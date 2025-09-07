@@ -22,11 +22,32 @@ try {
     }
 
     if (admin.apps.length === 0) {
+        // Handle different private key formats
+        let privateKey = requiredEnvVars.FIREBASE_PRIVATE_KEY;
+        
+        // If it's base64 encoded, decode it
+        if (!privateKey.includes('-----BEGIN PRIVATE KEY-----')) {
+            try {
+                privateKey = Buffer.from(privateKey, 'base64').toString('utf8');
+            } catch (e) {
+                console.log('Private key is not base64 encoded, using as-is');
+            }
+        }
+        
+        // Replace escaped newlines
+        privateKey = privateKey.replace(/\\n/g, '\n');
+        
+        console.log('Private key format check:', {
+            hasBeginMarker: privateKey.includes('-----BEGIN PRIVATE KEY-----'),
+            hasEndMarker: privateKey.includes('-----END PRIVATE KEY-----'),
+            length: privateKey.length
+        });
+
         firebaseApp = admin.initializeApp({
             credential: admin.credential.cert({
                 projectId: requiredEnvVars.FIREBASE_PROJECT_ID,
                 clientEmail: requiredEnvVars.FIREBASE_CLIENT_EMAIL,
-                privateKey: requiredEnvVars.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
+                privateKey: privateKey
             })
         });
         console.log('Firebase Admin initialized successfully');
