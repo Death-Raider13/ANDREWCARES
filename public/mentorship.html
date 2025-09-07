@@ -1404,25 +1404,26 @@
         <script
             src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
         <!-- Firebase and Application Logic -->
-        <script type="module">
-  // --- Firebase Imports ---
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, collection, query, where, getDocs, addDoc, updateDoc, serverTimestamp, onSnapshot, orderBy, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+        <!-- Firebase SDKs -->
+        <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
+        
+        <script>
+        // --- Firebase Configuration ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
+            authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
+            projectId: "andrew-cares-village-f4cb6",      
+            storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
+            messagingSenderId: "255087116955",
+            appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
+        };
 
-// --- Firebase Configuration ---
-const firebaseConfig = {
-      apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
-    authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-    projectId: "%REACT_APP_FIREBASE_PROJECT_ID%",      
-    storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
-    messagingSenderId: "255087116955",
-    appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
 // --- Cloudinary Configuration ---
 const CLOUDINARY_CONFIG = {
@@ -1508,17 +1509,17 @@ function createFileUploadInput(callback) {
     document.body.removeChild(input);
 }
 
-// --- Initialization ---
-onAuthStateChanged(auth, async (user) => {
+// --- Authentication State Management ---
+auth.onAuthStateChanged(async (user) => {
     if (!user) {
         window.location.href = 'index.html';
         return;
     }
     
     currentUser = user;
-    const userSnap = await getDoc(doc(db, "users", user.uid));
+    const userSnap = await db.collection("users").doc(user.uid).get();
     
-    if (!userSnap.exists()) {
+    if (!userSnap.exists) {
         window.location.href = 'index.html';
         return;
     }
@@ -1615,8 +1616,7 @@ async function loadMentorsForMember() {
     const instructorList = document.getElementById('memberInstructorList');
     instructorList.innerHTML = '<p>Loading mentors...</p>';
     
-    const q = query(collection(db, "users"), where("role", "==", "instructor"));
-    const snapshot = await getDocs(q);
+    const snapshot = await db.collection("users").where("role", "==", "instructor").get();
     
     instructorList.innerHTML = '';
     
@@ -1624,12 +1624,10 @@ async function loadMentorsForMember() {
         const instructor = { id: docSnap.id, ...docSnap.data() };
         
         // Get instructor's rating and completed sessions
-        const sessionsQ = query(
-            collection(db, "bookings"), 
-            where("instructorId", "==", instructor.id),
-            where("status", "==", "completed")
-        );
-        const sessionsSnap = await getDocs(sessionsQ);
+        const sessionsSnap = await db.collection("bookings")
+            .where("instructorId", "==", instructor.id)
+            .where("status", "==", "completed")
+            .get();
         const completedSessions = sessionsSnap.size;
         const avgRating = calculateAverageRating(sessionsSnap.docs);
 
@@ -1674,11 +1672,9 @@ async function selectMentorForMember(instructorId, instructorName, cardElement) 
 
     // Load instructor's available slots
     try {
-        const q = query(
-            collection(db, "mentorshipSlots"), 
-            where("instructorId", "==", instructorId)
-        );
-        const snapshot = await getDocs(q);
+        const snapshot = await db.collection("mentorshipSlots")
+            .where("instructorId", "==", instructorId)
+            .get();
         
         let events = [];
         snapshot.forEach(docSnap => {
@@ -1702,11 +1698,9 @@ async function selectMentorForMember(instructorId, instructorName, cardElement) 
         });
 
         // Filter out already booked sessions
-        const bookingsQ = query(
-            collection(db, "bookings"), 
-            where("instructorId", "==", instructorId)
-        );
-        const bookingsSnapshot = await getDocs(bookingsQ);
+        const bookingsSnapshot = await db.collection("bookings")
+            .where("instructorId", "==", instructorId)
+            .get();
         const bookedSlots = new Set(
             bookingsSnapshot.docs.map(d => `${d.data().slotDocId}_${d.data().timeSlot}`)
         );
