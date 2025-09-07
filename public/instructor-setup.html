@@ -337,7 +337,7 @@
                                     showRegularSetup();
                                 } else if (instructorData.bankDetailsAdded) {
                                     console.log('Redirecting to dashboard');
-                                    window.location.href = 'instructor-dashboard.html';
+                                    window.location.href = 'instructor.html';
                                 } else {
                                     console.log('Not approved instructor');
                                     showElement('not-instructor');
@@ -545,7 +545,7 @@
                 
                 if (result.success) {
                     alert('🎉 Setup complete! You can now receive payments from students.');
-                    window.location.href = 'instructor-dashboard.html';
+                    window.location.href = 'instructor.html';
                 } else {
                     alert('Error: ' + result.message);
                 }
