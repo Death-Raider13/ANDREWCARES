@@ -2,7 +2,7 @@ const CONFIG = {
     firebase: {
         apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
         authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-        projectId: "%REACT_APP_FIREBASE_PROJECT_ID%", 
+        projectId: "andrew-cares-village-f4cb6", 
         storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
         messagingSenderId: "255087116955",
         appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
