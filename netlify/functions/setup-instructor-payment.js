@@ -1,21 +1,42 @@
 const admin = require('firebase-admin');
 const fetch = require('node-fetch');
 
-// Initialize Firebase Admin if not already initialized
-if (!admin.apps.length) {
-    try {
-        admin.initializeApp({
+// Validate environment variables
+const requiredEnvVars = {
+    FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
+    FIREBASE_CLIENT_EMAIL: process.env.FIREBASE_CLIENT_EMAIL,
+    FIREBASE_PRIVATE_KEY: process.env.FIREBASE_PRIVATE_KEY,
+    PAYSTACK_SECRET_KEY: process.env.PAYSTACK_SECRET_KEY
+};
+
+console.log('Environment variables check:');
+for (const [key, value] of Object.entries(requiredEnvVars)) {
+    console.log(`${key}: ${value ? 'Set' : 'Missing'}`);
+}
+
+// Initialize Firebase Admin
+let firebaseApp;
+try {
+    if (!requiredEnvVars.FIREBASE_PROJECT_ID || !requiredEnvVars.FIREBASE_CLIENT_EMAIL || !requiredEnvVars.FIREBASE_PRIVATE_KEY) {
+        throw new Error('Missing required Firebase environment variables');
+    }
+
+    if (admin.apps.length === 0) {
+        firebaseApp = admin.initializeApp({
             credential: admin.credential.cert({
-                projectId: process.env.FIREBASE_PROJECT_ID,
-                clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-                privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')
+                projectId: requiredEnvVars.FIREBASE_PROJECT_ID,
+                clientEmail: requiredEnvVars.FIREBASE_CLIENT_EMAIL,
+                privateKey: requiredEnvVars.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
             })
         });
         console.log('Firebase Admin initialized successfully');
-    } catch (error) {
-        console.error('Firebase Admin initialization error:', error);
-        // Continue without throwing to see what the actual error is
+    } else {
+        firebaseApp = admin.app();
+        console.log('Using existing Firebase Admin app');
     }
+} catch (error) {
+    console.error('Firebase Admin initialization error:', error);
+    throw new Error(`Firebase initialization failed: ${error.message}`);
 }
 
 exports.handler = async (event, context) => {
