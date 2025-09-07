@@ -1,0 +1,3 @@
+/*
+  X-Frame-Options: ALLOW-FROM https://standard.paystack.co/
+  Content-Security-Policy: frame-ancestors https://standard.paystack.co/ https://checkout.paystack.co/

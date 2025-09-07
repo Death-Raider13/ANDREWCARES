@@ -1096,81 +1096,55 @@
             initiatePayment(name, email, phone, isAnonymous);
         });
 
-        function initiatePayment(name, email, phone, isAnonymous) {
-            if (isProcessing) return;
-            
-            // Check if Paystack is available
-            if (!window.PaystackPop) {
-                showMessage('Payment service is currently unavailable. Please try again later or contact support.', 'error');
-                return;
-            }
-            
-            isProcessing = true;
-            retryAttempts = 0;
-            
-            const donateBtn = document.getElementById('donateBtn');
-            donateBtn.disabled = true;
-            donateBtn.classList.add('processing');
-            
-            updateProgressStep(3, 'active');
-            
-            try {
-                const handler = PaystackPop.setup({
-                    key: PAYSTACK_PUBLIC_KEY,
-                    email: email,
-                    amount: selectedAmount * 100, // Convert to kobo
-                    currency: 'NGN',
-                    ref: generateReference(),
-                    metadata: {
-                        custom_fields: [
-                            {
-                                display_name: "Donor Name",
-                                variable_name: "donor_name",
-                                value: name
-                            },
-                            {
-                                display_name: "Phone Number",
-                                variable_name: "phone",
-                                value: phone || 'Not provided'
-                            },
-                            {
-                                display_name: "Anonymous",
-                                variable_name: "is_anonymous",
-                                value: isAnonymous ? 'Yes' : 'No'
-                            },
-                            {
-                                display_name: "Donation Type",
-                                variable_name: "donation_type",
-                                value: "General Support"
-                            }
-                        ]
-                    },
-                    onSuccess: function(transaction) {
-                        console.log('Payment successful:', transaction);
-                        updateProgressStep(3, 'completed');
-                        handlePaymentSuccess(transaction, name, email, phone, isAnonymous);
-                    },
-                    onCancel: function() {
-                        console.log('Payment cancelled by user');
-                        resetProcessingState();
-                        showMessage('Payment was cancelled. Your information has been saved if you want to try again.', 'warning');
-                    },
-                    onError: function(error) {
-                        console.error('Payment error:', error);
-                        resetProcessingState();
-                        showRetryOption('Payment failed. Please try again or contact support if the issue persists.');
-                    }
-                });
-                
-                handler.openIframe();
-                
-            } catch (error) {
-                console.error('Error initializing payment:', error);
-                resetProcessingState();
-                showRetryOption('Failed to initialize payment. Please check your internet connection and try again.');
-            }
-        }
+       function initiatePayment(name, email, phone, isAnonymous) {
+  if (isProcessing) return;
+  isProcessing = true;
+  retryAttempts = 0;
 
+  const donateBtn = document.getElementById('donateBtn');
+  donateBtn.disabled = true;
+  donateBtn.classList.add('processing');
+  updateProgressStep(3, 'active');
+
+  /*  NEW: build the config object ONCE  */
+  const config = {
+    key: PAYSTACK_PUBLIC_KEY,               // your pk_test_…
+    email: email,
+    amount: selectedAmount * 100,           // kobo
+    currency: 'NGN',
+    ref: generateReference(),
+    callback_url: location.href,            // ➜ FORCE redirect mode
+    metadata: {
+      custom_fields: [
+        { display_name: 'Donor Name', variable_name: 'donor_name', value: name },
+        { display_name: 'Phone',     variable_name: 'phone',     value: phone || 'N/A' },
+        { display_name: 'Anonymous', variable_name: 'is_anonymous', value: isAnonymous ? 'Yes' : 'No' }
+      ]
+    },
+    onSuccess: function (trx) {
+      console.log('Paystack onSuccess fired', trx);
+      handlePaymentSuccess(trx, name, email, phone, isAnonymous);
+    },
+    onCancel: function () {
+      console.log('Paystack onCancel fired');
+      resetProcessingState();
+    },
+    onError: function (err) {
+      console.error('Paystack onError fired', err);
+      resetProcessingState();
+      showRetryOption('Payment failed – please try again.');
+    }
+  };
+
+  /*  open the popup  */
+  try {
+    const handler = PaystackPop.setup(config);
+    handler.openIframe();
+  } catch (e) {
+    console.error('Paystack setup error', e);
+    resetProcessingState();
+  }
+}
         async function handlePaymentSuccess(transaction, name, email, phone, isAnonymous) {
             console.log('Processing successful payment...', transaction);
             
