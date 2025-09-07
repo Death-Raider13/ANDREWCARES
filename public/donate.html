@@ -1172,37 +1172,59 @@
         }
 
         async function handlePaymentSuccess(transaction, name, email, phone, isAnonymous) {
+            console.log('Processing successful payment...', transaction);
+            
+            // Show thank you page immediately to prevent loading state
+            const basicData = {
+                transactionId: transaction.reference,
+                amount: selectedAmount,
+                donorName: isAnonymous ? 'Anonymous' : name,
+                donorEmail: email,
+                isAnonymous: isAnonymous,
+                donationId: generateDonationId(),
+                timestamp: new Date()
+            };
+            
+            // Show thank you page first
+            showThankYouPage(basicData);
+            
+            // Then handle background tasks
             try {
-                console.log('Processing successful payment...');
+                console.log('Saving donation record in background...');
                 
-                // Save donation record
-                const donationData = await saveDonationRecord(transaction, name, email, phone, isAnonymous);
+                // Save donation record (non-blocking)
+                saveDonationRecord(transaction, name, email, phone, isAnonymous)
+                    .then(donationData => {
+                        console.log('Donation record saved successfully');
+                        // Update the thank you page with complete data if needed
+                        if (donationData.firestoreId) {
+                            console.log('Firestore ID:', donationData.firestoreId);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error saving donation record:', error);
+                    });
                 
-                // Send email notification with retry logic
-                await sendEmailWithRetry(donationData);
+                // Send email notification (non-blocking)
+                sendEmailWithRetry(basicData)
+                    .then(() => {
+                        console.log('Email notification sent successfully');
+                    })
+                    .catch(error => {
+                        console.error('Error sending email:', error);
+                    });
                 
-                // Update statistics
-                await updateDonationStats(selectedAmount);
-                
-                // Show thank you page
-                showThankYouPage(donationData);
+                // Update statistics (non-blocking)
+                updateDonationStats(selectedAmount)
+                    .then(() => {
+                        console.log('Donation stats updated successfully');
+                    })
+                    .catch(error => {
+                        console.error('Error updating stats:', error);
+                    });
                 
             } catch (error) {
-                console.error('Error processing successful payment:', error);
-                
-                // Even if there's an error saving records, show success since payment went through
-                const basicData = {
-                    transactionId: transaction.reference,
-                    amount: selectedAmount,
-                    donorName: isAnonymous ? 'Anonymous' : name,
-                    donorEmail: email,
-                    isAnonymous: isAnonymous,
-                    donationId: generateDonationId(),
-                    timestamp: new Date()
-                };
-                
-                showThankYouPage(basicData);
-                showMessage('Payment successful! There may have been an issue saving some details, but your donation went through. Reference: ' + transaction.reference, 'warning');
+                console.error('Error in background processing:', error);
             }
         }
 
