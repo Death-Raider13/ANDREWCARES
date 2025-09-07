@@ -22,33 +22,26 @@ try {
     }
 
     if (admin.apps.length === 0) {
-        // Handle different private key formats
-        let privateKey = requiredEnvVars.FIREBASE_PRIVATE_KEY;
-        
-        // If it's base64 encoded, decode it
-        if (!privateKey.includes('-----BEGIN PRIVATE KEY-----')) {
-            try {
-                privateKey = Buffer.from(privateKey, 'base64').toString('utf8');
-            } catch (e) {
-                console.log('Private key is not base64 encoded, using as-is');
-            }
-        }
-        
-        // Replace escaped newlines
-        privateKey = privateKey.replace(/\\n/g, '\n');
-        
-        console.log('Private key format check:', {
-            hasBeginMarker: privateKey.includes('-----BEGIN PRIVATE KEY-----'),
-            hasEndMarker: privateKey.includes('-----END PRIVATE KEY-----'),
-            length: privateKey.length
+        // Try creating a complete service account object
+        const serviceAccount = {
+            type: "service_account",
+            project_id: requiredEnvVars.FIREBASE_PROJECT_ID,
+            client_email: requiredEnvVars.FIREBASE_CLIENT_EMAIL,
+            private_key: requiredEnvVars.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+            auth_uri: "https://accounts.google.com/o/oauth2/auth",
+            token_uri: "https://oauth2.googleapis.com/token"
+        };
+
+        console.log('Service account validation:', {
+            hasProjectId: !!serviceAccount.project_id,
+            hasClientEmail: !!serviceAccount.client_email,
+            privateKeyLength: serviceAccount.private_key.length,
+            privateKeyStartsCorrectly: serviceAccount.private_key.startsWith('-----BEGIN PRIVATE KEY-----'),
+            privateKeyEndsCorrectly: serviceAccount.private_key.endsWith('-----END PRIVATE KEY-----\n') || serviceAccount.private_key.endsWith('-----END PRIVATE KEY-----')
         });
 
         firebaseApp = admin.initializeApp({
-            credential: admin.credential.cert({
-                projectId: requiredEnvVars.FIREBASE_PROJECT_ID,
-                clientEmail: requiredEnvVars.FIREBASE_CLIENT_EMAIL,
-                privateKey: privateKey
-            })
+            credential: admin.credential.cert(serviceAccount)
         });
         console.log('Firebase Admin initialized successfully');
     } else {
