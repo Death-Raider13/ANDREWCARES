@@ -1122,9 +1122,18 @@
       ]
     },
     onSuccess: function (trx) {
-      console.log('Paystack onSuccess fired', trx);
-      updateProgressStep(3, 'completed');
-      handlePaymentSuccess(trx, name, email, phone, isAnonymous);
+      console.log('🎉 PAYSTACK SUCCESS CALLBACK FIRED!', trx);
+      console.log('Transaction reference:', trx.reference);
+      console.log('About to call handlePaymentSuccess...');
+      
+      try {
+        updateProgressStep(3, 'completed');
+        handlePaymentSuccess(trx, name, email, phone, isAnonymous);
+        console.log('✅ handlePaymentSuccess called successfully');
+      } catch (error) {
+        console.error('❌ Error in onSuccess callback:', error);
+        alert('Payment successful but there was an error showing the thank you page. Reference: ' + trx.reference);
+      }
     },
     onCancel: function () {
       console.log('Paystack onCancel fired');
@@ -1148,7 +1157,8 @@
   }
 }
         async function handlePaymentSuccess(transaction, name, email, phone, isAnonymous) {
-            console.log('Processing successful payment...', transaction);
+            console.log('🚀 handlePaymentSuccess called with:', {transaction, name, email, phone, isAnonymous});
+            console.log('Selected amount:', selectedAmount);
             
             // Show thank you page immediately to prevent loading state
             const basicData = {
@@ -1161,8 +1171,17 @@
                 timestamp: new Date()
             };
             
+            console.log('📄 Basic data created:', basicData);
+            console.log('🎯 About to call showThankYouPage...');
+            
             // Show thank you page first
-            showThankYouPage(basicData);
+            try {
+                showThankYouPage(basicData);
+                console.log('✅ showThankYouPage completed successfully');
+            } catch (error) {
+                console.error('❌ Error in showThankYouPage:', error);
+                alert('Payment successful! Reference: ' + transaction.reference + '\nAmount: ₦' + selectedAmount.toLocaleString());
+            }
             
             // Then handle background tasks
             try {
@@ -1307,10 +1326,25 @@
         }
 
         function showThankYouPage(donationData) {
+            console.log('🎯 showThankYouPage called with:', donationData);
+            
             // Hide donation form and show thank you page
-            document.getElementById('donationForm').style.display = 'none';
+            const donationForm = document.getElementById('donationForm');
             const thankYouPage = document.getElementById('thankYouPage');
+            
+            console.log('📋 Form element:', donationForm);
+            console.log('🎉 Thank you page element:', thankYouPage);
+            
+            if (!donationForm || !thankYouPage) {
+                console.error('❌ Missing DOM elements:', {donationForm, thankYouPage});
+                alert('Payment successful! Reference: ' + donationData.transactionId + '\nAmount: ₦' + donationData.amount.toLocaleString());
+                return;
+            }
+            
+            donationForm.style.display = 'none';
             thankYouPage.classList.add('show');
+            
+            console.log('✅ DOM elements updated - form hidden, thank you page shown');
             
             // Populate receipt details
             document.getElementById('receiptAmount').textContent = '₦' + donationData.amount.toLocaleString();
