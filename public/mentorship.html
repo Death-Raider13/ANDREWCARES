@@ -494,6 +494,92 @@
             background-color: rgba(179, 139, 0, 0.1);
         }
 
+        /* Agreement Modal Styles */
+        .agreement-section {
+            padding: 1rem 0;
+        }
+
+        .agreement-details {
+            margin-bottom: 2rem;
+        }
+
+        .agreement-value {
+            font-weight: 600;
+            color: var(--color-primary);
+            margin: 0.25rem 0;
+        }
+
+        .agreement-terms {
+            background-color: var(--hover-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .agreement-terms h5 {
+            margin-top: 0;
+            color: var(--color-secondary);
+        }
+
+        .agreement-terms ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .agreement-terms li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .signature-section {
+            border-top: 2px solid var(--border-color);
+            padding-top: 1rem;
+            margin-top: 2rem;
+        }
+
+        .signature-box {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 2px dashed var(--border-color);
+        }
+
+        .signature-item {
+            margin: 1rem 0;
+            padding: 0.75rem;
+            background-color: white;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .signature-item label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            margin-bottom: 0.25rem;
+        }
+
+        .signature-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        .signature-timestamp {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-left: 1.5rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 1rem;
+        }
+
         /* Buttons */
         .btn {
             padding: 0.6rem 1.2rem;
@@ -1152,7 +1238,7 @@
                     </div>
                     <div class="active-conversations" id="sidebarConversations">
                         <div class="conversation-item">
-                            <img src="https://via.placeholder.com/40" alt="Avatar" class="conversation-avatar">
+                            <img src="https://ui-avatars.com/api/?name=No+Chat&background=ddd&color=999&size=40" alt="Avatar" class="conversation-avatar">
                             <div class="conversation-info">
                                 <p class="conversation-name">No active chats</p>
                                 <p class="conversation-preview">Start a session to begin chatting</p>
@@ -1174,38 +1260,115 @@
             </div>
         </div>
 
+        <!-- Agreement Modal -->
+        <div id="agreementModal" class="modal">
+            <div class="modal-content" style="max-width: 800px;">
+                <div class="modal-header">
+                    <h3><i class="fas fa-file-contract"></i> Mentorship Agreement</h3>
+                    <span class="close" onclick="closeAgreementModal()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div id="agreementContent">
+                        <div class="agreement-section">
+                            <h4>Mentorship Service Agreement</h4>
+                            <div class="agreement-details">
+                                <div class="form-group">
+                                    <label>Instructor:</label>
+                                    <p id="agreementInstructor" class="agreement-value"></p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Student:</label>
+                                    <p id="agreementStudent" class="agreement-value"></p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Session Date & Time:</label>
+                                    <p id="agreementDateTime" class="agreement-value"></p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Duration:</label>
+                                    <input type="number" id="agreementDuration" min="30" max="180" value="60" class="form-control" style="width: 100px; display: inline-block;"> minutes
+                                </div>
+                                <div class="form-group">
+                                    <label>Hourly Rate:</label>
+                                    <input type="number" id="agreementRate" min="1000" max="50000" step="500" class="form-control" style="width: 150px; display: inline-block;"> NGN/hour
+                                </div>
+                                <div class="form-group">
+                                    <label>Total Amount:</label>
+                                    <p id="agreementTotal" class="agreement-value" style="font-size: 1.2em; font-weight: bold; color: var(--color-primary);"></p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Session Subject/Topic:</label>
+                                    <textarea id="agreementSubject" class="form-control" rows="2" placeholder="Describe the mentorship topic or subject"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Additional Terms:</label>
+                                    <textarea id="agreementTerms" class="form-control" rows="3" placeholder="Any additional terms or conditions for this session"></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="agreement-terms">
+                                <h5>Standard Terms & Conditions:</h5>
+                                <ul>
+                                    <li>Payment is required before the session begins</li>
+                                    <li>Cancellations must be made at least 24 hours in advance for a full refund</li>
+                                    <li>The instructor will receive 90% of the payment, platform fee is 10%</li>
+                                    <li>Sessions are conducted via the platform's chat and video features</li>
+                                    <li>Both parties agree to maintain professional conduct</li>
+                                    <li>Session recordings are not permitted without mutual consent</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="signature-section">
+                                <div class="signature-box">
+                                    <h5>Digital Signatures:</h5>
+                                    <div class="signature-item">
+                                        <label>
+                                            <input type="checkbox" id="instructorSignature"> 
+                                            I, <span id="instructorSignatureName"></span>, agree to provide mentorship services as outlined above
+                                        </label>
+                                        <small class="signature-timestamp" id="instructorSignatureTime"></small>
+                                    </div>
+                                    <div class="signature-item">
+                                        <label>
+                                            <input type="checkbox" id="studentSignature"> 
+                                            I, <span id="studentSignatureName"></span>, agree to the terms and will make payment as specified
+                                        </label>
+                                        <small class="signature-timestamp" id="studentSignatureTime"></small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn btn-secondary" onclick="closeAgreementModal()">Cancel</button>
+                        <button class="btn btn-primary" id="finalizeAgreementBtn" onclick="finalizeAgreement()" disabled>
+                            <i class="fas fa-check"></i> Finalize Agreement
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Chat Modal -->
         <div id="chatModal" class="modal">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h3 id="chatModalTitle">Chat with Mentor</h3>
-                    <span class="close"
-                        onclick="closeChatModal()">&times;</span>
+                <div class="chat-header">
+                    <img id="chatPartnerAvatar" src="" alt="Partner" class="conversation-avatar">
+                    <div>
+                        <h3 id="chatModalTitle">Chat</h3>
+                        <p id="chatPartnerName"></p>
+                    </div>
+                    <span class="close" onclick="closeChatModal()">&times;</span>
                 </div>
-                <div class="chat-container">
-                    <div class="chat-header">
-                        <img id="chatPartnerAvatar" src alt="Partner"
-                            class="instructor-avatar">
-                        <div>
-                            <h4 id="chatPartnerName">Partner Name</h4>
-                            <p id="chatPartnerStatus">Online</p>
-                        </div>
-                    </div>
-                    <div class="chat-messages" id="chatMessages">
-                        <!-- Messages will be loaded here -->
-                    </div>
-                    <div class="chat-input">
-                        <input type="text" id="messageInput"
-                            placeholder="Type your message..."
-                            onkeypress="handleMessageKeyPress(event)">
-                        <button class="btn btn-info btn-sm"
-                            onclick="sendImage()" title="Send Image">
-                            <i class="fas fa-image"></i>
-                        </button>
-                        <button class="btn btn-primary" onclick="sendMessage()">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
+                <div class="chat-messages" id="chatMessages"></div>
+                <div class="chat-input">
+                    <input type="text" id="messageInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter') sendMessage()">
+                    <button class="btn btn-primary" onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                    <button class="btn btn-secondary" onclick="uploadChatImage()">
+                        <i class="fas fa-image"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -1563,39 +1726,17 @@ async function handleMemberEventClick(info) {
     const { slotDocId, timeSlot, instructorName, hourlyRate } = info.event.extendedProps;
     const startTime = info.event.start;
 
-    if (confirm(`Book a session with ${instructorName} at ${startTime.toLocaleString()}?\nRate: ₦${hourlyRate}/hour`)) {
-        try {
-            const bookingRef = await addDoc(collection(db, "bookings"), {
-                studentId: currentUser.uid,
-                studentName: currentUserData.name,
-                instructorId: selectedInstructorId,
-                instructorName: instructorName,
-                slotDocId: slotDocId,
-                timeSlot: timeSlot,
-                startTime: startTime,
-                hourlyRate: hourlyRate,
-                status: 'negotiating',
-                createdAt: serverTimestamp()
-            });
-
-            // Create chat session
-            await setDoc(doc(db, "chatSessions", bookingRef.id), {
-                bookingId: bookingRef.id,
-                studentId: currentUser.uid,
-                instructorId: selectedInstructorId,
-                participants: [currentUser.uid, selectedInstructorId],
-                createdAt: serverTimestamp(),
-                lastMessage: null
-            });
-
-            alert("Session booked! You can now chat with your mentor to finalize details.");
-            info.event.remove();
-            loadMemberSessions();
-        } catch (error) {
-            console.error("Booking error:", error);
-            alert("Failed to book session. Please try again.");
-        }
-    }
+    // Open agreement modal instead of direct booking
+    openAgreementModal({
+        instructorId: selectedInstructorId,
+        instructorName: instructorName,
+        studentId: currentUser.uid,
+        studentName: currentUserData.name,
+        slotDocId: slotDocId,
+        timeSlot: timeSlot,
+        startTime: startTime,
+        suggestedRate: hourlyRate
+    });
 }
 
 function loadMemberSessions() {
@@ -1628,9 +1769,9 @@ function loadMemberSessions() {
                     <button class="btn btn-info btn-sm" onclick="openChat('${session.id}', '${session.instructorId}', '${session.instructorName}')">
                         <i class="fas fa-comments"></i> Chat
                     </button>
-                    ${session.status === 'negotiating' ? `
-                        <button class="btn btn-success btn-sm" onclick="openPaymentModal('${session.id}')">
-                            <i class="fas fa-credit-card"></i> Pay
+                    ${session.status === 'agreement_signed' ? `
+                        <button class="btn btn-success btn-sm" onclick="processSecurePayment('${session.id}', ${session.agreement?.totalAmount || session.hourlyRate})">
+                            <i class="fas fa-credit-card"></i> Pay ₦${session.agreement?.totalAmount?.toLocaleString() || session.hourlyRate}
                         </button>
                     ` : ''}
                     ${session.status !== 'completed' ? `
@@ -1961,7 +2102,7 @@ function updateSidebarConversations() {
         if (snapshot.empty) {
             sidebarConversations.innerHTML = `
                 <div class="conversation-item">
-                    <img src="https://via.placeholder.com/40" alt="Avatar" class="conversation-avatar">
+                    <img src="https://ui-avatars.com/api/?name=No+Chat&background=ddd&color=999&size=40" alt="Avatar" class="conversation-avatar">
                     <div class="conversation-info">
                         <p class="conversation-name">No active chats</p>
                         <p class="conversation-preview">Start a session to begin chatting</p>
@@ -1982,7 +2123,7 @@ function updateSidebarConversations() {
             conversationEl.onclick = () => openChatModal(session.id, partnerName, partnerAvatar);
             
             conversationEl.innerHTML = `
-                <img src="${partnerAvatar || 'https://via.placeholder.com/40'}" alt="${partnerName}" class="conversation-avatar">
+                <img src="${partnerAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(partnerName)}&size=40`}" alt="${partnerName}" class="conversation-avatar">
                 <div class="conversation-info">
                     <p class="conversation-name">${partnerName}</p>
                     <p class="conversation-preview">${session.subject || 'Mentorship Session'}</p>
@@ -2001,7 +2142,7 @@ function openChatModal(sessionId, partnerName, partnerAvatar) {
     
     document.getElementById('chatModalTitle').textContent = `Chat with ${partnerName}`;
     document.getElementById('chatPartnerName').textContent = partnerName;
-    document.getElementById('chatPartnerAvatar').src = partnerAvatar || 'https://via.placeholder.com/50';
+    document.getElementById('chatPartnerAvatar').src = partnerAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(partnerName)}&size=50`;
     document.getElementById('chatModal').style.display = 'block';
     
     loadChatMessages(sessionId);
@@ -2426,10 +2567,270 @@ window.viewMentorDetails = function(mentorId) {
     alert(`Viewing details for mentor: ${mentorId}`);
 };
 
+// --- Agreement System Functions ---
+let currentAgreementData = null;
+
+function openAgreementModal(bookingData) {
+    currentAgreementData = bookingData;
+    
+    // Populate agreement details
+    document.getElementById('agreementInstructor').textContent = bookingData.instructorName;
+    document.getElementById('agreementStudent').textContent = bookingData.studentName;
+    document.getElementById('agreementDateTime').textContent = bookingData.startTime.toLocaleString();
+    document.getElementById('agreementRate').value = bookingData.suggestedRate;
+    
+    // Set signature names
+    document.getElementById('instructorSignatureName').textContent = bookingData.instructorName;
+    document.getElementById('studentSignatureName').textContent = bookingData.studentName;
+    
+    // Calculate initial total
+    updateAgreementTotal();
+    
+    // Setup event listeners
+    document.getElementById('agreementDuration').addEventListener('input', updateAgreementTotal);
+    document.getElementById('agreementRate').addEventListener('input', updateAgreementTotal);
+    document.getElementById('instructorSignature').addEventListener('change', checkSignatures);
+    document.getElementById('studentSignature').addEventListener('change', checkSignatures);
+    
+    // Show modal
+    document.getElementById('agreementModal').style.display = 'block';
+}
+
+function updateAgreementTotal() {
+    const duration = parseInt(document.getElementById('agreementDuration').value) || 60;
+    const rate = parseInt(document.getElementById('agreementRate').value) || 0;
+    const total = Math.round((duration / 60) * rate);
+    
+    document.getElementById('agreementTotal').textContent = `₦${total.toLocaleString()}`;
+}
+
+function checkSignatures() {
+    const instructorSigned = document.getElementById('instructorSignature').checked;
+    const studentSigned = document.getElementById('studentSignature').checked;
+    const finalizeBtn = document.getElementById('finalizeAgreementBtn');
+    
+    // Update timestamps when signed
+    if (instructorSigned && !document.getElementById('instructorSignatureTime').textContent) {
+        document.getElementById('instructorSignatureTime').textContent = `Signed on ${new Date().toLocaleString()}`;
+    }
+    if (studentSigned && !document.getElementById('studentSignatureTime').textContent) {
+        document.getElementById('studentSignatureTime').textContent = `Signed on ${new Date().toLocaleString()}`;
+    }
+    
+    // Enable finalize button only when both parties sign
+    finalizeBtn.disabled = !(instructorSigned && studentSigned);
+}
+
+async function finalizeAgreement() {
+    if (!currentAgreementData) return;
+    
+    const duration = parseInt(document.getElementById('agreementDuration').value);
+    const rate = parseInt(document.getElementById('agreementRate').value);
+    const total = Math.round((duration / 60) * rate);
+    const subject = document.getElementById('agreementSubject').value;
+    const additionalTerms = document.getElementById('agreementTerms').value;
+    
+    if (!subject.trim()) {
+        alert('Please specify the session subject/topic.');
+        return;
+    }
+    
+    try {
+        // Create the booking with agreement
+        const agreementData = {
+            instructorSignature: {
+                signed: true,
+                timestamp: serverTimestamp(),
+                name: currentAgreementData.instructorName
+            },
+            studentSignature: {
+                signed: true,
+                timestamp: serverTimestamp(),
+                name: currentAgreementData.studentName
+            },
+            agreedRate: rate,
+            duration: duration,
+            totalAmount: total,
+            subject: subject,
+            additionalTerms: additionalTerms,
+            platformFee: Math.round(total * 0.1),
+            instructorEarnings: Math.round(total * 0.9)
+        };
+        
+        const bookingRef = await addDoc(collection(db, "bookings"), {
+            studentId: currentAgreementData.studentId,
+            studentName: currentAgreementData.studentName,
+            instructorId: currentAgreementData.instructorId,
+            instructorName: currentAgreementData.instructorName,
+            slotDocId: currentAgreementData.slotDocId,
+            timeSlot: currentAgreementData.timeSlot,
+            startTime: currentAgreementData.startTime,
+            hourlyRate: rate,
+            status: 'agreement_signed',
+            createdAt: serverTimestamp(),
+            agreement: agreementData
+        });
+
+        // Create chat session
+        await setDoc(doc(db, "chatSessions", bookingRef.id), {
+            bookingId: bookingRef.id,
+            studentId: currentAgreementData.studentId,
+            instructorId: currentAgreementData.instructorId,
+            participants: [currentAgreementData.studentId, currentAgreementData.instructorId],
+            createdAt: serverTimestamp(),
+            lastMessage: `Agreement signed for ${subject} - ₦${total.toLocaleString()}`
+        });
+
+        // Store agreement document
+        await setDoc(doc(db, "agreements", bookingRef.id), {
+            bookingId: bookingRef.id,
+            ...agreementData,
+            createdAt: serverTimestamp(),
+            status: 'active'
+        });
+
+        alert('Agreement finalized successfully! Student can now proceed with payment.');
+        closeAgreementModal();
+        
+        // Refresh sessions and conversations
+        if (currentUserData.role === 'member') {
+            loadMemberSessions();
+        } else if (currentUserData.role === 'instructor') {
+            loadInstructorBookings();
+        }
+        updateSidebarConversations();
+        
+    } catch (error) {
+        console.error('Error finalizing agreement:', error);
+        alert('Failed to finalize agreement. Please try again.');
+    }
+}
+
+function closeAgreementModal() {
+    document.getElementById('agreementModal').style.display = 'none';
+    currentAgreementData = null;
+    
+    // Reset form
+    document.getElementById('agreementDuration').value = 60;
+    document.getElementById('agreementRate').value = '';
+    document.getElementById('agreementSubject').value = '';
+    document.getElementById('agreementTerms').value = '';
+    document.getElementById('instructorSignature').checked = false;
+    document.getElementById('studentSignature').checked = false;
+    document.getElementById('instructorSignatureTime').textContent = '';
+    document.getElementById('studentSignatureTime').textContent = '';
+    document.getElementById('finalizeAgreementBtn').disabled = true;
+}
+
+// Enhanced payment system with secure split payments
+async function processSecurePayment(sessionId, amount) {
+    try {
+        // Get session and agreement details
+        const sessionDoc = await getDoc(doc(db, "bookings", sessionId));
+        const session = sessionDoc.data();
+        const agreement = session.agreement;
+        
+        if (!agreement) {
+            throw new Error('No agreement found for this session');
+        }
+        
+        // Create instructor subaccount if not exists
+        let subaccountCode = null;
+        const instructorDoc = await getDoc(doc(db, "users", session.instructorId));
+        const instructorData = instructorDoc.data();
+        
+        if (instructorData.paystackSubaccount) {
+            subaccountCode = instructorData.paystackSubaccount;
+        } else {
+            // Instructor needs to setup bank details first
+            alert('Instructor must setup bank account details before receiving payments. Please contact the instructor.');
+            return false;
+        }
+        
+        // Process payment with split
+        const handler = PaystackPop.setup({
+            key: PAYSTACK_PUBLIC_KEY,
+            email: currentUserData.email,
+            amount: amount * 100, // Convert to kobo
+            currency: 'NGN',
+            ref: `session_${sessionId}_${Date.now()}`,
+            
+            subaccount: subaccountCode,
+            transaction_charge: agreement.platformFee * 100, // Platform fee in kobo
+            
+            metadata: {
+                session_id: sessionId,
+                instructor_id: session.instructorId,
+                student_id: session.studentId,
+                agreement_id: sessionId,
+                split_details: {
+                    instructor_amount: agreement.instructorEarnings,
+                    admin_commission: agreement.platformFee
+                }
+            },
+            
+            callback: function(response) {
+                if (response.status === 'success') {
+                    handleSecurePaymentSuccess(response, sessionId);
+                } else {
+                    alert('Payment failed or was cancelled.');
+                }
+            },
+            
+            onClose: function() {
+                alert('Payment cancelled.');
+            }
+        });
+        
+        handler.openIframe();
+        return true;
+        
+    } catch (error) {
+        console.error('Error processing secure payment:', error);
+        alert('Payment processing error: ' + error.message);
+        return false;
+    }
+}
+
+async function handleSecurePaymentSuccess(response, sessionId) {
+    try {
+        // Update booking status immediately
+        await updateDoc(doc(db, "bookings", sessionId), {
+            status: 'confirmed',
+            paymentReference: response.reference,
+            paidAt: serverTimestamp(),
+            paymentConfirmed: true
+        });
+
+        // Update agreement status
+        await updateDoc(doc(db, "agreements", sessionId), {
+            status: 'paid',
+            paymentReference: response.reference,
+            paidAt: serverTimestamp()
+        });
+
+        // Show success message
+        alert(`Payment successful! Reference: ${response.reference}\nYour mentorship session is confirmed.`);
+        closePaymentModal();
+        
+        // Update UI
+        updateSidebarConversations();
+        if (currentUserData.role === 'member') {
+            loadMemberSessions();
+        }
+        
+    } catch (error) {
+        console.error('Error updating payment status:', error);
+        alert(`Payment successful! Reference: ${response.reference}\nPlease contact support if the session doesn't appear as confirmed.`);
+        closePaymentModal();
+    }
+}
+
 // Close modals when clicking outside
 window.onclick = function(event) {
     const chatModal = document.getElementById('chatModal');
     const paymentModal = document.getElementById('paymentModal');
+    const agreementModal = document.getElementById('agreementModal');
     
     if (event.target === chatModal) {
         closeChatModal();
@@ -2437,6 +2838,10 @@ window.onclick = function(event) {
     
     if (event.target === paymentModal) {
         closePaymentModal();
+    }
+    
+    if (event.target === agreementModal) {
+        closeAgreementModal();
     }
 };
  </script>
