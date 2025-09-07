@@ -14,3 +14,11 @@
 
 [dev]
   functions = "public/netlify/functions"
+
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+  command = 'sed -i "s/%REACT_APP_FIREBASE_PROJECT_ID%/$REACT_APP_FIREBASE_PROJECT_ID/g" public/contact.html && echo "contact.html injected"'
+
+[build.environment]
+  REACT_APP_FIREBASE_PROJECT_ID = "andrew-cares-village-f4cb6"
