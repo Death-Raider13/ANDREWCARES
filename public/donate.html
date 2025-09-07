@@ -1147,13 +1147,28 @@
     }
   };
 
+  /*  Check if PaystackPop is available  */
+  if (!window.PaystackPop) {
+    console.error('❌ PaystackPop not available');
+    resetProcessingState();
+    showMessage('Payment service is currently unavailable. Please try again later.', 'error');
+    return;
+  }
+
+  console.log('📋 Paystack config:', config);
+  console.log('🔑 Paystack key:', PAYSTACK_PUBLIC_KEY);
+
   /*  open the popup  */
   try {
+    console.log('🚀 Setting up Paystack handler...');
     const handler = PaystackPop.setup(config);
+    console.log('✅ Handler created, opening iframe...');
     handler.openIframe();
+    console.log('✅ Iframe opened');
   } catch (e) {
-    console.error('Paystack setup error', e);
+    console.error('❌ Paystack setup error', e);
     resetProcessingState();
+    showRetryOption('Failed to initialize payment. Please try again.');
   }
 }
         async function handlePaymentSuccess(transaction, name, email, phone, isAnonymous) {
