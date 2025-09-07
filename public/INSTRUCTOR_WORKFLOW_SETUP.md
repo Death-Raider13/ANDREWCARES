@@ -16,23 +16,7 @@ This system provides a complete instructor application workflow from Google Form
 Add these to your Netlify site settings:
 
 ```bash
-# Firebase Admin SDK
-FIREBASE_PROJECT_ID=andrew-cares-village-f4cb6
-FIREBASE_CLIENT_EMAIL=your-firebase-admin-email@andrew-cares-village-f4cb6.iam.gserviceaccount.com
-FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYOUR_PRIVATE_KEY_HERE\n-----END PRIVATE KEY-----"
-FIREBASE_SERVICE_ACCOUNT={"type":"service_account","project_id":"andrew-cares-village-f4cb6",...}
 
-# Paystack (for payment processing)
-PAYSTACK_SECRET_KEY=sk_test_your_paystack_secret_key_here
-PAYSTACK_PUBLIC_KEY=pk_test_your_paystack_public_key_here
-
-# EmailJS (for email notifications)
-EMAILJS_SERVICE_ID=your_emailjs_service_id
-EMAILJS_PUBLIC_KEY=your_emailjs_public_key
-EMAILJS_TEMPLATE_ID=template_instructor_approval
-EMAILJS_WELCOME_TEMPLATE_ID=template_instructor_welcome
-EMAILJS_REJECTION_TEMPLATE_ID=template_instructor_rejection
-```
 
 ## Google Form Setup
 

@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Support Andrew Cares Village</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Support Andrew Cares Village</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;500;700&display=swap"
+            rel="stylesheet">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+        <style>
         :root {
             --background-color: #F4F2ED;
             --text-primary: #333333;
@@ -526,186 +529,219 @@
             display: none;
         }
     </style>
-</head>
-<body>
-    <div class="donation-container">
-        <!-- Main Donation Form -->
-        <div id="donationForm" class="donation-form">
-            <a href="home.html" class="back-link">
-                <i class="fas fa-arrow-left"></i> Back to Village
-            </a>
-
-            <!-- Progress Indicator -->
-            <div class="progress-indicator">
-                <div class="progress-step active" id="step1">1</div>
-                <div class="progress-line" id="line1"></div>
-                <div class="progress-step" id="step2">2</div>
-                <div class="progress-line" id="line2"></div>
-                <div class="progress-step" id="step3">3</div>
-            </div>
-
-            <div class="donation-header">
-                <h1>Support the Village</h1>
-                <p>Your generous donation helps keep Andrew Cares Village free for everyone and supports our mission of building a supportive community.</p>
-            </div>
-
-            <div class="donation-impact">
-                <h3 style="color: var(--color-primary); margin-bottom: 1rem;">Your Impact</h3>
-                <div class="impact-counter">
-                    <div class="impact-item">
-                        <div class="impact-number" id="totalDonors">1,247</div>
-                        <div class="impact-label">Donors</div>
-                    </div>
-                    <div class="impact-item">
-                        <div class="impact-number" id="totalRaised">₦2.8M</div>
-                        <div class="impact-label">Raised</div>
-                    </div>
-                    <div class="impact-item">
-                        <div class="impact-number" id="goalProgress">67%</div>
-                        <div class="impact-label">of Goal</div>
-                    </div>
-                </div>
-                <p>Every donation helps us:</p>
-                <ul style="text-align: left; margin: 1rem 0;">
-                    <li>Maintain our platform and servers</li>
-                    <li>Provide free access to all members</li>
-                    <li>Support community programs and events</li>
-                    <li>Develop new features and resources</li>
-                </ul>
-            </div>
-
-            <form id="donationFormElement">
-                <div class="amount-selection">
-                    <h3>Select Amount</h3>
-                    <div class="amount-buttons">
-                        <button type="button" class="amount-btn" onclick="selectAmount(1000)">₦1,000</button>
-                        <button type="button" class="amount-btn" onclick="selectAmount(2500)">₦2,500</button>
-                        <button type="button" class="amount-btn" onclick="selectAmount(5000)">₦5,000</button>
-                        <button type="button" class="amount-btn" onclick="selectAmount(10000)">₦10,000</button>
-                        <button type="button" class="amount-btn" onclick="selectAmount(25000)">₦25,000</button>
-                        <button type="button" class="amount-btn" onclick="selectAmount(50000)">₦50,000</button>
-                    </div>
-                    
-                    <div class="custom-amount-container">
-                        <span class="currency-symbol">₦</span>
-                        <input 
-                            type="number" 
-                            id="customAmount" 
-                            class="custom-amount" 
-                            placeholder="Enter custom amount"
-                            min="100"
-                            oninput="handleCustomAmount()"
-                        >
-                    </div>
-                </div>
-
-                <div class="donor-info">
-                    <h3>Donor Information</h3>
-                    
-                    <div class="form-group">
-                        <label for="donorName">Full Name *</label>
-                        <input type="text" id="donorName" required>
-                        <div class="error-text" id="nameError"></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="donorEmail">Email Address *</label>
-                        <input type="email" id="donorEmail" required>
-                        <div class="error-text" id="emailError"></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="donorPhone">Phone Number</label>
-                        <input type="tel" id="donorPhone" placeholder="+234">
-                    </div>
-                    
-                    <label class="anonymous-option">
-                        <input type="checkbox" id="isAnonymous">
-                        <span>Make this donation anonymous</span>
-                        <i class="fas fa-user-secret" style="margin-left: auto; color: var(--color-primary);"></i>
-                    </label>
-                </div>
-
-                <!-- Security Badges -->
-                <div class="security-badges">
-                    <div class="security-badge">
-                        <i class="fas fa-shield-alt" style="color: var(--success-color);"></i>
-                        Secure Payment
-                    </div>
-                    <div class="security-badge">
-                        <i class="fas fa-lock" style="color: var(--success-color);"></i>
-                        SSL Encrypted
-                    </div>
-                    <div class="security-badge">
-                        <i class="fas fa-credit-card" style="color: var(--success-color);"></i>
-                        Paystack Protected
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-donate" id="donateBtn" disabled>
-                    <span class="btn-text">
-                        <i class="fas fa-heart"></i> Donate Now
-                    </span>
-                    <div class="loading"></div>
-                </button>
-            </form>
-
-            <div id="messageContainer"></div>
-        </div>
-
-        <!-- Thank You Page -->
-        <div id="thankYouPage" class="thank-you-page">
-            <div class="thank-you-icon">
-                <i class="fas fa-heart"></i>
-            </div>
-            <h1 style="color: var(--color-primary); font-family: 'Cinzel', serif;">Thank You!</h1>
-            <h2 style="color: var(--success-color);">Your donation has been received!</h2>
-            
-            <div class="donation-receipt">
-                <h3>DONATION RECEIPT</h3>
-                <hr>
-                <p><strong>Amount:</strong> <span id="receiptAmount">₦0</span></p>
-                <p><strong>Transaction ID:</strong> <span id="receiptTransactionId">-</span></p>
-                <p><strong>Date:</strong> <span id="receiptDate">-</span></p>
-                <p><strong>Donor:</strong> <span id="receiptDonor">-</span></p>
-                <hr>
-                <p style="font-size: 0.9rem; color: var(--text-secondary);">
-                    A confirmation email has been sent to your email address.
-                </p>
-            </div>
-
-            <div class="share-donation">
-                <h3>Spread the Word!</h3>
-                <p>Help us reach more supporters by sharing your donation:</p>
-                <div class="share-buttons">
-                    <a href="#" class="share-btn twitter" id="shareTwitter" target="_blank">
-                        <i class="fab fa-twitter"></i> Share on Twitter
-                    </a>
-                    <a href="#" class="share-btn whatsapp" id="shareWhatsApp" target="_blank">
-                        <i class="fab fa-whatsapp"></i> Share on WhatsApp
-                    </a>
-                    <a href="#" class="share-btn linkedin" id="shareLinkedIn" target="_blank">
-                        <i class="fab fa-linkedin"></i> Share on LinkedIn
-                    </a>
-                </div>
-            </div>
-
-            <div style="margin: 2rem 0;">
-                <button onclick="makeAnotherDonation()" style="background: var(--color-primary); color: white; border: none; padding: 1rem 2rem; border-radius: 25px; cursor: pointer; margin-right: 1rem; transition: all 0.3s ease;">
-                    <i class="fas fa-plus"></i> Make Another Donation
-                </button>
-                <a href="home.html" style="background: var(--color-secondary); color: white; padding: 1rem 2rem; border-radius: 25px; text-decoration: none; display: inline-block; transition: all 0.3s ease;">
-                    <i class="fas fa-home"></i> Return to Village
+    </head>
+    <body>
+        <div class="donation-container">
+            <!-- Main Donation Form -->
+            <div id="donationForm" class="donation-form">
+                <a href="home.html" class="back-link">
+                    <i class="fas fa-arrow-left"></i> Back to Village
                 </a>
+
+                <!-- Progress Indicator -->
+                <div class="progress-indicator">
+                    <div class="progress-step active" id="step1">1</div>
+                    <div class="progress-line" id="line1"></div>
+                    <div class="progress-step" id="step2">2</div>
+                    <div class="progress-line" id="line2"></div>
+                    <div class="progress-step" id="step3">3</div>
+                </div>
+
+                <div class="donation-header">
+                    <h1>Support the Village</h1>
+                    <p>Your generous donation helps keep Andrew Cares Village
+                        free for everyone and supports our mission of building a
+                        supportive community.</p>
+                </div>
+
+                <div class="donation-impact">
+                    <h3
+                        style="color: var(--color-primary); margin-bottom: 1rem;">Your
+                        Impact</h3>
+                    <div class="impact-counter">
+                        <div class="impact-item">
+                            <div class="impact-number"
+                                id="totalDonors">1,247</div>
+                            <div class="impact-label">Donors</div>
+                        </div>
+                        <div class="impact-item">
+                            <div class="impact-number"
+                                id="totalRaised">₦2.8M</div>
+                            <div class="impact-label">Raised</div>
+                        </div>
+                        <div class="impact-item">
+                            <div class="impact-number"
+                                id="goalProgress">67%</div>
+                            <div class="impact-label">of Goal</div>
+                        </div>
+                    </div>
+                    <p>Every donation helps us:</p>
+                    <ul style="text-align: left; margin: 1rem 0;">
+                        <li>Maintain our platform and servers</li>
+                        <li>Provide free access to all members</li>
+                        <li>Support community programs and events</li>
+                        <li>Develop new features and resources</li>
+                    </ul>
+                </div>
+
+                <form id="donationFormElement">
+                    <div class="amount-selection">
+                        <h3>Select Amount</h3>
+                        <div class="amount-buttons">
+                            <button type="button" class="amount-btn"
+                                onclick="selectAmount(1000)">₦1,000</button>
+                            <button type="button" class="amount-btn"
+                                onclick="selectAmount(2500)">₦2,500</button>
+                            <button type="button" class="amount-btn"
+                                onclick="selectAmount(5000)">₦5,000</button>
+                            <button type="button" class="amount-btn"
+                                onclick="selectAmount(10000)">₦10,000</button>
+                            <button type="button" class="amount-btn"
+                                onclick="selectAmount(25000)">₦25,000</button>
+                            <button type="button" class="amount-btn"
+                                onclick="selectAmount(50000)">₦50,000</button>
+                        </div>
+
+                        <div class="custom-amount-container">
+                            <span class="currency-symbol">₦</span>
+                            <input
+                                type="number"
+                                id="customAmount"
+                                class="custom-amount"
+                                placeholder="Enter custom amount"
+                                min="100"
+                                oninput="handleCustomAmount()">
+                        </div>
+                    </div>
+
+                    <div class="donor-info">
+                        <h3>Donor Information</h3>
+
+                        <div class="form-group">
+                            <label for="donorName">Full Name *</label>
+                            <input type="text" id="donorName" required>
+                            <div class="error-text" id="nameError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="donorEmail">Email Address *</label>
+                            <input type="email" id="donorEmail" required>
+                            <div class="error-text" id="emailError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="donorPhone">Phone Number</label>
+                            <input type="tel" id="donorPhone"
+                                placeholder="+234">
+                        </div>
+
+                        <label class="anonymous-option">
+                            <input type="checkbox" id="isAnonymous">
+                            <span>Make this donation anonymous</span>
+                            <i class="fas fa-user-secret"
+                                style="margin-left: auto; color: var(--color-primary);"></i>
+                        </label>
+                    </div>
+
+                    <!-- Security Badges -->
+                    <div class="security-badges">
+                        <div class="security-badge">
+                            <i class="fas fa-shield-alt"
+                                style="color: var(--success-color);"></i>
+                            Secure Payment
+                        </div>
+                        <div class="security-badge">
+                            <i class="fas fa-lock"
+                                style="color: var(--success-color);"></i>
+                            SSL Encrypted
+                        </div>
+                        <div class="security-badge">
+                            <i class="fas fa-credit-card"
+                                style="color: var(--success-color);"></i>
+                            Paystack Protected
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-donate" id="donateBtn"
+                        disabled>
+                        <span class="btn-text">
+                            <i class="fas fa-heart"></i> Donate Now
+                        </span>
+                        <div class="loading"></div>
+                    </button>
+                </form>
+
+                <div id="messageContainer"></div>
+            </div>
+
+            <!-- Thank You Page -->
+            <div id="thankYouPage" class="thank-you-page">
+                <div class="thank-you-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h1
+                    style="color: var(--color-primary); font-family: 'Cinzel', serif;">Thank
+                    You!</h1>
+                <h2 style="color: var(--success-color);">Your donation has been
+                    received!</h2>
+
+                <div class="donation-receipt">
+                    <h3>DONATION RECEIPT</h3>
+                    <hr>
+                    <p><strong>Amount:</strong> <span
+                            id="receiptAmount">₦0</span></p>
+                    <p><strong>Transaction ID:</strong> <span
+                            id="receiptTransactionId">-</span></p>
+                    <p><strong>Date:</strong> <span
+                            id="receiptDate">-</span></p>
+                    <p><strong>Donor:</strong> <span
+                            id="receiptDonor">-</span></p>
+                    <hr>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);">
+                        A confirmation email has been sent to your email
+                        address.
+                    </p>
+                </div>
+
+                <div class="share-donation">
+                    <h3>Spread the Word!</h3>
+                    <p>Help us reach more supporters by sharing your
+                        donation:</p>
+                    <div class="share-buttons">
+                        <a href="#" class="share-btn twitter" id="shareTwitter"
+                            target="_blank">
+                            <i class="fab fa-twitter"></i> Share on Twitter
+                        </a>
+                        <a href="#" class="share-btn whatsapp"
+                            id="shareWhatsApp" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Share on WhatsApp
+                        </a>
+                        <a href="#" class="share-btn linkedin"
+                            id="shareLinkedIn" target="_blank">
+                            <i class="fab fa-linkedin"></i> Share on LinkedIn
+                        </a>
+                    </div>
+                </div>
+
+                <div style="margin: 2rem 0;">
+                    <button onclick="makeAnotherDonation()"
+                        style="background: var(--color-primary); color: white; border: none; padding: 1rem 2rem; border-radius: 25px; cursor: pointer; margin-right: 1rem; transition: all 0.3s ease;">
+                        <i class="fas fa-plus"></i> Make Another Donation
+                    </button>
+                    <a href="home.html"
+                        style="background: var(--color-secondary); color: white; padding: 1rem 2rem; border-radius: 25px; text-decoration: none; display: inline-block; transition: all 0.3s ease;">
+                        <i class="fas fa-home"></i> Return to Village
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Load EmailJS -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    
-    <!-- Firebase SDK -->
-    <script type="module">
+        <!-- Load EmailJS -->
+        <script
+            src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+        <!-- Firebase SDK -->
+        <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
         import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
         
@@ -713,7 +749,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
             authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-            projectId: "andrew-cares-village-f4cb6",
+             
             storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
             messagingSenderId: "255087116955",
             appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
@@ -731,9 +767,9 @@
         
         console.log('Firebase initialized for donations');
     </script>
-    
-    <!-- Production Paystack Integration with Development Fallback -->
-    <script>
+
+        <!-- Production Paystack Integration with Development Fallback -->
+        <script>
         // Check if we're in production (not localhost)
         const isProduction = !window.location.hostname.includes('localhost') && 
                             !window.location.hostname.includes('127.0.0.1') &&
@@ -891,9 +927,9 @@
         
         console.log('Custom Paystack implementation loaded - no external dependencies');
     </script>
-    
-    <!-- Simple Storage Solution using JSONBin.io (Free) -->
-    <script>
+
+        <!-- Simple Storage Solution using JSONBin.io (Free) -->
+        <script>
         // JSONBin.io configuration (Free tier: 100k requests/month)
         const JSONBIN_API_KEY = '$2a$10$gHy0n4iFrDG4Sc5v815nhu9Pv1qLgB4VEIHtUIKNaKoKqOwmJpSKy'; // Replace with your key
         const JSONBIN_BIN_ID = '68baffe5ae596e708fe3af67'; // Replace with your bin ID
@@ -1480,5 +1516,5 @@ Thank you.`;
             window.history.replaceState(null, null, window.location.href);
         }
     </script>
-</body>
+    </body>
 </html>

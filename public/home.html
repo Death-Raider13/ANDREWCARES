@@ -1147,7 +1147,9 @@
                 <div class="header-actions">
                     <div class="search-container">
                         <i class="fas fa-search search-icon"></i>
-                        <input type="text" class="search-input" id="globalSearch" placeholder="Search posts, people, topics...">
+                        <input type="text" class="search-input"
+                            id="globalSearch"
+                            placeholder="Search posts, people, topics...">
                         <div class="search-dropdown" id="searchDropdown">
                             <div class="search-section">Recent Searches</div>
                             <div id="recentSearches"></div>
@@ -1160,34 +1162,54 @@
 
                     <div class="notification-bell" id="notificationBell">
                         <i class="fas fa-bell"></i>
-                        <div class="notification-badge" id="notificationBadge" style="display: none;">0</div>
-                        <div class="notification-dropdown" id="notificationDropdown">
+                        <div class="notification-badge" id="notificationBadge"
+                            style="display: none;">0</div>
+                        <div class="notification-dropdown"
+                            id="notificationDropdown">
                             <div class="notification-header">
                                 <span>Notifications</span>
-                                <button id="markAllReadBtn" style="background: none; border: none; color: var(--color-primary); cursor: pointer; font-size: 0.8rem;">Mark all as read</button>
+                                <button id="markAllReadBtn"
+                                    style="background: none; border: none; color: var(--color-primary); cursor: pointer; font-size: 0.8rem;">Mark
+                                    all as read</button>
                             </div>
-                            <div class="notification-list" id="notificationList">
-                                <div style="padding: 2rem; text-align: center; color: var(--text-secondary);">No notifications yet</div>
+                            <div class="notification-list"
+                                id="notificationList">
+                                <div
+                                    style="padding: 2rem; text-align: center; color: var(--text-secondary);">No
+                                    notifications yet</div>
                             </div>
                         </div>
                     </div>
 
-                    <a href="admin.html" id="adminButton" class="hidden" style="background: var(--admin-color); color: white; padding: 0.5rem 1rem; border-radius: 20px;"><i class="fas fa-shield-alt"></i></a>
-                    <a href="instructor.html" id="instructorButton" class="hidden" style="background: var(--instructor-color); color: white; padding: 0.5rem 1rem; border-radius: 20px;"><i class="fas fa-chalkboard-teacher"></i></a>
-                    
+                    <a href="admin.html" id="adminButton" class="hidden"
+                        style="background: var(--admin-color); color: white; padding: 0.5rem 1rem; border-radius: 20px;"><i
+                            class="fas fa-shield-alt"></i></a>
+                    <a href="instructor.html" id="instructorButton"
+                        class="hidden"
+                        style="background: var(--instructor-color); color: white; padding: 0.5rem 1rem; border-radius: 20px;"><i
+                            class="fas fa-chalkboard-teacher"></i></a>
+
                     <div id="userProfile" class="user-profile">
-                        <img id="userAvatar" src alt="User Avatar" class="user-avatar">
+                        <img id="userAvatar" src alt="User Avatar"
+                            class="user-avatar">
                         <div>
-                            <span id="userName" class="user-name">Loading...</span>
-                            <span id="userRoleBadge" class="user-role-badge hidden"></span>
+                            <span id="userName"
+                                class="user-name">Loading...</span>
+                            <span id="userRoleBadge"
+                                class="user-role-badge hidden"></span>
                         </div>
                         <div class="profile-dropdown" id="profileDropdown">
-                            <a id="myProfileLink" href="profile.html"><i class="fas fa-user"></i> My Profile</a>
-                            <a href="messages.html"><i class="fas fa-comments"></i> Messages</a>
-                            <button id="logoutButton" class="logout-button"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                            <a id="myProfileLink" href="profile.html"><i
+                                    class="fas fa-user"></i> My Profile</a>
+                            <a href="messages.html"><i
+                                    class="fas fa-comments"></i> Messages</a>
+                            <button id="logoutButton" class="logout-button"><i
+                                    class="fas fa-sign-out-alt"></i>
+                                Logout</button>
                         </div>
                     </div>
-                    <button class="mobile-widgets-toggle" id="mobileWidgetsToggle">
+                    <button class="mobile-widgets-toggle"
+                        id="mobileWidgetsToggle">
                         <i class="fas fa-ellipsis-v"></i>
                     </button>
                 </div>
@@ -1204,17 +1226,30 @@
                 </div>
                 <div class="widget">
                     <div class="nav-menu">
-                        <a href="home.html" class="active"><i class="fas fa-home"></i> Village Square</a>
-                        <a href="profile.html"><i class="fas fa-user"></i> My Profile</a>
-                        <a href="friends.html"><i class="fas fa-users"></i> Friends</a>
-                        <a href="messages.html"><i class="fas fa-comments"></i> Messages</a>
-                        <a href="resources.html"><i class="fas fa-book"></i> Resources</a>
-                        <a href="live-events.html"><i class="fas fa-calendar"></i> Live Events</a>
-                        <a href="lounge.html"><i class="fas fa-coffee"></i> Lounge</a>
-                        <a href="mentorship.html"><i class="fas fa-handshake"></i> Mentorship</a>
-                        <a href="dojo.html"><i class="fas fa-fist-raised"></i> Training Dojo</a>
-                        <a href="course-management.html"><i class="fas fa-graduation-cap"></i> My Courses</a>
-                        <a href="apply.html" class="instructor-apply-link"><i class="fas fa-chalkboard-teacher"></i> Become an Instructor</a>
+                        <a href="home.html" class="active"><i
+                                class="fas fa-home"></i> Village Square</a>
+                        <a href="profile.html"><i class="fas fa-user"></i> My
+                            Profile</a>
+                        <a href="friends.html"><i class="fas fa-users"></i>
+                            Friends</a>
+                        <a href="messages.html"><i class="fas fa-comments"></i>
+                            Messages</a>
+                        <a href="resources.html"><i class="fas fa-book"></i>
+                            Resources</a>
+                        <a href="live-events.html"><i
+                                class="fas fa-calendar"></i> Live Events</a>
+                        <a href="lounge.html"><i class="fas fa-coffee"></i>
+                            Lounge</a>
+                        <a href="mentorship.html"><i
+                                class="fas fa-handshake"></i> Mentorship</a>
+                        <a href="dojo.html"><i class="fas fa-fist-raised"></i>
+                            Training Dojo</a>
+                        <a href="course-management.html"><i
+                                class="fas fa-graduation-cap"></i> My
+                            Courses</a>
+                        <a href="apply.html" class="instructor-apply-link"><i
+                                class="fas fa-chalkboard-teacher"></i> Become an
+                            Instructor</a>
                     </div>
                 </div>
                 <!-- Mobile Search -->
@@ -1222,7 +1257,9 @@
                     <div class="widget-title">Search</div>
                     <div class="search-container">
                         <i class="fas fa-search search-icon"></i>
-                        <input type="text" class="search-input" id="mobileGlobalSearch" placeholder="Search posts, people, topics...">
+                        <input type="text" class="search-input"
+                            id="mobileGlobalSearch"
+                            placeholder="Search posts, people, topics...">
                     </div>
                 </div>
             </div>
@@ -1235,16 +1272,18 @@
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-                
+
                 <!-- Quote of the Day Widget -->
                 <div class="widget" id="mobileQuoteWidget">
                     <div class="widget-title">
                         <i class="fas fa-quote-left"></i> Quote of the Day
                     </div>
                     <div class="quote-content" id="mobileQuoteContent">
-                        <blockquote style="font-style: italic; margin: 0; padding: 1rem; background: var(--hover-bg); border-left: 4px solid var(--color-primary); border-radius: 4px;">
+                        <blockquote
+                            style="font-style: italic; margin: 0; padding: 1rem; background: var(--hover-bg); border-left: 4px solid var(--color-primary); border-radius: 4px;">
                             "The best time to plant a tree was 20 years ago. The second best time is now."
-                            <footer style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">
+                            <footer
+                                style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">
                                 — Chinese Proverb
                             </footer>
                         </blockquote>
@@ -1256,21 +1295,30 @@
                     <div class="widget-title">
                         <i class="fas fa-bullhorn"></i> Village Announcements
                     </div>
-                    <div class="announcements-list" id="mobileAnnouncementsList">
-                        <div class="announcement-item" style="padding: 0.8rem; border-bottom: 1px solid var(--border-color); margin-bottom: 0.5rem;">
-                            <div style="font-weight: 600; color: var(--color-primary); font-size: 0.9rem;">
+                    <div class="announcements-list"
+                        id="mobileAnnouncementsList">
+                        <div class="announcement-item"
+                            style="padding: 0.8rem; border-bottom: 1px solid var(--border-color); margin-bottom: 0.5rem;">
+                            <div
+                                style="font-weight: 600; color: var(--color-primary); font-size: 0.9rem;">
                                 <i class="fas fa-star"></i> Welcome New Members!
                             </div>
-                            <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.3rem;">
-                                Join us in welcoming our newest village members this week.
+                            <div
+                                style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.3rem;">
+                                Join us in welcoming our newest village members
+                                this week.
                             </div>
                         </div>
-                        <div class="announcement-item" style="padding: 0.8rem; border-bottom: 1px solid var(--border-color); margin-bottom: 0.5rem;">
-                            <div style="font-weight: 600; color: var(--color-primary); font-size: 0.9rem;">
+                        <div class="announcement-item"
+                            style="padding: 0.8rem; border-bottom: 1px solid var(--border-color); margin-bottom: 0.5rem;">
+                            <div
+                                style="font-weight: 600; color: var(--color-primary); font-size: 0.9rem;">
                                 <i class="fas fa-calendar"></i> Community Event
                             </div>
-                            <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.3rem;">
-                                Monthly community gathering this Saturday at 3 PM EST.
+                            <div
+                                style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.3rem;">
+                                Monthly community gathering this Saturday at 3
+                                PM EST.
                             </div>
                         </div>
                     </div>
@@ -1282,45 +1330,68 @@
                         <i class="fas fa-fire"></i> Trending Topics
                     </div>
                     <div class="trending-list" id="mobileTrendingList">
-                        <div class="trending-item" style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-color);">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span style="font-size: 0.9rem; color: var(--text-primary);">#PersonalGrowth</span>
-                                <span style="font-size: 0.8rem; color: var(--text-secondary);">24 posts</span>
+                        <div class="trending-item"
+                            style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-color);">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center;">
+                                <span
+                                    style="font-size: 0.9rem; color: var(--text-primary);">#PersonalGrowth</span>
+                                <span
+                                    style="font-size: 0.8rem; color: var(--text-secondary);">24
+                                    posts</span>
                             </div>
                         </div>
-                        <div class="trending-item" style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-color);">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span style="font-size: 0.9rem; color: var(--text-primary);">#Mentorship</span>
-                                <span style="font-size: 0.8rem; color: var(--text-secondary);">18 posts</span>
+                        <div class="trending-item"
+                            style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-color);">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center;">
+                                <span
+                                    style="font-size: 0.9rem; color: var(--text-primary);">#Mentorship</span>
+                                <span
+                                    style="font-size: 0.8rem; color: var(--text-secondary);">18
+                                    posts</span>
                             </div>
                         </div>
-                        <div class="trending-item" style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-color);">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span style="font-size: 0.9rem; color: var(--text-primary);">#CommunitySupport</span>
-                                <span style="font-size: 0.8rem; color: var(--text-secondary);">15 posts</span>
+                        <div class="trending-item"
+                            style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-color);">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center;">
+                                <span
+                                    style="font-size: 0.9rem; color: var(--text-primary);">#CommunitySupport</span>
+                                <span
+                                    style="font-size: 0.8rem; color: var(--text-secondary);">15
+                                    posts</span>
                             </div>
                         </div>
                         <div class="trending-item" style="padding: 0.5rem 0;">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span style="font-size: 0.9rem; color: var(--text-primary);">#SkillBuilding</span>
-                                <span style="font-size: 0.8rem; color: var(--text-secondary);">12 posts</span>
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center;">
+                                <span
+                                    style="font-size: 0.9rem; color: var(--text-primary);">#SkillBuilding</span>
+                                <span
+                                    style="font-size: 0.8rem; color: var(--text-secondary);">12
+                                    posts</span>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Notifications Widget -->
                 <div class="widget">
                     <div class="widget-title">
                         <i class="fas fa-bell"></i> Notifications
-                        <div class="notification-badge" id="mobileNotificationBadge" style="display: none;">0</div>
+                        <div class="notification-badge"
+                            id="mobileNotificationBadge"
+                            style="display: none;">0</div>
                     </div>
                     <div class="notification-list" id="mobileNotificationList">
-                        <div style="padding: 2rem; text-align: center; color: var(--text-secondary);">
+                        <div
+                            style="padding: 2rem; text-align: center; color: var(--text-secondary);">
                             No notifications yet
                         </div>
                     </div>
-                    <button id="mobileMarkAllReadBtn" style="background: none; border: none; color: var(--color-primary); cursor: pointer; font-size: 0.8rem; width: 100%; padding: 0.5rem; border-top: 1px solid var(--border-color);">
+                    <button id="mobileMarkAllReadBtn"
+                        style="background: none; border: none; color: var(--color-primary); cursor: pointer; font-size: 0.8rem; width: 100%; padding: 0.5rem; border-top: 1px solid var(--border-color);">
                         Mark all as read
                     </button>
                 </div>
@@ -1329,10 +1400,13 @@
                 <div class="widget online-friends-widget">
                     <div class="widget-title">
                         <i class="fas fa-users"></i> Online Friends
-                        <span class="online-count" id="mobileOnlineCount">0</span>
+                        <span class="online-count"
+                            id="mobileOnlineCount">0</span>
                     </div>
-                    <div class="online-friends-list" id="mobileOnlineFriendsList">
-                        <div style="text-align: center; color: var(--text-secondary); padding: 1rem;">
+                    <div class="online-friends-list"
+                        id="mobileOnlineFriendsList">
+                        <div
+                            style="text-align: center; color: var(--text-secondary); padding: 1rem;">
                             Loading friends...
                         </div>
                     </div>
@@ -1344,11 +1418,20 @@
                         <i class="fas fa-bolt"></i> Quick Actions
                     </div>
                     <div class="nav-menu">
-                        <a href="admin.html" id="mobileAdminButton" class="hidden" style="color: var(--admin-color);"><i class="fas fa-shield-alt"></i> Admin Panel</a>
-                        <a href="instructor.html" id="mobileInstructorButton" class="hidden" style="color: var(--instructor-color);"><i class="fas fa-chalkboard-teacher"></i> Instructor Dashboard</a>
-                        <a href="profile.html"><i class="fas fa-user-edit"></i> Edit Profile</a>
-                        <a href="messages.html"><i class="fas fa-comments"></i> Messages</a>
-                        <button id="mobileLogoutButton" class="logout-button" style="width: 100%; text-align: left; background: none; border: none; padding: 0.8rem; color: var(--danger-color); cursor: pointer;">
+                        <a href="admin.html" id="mobileAdminButton"
+                            class="hidden" style="color: var(--admin-color);"><i
+                                class="fas fa-shield-alt"></i> Admin Panel</a>
+                        <a href="instructor.html" id="mobileInstructorButton"
+                            class="hidden"
+                            style="color: var(--instructor-color);"><i
+                                class="fas fa-chalkboard-teacher"></i>
+                            Instructor Dashboard</a>
+                        <a href="profile.html"><i class="fas fa-user-edit"></i>
+                            Edit Profile</a>
+                        <a href="messages.html"><i class="fas fa-comments"></i>
+                            Messages</a>
+                        <button id="mobileLogoutButton" class="logout-button"
+                            style="width: 100%; text-align: left; background: none; border: none; padding: 0.8rem; color: var(--danger-color); cursor: pointer;">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </button>
                     </div>
@@ -1359,8 +1442,12 @@
                     <div class="widget-title">
                         <i class="fas fa-heart"></i> Support the Village
                     </div>
-                    <p style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-secondary);">Help us keep the community thriving and support our mission!</p>
-                    <a href="donate.html" class="btn-donate" style="display: inline-block; width: 100%; text-align: center; text-decoration: none; padding: 0.8rem 1.5rem; background: linear-gradient(45deg, var(--success-color), #4caf50); color: white; border-radius: 25px; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 10px rgba(76, 175, 80, 0.3);">
+                    <p
+                        style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-secondary);">Help
+                        us keep the community thriving and support our
+                        mission!</p>
+                    <a href="donate.html" class="btn-donate"
+                        style="display: inline-block; width: 100%; text-align: center; text-decoration: none; padding: 0.8rem 1.5rem; background: linear-gradient(45deg, var(--success-color), #4caf50); color: white; border-radius: 25px; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 10px rgba(76, 175, 80, 0.3);">
                         <i class="fas fa-donate"></i> Donate Now
                     </a>
                 </div>
@@ -1459,7 +1546,7 @@
             const firebaseConfig = {
                 apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
                 authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-                projectId: "andrew-cares-village-f4cb6",
+                 
                 storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
                 messagingSenderId: "255087116955",
                 appId: "1:255087116955:web:84360ee1f13888f9b83c3e"

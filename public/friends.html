@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Friends Management - Andrew Cares Village</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Friends Management - Andrew Cares Village</title>
+
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+        <style>
         /* CSS Variables for easy theming */
         :root {
             --primary-blue: #1877f2;
@@ -693,179 +694,198 @@
             outline-offset: 2px;
         }
     </style>
-</head>
+    </head>
 
-<body>
-    <!-- Header -->
-    <header class="main-header" role="banner">
-        <div class="header-content">
-            <div class="profile-section">
-                <img id="profile-avatar" 
-                     src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNFQUVBRUEiLz4KPHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSI4IiB5PSI4Ij4KPHBhdGggZD0iTTEyIDEyQzE0LjIwOTEgMTIgMTYgMTAuMjA5MSAxNiA4QzE2IDUuNzkwODYgMTQuMjA5MSA0IDEyIDRDOS43OTA4NiA0IDggNS43OTA4NiA4IDhDOCAxMC4yMDkxIDkuNzkwODYgMTIgMTIgMTJaIiBmaWxsPSIjNzc3Ii8+CjxwYXRoIGQ9Ik0xMiAxNEM5LjMzIDEyIDQgMTUuMzQgNCAxOFYyMEgxMkgyMFYxOEMyMCAxNS4zNCAxNC42NyAxNCAyIDEySDEyWiIgZmlsbD0iIzc3NyIvPgo8L3N2Zz4KPC9zdmc+"
-                     alt="Profile Avatar" 
-                     class="profile-avatar">
-                <div class="profile-info">
-                    <h3 id="profile-name">Loading...</h3>
-                    <p id="profile-status">Online</p>
+    <body>
+        <!-- Header -->
+        <header class="main-header" role="banner">
+            <div class="header-content">
+                <div class="profile-section">
+                    <img id="profile-avatar"
+                        src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNFQUVBRUEiLz4KPHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSI4IiB5PSI4Ij4KPHBhdGggZD0iTTEyIDEyQzE0LjIwOTEgMTIgMTYgMTAuMjA5MSAxNiA4QzE2IDUuNzkwODYgMTQuMjA5MSA0IDEyIDRDOS43OTA4NiA0IDggNS43OTA4NiA4IDhDOCAxMC4yMDkxIDkuNzkwODYgMTIgMTIgMTJaIiBmaWxsPSIjNzc3Ii8+CjxwYXRoIGQ9Ik0xMiAxNEM5LjMzIDEyIDQgMTUuMzQgNCAxOFYyMEgxMkgyMFYxOEMyMCAxNS4zNCAxNC42NyAxNCAyIDEySDEyWiIgZmlsbD0iIzc3NyIvPgo8L3N2Zz4KPC9zdmc+"
+                        alt="Profile Avatar"
+                        class="profile-avatar">
+                    <div class="profile-info">
+                        <h3 id="profile-name">Loading...</h3>
+                        <p id="profile-status">Online</p>
+                    </div>
+                </div>
+
+                <div class="notification-section">
+                    <button class="notification-button"
+                        aria-label="Notifications"
+                        title="Friend requests">
+                        <i class="fas fa-bell"></i>
+                        <span
+                            class="notification-count visually-hidden">0</span>
+                    </button>
                 </div>
             </div>
-            
-            <div class="notification-section">
-                <button class="notification-button" 
-                        aria-label="Notifications" 
-                        title="Friend requests">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-count visually-hidden">0</span>
-                </button>
-            </div>
-        </div>
-    </header>
+        </header>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="nav-container">
-            <!-- Navigation Tabs -->
-            <nav class="nav-tabs" role="tablist">
-                <button class="nav-tab active" 
-                        data-tab="my-friends" 
-                        role="tab" 
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="nav-container">
+                <!-- Navigation Tabs -->
+                <nav class="nav-tabs" role="tablist">
+                    <button class="nav-tab active"
+                        data-tab="my-friends"
+                        role="tab"
                         aria-selected="true"
                         aria-controls="my-friends-panel">
-                    <i class="fas fa-users"></i> My Friends
-                </button>
-                <button class="nav-tab" 
-                        data-tab="pending-requests" 
+                        <i class="fas fa-users"></i> My Friends
+                    </button>
+                    <button class="nav-tab"
+                        data-tab="pending-requests"
                         role="tab"
                         aria-controls="pending-requests-panel">
-                    <i class="fas fa-user-clock"></i> Pending Requests
-                </button>
-                <button class="nav-tab" 
-                        data-tab="sent-requests" 
+                        <i class="fas fa-user-clock"></i> Pending Requests
+                    </button>
+                    <button class="nav-tab"
+                        data-tab="sent-requests"
                         role="tab"
                         aria-controls="sent-requests-panel">
-                    <i class="fas fa-paper-plane"></i> Sent Requests
-                </button>
-                <button class="nav-tab" 
-                        data-tab="find-friends" 
+                        <i class="fas fa-paper-plane"></i> Sent Requests
+                    </button>
+                    <button class="nav-tab"
+                        data-tab="find-friends"
                         role="tab"
                         aria-controls="find-friends-panel">
-                    <i class="fas fa-search"></i> Find Friends
-                </button>
-            </nav>
+                        <i class="fas fa-search"></i> Find Friends
+                    </button>
+                </nav>
 
-            <!-- Tab Content -->
-            <div class="tab-content">
-                <!-- My Friends Panel -->
-                <section id="my-friends-panel" 
-                         class="tab-panel active" 
-                         role="tabpanel" 
-                         aria-labelledby="my-friends-tab">
-                    <div class="loading-container">
-                        <div class="spinner" aria-label="Loading friends"></div>
-                    </div>
-                </section>
-
-                <!-- Pending Requests Panel -->
-                <section id="pending-requests-panel" 
-                         class="tab-panel" 
-                         role="tabpanel" 
-                         aria-labelledby="pending-requests-tab">
-                    <div class="loading-container">
-                        <div class="spinner" aria-label="Loading requests"></div>
-                    </div>
-                </section>
-
-                <!-- Sent Requests Panel -->
-                <section id="sent-requests-panel" 
-                         class="tab-panel" 
-                         role="tabpanel" 
-                         aria-labelledby="sent-requests-tab">
-                    <div class="loading-container">
-                        <div class="spinner" aria-label="Loading sent requests"></div>
-                    </div>
-                </section>
-
-                <!-- Find Friends Panel -->
-                <section id="find-friends-panel" 
-                         class="tab-panel" 
-                         role="tabpanel" 
-                         aria-labelledby="find-friends-tab">
-                    
-                    <div class="search-section">
-                        <div class="search-container">
-                            <input type="text" 
-                                   id="search-input" 
-                                   class="search-input"
-                                   placeholder="Search people by name or email..."
-                                   autocomplete="off"
-                                   spellcheck="false">
-                            <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    <!-- My Friends Panel -->
+                    <section id="my-friends-panel"
+                        class="tab-panel active"
+                        role="tabpanel"
+                        aria-labelledby="my-friends-tab">
+                        <div class="loading-container">
+                            <div class="spinner"
+                                aria-label="Loading friends"></div>
                         </div>
+                    </section>
 
-                        <div class="filter-controls">
-                            <div class="filter-options">
-                                <select id="status-filter" class="filter-select" aria-label="Status filter">
-                                    <option value="all">All users</option>
-                                    <option value="online">Online (last 5 min)</option>
-                                    <option value="recent">Recently active (last hour)</option>
-                                    <option value="offline">Offline</option>
-                                </select>
-                                
-                                <select id="sort-by" class="filter-select" aria-label="Sort by">
-                                    <option value="name">Sort by name</option>
-                                    <option value="activity">Sort by activity</option>
-                                    <option value="mutual">Sort by mutual friends</option>
-                                </select>
-                                
-                                <button id="sort-order" class="sort-btn" aria-label="Sort order" title="Toggle sort order">
-                                    <i class="fas fa-sort-alpha-down"></i>
-                                </button>
+                    <!-- Pending Requests Panel -->
+                    <section id="pending-requests-panel"
+                        class="tab-panel"
+                        role="tabpanel"
+                        aria-labelledby="pending-requests-tab">
+                        <div class="loading-container">
+                            <div class="spinner"
+                                aria-label="Loading requests"></div>
+                        </div>
+                    </section>
+
+                    <!-- Sent Requests Panel -->
+                    <section id="sent-requests-panel"
+                        class="tab-panel"
+                        role="tabpanel"
+                        aria-labelledby="sent-requests-tab">
+                        <div class="loading-container">
+                            <div class="spinner"
+                                aria-label="Loading sent requests"></div>
+                        </div>
+                    </section>
+
+                    <!-- Find Friends Panel -->
+                    <section id="find-friends-panel"
+                        class="tab-panel"
+                        role="tabpanel"
+                        aria-labelledby="find-friends-tab">
+
+                        <div class="search-section">
+                            <div class="search-container">
+                                <input type="text"
+                                    id="search-input"
+                                    class="search-input"
+                                    placeholder="Search people by name or email..."
+                                    autocomplete="off"
+                                    spellcheck="false">
+                                <i class="fas fa-search search-icon"
+                                    aria-hidden="true"></i>
                             </div>
 
-                            <div class="pagination">
-                                <button id="prev-page" 
-                                        class="pagination-btn" 
-                                        disabled 
+                            <div class="filter-controls">
+                                <div class="filter-options">
+                                    <select id="status-filter"
+                                        class="filter-select"
+                                        aria-label="Status filter">
+                                        <option value="all">All users</option>
+                                        <option value="online">Online (last 5
+                                            min)</option>
+                                        <option value="recent">Recently active
+                                            (last hour)</option>
+                                        <option value="offline">Offline</option>
+                                    </select>
+
+                                    <select id="sort-by" class="filter-select"
+                                        aria-label="Sort by">
+                                        <option value="name">Sort by
+                                            name</option>
+                                        <option value="activity">Sort by
+                                            activity</option>
+                                        <option value="mutual">Sort by mutual
+                                            friends</option>
+                                    </select>
+
+                                    <button id="sort-order" class="sort-btn"
+                                        aria-label="Sort order"
+                                        title="Toggle sort order">
+                                        <i class="fas fa-sort-alpha-down"></i>
+                                    </button>
+                                </div>
+
+                                <div class="pagination">
+                                    <button id="prev-page"
+                                        class="pagination-btn"
+                                        disabled
                                         aria-label="Previous page">
-                                    <i class="fas fa-chevron-left"></i>
-                                </button>
-                                <span class="page-info" id="page-info">Page 1</span>
-                                <button id="next-page" 
-                                        class="pagination-btn" 
-                                        disabled 
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <span class="page-info" id="page-info">Page
+                                        1</span>
+                                    <button id="next-page"
+                                        class="pagination-btn"
+                                        disabled
                                         aria-label="Next page">
-                                    <i class="fas fa-chevron-right"></i>
-                                </button>
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div id="search-results">
-                        <div class="empty-state">
-                            <div class="empty-state-icon">
-                                <i class="fas fa-search"></i>
+                        <div id="search-results">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <h3>Find your friends</h3>
+                                <p>Search for people to connect with</p>
                             </div>
-                            <h3>Find your friends</h3>
-                            <p>Search for people to connect with</p>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                </div>
             </div>
-        </div>
-    </main>
+        </main>
 
-    <!-- Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    
-    <script>
+        <!-- Scripts -->
+        <script
+            src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+        <script
+            src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+        <script
+            src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+        <script>
         // Application Configuration
         const APP_CONFIG = {
             firebase: {
                 apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
                 authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-                projectId: "andrew-cares-village-f4cb6",
+                 
                 storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
                 messagingSenderId: "255087116955",
                 appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
@@ -1947,5 +1967,5 @@
             appState.cleanup();
         });
     </script>
-</body>
+    </body>
 </html>

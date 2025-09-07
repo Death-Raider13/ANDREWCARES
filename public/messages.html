@@ -1,26 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messages - Andrew Cares Village</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Messages - Andrew Cares Village</title>
 
-    <!-- Enhanced Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <!-- Enhanced Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet">
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <!-- Animate.css for smooth animations -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- PDF.js for document preview -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+        <!-- Animate.css for smooth animations -->
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
-    <style>
+        <!-- PDF.js for document preview -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+        <style>
         /* Enhanced Professional Variables */
         :root {
             --primary-color: #6366f1;
@@ -2785,357 +2790,418 @@
     cursor: pointer;
 }
     </style>
-</head>
+    </head>
 
-<body>
-    <!-- Enhanced Header -->
-    <header class="main-header">
-        <a href="home.html" class="logo">Andrew Cares Village</a>
-        
-        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
-            <i class="fas fa-bars"></i>
-        </button>
-        
-        <nav class="main-nav" id="mainNav">
-            <a href="home.html">Home</a>
-            <a href="dojo.html?discipline=Forex">Forex Training</a>
-            <a href="dojo.html?discipline=Fitness">Fitness Training</a>
-            <a href="dojo.html?discipline=Karate">Karate Training</a>
-        </nav>
-        
-        <div class="header-actions">
-            <div id="userProfileNav" class="user-profile-nav">
-                <img id="userAvatarNav" src="" alt="User Avatar" class="user-avatar-nav">
-                <span id="userNameNav" class="user-name-nav">Loading...</span>
-                <div class="profile-dropdown">
-                    <a href="profile.html">My Profile</a>
-                    <a href="friends.html">Friends</a>
-                    <button id="logoutButton" class="logout-button">Logout</button>
+    <body>
+        <!-- Enhanced Header -->
+        <header class="main-header">
+            <a href="home.html" class="logo">Andrew Cares Village</a>
+
+            <button class="mobile-menu-toggle" id="mobileMenuToggle"
+                aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <nav class="main-nav" id="mainNav">
+                <a href="home.html">Home</a>
+                <a href="dojo.html?discipline=Forex">Forex Training</a>
+                <a href="dojo.html?discipline=Fitness">Fitness Training</a>
+                <a href="dojo.html?discipline=Karate">Karate Training</a>
+            </nav>
+
+            <div class="header-actions">
+                <div id="userProfileNav" class="user-profile-nav">
+                    <img id="userAvatarNav" src alt="User Avatar"
+                        class="user-avatar-nav">
+                    <span id="userNameNav"
+                        class="user-name-nav">Loading...</span>
+                    <div class="profile-dropdown">
+                        <a href="profile.html">My Profile</a>
+                        <a href="friends.html">Friends</a>
+                        <button id="logoutButton"
+                            class="logout-button">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Enhanced Main Content -->
+        <main class="messaging-container" id="messagingContainer">
+            <!-- Left Pane: Conversation List -->
+            <aside class="conversation-list">
+
+                <div class="conversation-list-header">
+                    <h2>Messages</h2>
+                    <div class="conversation-search">
+                        <input type="text" placeholder="Search conversations..."
+                            id="conversationSearch">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+                <div class="conversation-list-body" id="conversationListBody">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Loading conversations...
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Right Pane: Chat Window -->
+            <section class="chat-window" id="chatWindow">
+                <div class="chat-window-placeholder" id="chatWindowPlaceholder">
+                    <i class="fas fa-comments"></i>
+                    <h2>Select a conversation</h2>
+                    <p>Choose from your friends list to start chatting, or send
+                        voice messages, images, files, and locations.</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- Enhanced Modals -->
+
+        <!-- File Upload Modal -->
+        <div class="upload-modal" id="uploadModal">
+            <div class="upload-modal-content">
+                <h3>Share Media & Files</h3>
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Drag and drop files here or click to browse</p>
+                    <input type="file" id="fileInput" style="display: none;"
+                        accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt,.zip">
+                </div>
+                <div class="upload-options">
+                    <div class="upload-option" onclick="openCamera()">
+                        <i class="fas fa-camera"></i>
+                        <span>Camera</span>
+                    </div>
+                    <div class="upload-option" onclick="shareLocation()">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Location</span>
+                    </div>
+                    <div class="upload-option" onclick="shareContact()">
+                        <i class="fas fa-address-book"></i>
+                        <span>Contact</span>
+                    </div>
+                    <div class="upload-option" onclick="selectFile('image/*')">
+                        <i class="fas fa-image"></i>
+                        <span>Photos</span>
+                    </div>
+                    <div class="upload-option"
+                        onclick="selectFile('.pdf,.doc,.docx')">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Document</span>
+                    </div>
+                </div>
+                <div style="margin-top: 1.5rem; text-align: right;">
+                    <button onclick="closeUploadModal()"
+                        class="btn btn-secondary">Cancel</button>
                 </div>
             </div>
         </div>
-    </header>
 
-    <!-- Enhanced Main Content -->
-    <main class="messaging-container" id="messagingContainer">
-        <!-- Left Pane: Conversation List -->
-        <aside class="conversation-list">
-            
-            <div class="conversation-list-header">
-                <h2>Messages</h2>
-                <div class="conversation-search">
-                    <input type="text" placeholder="Search conversations..." id="conversationSearch">
-                    <i class="fas fa-search"></i>
+        <!-- Camera Modal -->
+        <div class="camera-modal" id="cameraModal">
+            <div class="camera-container">
+                <video class="camera-video" id="cameraVideo" autoplay></video>
+                <canvas id="cameraCanvas" style="display: none;"></canvas>
+                <div class="camera-controls">
+                    <button class="camera-btn close" title="Close Camera"
+                        onclick="closeCamera()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <button class="camera-btn capture" title="Capture Photo"
+                        onclick="capturePhoto()">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                    <button class="camera-btn" title="Switch Camera"
+                        onclick="switchCamera()">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
                 </div>
-            </div>
-            <div class="conversation-list-body" id="conversationListBody">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    Loading conversations...
-                </div>
-            </div>
-        </aside>
-
-        <!-- Right Pane: Chat Window -->
-        <section class="chat-window" id="chatWindow">
-            <div class="chat-window-placeholder" id="chatWindowPlaceholder">
-                <i class="fas fa-comments"></i>
-                <h2>Select a conversation</h2>
-                <p>Choose from your friends list to start chatting, or send voice messages, images, files, and locations.</p>
-            </div>
-        </section>
-    </main>
-
-    <!-- Enhanced Modals -->
-    
-    <!-- File Upload Modal -->
-    <div class="upload-modal" id="uploadModal">
-        <div class="upload-modal-content">
-            <h3>Share Media & Files</h3>
-            <div class="upload-area" id="uploadArea">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p>Drag and drop files here or click to browse</p>
-                <input type="file" id="fileInput" style="display: none;" accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt,.zip">
-            </div>
-            <div class="upload-options">
-                <div class="upload-option" onclick="openCamera()">
-                    <i class="fas fa-camera"></i>
-                    <span>Camera</span>
-                </div>
-                <div class="upload-option" onclick="shareLocation()">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>Location</span>
-                </div>
-                <div class="upload-option" onclick="shareContact()">
-                    <i class="fas fa-address-book"></i>
-                    <span>Contact</span>
-                </div>
-                <div class="upload-option" onclick="selectFile('image/*')">
-                    <i class="fas fa-image"></i>
-                    <span>Photos</span>
-                </div>
-                <div class="upload-option" onclick="selectFile('.pdf,.doc,.docx')">
-                    <i class="fas fa-file-alt"></i>
-                    <span>Document</span>
-                </div>
-            </div>
-            <div style="margin-top: 1.5rem; text-align: right;">
-                <button onclick="closeUploadModal()" class="btn btn-secondary">Cancel</button>
             </div>
         </div>
-    </div>
 
-    <!-- Camera Modal -->
-    <div class="camera-modal" id="cameraModal">
-        <div class="camera-container">
-            <video class="camera-video" id="cameraVideo" autoplay></video>
-            <canvas id="cameraCanvas" style="display: none;"></canvas>
-            <div class="camera-controls">
-                <button class="camera-btn close" title="Close Camera" onclick="closeCamera()">
+        <!-- Voice Recording Modal -->
+        <div class="voice-recording-modal" id="voiceRecordingModal">
+            <div class="voice-recording-content">
+                <h3>Recording Voice Message</h3>
+                <div class="voice-recording-visualizer" id="voiceVisualizer">
+                    <div class="voice-recording-bar"></div>
+                    <div class="voice-recording-bar"></div>
+                    <div class="voice-recording-bar"></div>
+                    <div class="voice-recording-bar"></div>
+                    <div class="voice-recording-bar"></div>
+                    <div class="voice-recording-bar"></div>
+                    <div class="voice-recording-bar"></div>
+                    <div class="voice-recording-bar"></div>
+                </div>
+                <div class="voice-recording-time"
+                    id="voiceRecordingTime">00:00</div>
+                <p>Speak into your microphone</p>
+                <div class="voice-recording-controls">
+                    <button type="button" class="voice-recording-btn cancel"
+                        title="Cancel Voice Recording"
+                        onclick="cancelVoiceRecording()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <button type="button" class="voice-recording-btn stop"
+                        title="Stop Voice Recording"
+                        onclick="stopVoiceRecording()">
+                        <i class="fas fa-stop"></i>
+                    </button>
+                    <button class="voice-recording-btn send"
+                        title="Send Voice Recording"
+                        onclick="sendVoiceRecording()" style="display: none;">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Image Viewer Modal -->
+        <div class="image-viewer-modal" id="imageViewerModal">
+            <div class="image-viewer-content">
+                <div class="image-viewer-controls">
+                    <button class="image-viewer-btn" onclick="downloadImage()"
+                        title="Download">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button class="image-viewer-btn"
+                        onclick="closeImageViewer()" title="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <img class="image-viewer-img" id="imageViewerImg" src
+                    alt="Full size image">
+                <div class="image-viewer-info" id="imageViewerInfo">
+                    Image details
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule Message Modal -->
+        <div class="schedule-modal" id="scheduleModal">
+            <div class="schedule-modal-content">
+                <h3>Schedule Message</h3>
+                <div class="schedule-input-group">
+                    <label for="scheduleDate">Date</label>
+                    <input type="date" id="scheduleDate" name="scheduleDate">
+                </div>
+                <div class="schedule-input-group">
+                    <label for="scheduleTime">Time</label>
+                    <input type="time" id="scheduleTime" name="scheduleTime">
+                </div>
+                <div class="schedule-input-group">
+                    <label for="scheduleMessage">Message</label>
+                    <textarea id="scheduleMessage" name="scheduleMessage"
+                        rows="3"
+                        placeholder="Type your message here..."></textarea>
+                </div>
+                <div class="schedule-actions">
+                    <button onclick="closeScheduleModal()"
+                        class="btn btn-secondary">Cancel</button>
+                    <button onclick="scheduleMessage()"
+                        class="btn btn-primary">Schedule</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Search Modal -->
+        <div class="contact-search-modal" id="contactSearchModal">
+            <div class="contact-search-content">
+                <div class="contact-search-header">
+                    <h3>Share Contact</h3>
+                    <input type="text" class="contact-search-input"
+                        id="contactSearchInput"
+                        placeholder="Search contacts...">
+                </div>
+                <div class="contact-search-results" id="contactSearchResults">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Loading contacts...
+                    </div>
+                </div>
+                <div class="schedule-actions">
+                    <button onclick="closeContactSearchModal()"
+                        class="btn btn-secondary">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Location Sharing Modal -->
+        <div class="location-modal" id="locationModal">
+            <div class="location-modal-content">
+                <h3>Share Location</h3>
+                <div class="location-preview" id="locationPreview">
+                    <div
+                        style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
+                        <i class="fas fa-map-marker-alt"
+                            style="font-size: 2rem;"></i>
+                    </div>
+                </div>
+                <div class="location-details" id="locationDetails">
+                    <h4>Getting your location...</h4>
+                    <p>Please allow location access to share your current
+                        position.</p>
+                </div>
+                <div class="location-actions">
+                    <button onclick="closeLocationModal()"
+                        class="btn btn-secondary">Cancel</button>
+                    <button onclick="sendCurrentLocation()"
+                        class="btn btn-primary" id="sendLocationBtn"
+                        disabled>Send Location</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wallpaper Selector Modal -->
+        <div class="wallpaper-selector" id="wallpaperSelector">
+            <div class="wallpaper-modal">
+                <h3>Choose Chat Wallpaper</h3>
+                <div class="wallpaper-options">
+                    <div class="wallpaper-option none selected"
+                        data-wallpaper="none" onclick="selectWallpaper('none')">
+                        <span>None</span>
+                    </div>
+                    <div class="wallpaper-option" data-wallpaper="bubbles"
+                        onclick="selectWallpaper('bubbles')">
+                        <div
+                            style="background: linear-gradient(45deg, #667eea, #764ba2); width: 100%; height: 100%;"></div>
+                    </div>
+                    <div class="wallpaper-option" data-wallpaper="geometric"
+                        onclick="selectWallpaper('geometric')">
+                        <div
+                            style="background: linear-gradient(45deg, #f093fb, #f5576c); width: 100%; height: 100%;"></div>
+                    </div>
+                    <div class="wallpaper-option" data-wallpaper="nature"
+                        onclick="selectWallpaper('nature')">
+                        <div
+                            style="background: linear-gradient(45deg, #4facfe, #00f2fe); width: 100%; height: 100%;"></div>
+                    </div>
+                    <div class="wallpaper-option" data-wallpaper="dark"
+                        onclick="selectWallpaper('dark')">
+                        <div
+                            style="background: linear-gradient(45deg, #2c3e50, #34495e); width: 100%; height: 100%;"></div>
+                    </div>
+                    <div class="wallpaper-option" data-wallpaper="sunset"
+                        onclick="selectWallpaper('sunset')">
+                        <div
+                            style="background: linear-gradient(45deg, #ff9a9e, #fecfef); width: 100%; height: 100%;"></div>
+                    </div>
+                </div>
+                <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                    <button onclick="closeWallpaperSelector()"
+                        class="btn btn-secondary">Cancel</button>
+                    <button onclick="applyWallpaper()"
+                        class="btn btn-primary">Apply</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Message Context Menu -->
+        <div class="message-context-menu" id="messageContextMenu">
+            <div class="context-menu-item" onclick="replyToMessage()">
+                <i class="fas fa-reply"></i>
+                Reply
+            </div>
+            <div class="context-menu-item" onclick="forwardMessage()">
+                <i class="fas fa-share"></i>
+                Forward
+            </div>
+            <div class="context-menu-item" onclick="addReaction()">
+                <i class="fas fa-smile"></i>
+                React
+            </div>
+            <div class="context-menu-item" onclick="copyMessage()">
+                <i class="fas fa-copy"></i>
+                Copy
+            </div>
+            <div class="context-menu-item" onclick="selectMessage()">
+                <i class="fas fa-check-square"></i>
+                Select
+            </div>
+            <div class="context-menu-item danger" onclick="deleteMessage()">
+                <i class="fas fa-trash"></i>
+                Delete
+            </div>
+        </div>
+
+        <!-- Emoji Picker -->
+        <div class="emoji-picker" id="emojiPicker">
+            <div class="emoji-picker-header">
+                <span>Choose Emoji</span>
+                <button type="button" onclick="closeEmojiPicker()"
+                    class="close-emoji-picker-btn" title="Close Emoji Picker">
                     <i class="fas fa-times"></i>
                 </button>
-                <button class="camera-btn capture" title="Capture Photo" onclick="capturePhoto()">
-                    <i class="fas fa-camera"></i>
-                </button>
-                <button class="camera-btn" title="Switch Camera" onclick="switchCamera()">
-                    <i class="fas fa-sync-alt"></i>
-                </button>
+            </div>
+            <div class="emoji-picker-body" id="emojiPickerBody">
+                <!-- Emojis will be populated by JavaScript -->
             </div>
         </div>
-    </div>
 
-    <!-- Voice Recording Modal -->
-    <div class="voice-recording-modal" id="voiceRecordingModal">
-        <div class="voice-recording-content">
-            <h3>Recording Voice Message</h3>
-            <div class="voice-recording-visualizer" id="voiceVisualizer">
-                <div class="voice-recording-bar"></div>
-                <div class="voice-recording-bar"></div>
-                <div class="voice-recording-bar"></div>
-                <div class="voice-recording-bar"></div>
-                <div class="voice-recording-bar"></div>
-                <div class="voice-recording-bar"></div>
-                <div class="voice-recording-bar"></div>
-                <div class="voice-recording-bar"></div>
+        <!-- Reply Input Bar -->
+        <div class="reply-input-bar" id="replyInputBar">
+            <div class="reply-input-preview">
+                <div class="reply-input-author" id="replyAuthor">John Doe</div>
+                <div class="reply-input-text" id="replyText">Original message
+                    text...</div>
             </div>
-            <div class="voice-recording-time" id="voiceRecordingTime">00:00</div>
-            <p>Speak into your microphone</p>
-            <div class="voice-recording-controls">
-                <button type="button" class="voice-recording-btn cancel" title="Cancel Voice Recording" onclick="cancelVoiceRecording()">
-                    <i class="fas fa-times"></i>
-                </button>
-                <button type="button" class="voice-recording-btn stop" title="Stop Voice Recording" onclick="stopVoiceRecording()">
-                    <i class="fas fa-stop"></i>
-                </button>
-                <button class="voice-recording-btn send" title="Send Voice Recording" onclick="sendVoiceRecording()" style="display: none;">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Image Viewer Modal -->
-    <div class="image-viewer-modal" id="imageViewerModal">
-        <div class="image-viewer-content">
-            <div class="image-viewer-controls">
-                <button class="image-viewer-btn" onclick="downloadImage()" title="Download">
-                    <i class="fas fa-download"></i>
-                </button>
-                <button class="image-viewer-btn" onclick="closeImageViewer()" title="Close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <img class="image-viewer-img" id="imageViewerImg" src="" alt="Full size image">
-            <div class="image-viewer-info" id="imageViewerInfo">
-                Image details
-            </div>
-        </div>
-    </div>
-
-    <!-- Schedule Message Modal -->
-    <div class="schedule-modal" id="scheduleModal">
-        <div class="schedule-modal-content">
-            <h3>Schedule Message</h3>
-            <div class="schedule-input-group">
-                <label for="scheduleDate">Date</label>
-                <input type="date" id="scheduleDate" name="scheduleDate">
-            </div>
-            <div class="schedule-input-group">
-                <label for="scheduleTime">Time</label>
-                <input type="time" id="scheduleTime" name="scheduleTime">
-            </div>
-            <div class="schedule-input-group">
-                <label for="scheduleMessage">Message</label>
-                <textarea id="scheduleMessage" name="scheduleMessage" rows="3" placeholder="Type your message here..."></textarea>
-            </div>
-            <div class="schedule-actions">
-                <button onclick="closeScheduleModal()" class="btn btn-secondary">Cancel</button>
-                <button onclick="scheduleMessage()" class="btn btn-primary">Schedule</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Contact Search Modal -->
-    <div class="contact-search-modal" id="contactSearchModal">
-        <div class="contact-search-content">
-            <div class="contact-search-header">
-                <h3>Share Contact</h3>
-                <input type="text" class="contact-search-input" id="contactSearchInput" placeholder="Search contacts...">
-            </div>
-            <div class="contact-search-results" id="contactSearchResults">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    Loading contacts...
-                </div>
-            </div>
-            <div class="schedule-actions">
-                <button onclick="closeContactSearchModal()" class="btn btn-secondary">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Location Sharing Modal -->
-    <div class="location-modal" id="locationModal">
-        <div class="location-modal-content">
-            <h3>Share Location</h3>
-            <div class="location-preview" id="locationPreview">
-                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
-                    <i class="fas fa-map-marker-alt" style="font-size: 2rem;"></i>
-                </div>
-            </div>
-            <div class="location-details" id="locationDetails">
-                <h4>Getting your location...</h4>
-                <p>Please allow location access to share your current position.</p>
-            </div>
-            <div class="location-actions">
-                <button onclick="closeLocationModal()" class="btn btn-secondary">Cancel</button>
-                <button onclick="sendCurrentLocation()" class="btn btn-primary" id="sendLocationBtn" disabled>Send Location</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Wallpaper Selector Modal -->
-    <div class="wallpaper-selector" id="wallpaperSelector">
-        <div class="wallpaper-modal">
-            <h3>Choose Chat Wallpaper</h3>
-            <div class="wallpaper-options">
-                <div class="wallpaper-option none selected" data-wallpaper="none" onclick="selectWallpaper('none')">
-                    <span>None</span>
-                </div>
-                <div class="wallpaper-option" data-wallpaper="bubbles" onclick="selectWallpaper('bubbles')">
-                    <div style="background: linear-gradient(45deg, #667eea, #764ba2); width: 100%; height: 100%;"></div>
-                </div>
-                <div class="wallpaper-option" data-wallpaper="geometric" onclick="selectWallpaper('geometric')">
-                    <div style="background: linear-gradient(45deg, #f093fb, #f5576c); width: 100%; height: 100%;"></div>
-                </div>
-                <div class="wallpaper-option" data-wallpaper="nature" onclick="selectWallpaper('nature')">
-                    <div style="background: linear-gradient(45deg, #4facfe, #00f2fe); width: 100%; height: 100%;"></div>
-                </div>
-                <div class="wallpaper-option" data-wallpaper="dark" onclick="selectWallpaper('dark')">
-                    <div style="background: linear-gradient(45deg, #2c3e50, #34495e); width: 100%; height: 100%;"></div>
-                </div>
-                <div class="wallpaper-option" data-wallpaper="sunset" onclick="selectWallpaper('sunset')">
-                    <div style="background: linear-gradient(45deg, #ff9a9e, #fecfef); width: 100%; height: 100%;"></div>
-                </div>
-            </div>
-            <div style="margin-top: 2rem; display: flex; gap: 1rem;">
-                <button onclick="closeWallpaperSelector()" class="btn btn-secondary">Cancel</button>
-                <button onclick="applyWallpaper()" class="btn btn-primary">Apply</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Message Context Menu -->
-    <div class="message-context-menu" id="messageContextMenu">
-        <div class="context-menu-item" onclick="replyToMessage()">
-            <i class="fas fa-reply"></i>
-            Reply
-        </div>
-        <div class="context-menu-item" onclick="forwardMessage()">
-            <i class="fas fa-share"></i>
-            Forward
-        </div>
-        <div class="context-menu-item" onclick="addReaction()">
-            <i class="fas fa-smile"></i>
-            React
-        </div>
-        <div class="context-menu-item" onclick="copyMessage()">
-            <i class="fas fa-copy"></i>
-            Copy
-        </div>
-        <div class="context-menu-item" onclick="selectMessage()">
-            <i class="fas fa-check-square"></i>
-            Select
-        </div>
-        <div class="context-menu-item danger" onclick="deleteMessage()">
-            <i class="fas fa-trash"></i>
-            Delete
-        </div>
-    </div>
-
-    <!-- Emoji Picker -->
-    <div class="emoji-picker" id="emojiPicker">
-        <div class="emoji-picker-header">
-            <span>Choose Emoji</span>
-            <button type="button" onclick="closeEmojiPicker()" class="close-emoji-picker-btn" title="Close Emoji Picker">
+            <button type="button" class="reply-cancel-btn" title="Cancel reply"
+                onclick="cancelReply()">
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        <div class="emoji-picker-body" id="emojiPickerBody">
-            <!-- Emojis will be populated by JavaScript -->
+
+        <!-- Message Selection Counter -->
+        <div class="message-selection-counter" id="messageSelectionCounter">
+            <span id="selectionCount">0</span> messages selected
         </div>
-    </div>
 
-    <!-- Reply Input Bar -->
-    <div class="reply-input-bar" id="replyInputBar">
-        <div class="reply-input-preview">
-            <div class="reply-input-author" id="replyAuthor">John Doe</div>
-            <div class="reply-input-text" id="replyText">Original message text...</div>
-        </div>
-      <button type="button" class="reply-cancel-btn" title="Cancel reply" onclick="cancelReply()">
-    <i class="fas fa-times"></i>
-</button>
-    </div>
-
-    <!-- Message Selection Counter -->
-    <div class="message-selection-counter" id="messageSelectionCounter">
-        <span id="selectionCount">0</span> messages selected
-    </div>
-
-    <!-- Forward Modal -->
-    <div class="contact-search-modal" id="forwardModal">
-        <div class="contact-search-content">
-            <div class="contact-search-header">
-                <h3>Forward Message</h3>
-                <input type="text" class="contact-search-input" id="forwardSearchInput" placeholder="Search contacts...">
-            </div>
-            <div class="contact-search-results" id="forwardSearchResults">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    Loading contacts...
+        <!-- Forward Modal -->
+        <div class="contact-search-modal" id="forwardModal">
+            <div class="contact-search-content">
+                <div class="contact-search-header">
+                    <h3>Forward Message</h3>
+                    <input type="text" class="contact-search-input"
+                        id="forwardSearchInput"
+                        placeholder="Search contacts...">
+                </div>
+                <div class="contact-search-results" id="forwardSearchResults">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Loading contacts...
+                    </div>
+                </div>
+                <div class="schedule-actions">
+                    <button onclick="closeForwardModal()"
+                        class="btn btn-secondary">Cancel</button>
                 </div>
             </div>
-            <div class="schedule-actions">
-                <button onclick="closeForwardModal()" class="btn btn-secondary">Cancel</button>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div class="schedule-modal" id="deleteModal">
+            <div class="schedule-modal-content">
+                <h3>Delete Message</h3>
+                <p
+                    style="margin-bottom: 2rem; color: var(--text-secondary);">Choose
+                    delete option:</p>
+                <div class="schedule-actions"
+                    style="flex-direction: column; gap: 1rem;">
+                    <button onclick="deleteMessageForMe()"
+                        class="btn btn-secondary">Delete for me</button>
+                    <button onclick="deleteMessageForEveryone()" class="btn"
+                        style="background: var(--danger-color); color: white;">Delete
+                        for everyone</button>
+                    <button onclick="closeDeleteModal()"
+                        class="btn btn-secondary">Cancel</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Delete Confirmation Modal -->
-    <div class="schedule-modal" id="deleteModal">
-        <div class="schedule-modal-content">
-            <h3>Delete Message</h3>
-            <p style="margin-bottom: 2rem; color: var(--text-secondary);">Choose delete option:</p>
-            <div class="schedule-actions" style="flex-direction: column; gap: 1rem;">
-                <button onclick="deleteMessageForMe()" class="btn btn-secondary">Delete for me</button>
-                <button onclick="deleteMessageForEveryone()" class="btn" style="background: var(--danger-color); color: white;">Delete for everyone</button>
-                <button onclick="closeDeleteModal()" class="btn btn-secondary">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Enhanced JavaScript with All Features -->
-    <script type="module">
+        <!-- Enhanced JavaScript with All Features -->
+        <script type="module">
         // Firebase SDK Imports (keeping the same as your original)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
@@ -3145,7 +3211,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
             authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-            projectId: "andrew-cares-village-f4cb6",
+             
             storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
             messagingSenderId: "255087116955",
             appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
@@ -6814,5 +6880,5 @@ function stopVoiceRecording() {
         }, 2000);
     
     </script>
-</body>
+    </body>
 </html>

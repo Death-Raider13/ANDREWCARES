@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - Andrew Cares Village</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign Up - Andrew Cares Village</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;500;700&display=swap"
+            rel="stylesheet">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <style>
         :root {
             --primary-color: #001F3F; --primary-light: #003366; --secondary-color: #2ECC40;
             --accent-color: #FF4136; --background-color: #F4F2ED; --text-primary: #333333;
@@ -147,35 +150,58 @@
             }
         }
     </style>
-</head>
-<body>
-    <div class="container">
-        <div class="signup-card">
-            <div class="logo"><a href="index.html">Andrew Cares Village</a></div>
-            <div class="welcome-text">Join our community to access exclusive resources.</div>
-            <form id="signupForm">
-                <div class="form-group"><label for="name">Full Name</label><div class="input-wrapper"><i class="fas fa-user"></i><input type="text" id="name" required></div></div>
-                <div class="form-group"><label for="email">Email Address</label><div class="input-wrapper"><i class="fas fa-envelope"></i><input type="email" id="email" required></div></div>
-                <div class="form-group"><label for="password">Password</label><div class="input-wrapper"><i class="fas fa-lock"></i><input type="password" id="password" required></div>
-                    <div class="password-requirements"><ul id="requirements">
-                        <li id="length"><i class="fas fa-circle"></i> At least 8 characters</li>
-                        <li id="uppercase"><i class="fas fa-circle"></i> An uppercase letter</li>
-                        <li id="number"><i class="fas fa-circle"></i> A number</li>
-                    </ul></div>
+    </head>
+    <body>
+        <div class="container">
+            <div class="signup-card">
+                <div class="logo"><a href="index.html">Andrew Cares
+                        Village</a></div>
+                <div class="welcome-text">Join our community to access exclusive
+                    resources.</div>
+                <form id="signupForm">
+                    <div class="form-group"><label for="name">Full
+                            Name</label><div class="input-wrapper"><i
+                                class="fas fa-user"></i><input type="text"
+                                id="name" required></div></div>
+                    <div class="form-group"><label for="email">Email
+                            Address</label><div class="input-wrapper"><i
+                                class="fas fa-envelope"></i><input type="email"
+                                id="email" required></div></div>
+                    <div class="form-group"><label
+                            for="password">Password</label><div
+                            class="input-wrapper"><i
+                                class="fas fa-lock"></i><input type="password"
+                                id="password" required></div>
+                        <div class="password-requirements"><ul
+                                id="requirements">
+                                <li id="length"><i class="fas fa-circle"></i> At
+                                    least 8 characters</li>
+                                <li id="uppercase"><i class="fas fa-circle"></i>
+                                    An uppercase letter</li>
+                                <li id="number"><i class="fas fa-circle"></i> A
+                                    number</li>
+                            </ul></div>
+                    </div>
+                    <div class="form-group"><label for="confirmPassword">Confirm
+                            Password</label><div class="input-wrapper"><i
+                                class="fas fa-lock"></i><input type="password"
+                                id="confirmPassword" required></div></div>
+                    <button type="submit"><span>Create Account</span><div
+                            class="loading-spinner"></div></button>
+                    <div id="message" class="message"></div>
+                </form>
+                <div class="divider"><span>or</span></div>
+                <div class="social-login">
+                    <button type="button" id="googleSignIn"
+                        class="social-button"><i class="fab fa-google"></i>
+                        Continue with Google</button>
                 </div>
-                <div class="form-group"><label for="confirmPassword">Confirm Password</label><div class="input-wrapper"><i class="fas fa-lock"></i><input type="password" id="confirmPassword" required></div></div>
-                <button type="submit"><span>Create Account</span><div class="loading-spinner"></div></button>
-                <div id="message" class="message"></div>
-            </form>
-            <div class="divider"><span>or</span></div>
-            <div class="social-login">
-                <button type="button" id="googleSignIn" class="social-button"><i class="fab fa-google"></i> Continue with Google</button>
+                <div class="links"><a href="login.html">Already have an account?
+                        Sign in</a></div>
             </div>
-            <div class="links"><a href="login.html">Already have an account? Sign in</a></div>
         </div>
-    </div>
 
-    <script type="module">
+        <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendEmailVerification } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc,serverTimestamp  } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
@@ -183,7 +209,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
             authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-            projectId: "andrew-cares-village-f4cb6",
+             
             storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
             messagingSenderId: "255087116955",
             appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
@@ -291,5 +317,5 @@
             });
         }
     </script>
-</body>
+    </body>
 </html>

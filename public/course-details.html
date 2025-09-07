@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Details - Andrew Cares Village</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:wght@400;700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Course Details - Andrew Cares Village</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:wght@400;700&family=Montserrat:wght@400;500;700&display=swap"
+            rel="stylesheet">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <style>
         :root {
             --background-color: #F4F2ED; --text-primary: #333333; --text-secondary: #555555;
             --color-primary: #B38B00; --color-secondary: #001F3F; --card-bg: #FFFFFF;
@@ -71,37 +74,44 @@
         .modal-container p { color: var(--text-secondary); margin-bottom: 2rem; }
         .modal-container .btn-primary { background-color: var(--color-primary); color: white; padding: 0.8rem 1.5rem; border-radius: 8px; text-decoration: none; display: inline-block; }
     </style>
-</head>
-<body>
-    <header class="main-header">
-        <a href="home.html" class="logo">Andrew Cares Village</a>
-        <div class="header-actions">
-            <div id="userProfile" class="user-profile">
-                <img id="userAvatar" src="" alt="User Avatar" class="user-avatar">
-                <span id="userName">Loading...</span>
+    </head>
+    <body>
+        <header class="main-header">
+            <a href="home.html" class="logo">Andrew Cares Village</a>
+            <div class="header-actions">
+                <div id="userProfile" class="user-profile">
+                    <img id="userAvatar" src alt="User Avatar"
+                        class="user-avatar">
+                    <span id="userName">Loading...</span>
+                </div>
+            </div>
+        </header>
+        <main id="page-container">
+            <div id="skeleton-loader"
+                style="text-align: center; padding: 5rem;">
+                <div class="skeleton"
+                    style="width: 200px; height: 40px; margin: 0 auto 2rem auto;"></div>
+                <div class="skeleton"
+                    style="width: 80%; height: 20px; margin: 0 auto;"></div>
+            </div>
+        </main>
+
+        <!-- Completion Modal -->
+        <div id="completionModal" class="modal-overlay">
+            <div class="modal-container">
+                <i class="fas fa-award"
+                    style="font-size: 4rem; color: var(--color-primary); margin-bottom: 1rem;"></i>
+                <h2>Course Completed!</h2>
+                <p>Congratulations on completing this course. Your dedication
+                    has paid off!</p>
+                <div id="modal-actions"
+                    style="display: flex; flex-direction: column; gap: 1rem;">
+                    <!-- Certificate and Testimonial buttons will be added here by JS -->
+                </div>
             </div>
         </div>
-    </header>
-    <main id="page-container">
-        <div id="skeleton-loader" style="text-align: center; padding: 5rem;">
-            <div class="skeleton" style="width: 200px; height: 40px; margin: 0 auto 2rem auto;"></div>
-            <div class="skeleton" style="width: 80%; height: 20px; margin: 0 auto;"></div>
-        </div>
-    </main>
 
-    <!-- Completion Modal -->
-    <div id="completionModal" class="modal-overlay">
-        <div class="modal-container">
-            <i class="fas fa-award" style="font-size: 4rem; color: var(--color-primary); margin-bottom: 1rem;"></i>
-            <h2>Course Completed!</h2>
-            <p>Congratulations on completing this course. Your dedication has paid off!</p>
-            <div id="modal-actions" style="display: flex; flex-direction: column; gap: 1rem;">
-                <!-- Certificate and Testimonial buttons will be added here by JS -->
-            </div>
-        </div>
-    </div>
-
-    <script type="module">
+        <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, collection, getDocs, query, orderBy, where, addDoc, serverTimestamp, runTransaction, updateDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
@@ -109,7 +119,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
             authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-            projectId: "andrew-cares-village-f4cb6",
+             
             storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
             messagingSenderId: "255087116955",
             appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
@@ -472,6 +482,5 @@ async submitTestimonial(testimonialText) {
         }
         new CourseDetailsPage( );
     </script>
-</body>
+    </body>
 </html>
-

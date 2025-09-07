@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Village Library - Andrew Cares Village</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>The Village Library - Andrew Cares Village</title>
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:wght@400;700&family=Montserrat:wght@400;500;700&display=swap"
-        rel="stylesheet">
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:wght@400;700&family=Montserrat:wght@400;500;700&display=swap"
+            rel="stylesheet">
 
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <!-- Font Awesome for Icons -->
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+            integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+        <!-- Firebase SDK -->
+        <script
+            src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+        <script
+            src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+        <script
+            src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
-    <style>
+        <style>
         /* Global Styles & Variables */
         :root {
             --background-color: #F4F2ED;
@@ -1072,121 +1075,134 @@
             }
         }
     </style>
-</head>
+    </head>
 
-<body>
-    <!-- Header -->
-    <header class="main-header">
-        <a href="home.html" class="logo">Andrew Cares Village</a>
-        
-        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
-            <i class="fas fa-bars"></i>
-        </button>
-        
-        <nav class="main-nav" id="mainNav">
-            <a href="home.html">Home</a>
-            <a href="dojo.html?discipline=Forex">Forex Training</a>
-            <a href="dojo.html?discipline=Fitness">Fitness Training</a>
-            <a href="dojo.html?discipline=Karate">Karate Training</a>
-            <a href="live-events.html">Live Events</a>
-            <a href="resources.html" class="active">Resources</a>
-        </nav>
-        
-        <div class="header-actions">
-            <div id="userProfileNav" class="user-profile-nav">
-                <img id="userAvatarNav" src="" alt="User Avatar" class="user-avatar-nav">
-                <span id="userNameNav" class="user-name-nav">Loading...</span>
-                <div class="profile-dropdown">
-                    <a href="profile.html">My Profile</a>
-                    <a href="messages.html">Messages</a>
-                    <button id="logoutButton" class="logout-button">Logout</button>
+    <body>
+        <!-- Header -->
+        <header class="main-header">
+            <a href="home.html" class="logo">Andrew Cares Village</a>
+
+            <button class="mobile-menu-toggle" id="mobileMenuToggle"
+                aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <nav class="main-nav" id="mainNav">
+                <a href="home.html">Home</a>
+                <a href="dojo.html?discipline=Forex">Forex Training</a>
+                <a href="dojo.html?discipline=Fitness">Fitness Training</a>
+                <a href="dojo.html?discipline=Karate">Karate Training</a>
+                <a href="live-events.html">Live Events</a>
+                <a href="resources.html" class="active">Resources</a>
+            </nav>
+
+            <div class="header-actions">
+                <div id="userProfileNav" class="user-profile-nav">
+                    <img id="userAvatarNav" src alt="User Avatar"
+                        class="user-avatar-nav">
+                    <span id="userNameNav"
+                        class="user-name-nav">Loading...</span>
+                    <div class="profile-dropdown">
+                        <a href="profile.html">My Profile</a>
+                        <a href="messages.html">Messages</a>
+                        <button id="logoutButton"
+                            class="logout-button">Logout</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </header>
+        </header>
 
-    <!-- Main Content -->
-    <main class="page-container">
-        <!-- Page Header -->
-        <div class="page-header">
-            <h1><i class="fas fa-book-open"></i> The Village Library</h1>
-            <p>Free resources, guides, and tools for all community members</p>
-        </div>
-
-
-        <!-- Library Content (Hidden by default) -->
-        <div id="libraryContent">
-            <!-- Search and Filter Bar -->
-            <div class="search-filter-bar">
-                <div class="search-box">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" id="searchInput" class="search-input" placeholder="Search resources...">
-                </div>
+        <!-- Main Content -->
+        <main class="page-container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1><i class="fas fa-book-open"></i> The Village Library</h1>
+                <p>Free resources, guides, and tools for all community
+                    members</p>
             </div>
 
-            <!-- Categories Navigation -->
-            <div class="categories-nav">
-                <button class="category-btn active" data-category="all">All Resources</button>
-                <button class="category-btn" data-category="forex">Forex Trading</button>
-                <button class="category-btn" data-category="fitness">Fitness & Health</button>
-                <button class="category-btn" data-category="karate">Martial Arts</button>
-                <button class="category-btn" data-category="business">Business</button>
-                <button class="category-btn" data-category="personal">Personal Development</button>
+            <!-- Library Content (Hidden by default) -->
+            <div id="libraryContent">
+                <!-- Search and Filter Bar -->
+                <div class="search-filter-bar">
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="searchInput" class="search-input"
+                            placeholder="Search resources...">
+                    </div>
+                </div>
+
+                <!-- Categories Navigation -->
+                <div class="categories-nav">
+                    <button class="category-btn active" data-category="all">All
+                        Resources</button>
+                    <button class="category-btn" data-category="forex">Forex
+                        Trading</button>
+                    <button class="category-btn" data-category="fitness">Fitness
+                        & Health</button>
+                    <button class="category-btn" data-category="karate">Martial
+                        Arts</button>
+                    <button class="category-btn"
+                        data-category="business">Business</button>
+                    <button class="category-btn"
+                        data-category="personal">Personal Development</button>
+                </div>
+
+                <!-- Featured Resources -->
+                <section class="featured-section" id="featuredSection"
+                    style="display: none;">
+                    <h2 class="section-title">
+                        <i class="fas fa-star"></i>
+                        Featured Resources
+                    </h2>
+                    <div class="featured-resources" id="featuredResources">
+                        <!-- Featured resources will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- All Resources -->
+                <section class="resources-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-archive"></i>
+                        Resource Collection
+                    </h2>
+                    <div class="resources-grid" id="resourcesGrid">
+                        <!-- Skeleton loaders will be shown initially -->
+                    </div>
+
+                    <div id="noResourcesFound" class="empty-state"
+                        style="display: none;">
+                        <i class="fas fa-search"></i>
+                        <h3>No Resources Found</h3>
+                        <p>Try adjusting your search or category filter.</p>
+                    </div>
+
+                    <div id="loadingResources" class="empty-state">
+                        <div class="loading-spinner"></div>
+                        <h3>Loading Resources...</h3>
+                        <p>Please wait while we fetch the latest resources.</p>
+                    </div>
+                </section>
             </div>
+        </main>
 
-            <!-- Featured Resources -->
-            <section class="featured-section" id="featuredSection" style="display: none;">
-                <h2 class="section-title">
-                    <i class="fas fa-star"></i>
-                    Featured Resources
-                </h2>
-                <div class="featured-resources" id="featuredResources">
-                    <!-- Featured resources will be loaded here -->
-                </div>
-            </section>
+        <!-- Footer -->
+        <footer class="main-footer">
+            <div class="footer-links">
+                <a href="about.html">About Us</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+            </div>
+            <p>&copy; 2025 Andrew Cares Village. All Rights Reserved.</p>
+        </footer>
 
-            <!-- All Resources -->
-            <section class="resources-section">
-                <h2 class="section-title">
-                    <i class="fas fa-archive"></i>
-                    Resource Collection
-                </h2>
-                <div class="resources-grid" id="resourcesGrid">
-                    <!-- Skeleton loaders will be shown initially -->
-                </div>
-
-                <div id="noResourcesFound" class="empty-state" style="display: none;">
-                    <i class="fas fa-search"></i>
-                    <h3>No Resources Found</h3>
-                    <p>Try adjusting your search or category filter.</p>
-                </div>
-
-                <div id="loadingResources" class="empty-state">
-                    <div class="loading-spinner"></div>
-                    <h3>Loading Resources...</h3>
-                    <p>Please wait while we fetch the latest resources.</p>
-                </div>
-            </section>
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="main-footer">
-        <div class="footer-links">
-            <a href="about.html">About Us</a>
-            <a href="privacy.html">Privacy Policy</a>
-            <a href="terms.html">Terms of Service</a>
-        </div>
-        <p>&copy; 2025 Andrew Cares Village. All Rights Reserved.</p>
-    </footer>
-
-    <!-- JavaScript -->
-    <script>
+        <!-- JavaScript -->
+        <script>
         // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
             authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-            projectId: "andrew-cares-village-f4cb6",
+             
             storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
             messagingSenderId: "255087116955",
             appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
@@ -1618,6 +1634,6 @@
             console.log('Resources page initialized');
         });
     </script>
-</body>
+    </body>
 
 </html>

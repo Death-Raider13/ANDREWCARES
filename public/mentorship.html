@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1-on-1 Mentorship - Andrew Cares Village</title>
-    
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <!-- FullCalendar CSS -->
-   <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
-    <!-- Paystack Integration -->
-    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>1-on-1 Mentorship - Andrew Cares Village</title>
 
-     <!-- Cloudinary Upload Widget -->
-    <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+        <!-- Font Awesome for Icons -->
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <style>
+        <!-- FullCalendar CSS -->
+        <script
+            src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+        <!-- Paystack Integration -->
+        <script src="https://js.paystack.co/v1/inline.js"></script>
+
+        <!-- Cloudinary Upload Widget -->
+        <script src="https://upload-widget.cloudinary.com/global/all.js"
+            type="text/javascript"></script>
+
+        <style>
         /* Enhanced CSS Variables */
         :root {
             --background-color: #F4F2ED;
@@ -577,294 +580,326 @@
     transform: scale(1.05);
 }
     </style>
-</head>
-<body>
-    <!-- Header -->
-    <header class="main-header">
-        <a href="home.html" style="font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--color-secondary); text-decoration: none;">Andrew Cares Village</a>
-    </header>
+    </head>
+    <body>
+        <!-- Header -->
+        <header class="main-header">
+            <a href="home.html"
+                style="font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--color-secondary); text-decoration: none;">Andrew
+                Cares Village</a>
+        </header>
 
-    <!-- Main Page Content -->
-    <div id="pageContent" class="mentorship-container">
-        <!-- Member View -->
-        <div id="memberView" class="hidden">
-            <div class="dashboard-header">
-                <h1><i class="fas fa-graduation-cap"></i> Mentorship Portal</h1>
-                <p>Connect with expert mentors for personalized guidance</p>
-            </div>
+        <!-- Main Page Content -->
+        <div id="pageContent" class="mentorship-container">
+            <!-- Member View -->
+            <div id="memberView" class="hidden">
+                <div class="dashboard-header">
+                    <h1><i class="fas fa-graduation-cap"></i> Mentorship
+                        Portal</h1>
+                    <p>Connect with expert mentors for personalized guidance</p>
+                </div>
 
-            <div class="tab-nav">
-                <button class="tab-btn active" onclick="switchTab('browse')">
-                    <i class="fas fa-search"></i> Browse Mentors
-                </button>
-                <button class="tab-btn" onclick="switchTab('my-sessions')">
-                    <i class="fas fa-calendar-alt"></i> My Sessions
-                </button>
-                <button class="tab-btn" onclick="switchTab('chat')">
-                    <i class="fas fa-comments"></i> Messages
-                </button>
-            </div>
+                <div class="tab-nav">
+                    <button class="tab-btn active"
+                        onclick="switchTab('browse')">
+                        <i class="fas fa-search"></i> Browse Mentors
+                    </button>
+                    <button class="tab-btn" onclick="switchTab('my-sessions')">
+                        <i class="fas fa-calendar-alt"></i> My Sessions
+                    </button>
+                    <button class="tab-btn" onclick="switchTab('chat')">
+                        <i class="fas fa-comments"></i> Messages
+                    </button>
+                </div>
 
-            <!-- Browse Mentors Tab -->
-            <div id="browse-tab" class="tab-content active">
-                <div class="grid-2">
+                <!-- Browse Mentors Tab -->
+                <div id="browse-tab" class="tab-content active">
+                    <div class="grid-2">
+                        <div class="card">
+                            <h2 class="section-title">Available Mentors</h2>
+                            <div id="memberInstructorList">
+                                <p>Loading mentors...</p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h2 class="section-title"
+                                id="memberBookingTitle">Select a Mentor to
+                                Begin</h2>
+                            <div id="memberCalendar"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- My Sessions Tab -->
+                <div id="my-sessions-tab" class="tab-content">
                     <div class="card">
-                        <h2 class="section-title">Available Mentors</h2>
-                        <div id="memberInstructorList">
+                        <h2 class="section-title">My Mentorship Sessions</h2>
+                        <div id="memberSessionsList">
+                            <p>You have no sessions yet.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Tab -->
+                <div id="chat-tab" class="tab-content">
+                    <div class="card">
+                        <h2 class="section-title">Messages</h2>
+                        <div id="memberChatContainer">
+                            <p>Select a session to start chatting with your
+                                mentor.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instructor View -->
+            <div id="instructorView" class="hidden">
+                <div class="dashboard-header">
+                    <h1><i class="fas fa-chalkboard-teacher"></i> Mentor
+                        Dashboard</h1>
+                    <p>Manage your mentorship sessions and availability</p>
+                    <button class="btn btn-secondary btn-sm"
+                        onclick="updateProfileImage()"
+                        style="margin-left: 1rem;">
+                        <i class="fas fa-camera"></i> Update Photo
+                    </button>
+                </div>
+
+                <div class="tab-nav">
+                    <button class="tab-btn active"
+                        onclick="switchTab('availability')">
+                        <i class="fas fa-clock"></i> Set Availability
+                    </button>
+                    <button class="tab-btn" onclick="switchTab('bookings')">
+                        <i class="fas fa-calendar-check"></i> Bookings
+                    </button>
+                    <button class="tab-btn" onclick="switchTab('completed')">
+                        <i class="fas fa-trophy"></i> Completed
+                    </button>
+                    <button class="tab-btn"
+                        onclick="switchTab('instructor-chat')">
+                        <i class="fas fa-comments"></i> Messages
+                    </button>
+                </div>
+
+                <!-- Set Availability Tab -->
+                <div id="availability-tab" class="tab-content active">
+                    <div class="card">
+                        <h2 class="section-title">Set Your Availability</h2>
+                        <div class="form-group">
+                            <label for="availabilityDate">Select Date:</label>
+                            <input type="date" id="availabilityDate"
+                                class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="hourlyRate">Hourly Rate (₦):</label>
+                            <input type="number" id="hourlyRate"
+                                class="form-control" placeholder="e.g., 5000"
+                                min="1000">
+                            <small>Minimum rate: ₦1,000 per hour</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Available Time Slots:</label>
+                            <div class="availability-grid" id="timeSlotGrid">
+                                <!-- Time slots will be generated by JavaScript -->
+                            </div>
+                        </div>
+                        <button class="btn btn-primary"
+                            onclick="saveAvailability()">
+                            <i class="fas fa-save"></i> Save Availability
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bookings Tab -->
+                <div id="bookings-tab" class="tab-content">
+                    <div class="card">
+                        <h2 class="section-title">Pending & Confirmed
+                            Bookings</h2>
+                        <div id="instructorBookingsList">
+                            <p>No bookings yet.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Completed Tab -->
+                <div id="completed-tab" class="tab-content">
+                    <div class="card">
+                        <h2 class="section-title">Completed Sessions</h2>
+                        <div id="completedSessionsList">
+                            <p>No completed sessions yet.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instructor Chat Tab -->
+                <div id="instructor-chat-tab" class="tab-content">
+                    <div class="card">
+                        <h2 class="section-title">Student Messages</h2>
+                        <div id="instructorChatContainer">
+                            <p>No active conversations.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin View -->
+            <div id="adminView" class="hidden">
+                <div class="dashboard-header">
+                    <h1><i class="fas fa-chart-line"></i> Admin Dashboard</h1>
+                    <p>Monitor platform performance and commission earnings</p>
+                </div>
+
+                <div class="grid-3 mb-2">
+                    <div class="stat-card revenue">
+                        <h3 id="totalCommission">₦0</h3>
+                        <p>Total Commission Earned</p>
+                    </div>
+                    <div class="stat-card sessions">
+                        <h3 id="totalSessions">0</h3>
+                        <p>Total Sessions Completed</p>
+                    </div>
+                    <div class="stat-card pending">
+                        <h3 id="pendingSessions">0</h3>
+                        <p>Pending Sessions</p>
+                    </div>
+                </div>
+
+                <div class="tab-nav">
+                    <button class="tab-btn active"
+                        onclick="switchTab('statistics')">
+                        <i class="fas fa-chart-bar"></i> Statistics
+                    </button>
+                    <button class="tab-btn" onclick="switchTab('transactions')">
+                        <i class="fas fa-money-bill-wave"></i> Transactions
+                    </button>
+                    <button class="tab-btn" onclick="switchTab('mentors')">
+                        <i class="fas fa-users"></i> Mentors
+                    </button>
+                </div>
+
+                <!-- Statistics Tab -->
+                <div id="statistics-tab" class="tab-content active">
+                    <div class="grid-2">
+                        <div class="card">
+                            <h2 class="section-title">Revenue Analytics</h2>
+                            <div id="revenueChart">
+                                <!-- Chart placeholder -->
+                                <p>Revenue chart will be displayed here</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h2 class="section-title">Top Performing
+                                Mentors</h2>
+                            <div id="topMentorsList">
+                                <p>Loading mentor rankings...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transactions Tab -->
+                <div id="transactions-tab" class="tab-content">
+                    <div class="card">
+                        <h2 class="section-title">All Transactions</h2>
+                        <div id="transactionsList">
+                            <p>Loading transactions...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mentors Tab -->
+                <div id="mentors-tab" class="tab-content">
+                    <div class="card">
+                        <h2 class="section-title">Mentor Management</h2>
+                        <div id="allMentorsList">
                             <p>Loading mentors...</p>
                         </div>
                     </div>
-
-                    <div class="card">
-                        <h2 class="section-title" id="memberBookingTitle">Select a Mentor to Begin</h2>
-                        <div id="memberCalendar"></div>
-                    </div>
                 </div>
             </div>
 
-            <!-- My Sessions Tab -->
-            <div id="my-sessions-tab" class="tab-content">
-                <div class="card">
-                    <h2 class="section-title">My Mentorship Sessions</h2>
-                    <div id="memberSessionsList">
-                        <p>You have no sessions yet.</p>
-                    </div>
-                </div>
+            <!-- Access Denied View -->
+            <div id="accessDeniedView" class="access-denied hidden">
+                <i class="fas fa-lock"></i>
+                <h2>Access Restricted</h2>
+                <p>This mentorship platform is available to registered members,
+                    instructors, and admins only. Please contact support if you
+                    believe this is an error.</p>
+                <a href="contact.html" class="btn btn-primary"><i
+                        class="fas fa-envelope"></i> Contact Support</a>
             </div>
+        </div>
 
-            <!-- Chat Tab -->
-            <div id="chat-tab" class="tab-content">
-                <div class="card">
-                    <h2 class="section-title">Messages</h2>
-                    <div id="memberChatContainer">
-                        <p>Select a session to start chatting with your mentor.</p>
+        <!-- Chat Modal -->
+        <div id="chatModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="chatModalTitle">Chat with Mentor</h3>
+                    <span class="close"
+                        onclick="closeChatModal()">&times;</span>
+                </div>
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <img id="chatPartnerAvatar" src alt="Partner"
+                            class="instructor-avatar">
+                        <div>
+                            <h4 id="chatPartnerName">Partner Name</h4>
+                            <p id="chatPartnerStatus">Online</p>
+                        </div>
+                    </div>
+                    <div class="chat-messages" id="chatMessages">
+                        <!-- Messages will be loaded here -->
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="messageInput"
+                            placeholder="Type your message..."
+                            onkeypress="handleMessageKeyPress(event)">
+                        <button class="btn btn-info btn-sm"
+                            onclick="sendImage()" title="Send Image">
+                            <i class="fas fa-image"></i>
+                        </button>
+                        <button class="btn btn-primary" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Instructor View -->
-        <div id="instructorView" class="hidden">
-            <div class="dashboard-header">
-                <h1><i class="fas fa-chalkboard-teacher"></i> Mentor Dashboard</h1>
-                <p>Manage your mentorship sessions and availability</p>
-                <button class="btn btn-secondary btn-sm" onclick="updateProfileImage()" style="margin-left: 1rem;">
-    <i class="fas fa-camera"></i> Update Photo
-</button>
-            </div>
-
-            <div class="tab-nav">
-                <button class="tab-btn active" onclick="switchTab('availability')">
-                    <i class="fas fa-clock"></i> Set Availability
-                </button>
-                <button class="tab-btn" onclick="switchTab('bookings')">
-                    <i class="fas fa-calendar-check"></i> Bookings
-                </button>
-                <button class="tab-btn" onclick="switchTab('completed')">
-                    <i class="fas fa-trophy"></i> Completed
-                </button>
-                <button class="tab-btn" onclick="switchTab('instructor-chat')">
-                    <i class="fas fa-comments"></i> Messages
-                </button>
-            </div>
-
-            <!-- Set Availability Tab -->
-            <div id="availability-tab" class="tab-content active">
-                <div class="card">
-                    <h2 class="section-title">Set Your Availability</h2>
-                    <div class="form-group">
-                        <label for="availabilityDate">Select Date:</label>
-                        <input type="date" id="availabilityDate" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="hourlyRate">Hourly Rate (₦):</label>
-                        <input type="number" id="hourlyRate" class="form-control" placeholder="e.g., 5000" min="1000">
-                        <small>Minimum rate: ₦1,000 per hour</small>
-                    </div>
-                    <div class="form-group">
-                        <label>Available Time Slots:</label>
-                        <div class="availability-grid" id="timeSlotGrid">
-                            <!-- Time slots will be generated by JavaScript -->
+        <!-- Payment Modal -->
+        <div id="paymentModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Complete Payment</h3>
+                    <span class="close"
+                        onclick="closePaymentModal()">&times;</span>
+                </div>
+                <div id="paymentContent">
+                    <div class="session-card">
+                        <div class="session-info">
+                            <h4 id="paymentSessionTitle">Session Details</h4>
+                            <p id="paymentSessionDetails">Session
+                                information</p>
+                            <p><strong>Amount: <span
+                                        id="paymentAmount">₦0</span></strong></p>
+                            <small>Platform fee (10%): <span
+                                    id="platformFee">₦0</span></small>
                         </div>
                     </div>
-                    <button class="btn btn-primary" onclick="saveAvailability()">
-                        <i class="fas fa-save"></i> Save Availability
+                    <button class="btn btn-success" onclick="processPayment()"
+                        style="width: 100%; margin-top: 1rem;">
+                        <i class="fas fa-credit-card"></i> Pay with Paystack
                     </button>
                 </div>
             </div>
-
-            <!-- Bookings Tab -->
-            <div id="bookings-tab" class="tab-content">
-                <div class="card">
-                    <h2 class="section-title">Pending & Confirmed Bookings</h2>
-                    <div id="instructorBookingsList">
-                        <p>No bookings yet.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Completed Tab -->
-            <div id="completed-tab" class="tab-content">
-                <div class="card">
-                    <h2 class="section-title">Completed Sessions</h2>
-                    <div id="completedSessionsList">
-                        <p>No completed sessions yet.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Instructor Chat Tab -->
-            <div id="instructor-chat-tab" class="tab-content">
-                <div class="card">
-                    <h2 class="section-title">Student Messages</h2>
-                    <div id="instructorChatContainer">
-                        <p>No active conversations.</p>
-                    </div>
-                </div>
-            </div>
         </div>
 
-        <!-- Admin View -->
-        <div id="adminView" class="hidden">
-            <div class="dashboard-header">
-                <h1><i class="fas fa-chart-line"></i> Admin Dashboard</h1>
-                <p>Monitor platform performance and commission earnings</p>
-            </div>
-
-            <div class="grid-3 mb-2">
-                <div class="stat-card revenue">
-                    <h3 id="totalCommission">₦0</h3>
-                    <p>Total Commission Earned</p>
-                </div>
-                <div class="stat-card sessions">
-                    <h3 id="totalSessions">0</h3>
-                    <p>Total Sessions Completed</p>
-                </div>
-                <div class="stat-card pending">
-                    <h3 id="pendingSessions">0</h3>
-                    <p>Pending Sessions</p>
-                </div>
-            </div>
-
-            <div class="tab-nav">
-                <button class="tab-btn active" onclick="switchTab('statistics')">
-                    <i class="fas fa-chart-bar"></i> Statistics
-                </button>
-                <button class="tab-btn" onclick="switchTab('transactions')">
-                    <i class="fas fa-money-bill-wave"></i> Transactions
-                </button>
-                <button class="tab-btn" onclick="switchTab('mentors')">
-                    <i class="fas fa-users"></i> Mentors
-                </button>
-            </div>
-
-            <!-- Statistics Tab -->
-            <div id="statistics-tab" class="tab-content active">
-                <div class="grid-2">
-                    <div class="card">
-                        <h2 class="section-title">Revenue Analytics</h2>
-                        <div id="revenueChart">
-                            <!-- Chart placeholder -->
-                            <p>Revenue chart will be displayed here</p>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <h2 class="section-title">Top Performing Mentors</h2>
-                        <div id="topMentorsList">
-                            <p>Loading mentor rankings...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Transactions Tab -->
-            <div id="transactions-tab" class="tab-content">
-                <div class="card">
-                    <h2 class="section-title">All Transactions</h2>
-                    <div id="transactionsList">
-                        <p>Loading transactions...</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mentors Tab -->
-            <div id="mentors-tab" class="tab-content">
-                <div class="card">
-                    <h2 class="section-title">Mentor Management</h2>
-                    <div id="allMentorsList">
-                        <p>Loading mentors...</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Access Denied View -->
-        <div id="accessDeniedView" class="access-denied hidden">
-            <i class="fas fa-lock"></i>
-            <h2>Access Restricted</h2>
-            <p>This mentorship platform is available to registered members, instructors, and admins only. Please contact support if you believe this is an error.</p>
-            <a href="contact.html" class="btn btn-primary"><i class="fas fa-envelope"></i> Contact Support</a>
-        </div>
-    </div>
-
-    <!-- Chat Modal -->
-    <div id="chatModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="chatModalTitle">Chat with Mentor</h3>
-                <span class="close" onclick="closeChatModal()">&times;</span>
-            </div>
-            <div class="chat-container">
-                <div class="chat-header">
-                    <img id="chatPartnerAvatar" src="" alt="Partner" class="instructor-avatar">
-                    <div>
-                        <h4 id="chatPartnerName">Partner Name</h4>
-                        <p id="chatPartnerStatus">Online</p>
-                    </div>
-                </div>
-                <div class="chat-messages" id="chatMessages">
-                    <!-- Messages will be loaded here -->
-                </div>
-              <div class="chat-input">
-    <input type="text" id="messageInput" placeholder="Type your message..." onkeypress="handleMessageKeyPress(event)">
-    <button class="btn btn-info btn-sm" onclick="sendImage()" title="Send Image">
-        <i class="fas fa-image"></i>
-    </button>
-    <button class="btn btn-primary" onclick="sendMessage()">
-        <i class="fas fa-paper-plane"></i>
-    </button>
-</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Payment Modal -->
-    <div id="paymentModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Complete Payment</h3>
-                <span class="close" onclick="closePaymentModal()">&times;</span>
-            </div>
-            <div id="paymentContent">
-                <div class="session-card">
-                    <div class="session-info">
-                        <h4 id="paymentSessionTitle">Session Details</h4>
-                        <p id="paymentSessionDetails">Session information</p>
-                        <p><strong>Amount: <span id="paymentAmount">₦0</span></strong></p>
-                        <small>Platform fee (10%): <span id="platformFee">₦0</span></small>
-                    </div>
-                </div>
-                <button class="btn btn-success" onclick="processPayment()" style="width: 100%; margin-top: 1rem;">
-                    <i class="fas fa-credit-card"></i> Pay with Paystack
-                </button>
-            </div>
-        </div>
-    </div>
-
-    
-  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
-    <!-- Firebase and Application Logic -->
- <script type="module">
+        <script
+            src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+        <!-- Firebase and Application Logic -->
+        <script type="module">
   // --- Firebase Imports ---
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
@@ -874,7 +909,7 @@ import { getFirestore, doc, getDoc, collection, query, where, getDocs, addDoc, u
 const firebaseConfig = {
     apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
     authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-    projectId: "andrew-cares-village-f4cb6",
+     
     storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
     messagingSenderId: "255087116955",
     appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
@@ -2006,5 +2041,5 @@ window.onclick = function(event) {
     }
 };
  </script>
-</body>
+    </body>
 </html>

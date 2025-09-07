@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Training Dojo - Andrew Cares Village</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:wght@400;700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Training Dojo - Andrew Cares Village</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:wght@400;700&family=Montserrat:wght@400;500;700&display=swap"
+            rel="stylesheet">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <style>
         :root {
             --background-color: #F4F2ED; --text-primary: #333333; --text-secondary: #555555;
             --color-primary: #B38B00; --color-secondary: #001F3F; --card-bg: #FFFFFF;
@@ -646,62 +649,71 @@
             }
         }
     </style>
-</head>
-<body>
-    <header class="main-header">
-        <a href="home.html" class="logo">Andrew Cares Village</a>
-        
-        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
-            <i class="fas fa-bars"></i>
-        </button>
-        
-        <nav class="main-nav" id="mainNav">
-            <a href="home.html">Home</a>
-            <a href="dojo.html?discipline=Forex" id="nav-forex">Forex Training</a>
-            <a href="dojo.html?discipline=Fitness" id="nav-fitness">Fitness Training</a>
-            <a href="dojo.html?discipline=Karate" id="nav-karate">Karate Training</a>
-        </nav>
-        
-        <div class="header-actions">
-            <div id="userProfile" class="user-profile">
-                <img id="userAvatar" src="" alt="User Avatar" class="user-avatar">
-                <span id="userName" class="user-name">Loading...</span>
-                <div class="profile-dropdown">
-                    <a href="profile.html">My Profile</a>
-                    <button id="logoutButton" class="logout-button">Logout</button>
+    </head>
+    <body>
+        <header class="main-header">
+            <a href="home.html" class="logo">Andrew Cares Village</a>
+
+            <button class="mobile-menu-toggle" id="mobileMenuToggle"
+                aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <nav class="main-nav" id="mainNav">
+                <a href="home.html">Home</a>
+                <a href="dojo.html?discipline=Forex" id="nav-forex">Forex
+                    Training</a>
+                <a href="dojo.html?discipline=Fitness" id="nav-fitness">Fitness
+                    Training</a>
+                <a href="dojo.html?discipline=Karate" id="nav-karate">Karate
+                    Training</a>
+            </nav>
+
+            <div class="header-actions">
+                <div id="userProfile" class="user-profile">
+                    <img id="userAvatar" src alt="User Avatar"
+                        class="user-avatar">
+                    <span id="userName" class="user-name">Loading...</span>
+                    <div class="profile-dropdown">
+                        <a href="profile.html">My Profile</a>
+                        <button id="logoutButton"
+                            class="logout-button">Logout</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </header>
+        </header>
 
-    <main class="dojo-main">
-        <section id="dojo-hero" class="dojo-hero">
-            <h1 id="dojo-title">Loading Dojo...</h1>
-            <p id="dojo-subtitle">Please wait while we prepare the training ground.</p>
-        </section>
+        <main class="dojo-main">
+            <section id="dojo-hero" class="dojo-hero">
+                <h1 id="dojo-title">Loading Dojo...</h1>
+                <p id="dojo-subtitle">Please wait while we prepare the training
+                    ground.</p>
+            </section>
 
-        <section id="my-learning-section" style="display: none;">
-            <div class="section-header">
-                <h2>My Learning Path</h2>
-                <p>Continue your journey in the courses you've already joined.</p>
-            </div>
-            <div class="course-grid" id="enrolled-courses-grid"></div>
-        </section>
+            <section id="my-learning-section" style="display: none;">
+                <div class="section-header">
+                    <h2>My Learning Path</h2>
+                    <p>Continue your journey in the courses you've already
+                        joined.</p>
+                </div>
+                <div class="course-grid" id="enrolled-courses-grid"></div>
+            </section>
 
-        <section id="all-courses-section">
-            <div class="section-header">
-                <h2 id="all-courses-title">Discover New Courses</h2>
-                <p id="all-courses-subtitle">Explore all available courses in this dojo.</p>
-            </div>
-            <div id="course-container" class="course-grid">
-                <div class="skeleton skeleton-card"></div>
-                <div class="skeleton skeleton-card"></div>
-                <div class="skeleton skeleton-card"></div>
-            </div>
-        </section>
-    </main>
+            <section id="all-courses-section">
+                <div class="section-header">
+                    <h2 id="all-courses-title">Discover New Courses</h2>
+                    <p id="all-courses-subtitle">Explore all available courses
+                        in this dojo.</p>
+                </div>
+                <div id="course-container" class="course-grid">
+                    <div class="skeleton skeleton-card"></div>
+                    <div class="skeleton skeleton-card"></div>
+                    <div class="skeleton skeleton-card"></div>
+                </div>
+            </section>
+        </main>
 
-    <script type="module">
+        <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
@@ -709,7 +721,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
             authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-            projectId: "andrew-cares-village-f4cb6",
+             
             storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
             messagingSenderId: "255087116955",
             appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
@@ -946,5 +958,5 @@
 
         new DojoPage();
     </script>
-</body>
+    </body>
 </html>

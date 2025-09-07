@@ -1,15 +1,18 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Andrew Cares Village</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login - Andrew Cares Village</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;500;700&display=swap"
+            rel="stylesheet">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <style>
         :root {
             --primary-color: #001F3F; 
             --primary-light: #003366; 
@@ -447,59 +450,63 @@
 
       
     </style>
-</head>
-<body>
-    <div class="container">
-        <div class="login-card">
-            <div class="logo">
-                <a href="index.html">Andrew Cares Village</a>
-            </div>
-            <div class="welcome-text">Welcome back! Please login to your account.</div>
-            
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="email" name="email" required autocomplete="email" inputmode="email">
-                    </div>
+    </head>
+    <body>
+        <div class="container">
+            <div class="login-card">
+                <div class="logo">
+                    <a href="index.html">Andrew Cares Village</a>
                 </div>
-                
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="password" name="password" required autocomplete="current-password">
+                <div class="welcome-text">Welcome back! Please login to your
+                    account.</div>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" name="email" required
+                                autocomplete="email" inputmode="email">
+                        </div>
                     </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" name="password"
+                                required autocomplete="current-password">
+                        </div>
+                    </div>
+
+                    <button type="submit">
+                        <span>Sign In</span>
+                        <div class="loading-spinner"></div>
+                    </button>
+
+                    <div id="message" class="message"></div>
+                </form>
+
+                <div class="divider">
+                    <span>or</span>
                 </div>
-                
-                <button type="submit">
-                    <span>Sign In</span>
-                    <div class="loading-spinner"></div>
-                </button>
-                
-                <div id="message" class="message"></div>
-            </form>
-            
-            <div class="divider">
-                <span>or</span>
-            </div>
-            
-            <div class="social-login">
-                <button type="button" id="googleSignIn" class="social-button">
-                    <i class="fab fa-google"></i> 
-                    Continue with Google
-                </button>
-            </div>
-            
-            <div class="links">
-                <a href="signup.html">Create Account</a>
-                <a href="forgot-password.html">Forgot Password?</a>
+
+                <div class="social-login">
+                    <button type="button" id="googleSignIn"
+                        class="social-button">
+                        <i class="fab fa-google"></i>
+                        Continue with Google
+                    </button>
+                </div>
+
+                <div class="links">
+                    <a href="signup.html">Create Account</a>
+                    <a href="forgot-password.html">Forgot Password?</a>
+                </div>
             </div>
         </div>
-    </div>
 
-    <script type="module">
+        <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
@@ -507,7 +514,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
             authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-            projectId: "andrew-cares-village-f4cb6",
+             
             storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
             messagingSenderId: "255087116955",
             appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
@@ -599,5 +606,5 @@
             }
         });
     </script>
-</body>
+    </body>
 </html>

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Complete Your Instructor Setup - Andrew Cares Village</title>
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Complete Your Instructor Setup - Andrew Cares Village</title>
+        <style>
         :root {
             --background-color: #F4F2ED;
             --text-primary: #333333;
@@ -172,106 +172,122 @@
             .setup-card { padding: 1.5rem; }
         }
     </style>
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-    <div class="container">
-        <!-- Token-based setup -->
-        <div id="token-setup" class="hidden">
-            <div class="header">
-                <h1>🎉 Complete Your Instructor Setup</h1>
-                <p>Welcome! Complete your payment setup to start earning from your lessons.</p>
-            </div>
-            <div class="setup-card">
-                <div class="user-info">
-                    <strong>Email:</strong> <span id="user-email"></span>
+
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;500;600;700&display=swap"
+            rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+            <!-- Token-based setup -->
+            <div id="token-setup" class="hidden">
+                <div class="header">
+                    <h1>🎉 Complete Your Instructor Setup</h1>
+                    <p>Welcome! Complete your payment setup to start earning
+                        from your lessons.</p>
                 </div>
-                <input type="hidden" id="setup-token">
-            </div>
-        </div>
-
-        <!-- Regular logged-in setup -->
-        <div id="regular-setup" class="hidden">
-            <div class="header">
-                <h1>Complete Your Instructor Profile</h1>
-                <p>Add your bank details to receive payments from students.</p>
-            </div>
-        </div>
-
-        <!-- Setup form -->
-        <div id="instructor-setup" class="hidden">
-            <div class="setup-card">
-                <form id="instructor-bank-form">
-                    <div class="form-group">
-                        <label for="business-name">Business/Teaching Name:</label>
-                        <input type="text" id="business-name" placeholder="e.g., John's Math Tutoring" required>
+                <div class="setup-card">
+                    <div class="user-info">
+                        <strong>Email:</strong> <span id="user-email"></span>
                     </div>
+                    <input type="hidden" id="setup-token">
+                </div>
+            </div>
 
-                    <div class="form-group">
-                        <label for="bank-select">Bank:</label>
-                        <select id="bank-select" required>
-                            <option value="">Select your bank...</option>
-                        </select>
-                    </div>
+            <!-- Regular logged-in setup -->
+            <div id="regular-setup" class="hidden">
+                <div class="header">
+                    <h1>Complete Your Instructor Profile</h1>
+                    <p>Add your bank details to receive payments from
+                        students.</p>
+                </div>
+            </div>
 
-                    <div class="form-group">
-                        <label for="account-number">Account Number:</label>
-                        <input type="text" id="account-number" placeholder="10-digit account number" maxlength="10" required>
-                    </div>
+            <!-- Setup form -->
+            <div id="instructor-setup" class="hidden">
+                <div class="setup-card">
+                    <form id="instructor-bank-form">
+                        <div class="form-group">
+                            <label for="business-name">Business/Teaching
+                                Name:</label>
+                            <input type="text" id="business-name"
+                                placeholder="e.g., John's Math Tutoring"
+                                required>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="account-name">Account Name:</label>
-                        <input type="text" id="account-name" placeholder="Account name will appear here" readonly>
-                        <small id="verification-status"></small>
-                    </div>
+                        <div class="form-group">
+                            <label for="bank-select">Bank:</label>
+                            <select id="bank-select" required>
+                                <option value>Select your bank...</option>
+                            </select>
+                        </div>
 
-                    <button type="submit" id="submit-btn">Complete Setup</button>
-                </form>
+                        <div class="form-group">
+                            <label for="account-number">Account Number:</label>
+                            <input type="text" id="account-number"
+                                placeholder="10-digit account number"
+                                maxlength="10" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="account-name">Account Name:</label>
+                            <input type="text" id="account-name"
+                                placeholder="Account name will appear here"
+                                readonly>
+                            <small id="verification-status"></small>
+                        </div>
+
+                        <button type="submit" id="submit-btn">Complete
+                            Setup</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Error states -->
+            <div id="not-instructor" class="hidden">
+                <div class="setup-card access-denied">
+                    <h2>Access Denied</h2>
+                    <p>You need to be approved as an instructor first.</p>
+                    <a href="apply.html">Apply to be an Instructor</a>
+                </div>
+            </div>
+
+            <div id="expired-token" class="hidden">
+                <div class="setup-card access-denied">
+                    <h2>Link Expired</h2>
+                    <p>This setup link has expired. Please contact support for a
+                        new one.</p>
+                    <a href="contact.html">Contact Support</a>
+                </div>
+            </div>
+
+            <div id="login-required" class="hidden">
+                <div class="setup-card access-denied">
+                    <h2>Login Required</h2>
+                    <p>Please login to complete your instructor setup.</p>
+                    <a href="login.html">Login Here</a>
+                </div>
             </div>
         </div>
 
-        <!-- Error states -->
-        <div id="not-instructor" class="hidden">
-            <div class="setup-card access-denied">
-                <h2>Access Denied</h2>
-                <p>You need to be approved as an instructor first.</p>
-                <a href="apply.html">Apply to be an Instructor</a>
-            </div>
-        </div>
+        <!-- Firebase & Scripts -->
+        <script
+            src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+        <script
+            src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+        <script
+            src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
 
-        <div id="expired-token" class="hidden">
-            <div class="setup-card access-denied">
-                <h2>Link Expired</h2>
-                <p>This setup link has expired. Please contact support for a new one.</p>
-                <a href="contact.html">Contact Support</a>
-            </div>
-        </div>
-
-        <div id="login-required" class="hidden">
-            <div class="setup-card access-denied">
-                <h2>Login Required</h2>
-                <p>Please login to complete your instructor setup.</p>
-                <a href="login.html">Login Here</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Firebase & Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
-    
-    <!-- Embedded Config -->
-    <script>
+        <!-- Embedded Config -->
+        <script>
         const CONFIG = {
             firebase: {
                 apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
                 authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-                projectId: "andrew-cares-village-f4cb6",
+                 
                 storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
                 messagingSenderId: "255087116955",
                 appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
@@ -292,7 +308,7 @@
         };
     </script>
 
-    <script type="module">
+        <script type="module">
         // Initialize Firebase
         firebase.initializeApp(CONFIG.firebase);
 
@@ -542,5 +558,5 @@
             }
         });
     </script>
-</body>
+    </body>
 </html>

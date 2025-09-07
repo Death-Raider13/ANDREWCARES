@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Editor - Andrew Cares Village</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Course Editor - Andrew Cares Village</title>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+            rel="stylesheet">
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cinzel:wght@400;500;600&display=swap"
+            rel="stylesheet">
+        <style>
         /* --- Enhanced Root Variables & Base Styles --- */
         :root {
             --background: #0f0f23;
@@ -877,200 +881,230 @@
             }
         }
     </style>
-</head>
-<body>
-    <div class="editor-layout">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2 id="courseTitleHeader">Loading Course...</h2>
-                <a href="instructor.html">
-                    <i class="fas fa-arrow-left"></i>
-                    Back to Dojo
-                </a>
-            </div>
-            <div class="curriculum-list" id="curriculumList">
-                <div style="text-align:center; padding: 2rem; color: var(--text-secondary);">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <p>Loading curriculum...</p>
+    </head>
+    <body>
+        <div class="editor-layout">
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h2 id="courseTitleHeader">Loading Course...</h2>
+                    <a href="instructor.html">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Dojo
+                    </a>
                 </div>
-            </div>
-            <div class="sidebar-footer">
-                <button id="addSectionBtn" class="btn-add-section">
-                    <i class="fas fa-plus"></i>
-                    Add Section
-                </button>
-            </div>
-        </aside>
-
-        <main class="main-editor">
-            <div class="editor-toolbar">
-                <div class="toolbar-left">
-                    <button id="sidebarToggle" class="control-btn" style="display: none;">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                </div>
-                <div class="toolbar-right">
-                    <button id="saveLessonBtn" class="btn-save" style="display: none;">
-                        <i class="fas fa-save"></i>
-                        Save Lesson
-                    </button>
-                </div>
-            </div>
-
-            <div class="editor-content">
-                <div id="editorPlaceholder" class="editor-placeholder">
-                    <i class="fas fa-graduation-cap"></i>
-                    <h3>Welcome to the Course Editor</h3>
-                    <p>Select a lesson from the sidebar to start editing, or create a new section to get started.</p>
-                </div>
-
-                <div id="lessonEditor" class="lesson-editor">
-                    <div class="lesson-header">
-                        <h3 id="lessonTitleHeader"></h3>
+                <div class="curriculum-list" id="curriculumList">
+                    <div
+                        style="text-align:center; padding: 2rem; color: var(--text-secondary);">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading curriculum...</p>
                     </div>
-                    
-                    <div id="contentBlockArea"></div>
+                </div>
+                <div class="sidebar-footer">
+                    <button id="addSectionBtn" class="btn-add-section">
+                        <i class="fas fa-plus"></i>
+                        Add Section
+                    </button>
+                </div>
+            </aside>
 
-                    <div class="add-block-controls">
-                        <button class="add-block-btn" data-type="text">
-                            <i class="fas fa-paragraph"></i>
-                            Text Content
+            <main class="main-editor">
+                <div class="editor-toolbar">
+                    <div class="toolbar-left">
+                        <button id="sidebarToggle" class="control-btn"
+                            style="display: none;">
+                            <i class="fas fa-bars"></i>
                         </button>
-                        <button class="add-block-btn" data-type="video">
+                    </div>
+                    <div class="toolbar-right">
+                        <button id="saveLessonBtn" class="btn-save"
+                            style="display: none;">
+                            <i class="fas fa-save"></i>
+                            Save Lesson
+                        </button>
+                    </div>
+                </div>
+
+                <div class="editor-content">
+                    <div id="editorPlaceholder" class="editor-placeholder">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h3>Welcome to the Course Editor</h3>
+                        <p>Select a lesson from the sidebar to start editing, or
+                            create a new section to get started.</p>
+                    </div>
+
+                    <div id="lessonEditor" class="lesson-editor">
+                        <div class="lesson-header">
+                            <h3 id="lessonTitleHeader"></h3>
+                        </div>
+
+                        <div id="contentBlockArea"></div>
+
+                        <div class="add-block-controls">
+                            <button class="add-block-btn" data-type="text">
+                                <i class="fas fa-paragraph"></i>
+                                Text Content
+                            </button>
+                            <button class="add-block-btn" data-type="video">
+                                <i class="fas fa-video"></i>
+                                Video/YouTube
+                            </button>
+                            <button class="add-block-btn" data-type="record">
+                                <i class="fas fa-record-vinyl"></i>
+                                Record Video
+                            </button>
+                            <button class="add-block-btn" data-type="file">
+                                <i class="fas fa-paperclip"></i>
+                                File Upload
+                            </button>
+                            <button class="add-block-btn" data-type="quiz">
+                                <i class="fas fa-question-circle"></i>
+                                Quiz Question
+                            </button>
+                        </div>
+
+                        <div class="lesson-settings">
+                            <h4>Lesson Settings</h4>
+                            <div class="settings-grid">
+                                <div class="setting-item">
+                                    <input type="checkbox" id="allowComments">
+                                    <label for="allowComments">Allow
+                                        Comments</label>
+                                </div>
+                                <div class="setting-item">
+                                    <input type="checkbox" id="isFreePreview">
+                                    <label for="isFreePreview">Free
+                                        Preview</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Professional Video Recorder Modal -->
+        <div id="videoRecorderModal" class="modal-overlay"
+            style="display: none;">
+            <div class="modal-content"
+                style="max-width: 90vw; max-height: 90vh; overflow-y: auto;">
+                <div class="video-recorder">
+                    <div class="recorder-header">
+                        <h3 class="recorder-title">
                             <i class="fas fa-video"></i>
-                            Video/YouTube
+                            Professional Video Recorder
+                        </h3>
+                        <div class="recorder-status">
+                            <div class="status-indicator"
+                                id="recordingIndicator"></div>
+                            <span id="recordingStatus">Ready to Record</span>
+                            <span id="recordingTime"
+                                style="display: none;">00:00</span>
+                        </div>
+                        <button id="closeRecorder" class="control-btn">
+                            <i class="fas fa-times"></i>
                         </button>
-                        <button class="add-block-btn" data-type="record">
+                    </div>
+
+                    <div class="video-preview-container">
+                        <video id="videoPreview" class="video-preview" autoplay
+                            muted></video>
+                        <canvas id="outputCanvas" class="video-preview"
+                            style="display: none;"></canvas>
+                        <div id="previewOverlay" class="preview-overlay">
+                            <i class="fas fa-play-circle"
+                                style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                            <div>Click "Start Camera" to begin</div>
+                        </div>
+                    </div>
+
+                    <div class="recorder-controls">
+                        <div class="control-group">
+                            <h4>Camera & Microphone</h4>
+                            <div class="control-buttons">
+                                <button id="startCamera" class="control-btn">
+                                    <i class="fas fa-camera"></i> Start Camera
+                                </button>
+                                <button id="toggleMicrophone"
+                                    class="control-btn">
+                                    <i class="fas fa-microphone"></i> Microphone
+                                    On
+                                </button>
+                                <button id="switchCamera" class="control-btn"
+                                    style="display: none;">
+                                    <i class="fas fa-sync-alt"></i> Switch
+                                    Camera
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <h4>Screen Sharing</h4>
+                            <div class="control-buttons">
+                                <button id="shareScreen" class="control-btn">
+                                    <i class="fas fa-desktop"></i> Share Screen
+                                </button>
+                                <button id="shareWindow" class="control-btn">
+                                    <i class="fas fa-window-maximize"></i> Share
+                                    Window
+                                </button>
+                                <button id="shareTab" class="control-btn">
+                                    <i class="fas fa-chrome"></i> Share Tab
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <h4>Virtual Background</h4>
+                            <div class="control-buttons">
+                                <button id="toggleBackground"
+                                    class="control-btn">
+                                    <i class="fas fa-magic"></i> Enable
+                                    Background
+                                </button>
+                                <button id="backgroundSettings"
+                                    class="control-btn">
+                                    <i class="fas fa-cog"></i> Settings
+                                </button>
+                            </div>
+                            <div class="background-selector">
+                                <div class="bg-option none active"
+                                    data-bg="none" title="No Background"></div>
+                                <div class="bg-option blur" data-bg="blur"
+                                    title="Blur Background"></div>
+                                <div class="bg-option" data-bg="office"
+                                    title="Office"
+                                    style="background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjkwIiB2aWV3Qm94PSIwIDAgMTYwIDkwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxNjAiIGhlaWdodD0iOTAiIGZpbGw9IiNmMGY0ZjgiLz48cmVjdCB4PSIyMCIgeT0iMjAiIHdpZHRoPSIxMjAiIGhlaWdodD0iNTAiIGZpbGw9IiNkMWQ1ZGIiLz48L3N2Zz4=')"></div>
+                                <div class="bg-option" data-bg="nature"
+                                    title="Nature"
+                                    style="background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjkwIiB2aWV3Qm94PSIwIDAgMTYwIDkwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxNjAiIGhlaWdodD0iOTAiIGZpbGw9IiM2NmJiNmEiLz48Y2lyY2xlIGN4PSI4MCIgY3k9IjQ1IiByPSIyMCIgZmlsbD0iIzRjYWY1MCIvPjwvc3ZnPg==')"></div>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <h4>Recording Quality</h4>
+                            <div class="control-buttons">
+                                <button class="control-btn"
+                                    data-quality="720p">720p</button>
+                                <button class="control-btn active"
+                                    data-quality="1080p">1080p</button>
+                                <button class="control-btn"
+                                    data-quality="4k">4K</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1.5rem;">
+                        <button id="recordButton" class="record-button">
                             <i class="fas fa-record-vinyl"></i>
-                            Record Video
-                        </button>
-                        <button class="add-block-btn" data-type="file">
-                            <i class="fas fa-paperclip"></i>
-                            File Upload
-                        </button>
-                        <button class="add-block-btn" data-type="quiz">
-                            <i class="fas fa-question-circle"></i>
-                            Quiz Question
+                            Start Recording
                         </button>
                     </div>
-
-                    <div class="lesson-settings">
-                        <h4>Lesson Settings</h4>
-                        <div class="settings-grid">
-                            <div class="setting-item">
-                                <input type="checkbox" id="allowComments">
-                                <label for="allowComments">Allow Comments</label>
-                            </div>
-                            <div class="setting-item">
-                                <input type="checkbox" id="isFreePreview">
-                                <label for="isFreePreview">Free Preview</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Professional Video Recorder Modal -->
-    <div id="videoRecorderModal" class="modal-overlay" style="display: none;">
-        <div class="modal-content" style="max-width: 90vw; max-height: 90vh; overflow-y: auto;">
-            <div class="video-recorder">
-                <div class="recorder-header">
-                    <h3 class="recorder-title">
-                        <i class="fas fa-video"></i>
-                        Professional Video Recorder
-                    </h3>
-                    <div class="recorder-status">
-                        <div class="status-indicator" id="recordingIndicator"></div>
-                        <span id="recordingStatus">Ready to Record</span>
-                        <span id="recordingTime" style="display: none;">00:00</span>
-                    </div>
-                    <button id="closeRecorder" class="control-btn">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-
-                <div class="video-preview-container">
-                    <video id="videoPreview" class="video-preview" autoplay muted></video>
-                    <canvas id="outputCanvas" class="video-preview" style="display: none;"></canvas>
-                    <div id="previewOverlay" class="preview-overlay">
-                        <i class="fas fa-play-circle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-                        <div>Click "Start Camera" to begin</div>
-                    </div>
-                </div>
-
-                <div class="recorder-controls">
-                    <div class="control-group">
-                        <h4>Camera & Microphone</h4>
-                        <div class="control-buttons">
-                            <button id="startCamera" class="control-btn">
-                                <i class="fas fa-camera"></i> Start Camera
-                            </button>
-                            <button id="toggleMicrophone" class="control-btn">
-                                <i class="fas fa-microphone"></i> Microphone On
-                            </button>
-                            <button id="switchCamera" class="control-btn" style="display: none;">
-                                <i class="fas fa-sync-alt"></i> Switch Camera
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <h4>Screen Sharing</h4>
-                        <div class="control-buttons">
-                            <button id="shareScreen" class="control-btn">
-                                <i class="fas fa-desktop"></i> Share Screen
-                            </button>
-                            <button id="shareWindow" class="control-btn">
-                                <i class="fas fa-window-maximize"></i> Share Window
-                            </button>
-                            <button id="shareTab" class="control-btn">
-                                <i class="fas fa-chrome"></i> Share Tab
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <h4>Virtual Background</h4>
-                        <div class="control-buttons">
-                            <button id="toggleBackground" class="control-btn">
-                                <i class="fas fa-magic"></i> Enable Background
-                            </button>
-                            <button id="backgroundSettings" class="control-btn">
-                                <i class="fas fa-cog"></i> Settings
-                            </button>
-                        </div>
-                        <div class="background-selector">
-                            <div class="bg-option none active" data-bg="none" title="No Background"></div>
-                            <div class="bg-option blur" data-bg="blur" title="Blur Background"></div>
-                            <div class="bg-option" data-bg="office" title="Office" style="background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjkwIiB2aWV3Qm94PSIwIDAgMTYwIDkwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxNjAiIGhlaWdodD0iOTAiIGZpbGw9IiNmMGY0ZjgiLz48cmVjdCB4PSIyMCIgeT0iMjAiIHdpZHRoPSIxMjAiIGhlaWdodD0iNTAiIGZpbGw9IiNkMWQ1ZGIiLz48L3N2Zz4=')"></div>
-                            <div class="bg-option" data-bg="nature" title="Nature" style="background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjkwIiB2aWV3Qm94PSIwIDAgMTYwIDkwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxNjAiIGhlaWdodD0iOTAiIGZpbGw9IiM2NmJiNmEiLz48Y2lyY2xlIGN4PSI4MCIgY3k9IjQ1IiByPSIyMCIgZmlsbD0iIzRjYWY1MCIvPjwvc3ZnPg==')"></div>
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <h4>Recording Quality</h4>
-                        <div class="control-buttons">
-                            <button class="control-btn" data-quality="720p">720p</button>
-                            <button class="control-btn active" data-quality="1080p">1080p</button>
-                            <button class="control-btn" data-quality="4k">4K</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="margin-top: 1.5rem;">
-                    <button id="recordButton" class="record-button">
-                        <i class="fas fa-record-vinyl"></i>
-                        Start Recording
-                    </button>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Enhanced Modal Styles -->
-    <style>
+        <!-- Enhanced Modal Styles -->
+        <style>
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -1108,12 +1142,14 @@
         }
     </style>
 
-    <!-- Libraries -->
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/4.10.0/tf.min.js"></script>
+        <!-- Libraries -->
+        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/4.10.0/tf.min.js"></script>
 
-    <script type="module">
+        <script type="module">
         // --- Firebase Imports ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
@@ -1123,7 +1159,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
             authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-            projectId: "andrew-cares-village-f4cb6",
+             
             storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
             messagingSenderId: "255087116955",
             appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
@@ -2850,5 +2886,5 @@ try {
 
         console.log('Enhanced Course Editor initialized successfully!');
     </script>
-</body>
+    </body>
 </html>

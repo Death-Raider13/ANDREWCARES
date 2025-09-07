@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Andrew Cares Village</title>
-    <!-- Fonts and Icons -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;500;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Welcome to Andrew Cares Village</title>
+        <!-- Fonts and Icons -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;500;700&display=swap"
+            rel="stylesheet">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+            integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <style>
+        <style>
         :root {
             --background-color: #F4F2ED;
             --text-primary: #333333;
@@ -814,59 +815,67 @@
             }
         }
     </style>
-</head>
+    </head>
 
-<body>
-    <!-- Header -->
-    <header class="main-header">
-        <div class="logo">Andrew Cares Village</div>
-        <div class="header-actions">
-            <button onclick="window.location.href='login.html'" class="btn-secondary">Login</button>
-            <button onclick="window.location.href='signup.html'" class="btn-primary">Join Now</button>
-            <button onclick="window.location.href='contact.html'" class="btn-primary">Support</button>
-             <button onclick="window.location.href='About.html'" class="btn-primary">Who we are</button>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main>
-        <section class="hero">
-            <div class="hero-content">
-                <h1>Master Yourself, Master Your Life</h1>
-                <p>Join a community dedicated to holistic growth through discipline, finance, and fitness. Become the
-                    strongest version of yourself, together.</p>
-                <button id="heroJoinBtn" class="btn-primary" onclick="window.location.href='login.html?action=signup'">Start Your Journey</button>
+    <body>
+        <!-- Header -->
+        <header class="main-header">
+            <div class="logo">Andrew Cares Village</div>
+            <div class="header-actions">
+                <button onclick="window.location.href='login.html'"
+                    class="btn-secondary">Login</button>
+                <button onclick="window.location.href='signup.html'"
+                    class="btn-primary">Join Now</button>
+                <button onclick="window.location.href='contact.html'"
+                    class="btn-primary">Support</button>
+                <button onclick="window.location.href='About.html'"
+                    class="btn-primary">Who we are</button>
             </div>
-        </section>
+        </header>
 
-        <section class="disciplines">
-            <div class="discipline-card">
-                <i class="fas fa-fist-raised"></i>
-                <h2>Karate</h2>
-                <p>Cultivate discipline, focus, and self-defense skills in our digital dojo. Master the art of mind and
-                    body unity.</p>
-            </div>
-            <div class="discipline-card">
-                <i class="fas fa-chart-line"></i>
-                <h2>Forex</h2>
-                <p>Learn the art of currency trading from seasoned experts. Transform financial knowledge into lasting
-                    wealth.</p>
-            </div>
-            <div class="discipline-card">
-                <i class="fas fa-dumbbell"></i>
-                <h2>Fitness</h2>
-                <p>Build a stronger, healthier body with our comprehensive workout programs. Forge your physical
-                    excellence.</p>
-            </div>
-        </section>
-    </main>
+        <!-- Main Content -->
+        <main>
+            <section class="hero">
+                <div class="hero-content">
+                    <h1>Master Yourself, Master Your Life</h1>
+                    <p>Join a community dedicated to holistic growth through
+                        discipline, finance, and fitness. Become the
+                        strongest version of yourself, together.</p>
+                    <button id="heroJoinBtn" class="btn-primary"
+                        onclick="window.location.href='login.html?action=signup'">Start
+                        Your Journey</button>
+                </div>
+            </section>
 
+            <section class="disciplines">
+                <div class="discipline-card">
+                    <i class="fas fa-fist-raised"></i>
+                    <h2>Karate</h2>
+                    <p>Cultivate discipline, focus, and self-defense skills in
+                        our digital dojo. Master the art of mind and
+                        body unity.</p>
+                </div>
+                <div class="discipline-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h2>Forex</h2>
+                    <p>Learn the art of currency trading from seasoned experts.
+                        Transform financial knowledge into lasting
+                        wealth.</p>
+                </div>
+                <div class="discipline-card">
+                    <i class="fas fa-dumbbell"></i>
+                    <h2>Fitness</h2>
+                    <p>Build a stronger, healthier body with our comprehensive
+                        workout programs. Forge your physical
+                        excellence.</p>
+                </div>
+            </section>
+        </main>
 
-   
-    <!-- Toast Notification Container -->
-    <div id="toastContainer"></div>
+        <!-- Toast Notification Container -->
+        <div id="toastContainer"></div>
 
-    <script type="module">
+        <script type="module">
         // Firebase SDK Imports
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendEmailVerification, reload, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
@@ -876,7 +885,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
             authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-            projectId: "andrew-cares-village-f4cb6",
+             
             storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
             messagingSenderId: "255087116955",
             appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
@@ -1473,15 +1482,15 @@
         console.log('Andrew Cares Village - Optimized Landing Page Loaded Successfully');
     </script>
 
-    <!-- 3. HTML: Footer -->
-    <footer class="main-footer">
-        <div class="footer-links">
-            <a href="about.html">About Us</a>
-            <a href="privacy.html">Privacy Policy</a>
-            <a href="terms.html">Terms of Service</a>
-        </div>
-        <p>&copy; 2025 Andrew Cares Village. All Rights Reserved.</p>
-    </footer>
-</body>
+        <!-- 3. HTML: Footer -->
+        <footer class="main-footer">
+            <div class="footer-links">
+                <a href="about.html">About Us</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+            </div>
+            <p>&copy; 2025 Andrew Cares Village. All Rights Reserved.</p>
+        </footer>
+    </body>
 
 </html>

@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Management - Andrew Cares Village</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Course Management - Andrew Cares Village</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;500;700&display=swap"
+            rel="stylesheet">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <style>
         :root {
             --background-color: #F4F2ED; --text-primary: #333333; --text-secondary: #555555;
             --color-primary: #B38B00; --color-secondary: #001F3F; --card-bg: #FFFFFF;
@@ -696,21 +699,31 @@
         <header class="main-header">
             <a href="home.html" class="logo">Andrew Cares Village</a>
             <div class="user-profile-nav">
-                <img id="userAvatarNav" src alt="User Avatar" class="user-avatar-nav">
+                <img id="userAvatarNav" src alt="User Avatar"
+                    class="user-avatar-nav">
                 <span id="userNameNav">Loading...</span>
             </div>
         </header>
-        <div id="loadingOverlay" class="loading-overlay" style="display: none;"><div class="loading-spinner"></div></div>
+        <div id="loadingOverlay" class="loading-overlay"
+            style="display: none;"><div class="loading-spinner"></div></div>
         <main class="page-container">
-            <div id="courseOverview" class="course-overview" style="display: none;">
+            <div id="courseOverview" class="course-overview"
+                style="display: none;">
                 <div class="course-header">
                     <div class="course-info">
                         <h2 id="courseTitle">Loading...</h2>
                         <div class="course-meta">
-                            <div class="meta-item"><i class="fas fa-tag"></i><span id="courseDiscipline">-</span></div>
-                            <div class="meta-item"><i class="fas fa-signal"></i><span id="courseLevel">-</span></div>
-                            <div class="meta-item"><i class="fas fa-calendar"></i><span id="courseCreated">-</span></div>
-                            <div class="meta-item"><span id="courseStatus" class="course-status">-</span></div>
+                            <div class="meta-item"><i
+                                    class="fas fa-tag"></i><span
+                                    id="courseDiscipline">-</span></div>
+                            <div class="meta-item"><i
+                                    class="fas fa-signal"></i><span
+                                    id="courseLevel">-</span></div>
+                            <div class="meta-item"><i
+                                    class="fas fa-calendar"></i><span
+                                    id="courseCreated">-</span></div>
+                            <div class="meta-item"><span id="courseStatus"
+                                    class="course-status">-</span></div>
                         </div>
                         <p id="courseDescription">Loading...</p>
                     </div>
@@ -719,37 +732,51 @@
             </div>
             <div id="analyticsSection" style="display: none;">
                 <div class="analytics-grid">
-                    <div class="analytics-card"><h3>Total Students</h3><div class="value" id="totalStudents">0</div></div>
-                    <div class="analytics-card"><h3>Completion Rate</h3><div class="value" id="completionRate">0%</div></div>
-                    <div class="analytics-card"><h3>Average Rating</h3><div class="value" id="averageRating">0.0</div></div>
+                    <div class="analytics-card"><h3>Total Students</h3><div
+                            class="value" id="totalStudents">0</div></div>
+                    <div class="analytics-card"><h3>Completion Rate</h3><div
+                            class="value" id="completionRate">0%</div></div>
+                    <div class="analytics-card"><h3>Average Rating</h3><div
+                            class="value" id="averageRating">0.0</div></div>
                 </div>
             </div>
-            <div id="tabsContainer" class="tabs-container" style="display: none;">
+            <div id="tabsContainer" class="tabs-container"
+                style="display: none;">
                 <div class="tabs">
-                    <button class="tab-btn active" data-tab="lessons"><i class="fas fa-list-ul"></i> Lessons</button>
-                    <button class="tab-btn" data-tab="feedback"><i class="fas fa-comments"></i> Feedback</button>
-                    <button class="tab-btn" data-tab="progress"><i class="fas fa-chart-bar"></i> Student Progress</button>
+                    <button class="tab-btn active" data-tab="lessons"><i
+                            class="fas fa-list-ul"></i> Lessons</button>
+                    <button class="tab-btn" data-tab="feedback"><i
+                            class="fas fa-comments"></i> Feedback</button>
+                    <button class="tab-btn" data-tab="progress"><i
+                            class="fas fa-chart-bar"></i> Student
+                        Progress</button>
                 </div>
                 <div id="lessonsTab" class="tab-content active">
-                    <div id="lessonPreviewContainer" style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+                    <div id="lessonPreviewContainer"
+                        style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
                         <div id="lessonListContainer">
                             <h3>Course Lessons</h3>
                             <ul id="lessonList" class="lesson-list"></ul>
                         </div>
                         <div id="lessonDetailContainer">
                             <div id="videoPlayerContainer" class="video-player">
-                                <div class="empty-state"><i class="fas fa-play-circle"></i><p>Select a lesson to preview</p></div>
+                                <div class="empty-state"><i
+                                        class="fas fa-play-circle"></i><p>Select
+                                        a lesson to preview</p></div>
                             </div>
-                            <div id="lessonInfoContainer" style="padding: 1rem;"></div>
+                            <div id="lessonInfoContainer"
+                                style="padding: 1rem;"></div>
                         </div>
                     </div>
                 </div>
                 <div id="feedbackTab" class="tab-content">
                     <div class="student-feedback">
                         <div class="rating-overview">
-                            <div class="rating-score" id="overallRating">0.0</div>
+                            <div class="rating-score"
+                                id="overallRating">0.0</div>
                             <div>
-                                <div class="star-rating" id="overallStars"></div>
+                                <div class="star-rating"
+                                    id="overallStars"></div>
                                 <p><span id="totalReviews">0</span> reviews</p>
                             </div>
                         </div>
@@ -762,8 +789,8 @@
                 </div>
             </div>
         </main>
-<!-- In course-management.html, replace the entire script block with this one -->
-<script type="module">
+        <!-- In course-management.html, replace the entire script block with this one -->
+        <script type="module">
     // --- Firebase v9 SDK Imports ---
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
@@ -773,7 +800,7 @@
     const firebaseConfig = {
         apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
         authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-        projectId: "andrew-cares-village-f4cb6",
+         
         storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
         messagingSenderId: "255087116955",
         appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
@@ -1719,6 +1746,5 @@ document.addEventListener('DOMContentLoaded', function() {
     new CourseManagementApp();
     
 </script>
-</body>
+    </body>
 </html>
-
