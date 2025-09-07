@@ -4,7 +4,7 @@
   command = 'sed -i "s/%REACT_APP_FIREBASE_PROJECT_ID%/$REACT_APP_FIREBASE_PROJECT_ID/g" public/contact.html && echo "contact.html injected"'
 
 [functions]
-  directory = "public/netlify/functions"
+  directory = "netlify/functions"
 
 [[headers]]
   for = "/.netlify/functions/*"
@@ -14,8 +14,8 @@
     Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
 
 [dev]
-  functions = "public/netlify/functions"
-
+  functions = "netlify/functions"
 
 [build.environment]
-  REACT_APP_FIREBASE_PROJECT_ID = "andrew-cares-village-f4cb6"
+  SECRETS_SCAN_OMIT_KEYS = "FIREBASE_PROJECT_ID,FIREBASE_CLIENT_EMAIL"
+
