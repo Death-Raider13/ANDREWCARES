@@ -31,6 +31,18 @@ try {
             auth_uri: "https://accounts.google.com/o/oauth2/auth",
             token_uri: "https://oauth2.googleapis.com/token"
         };
+        /* ---------- 1.  Build the service-account object ---------- */
+        
+        /* ---------- 2.  Quick sanity check (add here) ---------- */
+        const key = serviceAccount.private_key;   // what will really be used
+        console.log('KEY starts with:', key.slice(0, 27));
+        console.log('KEY ends with  :', key.slice(-28));
+        console.log('Has real LF    :', key.includes('\n'));   // must be true
+
+        /* ---------- 3.  Now hand it to Firebase ---------- */
+        firebaseApp = admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount)
+        });
 
         console.log('Service account validation:', {
             hasProjectId: !!serviceAccount.project_id,
@@ -145,6 +157,7 @@ exports.handler = async (event, context) => {
 
         // Update user's custom claims
         await admin.auth().setCustomUserClaims(userId, {
+            role: 'instructor',
             instructor_approved: true,
             bank_details_added: true,
             subaccount_code: subaccountData.data.subaccount_code
@@ -160,7 +173,17 @@ exports.handler = async (event, context) => {
             subaccount_code: subaccountData.data.subaccount_code,
             subaccount_id: subaccountData.data.id,
             created_at: admin.firestore.FieldValue.serverTimestamp(),
-            status: 'active'
+            status: 'active',
+            role: 'instructor'
+        });
+
+        // Also update the user's profile document to set role
+        await admin.firestore().collection('users').doc(userId).update({
+            role: 'instructor',
+            instructorStatus: 'approved',
+            bankDetailsAdded: true,
+            subaccount_code: subaccountData.data.subaccount_code,
+            updated_at: admin.firestore.FieldValue.serverTimestamp()
         });
 
         return {
