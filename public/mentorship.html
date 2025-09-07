@@ -1735,13 +1735,11 @@ async function handleMemberEventClick(info) {
 
 function loadMemberSessions() {
     const sessionsList = document.getElementById('memberSessionsList');
-    const q = query(
-        collection(db, "bookings"), 
-        where("studentId", "==", currentUser.uid), 
-        orderBy("createdAt", "desc")
-    );
+    const q = db.collection("bookings")
+        .where("studentId", "==", currentUser.uid)
+        .orderBy("createdAt", "desc");
     
-    onSnapshot(q, (snapshot) => {
+    q.onSnapshot((snapshot) => {
         sessionsList.innerHTML = snapshot.empty ? '<p>You have no sessions yet.</p>' : '';
         
         snapshot.forEach(docSnap => {
@@ -1836,11 +1834,11 @@ window.saveAvailability = async function() {
     }));
 
     try {
-        await setDoc(doc(db, "mentorshipSlots", `${currentUser.uid}_${date}`), {
+        await db.collection("mentorshipSlots").doc(`${currentUser.uid}_${date}`).set({
             instructorId: currentUser.uid,
             date: date,
             timeSlots: timeSlots,
-            createdAt: serverTimestamp()
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
         alert('Availability saved successfully!');
@@ -1858,14 +1856,12 @@ window.saveAvailability = async function() {
 
 function loadInstructorBookings() {
     const bookingsList = document.getElementById('instructorBookingsList');
-    const q = query(
-        collection(db, "bookings"), 
-        where("instructorId", "==", currentUser.uid),
-        where("status", "in", ["negotiating", "confirmed"]),
-        orderBy("createdAt", "desc")
-    );
+    const q = db.collection("bookings")
+        .where("instructorId", "==", currentUser.uid)
+        .where("status", "in", ["negotiating", "confirmed", "agreement_signed"])
+        .orderBy("createdAt", "desc");
     
-    onSnapshot(q, (snapshot) => {
+    q.onSnapshot((snapshot) => {
         bookingsList.innerHTML = snapshot.empty ? '<p>No bookings yet.</p>' : '';
         
         snapshot.forEach(docSnap => {
@@ -1901,14 +1897,12 @@ function loadInstructorBookings() {
 
 function loadCompletedSessions() {
     const completedList = document.getElementById('completedSessionsList');
-    const q = query(
-        collection(db, "bookings"), 
-        where("instructorId", "==", currentUser.uid),
-        where("status", "==", "completed"),
-        orderBy("completedAt", "desc")
-    );
+    const q = db.collection("bookings")
+        .where("instructorId", "==", currentUser.uid)
+        .where("status", "==", "completed")
+        .orderBy("completedAt", "desc");
     
-    onSnapshot(q, (snapshot) => {
+    q.onSnapshot((snapshot) => {
         completedList.innerHTML = snapshot.empty ? '<p>No completed sessions yet.</p>' : '';
         
         snapshot.forEach(docSnap => {
@@ -1944,9 +1938,9 @@ function setupInstructorChat() {
 window.markSessionComplete = async function(bookingId) {
     if (confirm('Mark this session as completed?')) {
         try {
-            await updateDoc(doc(db, "bookings", bookingId), {
+            await db.collection("bookings").doc(bookingId).update({
                 status: 'completed',
-                completedAt: serverTimestamp(),
+                completedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 rating: 5 // Default rating, can be updated by student later
             });
             alert('Session marked as completed!');
@@ -1967,29 +1961,25 @@ function initializeAdmin() {
 async function loadAdminStatistics() {
     try {
         // Get all completed bookings
-        const completedQ = query(
-            collection(db, "bookings"), 
-            where("status", "==", "completed")
-        );
-        const completedSnap = await getDocs(completedQ);
+        const completedSnapshot = await db.collection("bookings")
+            .where("status", "==", "completed")
+            .get();
         
         let totalCommission = 0;
-        completedSnap.forEach(doc => {
+        completedSnapshot.forEach(doc => {
             const booking = doc.data();
             totalCommission += Math.round(booking.finalAmount * 0.1); // 10% commission
         });
         
         // Get pending sessions
-        const pendingQ = query(
-            collection(db, "bookings"), 
-            where("status", "in", ["negotiating", "confirmed"])
-        );
-        const pendingSnap = await getDocs(pendingQ);
+        const pendingSnapshot = await db.collection("bookings")
+            .where("status", "in", ["negotiating", "confirmed", "agreement_signed"])
+            .get();
         
         // Update DOM
         document.getElementById('totalCommission').textContent = `₦${totalCommission.toLocaleString()}`;
-        document.getElementById('totalSessions').textContent = completedSnap.size;
-        document.getElementById('pendingSessions').textContent = pendingSnap.size;
+        document.getElementById('totalSessions').textContent = completedSnapshot.size;
+        document.getElementById('pendingSessions').textContent = pendingSnapshot.size;
         
     } catch (error) {
         console.error('Error loading admin statistics:', error);
@@ -1998,13 +1988,11 @@ async function loadAdminStatistics() {
 
 function loadTransactions() {
     const transactionsList = document.getElementById('transactionsList');
-    const q = query(
-        collection(db, "bookings"), 
-        where("status", "==", "completed"),
-        orderBy("completedAt", "desc")
-    );
+    const q = db.collection("bookings")
+        .where("status", "==", "completed")
+        .orderBy("completedAt", "desc");
     
-    onSnapshot(q, (snapshot) => {
+    q.onSnapshot((snapshot) => {
         transactionsList.innerHTML = snapshot.empty ? '<p>No transactions yet.</p>' : '';
         
         snapshot.forEach(docSnap => {
@@ -2036,8 +2024,7 @@ function loadTransactions() {
 
 async function loadAllMentors() {
     const mentorsList = document.getElementById('allMentorsList');
-    const q = query(collection(db, "users"), where("role", "==", "instructor"));
-    const snapshot = await getDocs(q);
+    const snapshot = await db.collection("users").where("role", "==", "instructor").get();
     
     mentorsList.innerHTML = '';
     
@@ -2045,12 +2032,10 @@ async function loadAllMentors() {
         const mentor = { id: docSnap.id, ...docSnap.data() };
         
         // Get mentor statistics
-        const sessionsQ = query(
-            collection(db, "bookings"), 
-            where("instructorId", "==", mentor.id),
-            where("status", "==", "completed")
-        );
-        const sessionsSnap = await getDocs(sessionsQ);
+        const sessionsSnap = await db.collection("bookings")
+            .where("instructorId", "==", mentor.id)
+            .where("status", "==", "completed")
+            .get();
         
         let totalEarnings = 0;
         sessionsSnap.forEach(doc => {
@@ -2084,13 +2069,11 @@ function updateSidebarConversations() {
     if (!currentUser) return;
     
     // Query for active sessions/conversations
-    const q = query(
-        collection(db, "bookings"),
-        where(currentUserData.role === 'instructor' ? "instructorId" : "studentId", "==", currentUser.uid),
-        where("status", "in", ["confirmed", "negotiating", "completed"])
-    );
+    const q = db.collection("bookings")
+        .where(currentUserData.role === 'instructor' ? "instructorId" : "studentId", "==", currentUser.uid)
+        .where("status", "in", ["confirmed", "negotiating", "completed", "agreement_signed"]);
     
-    onSnapshot(q, (snapshot) => {
+    q.onSnapshot((snapshot) => {
         sidebarConversations.innerHTML = '';
         
         if (snapshot.empty) {
@@ -2144,12 +2127,10 @@ function openChatModal(sessionId, partnerName, partnerAvatar) {
 
 function loadChatMessages(sessionId) {
     const messagesContainer = document.getElementById('chatMessages');
-    const q = query(
-        collection(db, "chatSessions", sessionId, "messages"),
-        orderBy("timestamp", "asc")
-    );
+    const q = db.collection("chatSessions").doc(sessionId).collection("messages")
+        .orderBy("timestamp", "asc");
     
-    onSnapshot(q, (snapshot) => {
+    q.onSnapshot((snapshot) => {
         messagesContainer.innerHTML = '';
         
         snapshot.forEach(docSnap => {
@@ -2188,12 +2169,12 @@ window.sendMessage = async function() {
     if (!content || !currentChatSession) return;
     
     try {
-        await addDoc(collection(db, "chatSessions", currentChatSession, "messages"), {
+        await db.collection("chatSessions").doc(currentChatSession).collection("messages").add({
             senderId: currentUser.uid,
             senderName: currentUserData.name,
             content: content,
             type: 'text',
-            timestamp: serverTimestamp()
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
         
         input.value = '';
@@ -2209,12 +2190,12 @@ window.sendImage = function() {
     
     createFileUploadInput(async (imageUrl) => {
         try {
-            await addDoc(collection(db, "chatSessions", currentChatSession, "messages"), {
+            await db.collection("chatSessions").doc(currentChatSession).collection("messages").add({
                 senderId: currentUser.uid,
                 senderName: currentUserData.name,
                 content: imageUrl,
                 type: 'image',
-                timestamp: serverTimestamp()
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
         } catch (error) {
             console.error('Error sending image:', error);
@@ -2269,7 +2250,7 @@ window.processPayment = async function() {
     
     try {
         // Get instructor's subaccount details
-        const instructorDoc = await getDoc(doc(db, "users", selectedInstructorId));
+        const instructorDoc = await db.collection("users").doc(selectedInstructorId).get();
         const instructorData = instructorDoc.data();
         
         if (!instructorData.paystackSubaccount) {
@@ -2352,7 +2333,7 @@ async function createInstructorSubaccount(instructorId, bankDetails) {
         
         if (data.status) {
             // Save subaccount code to instructor's profile
-            await updateDoc(doc(db, "users", instructorId), {
+            await db.collection("users").doc(instructorId).update({
                 paystackSubaccount: data.data.subaccount_code,
                 bankDetails: bankDetails,
                 payoutEnabled: true
@@ -2473,10 +2454,10 @@ async function processManualPayout(sessionId) {
         
         if (transferData.status) {
             // Update session with payout status
-            await updateDoc(doc(db, "bookings", sessionId), {
+            await db.collection("bookings").doc(sessionId).update({
                 instructorPaidOut: true,
                 payoutReference: transferData.data.transfer_code,
-                payoutDate: serverTimestamp()
+                payoutDate: firebase.firestore.FieldValue.serverTimestamp()
             });
             
             return true;
@@ -2492,11 +2473,11 @@ async function processManualPayout(sessionId) {
 async function handlePaymentSuccess(response) {
     try {
         // Update booking status to confirmed
-        await updateDoc(doc(db, "bookings", window.currentPaymentData.sessionId), {
+        await db.collection("bookings").doc(window.currentPaymentData.sessionId).update({
             status: 'confirmed',
             finalAmount: window.currentPaymentData.amount,
             paymentReference: response.reference,
-            paidAt: serverTimestamp()
+            paidAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
         // Show success message immediately
@@ -2524,7 +2505,7 @@ window.closePaymentModal = function() {
 window.updateProfileImage = function() {
     createFileUploadInput(async (imageUrl) => {
         try {
-            await updateDoc(doc(db, "users", currentUser.uid), {
+            await db.collection("users").doc(currentUser.uid).update({
                 avatarUrl: imageUrl
             });
             
@@ -2547,7 +2528,7 @@ window.updateProfileImage = function() {
 window.cancelBooking = async function(bookingId) {
     if (confirm("Are you sure you want to cancel this booking?")) {
         try {
-            await deleteDoc(doc(db, "bookings", bookingId));
+            await db.collection("bookings").doc(bookingId).delete();
             alert("Booking cancelled.");
         } catch (error) {
             console.error("Cancellation error:", error);
@@ -2634,12 +2615,12 @@ async function finalizeAgreement() {
         const agreementData = {
             instructorSignature: {
                 signed: true,
-                timestamp: serverTimestamp(),
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 name: currentAgreementData.instructorName
             },
             studentSignature: {
                 signed: true,
-                timestamp: serverTimestamp(),
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 name: currentAgreementData.studentName
             },
             agreedRate: rate,
@@ -2651,7 +2632,7 @@ async function finalizeAgreement() {
             instructorEarnings: Math.round(total * 0.9)
         };
         
-        const bookingRef = await addDoc(collection(db, "bookings"), {
+        const bookingRef = await db.collection("bookings").add({
             studentId: currentAgreementData.studentId,
             studentName: currentAgreementData.studentName,
             instructorId: currentAgreementData.instructorId,
@@ -2661,25 +2642,25 @@ async function finalizeAgreement() {
             startTime: currentAgreementData.startTime,
             hourlyRate: rate,
             status: 'agreement_signed',
-            createdAt: serverTimestamp(),
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             agreement: agreementData
         });
 
         // Create chat session
-        await setDoc(doc(db, "chatSessions", bookingRef.id), {
+        await db.collection("chatSessions").doc(bookingRef.id).set({
             bookingId: bookingRef.id,
             studentId: currentAgreementData.studentId,
             instructorId: currentAgreementData.instructorId,
             participants: [currentAgreementData.studentId, currentAgreementData.instructorId],
-            createdAt: serverTimestamp(),
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             lastMessage: `Agreement signed for ${subject} - ₦${total.toLocaleString()}`
         });
 
         // Store agreement document
-        await setDoc(doc(db, "agreements", bookingRef.id), {
+        await db.collection("agreements").doc(bookingRef.id).set({
             bookingId: bookingRef.id,
             ...agreementData,
-            createdAt: serverTimestamp(),
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             status: 'active'
         });
 
@@ -2730,7 +2711,7 @@ async function processSecurePayment(sessionId, amount) {
         
         // Create instructor subaccount if not exists
         let subaccountCode = null;
-        const instructorDoc = await getDoc(doc(db, "users", session.instructorId));
+        const instructorDoc = await db.collection("users").doc(session.instructorId).get();
         const instructorData = instructorDoc.data();
         
         if (instructorData.paystackSubaccount) {
@@ -2789,18 +2770,18 @@ async function processSecurePayment(sessionId, amount) {
 async function handleSecurePaymentSuccess(response, sessionId) {
     try {
         // Update booking status immediately
-        await updateDoc(doc(db, "bookings", sessionId), {
+        await db.collection("bookings").doc(sessionId).update({
             status: 'confirmed',
             paymentReference: response.reference,
-            paidAt: serverTimestamp(),
+            paidAt: firebase.firestore.FieldValue.serverTimestamp(),
             paymentConfirmed: true
         });
 
         // Update agreement status
-        await updateDoc(doc(db, "agreements", sessionId), {
+        await db.collection("agreements").doc(sessionId).update({
             status: 'paid',
             paymentReference: response.reference,
-            paidAt: serverTimestamp()
+            paidAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
         // Show success message
