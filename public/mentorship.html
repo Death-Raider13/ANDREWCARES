@@ -46,11 +46,31 @@
             line-height: 1.6;
         }
 
-        /* Main Container */
+        /* Main Container with 90/10 Split Layout */
         .mentorship-container {
             max-width: 1400px;
             margin: 2rem auto;
             padding: 0 2rem;
+            display: flex;
+            gap: 1rem;
+            height: calc(100vh - 6rem);
+        }
+
+        .main-content {
+            flex: 0 0 90%;
+            overflow-y: auto;
+            padding-right: 1rem;
+        }
+
+        .chat-sidebar {
+            flex: 0 0 10%;
+            min-width: 300px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         /* Role-based Dashboard Headers */
@@ -230,6 +250,97 @@
         .instructor-rating {
             color: var(--warning-color);
             font-size: 0.8rem;
+        }
+
+        /* Sidebar Chat Interface */
+        .sidebar-chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .sidebar-chat-header {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .sidebar-chat-header h3 {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .active-conversations {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .conversation-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 0.5rem;
+            border: 1px solid transparent;
+        }
+
+        .conversation-item:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .conversation-item.active {
+            background-color: rgba(179, 139, 0, 0.1);
+            border-color: var(--color-primary);
+        }
+
+        .conversation-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .conversation-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .conversation-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .conversation-preview {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .unread-badge {
+            background-color: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
         }
 
         /* Chat Interface */
@@ -530,29 +641,241 @@
         .flex-center { align-items: center; }
         .gap-1 { gap: 0.5rem; }
 
-        /* Responsive Design */
+        /* Enhanced Responsive Design */
         @media (max-width: 1024px) {
-            .grid-2 {
-                grid-template-columns: 1fr;
+            .mentorship-container {
+                flex-direction: column;
+                height: auto;
+                gap: 1rem;
             }
             
-            .tab-nav {
-                flex-wrap: wrap;
+            .main-content {
+                width: 100%;
+                height: auto;
+                min-height: 70vh;
+            }
+            
+            .chat-sidebar {
+                width: 100%;
+                height: 30vh;
+                min-height: 250px;
+                order: 2;
+            }
+            
+            .sidebar-chat-header h3 {
+                font-size: 0.9rem;
+            }
+            
+            .conversation-item {
+                padding: 0.5rem;
+                gap: 0.5rem;
+            }
+            
+            .conversation-avatar {
+                width: 35px;
+                height: 35px;
             }
         }
 
         @media (max-width: 768px) {
+            .container {
+                padding: 0.5rem;
+            }
+            
             .mentorship-container {
-                padding: 0 1rem;
+                flex-direction: column;
+                height: auto;
+                gap: 0.5rem;
             }
             
-            .dashboard-header h1 {
-                font-size: 2rem;
+            .main-content {
+                width: 100%;
+                height: auto;
+                min-height: 65vh;
+                padding: 1rem;
             }
             
+            .chat-sidebar {
+                width: 100%;
+                height: 35vh;
+                min-height: 280px;
+                order: 2;
+            }
+            
+            /* Mobile-optimized tabs */
+            .tabs {
+                flex-wrap: wrap;
+                gap: 0.25rem;
+            }
+            
+            .tab-btn {
+                flex: 1;
+                min-width: calc(50% - 0.125rem);
+                padding: 0.6rem 0.8rem;
+                font-size: 0.85rem;
+                text-align: center;
+            }
+            
+            /* Mobile instructor cards */
+            .instructor-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem 0.5rem;
+            }
+            
+            .instructor-avatar {
+                width: 60px;
+                height: 60px;
+            }
+            
+            /* Mobile session cards */
             .session-card {
                 flex-direction: column;
                 align-items: flex-start;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .session-actions {
+                width: 100%;
+                display: flex;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+            }
+            
+            .session-actions .btn {
+                flex: 1;
+                min-width: calc(50% - 0.25rem);
+                justify-content: center;
+            }
+            
+            /* Mobile calendar adjustments */
+            .fc-toolbar {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .fc-toolbar-chunk {
+                display: flex;
+                justify-content: center;
+            }
+            
+            /* Mobile chat interface */
+            .chat-container {
+                height: 400px;
+            }
+            
+            .message-content {
+                max-width: 85%;
+                padding: 0.6rem 0.8rem;
+                font-size: 0.9rem;
+            }
+            
+            .chat-input {
+                padding: 0.75rem;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            
+            .chat-input input {
+                margin-right: 0;
+                margin-bottom: 0.5rem;
+            }
+            
+            .chat-input .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            /* Mobile form improvements */
+            .form-control {
+                padding: 1rem;
+                font-size: 1.1rem;
+            }
+            
+            .btn {
+                padding: 0.8rem 1rem;
+                font-size: 1rem;
+                min-height: 44px;
+            }
+            
+            /* Mobile availability grid */
+            .availability-grid {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+            
+            .time-slot {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0.25rem;
+            }
+            
+            .main-content {
+                padding: 0.5rem;
+                min-height: 60vh;
+            }
+            
+            .chat-sidebar {
+                height: 40vh;
+                min-height: 300px;
+            }
+            
+            .tab-btn {
+                padding: 0.5rem 0.4rem;
+                font-size: 0.8rem;
+            }
+            
+            .instructor-card {
+                padding: 0.75rem 0.25rem;
+            }
+            
+            .instructor-avatar {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .session-card {
+                padding: 0.75rem;
+            }
+            
+            .conversation-item {
+                padding: 0.4rem;
+            }
+            
+            .conversation-avatar {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .conversation-name {
+                font-size: 0.85rem;
+            }
+            
+            .conversation-preview {
+                font-size: 0.75rem;
+            }
+            
+            .chat-container {
+                height: 350px;
+            }
+            
+            .message-content {
+                max-width: 90%;
+                padding: 0.5rem 0.7rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Additional responsive improvements */
+        @media (max-width: 1200px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
                 gap: 1rem;
             }
         }
@@ -591,13 +914,14 @@
 
         <!-- Main Page Content -->
         <div id="pageContent" class="mentorship-container">
-            <!-- Member View -->
-            <div id="memberView" class="hidden">
-                <div class="dashboard-header">
-                    <h1><i class="fas fa-graduation-cap"></i> Mentorship
-                        Portal</h1>
-                    <p>Connect with expert mentors for personalized guidance</p>
-                </div>
+            <!-- Main Content Area (90%) -->
+            <div class="main-content">
+                <!-- Member View -->
+                <div id="memberView" class="hidden">
+                    <div class="dashboard-header">
+                        <h1><i class="fas fa-graduation-cap"></i> Mentorship
+                            Portal</h1>
+                        <p>Connect with expert mentors for personalized guidance</p>
 
                 <div class="tab-nav">
                     <button class="tab-btn active"
@@ -820,6 +1144,24 @@
                 </div>
             </div>
 
+            <!-- Chat Sidebar (10%) -->
+            <div class="chat-sidebar">
+                <div class="sidebar-chat">
+                    <div class="sidebar-chat-header">
+                        <h3><i class="fas fa-comments"></i> Active Chats</h3>
+                    </div>
+                    <div class="active-conversations" id="sidebarConversations">
+                        <div class="conversation-item">
+                            <img src="https://via.placeholder.com/40" alt="Avatar" class="conversation-avatar">
+                            <div class="conversation-info">
+                                <p class="conversation-name">No active chats</p>
+                                <p class="conversation-preview">Start a session to begin chatting</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Access Denied View -->
             <div id="accessDeniedView" class="access-denied hidden">
                 <i class="fas fa-lock"></i>
@@ -1030,6 +1372,9 @@ function initializeView() {
     instructorView.classList.add('hidden');
     adminView.classList.add('hidden');
     accessDeniedView.classList.add('hidden');
+
+    // Initialize sidebar conversations for all roles
+    updateSidebarConversations();
 
     if (userRole === 'admin') {
         adminView.classList.remove('hidden');
@@ -1597,15 +1942,68 @@ async function loadAllMentors() {
     }
 }
 
+// --- Sidebar Chat Functions ---
+function updateSidebarConversations() {
+    const sidebarConversations = document.getElementById('sidebarConversations');
+    
+    if (!currentUser) return;
+    
+    // Query for active sessions/conversations
+    const q = query(
+        collection(db, "bookings"),
+        where(currentUserData.role === 'instructor' ? "instructorId" : "studentId", "==", currentUser.uid),
+        where("status", "in", ["confirmed", "negotiating", "completed"])
+    );
+    
+    onSnapshot(q, (snapshot) => {
+        sidebarConversations.innerHTML = '';
+        
+        if (snapshot.empty) {
+            sidebarConversations.innerHTML = `
+                <div class="conversation-item">
+                    <img src="https://via.placeholder.com/40" alt="Avatar" class="conversation-avatar">
+                    <div class="conversation-info">
+                        <p class="conversation-name">No active chats</p>
+                        <p class="conversation-preview">Start a session to begin chatting</p>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+        
+        snapshot.forEach(docSnap => {
+            const session = { id: docSnap.id, ...docSnap.data() };
+            const isInstructor = currentUserData.role === 'instructor';
+            const partnerName = isInstructor ? session.studentName : session.instructorName;
+            const partnerAvatar = isInstructor ? session.studentAvatar : session.instructorAvatar;
+            
+            const conversationEl = document.createElement('div');
+            conversationEl.className = 'conversation-item';
+            conversationEl.onclick = () => openChatModal(session.id, partnerName, partnerAvatar);
+            
+            conversationEl.innerHTML = `
+                <img src="${partnerAvatar || 'https://via.placeholder.com/40'}" alt="${partnerName}" class="conversation-avatar">
+                <div class="conversation-info">
+                    <p class="conversation-name">${partnerName}</p>
+                    <p class="conversation-preview">${session.subject || 'Mentorship Session'}</p>
+                </div>
+                ${session.unreadCount > 0 ? `<div class="unread-badge">${session.unreadCount}</div>` : ''}
+            `;
+            
+            sidebarConversations.appendChild(conversationEl);
+        });
+    });
+}
+
 // --- Chat Functions ---
-window.openChat = function(sessionId, partnerId, partnerName) {
+function openChatModal(sessionId, partnerName, partnerAvatar) {
     currentChatSession = sessionId;
     
-    document.getElementById('chatModalTitle').textContent = `Chat - ${partnerName}`;
+    document.getElementById('chatModalTitle').textContent = `Chat with ${partnerName}`;
     document.getElementById('chatPartnerName').textContent = partnerName;
-    document.getElementById('chatPartnerAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(partnerName)}`;
-    
+    document.getElementById('chatPartnerAvatar').src = partnerAvatar || 'https://via.placeholder.com/50';
     document.getElementById('chatModal').style.display = 'block';
+    
     loadChatMessages(sessionId);
 };
 
@@ -1782,7 +2180,11 @@ window.processPayment = async function() {
                 alert('Payment cancelled.');
             },
             callback: function(response) {
-                handlePaymentSuccess(response);
+                if (response.status === 'success') {
+                    handlePaymentSuccess(response);
+                } else {
+                    alert('Payment failed or was cancelled.');
+                }
             }
         });
         
@@ -1961,23 +2363,20 @@ async function handlePaymentSuccess(response) {
             paymentReference: response.reference,
             paidAt: serverTimestamp()
         });
-        
-        // Record transaction for admin
-        await addDoc(collection(db, "transactions"), {
-            bookingId: window.currentPaymentData.sessionId,
-            amount: window.currentPaymentData.amount,
-            commission: Math.round(window.currentPaymentData.amount * 0.1),
-            paymentReference: response.reference,
-            status: 'successful',
-            createdAt: serverTimestamp()
-        });
-        
-        alert('Payment successful! Your session is now confirmed.');
+
+        // Show success message immediately
+        alert('Payment successful! Your session has been confirmed.');
         closePaymentModal();
         
+        // Update sidebar conversations and refresh sessions in background
+        updateSidebarConversations();
+        loadMemberSessions();
+        
     } catch (error) {
-        console.error('Error processing payment success:', error);
-        alert('Payment was successful but there was an error updating your booking. Please contact support.');
+        console.error('Error updating booking:', error);
+        // Still show success since payment went through
+        alert(`Payment successful! Reference: ${response.reference}\nYour session has been booked. Please contact support if you don't see it in your sessions.`);
+        closePaymentModal();
     }
 }
 
