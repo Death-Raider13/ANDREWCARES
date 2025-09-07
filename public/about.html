@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Andrew Cares Village</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:wght@400;700&family=Montserrat:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* --- CSS STYLES --- */
+
+        /* 1. Global Styles & Variables */
+        :root {
+            --background-color: #F4F2ED;
+            --text-primary: #333333;
+            --text-secondary: #555555;
+            --color-primary: #B38B00;
+            /* Rich Gold */
+            --color-secondary: #001F3F;
+            /* Deep Navy Blue */
+            --card-bg: #FFFFFF;
+            --border-color: #EAEAEA;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        /* Footer Styles */
+        .main-footer {
+            background-color: var(--card-bg);
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--border-color);
+            border-bottom: none;
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 3rem;
+        }
+        
+        .footer-links a {
+            margin: 0 1rem;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--color-primary);
+            font-weight: 500;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* 2. Header & Footer Styles */
+        .main-header,
+        .main-footer {
+            background-color: var(--card-bg);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .main-footer {
+            border-top: 1px solid var(--border-color);
+            border-bottom: none;
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 3rem;
+        }
+
+        .footer-links a {
+            margin: 0 1rem;
+        }
+
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--color-secondary);
+            text-align: center;
+        }
+
+        /* 3. Static Content Page Layout */
+        .content-container {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .content-container h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            color: var(--color-secondary);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .content-container h2 {
+            font-family: 'Lora', serif;
+            font-size: 1.8rem;
+            color: var(--color-primary);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .content-container p {
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+        }
+
+        .mission-statement {
+            font-family: 'Lora', serif;
+            font-size: 1.2rem;
+            font-style: italic;
+            text-align: center;
+            padding: 1.5rem;
+            background-color: var(--hover-bg);
+            border-left: 4px solid var(--color-primary);
+            margin: 2rem 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-header,
+            .main-footer {
+                padding: 1rem;
+            }
+            
+            .content-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            
+            .content-container h1 {
+                font-size: 2rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .content-container h2 {
+                font-size: 1.5rem;
+                margin-top: 2rem;
+            }
+            
+            .content-container p {
+                font-size: 1rem;
+            }
+            
+            .mission-statement {
+                font-size: 1.1rem;
+                padding: 1rem;
+                margin: 1.5rem 0;
+            }
+            
+            .footer-links a {
+                margin: 0 0.5rem;
+                display: inline-block;
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header,
+            .main-footer {
+                padding: 0.75rem;
+            }
+            
+            .content-container {
+                margin: 0.5rem;
+                padding: 1rem;
+            }
+            
+            .content-container h1 {
+                font-size: 1.75rem;
+            }
+            
+            .content-container h2 {
+                font-size: 1.3rem;
+            }
+            
+            .logo {
+                font-size: 1.25rem;
+            }
+            
+            .footer-links {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                margin-bottom: 1rem;
+            }
+            
+            .footer-links a {
+                margin: 0;
+            }
+        }
+
+        /* Accessibility improvements */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. HTML: Header -->
+    <header class="main-header">
+        <div class="logo">
+            <a href="index.html">Andrew Cares Village</a>
+        </div>
+    </header>
+
+
+    <!-- 2. HTML: Main Content -->
+    <main class="content-container">
+        <h1>Our Story</h1>
+
+        <p>Andrew Cares Village was born from a simple yet powerful idea: that true strength is built not in isolation, but in community. In a world that often feels disconnected, we sought to create a digital sanctuary—a place where individuals could pursue self-mastery while being supported by a family of like-minded peers.</p>
+        
+        <p>Our founder, Andrew, envisioned a platform that blended ancient wisdom with modern accessibility. A place where the discipline of a martial arts dojo, the focus of a financial trading floor, and the vitality of a fitness center could coexist. More than just a collection of courses, this would be a village where every member's journey is valued, and every success is celebrated together.</p>
+
+        <div class="mission-statement">
+            <p>"Our mission is to empower individuals to achieve holistic self-mastery by providing expert-led training in a supportive, family-like community that fosters discipline, growth, and mutual respect."</p>
+        </div>
+
+        <h2>The Three Pillars of the Village</h2>
+        <p>Our philosophy is built on three core pillars that guide everything we do:</p>
+        <ul>
+            <li><strong>Discipline:</strong> We believe that consistent, focused effort is the cornerstone of all achievement. Our courses are designed to instill not just skills, but the discipline required to apply them effectively.</li>
+            <li><strong>Community:</strong> We are more than a platform; we are a family. We foster an environment of mutual support where members can connect, share their struggles and triumphs, and grow together.</li>
+            <li><strong>Growth:</strong> We are committed to the continuous improvement of our members. Our platform is a living entity, constantly evolving with new courses, live events, and features designed to help you reach the next level of your potential.</li>
+        </ul>
+
+        <h2>Join Our Family</h2>
+        <p>Whether you are here to master the markets, sculpt your body, or learn the way of the warrior, you have found a home. We invite you to join our village, contribute to our community, and begin your journey toward becoming the strongest version of yourself.</p>
+
+    </main>
+
+    <!-- 3. HTML: Footer -->
+    <footer class="main-footer">
+        <div class="footer-links">
+            <a href="about.html">About Us</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+        </div>
+        <p>&copy; 2025 Andrew Cares Village. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

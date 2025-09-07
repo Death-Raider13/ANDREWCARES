@@ -1,0 +1,28 @@
+rules_version = '2';
+
+// Firebase Storage Rules for Andrew Cares Village
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Allow authenticated users to upload files to messages folder
+    match /messages/{allPaths=**} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Allow authenticated users to upload profile pictures
+    match /profiles/{userId}/{allPaths=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Allow authenticated users to upload course materials
+    match /courses/{allPaths=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+    
+    // Allow authenticated users to upload general files
+    match /uploads/{allPaths=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}

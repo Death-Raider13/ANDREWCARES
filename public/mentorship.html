@@ -1,0 +1,2010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1-on-1 Mentorship - Andrew Cares Village</title>
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- FullCalendar CSS -->
+   <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+    <!-- Paystack Integration -->
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+
+     <!-- Cloudinary Upload Widget -->
+    <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+
+    <style>
+        /* Enhanced CSS Variables */
+        :root {
+            --background-color: #F4F2ED;
+            --text-primary: #333333;
+            --text-secondary: #555555;
+            --color-primary: #B38B00;
+            --color-secondary: #001F3F;
+            --card-bg: #FFFFFF;
+            --border-color: #EAEAEA;
+            --hover-bg: #F9F9F9;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+            --chat-bg: #f8f9fa;
+            --message-sent: #007bff;
+            --message-received: #e9ecef;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Main Container */
+        .mentorship-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Role-based Dashboard Headers */
+        .dashboard-header {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .dashboard-header h1 {
+            font-family: 'Cinzel', serif;
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        .dashboard-header p {
+            margin: 0.5rem 0 0 0;
+            opacity: 0.9;
+        }
+
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 0.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: var(--text-secondary);
+        }
+
+        .tab-btn.active {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        .tab-btn:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .tab-btn.active:hover {
+            background-color: #9c7a00;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--success-color), #20c997);
+            color: white;
+            border-radius: 12px;
+        }
+
+        .stat-card.revenue {
+            background: linear-gradient(135deg, var(--color-primary), #d4af37);
+        }
+
+        .stat-card.sessions {
+            background: linear-gradient(135deg, var(--info-color), #20c997);
+        }
+
+        .stat-card.pending {
+            background: linear-gradient(135deg, var(--warning-color), #f39c12);
+        }
+
+        .stat-card h3 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+
+        .stat-card p {
+            margin: 0.5rem 0 0 0;
+            opacity: 0.9;
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: var(--color-secondary);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--color-primary);
+            padding-bottom: 0.5rem;
+        }
+
+        /* Instructor Sidebar */
+        .instructor-sidebar {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .instructor-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            margin-bottom: 1rem;
+        }
+
+        .instructor-card:hover {
+            background-color: var(--hover-bg);
+            transform: translateX(5px);
+        }
+
+        .instructor-card.active {
+            background-color: var(--hover-bg);
+            border-color: var(--color-primary);
+            box-shadow: 0 2px 10px rgba(179, 139, 0, 0.2);
+        }
+
+        .instructor-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .instructor-info h4 {
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .instructor-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .instructor-rating {
+            color: var(--warning-color);
+            font-size: 0.8rem;
+        }
+
+        /* Chat Interface */
+        .chat-container {
+            height: 500px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            background-color: var(--chat-bg);
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .message.sent {
+            flex-direction: row-reverse;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 0.8rem 1rem;
+            border-radius: 18px;
+            background-color: var(--message-received);
+        }
+
+        .message.sent .message-content {
+            background-color: var(--message-sent);
+            color: white;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 1rem;
+            background-color: white;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            margin-right: 0.5rem;
+        }
+
+        /* Session Cards */
+        .session-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .session-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .session-info h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--color-secondary);
+        }
+
+        .session-info p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .session-status {
+            padding: 0.25rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .status-confirmed {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .status-completed {
+            background-color: var(--info-color);
+            color: white;
+        }
+
+        .status-negotiating {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        /* Availability Slots */
+        .availability-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .time-slot {
+            padding: 0.8rem;
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .time-slot:hover {
+            border-color: var(--color-primary);
+            background-color: var(--hover-bg);
+        }
+
+        .time-slot.selected {
+            border-color: var(--color-primary);
+            background-color: rgba(179, 139, 0, 0.1);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary { background-color: var(--color-primary); color: white; }
+        .btn-primary:hover { background-color: #9c7a00; }
+        .btn-secondary { background-color: var(--text-secondary); color: white; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-danger { background-color: var(--danger-color); color: white; }
+        .btn-info { background-color: var(--info-color); color: white; }
+        .btn-warning { background-color: var(--warning-color); color: white; }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--color-primary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(179, 139, 0, 0.2);
+        }
+
+        /* Calendar Styles */
+        #calendar {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        .fc-button-primary {
+            background-color: var(--color-primary) !important;
+            border-color: var(--color-primary) !important;
+        }
+        
+        .fc-event {
+            cursor: pointer;
+        }
+        
+        .fc-daygrid-day.fc-day-today {
+            background-color: rgba(179, 139, 0, 0.1);
+        }
+
+        /* Payment Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .close {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        /* Access Denied */
+        .access-denied {
+            text-align: center;
+            padding: 4rem 2rem;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+
+        .access-denied i {
+            font-size: 4rem;
+            color: var(--warning-color);
+            margin-bottom: 1rem;
+        }
+
+        .access-denied h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: var(--color-secondary);
+        }
+
+        /* Utility Classes */
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mt-2 { margin-top: 1rem; }
+        .flex { display: flex; }
+        .flex-between { justify-content: space-between; }
+        .flex-center { align-items: center; }
+        .gap-1 { gap: 0.5rem; }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            .tab-nav {
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mentorship-container {
+                padding: 0 1rem;
+            }
+            
+            .dashboard-header h1 {
+                font-size: 2rem;
+            }
+            
+            .session-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+        .upload-loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0,0,0,0.8);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    z-index: 2000;
+    font-weight: 600;
+}
+
+.message img {
+    max-width: 200px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.message img:hover {
+    transform: scale(1.05);
+}
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <a href="home.html" style="font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--color-secondary); text-decoration: none;">Andrew Cares Village</a>
+    </header>
+
+    <!-- Main Page Content -->
+    <div id="pageContent" class="mentorship-container">
+        <!-- Member View -->
+        <div id="memberView" class="hidden">
+            <div class="dashboard-header">
+                <h1><i class="fas fa-graduation-cap"></i> Mentorship Portal</h1>
+                <p>Connect with expert mentors for personalized guidance</p>
+            </div>
+
+            <div class="tab-nav">
+                <button class="tab-btn active" onclick="switchTab('browse')">
+                    <i class="fas fa-search"></i> Browse Mentors
+                </button>
+                <button class="tab-btn" onclick="switchTab('my-sessions')">
+                    <i class="fas fa-calendar-alt"></i> My Sessions
+                </button>
+                <button class="tab-btn" onclick="switchTab('chat')">
+                    <i class="fas fa-comments"></i> Messages
+                </button>
+            </div>
+
+            <!-- Browse Mentors Tab -->
+            <div id="browse-tab" class="tab-content active">
+                <div class="grid-2">
+                    <div class="card">
+                        <h2 class="section-title">Available Mentors</h2>
+                        <div id="memberInstructorList">
+                            <p>Loading mentors...</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2 class="section-title" id="memberBookingTitle">Select a Mentor to Begin</h2>
+                        <div id="memberCalendar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Sessions Tab -->
+            <div id="my-sessions-tab" class="tab-content">
+                <div class="card">
+                    <h2 class="section-title">My Mentorship Sessions</h2>
+                    <div id="memberSessionsList">
+                        <p>You have no sessions yet.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Tab -->
+            <div id="chat-tab" class="tab-content">
+                <div class="card">
+                    <h2 class="section-title">Messages</h2>
+                    <div id="memberChatContainer">
+                        <p>Select a session to start chatting with your mentor.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructor View -->
+        <div id="instructorView" class="hidden">
+            <div class="dashboard-header">
+                <h1><i class="fas fa-chalkboard-teacher"></i> Mentor Dashboard</h1>
+                <p>Manage your mentorship sessions and availability</p>
+                <button class="btn btn-secondary btn-sm" onclick="updateProfileImage()" style="margin-left: 1rem;">
+    <i class="fas fa-camera"></i> Update Photo
+</button>
+            </div>
+
+            <div class="tab-nav">
+                <button class="tab-btn active" onclick="switchTab('availability')">
+                    <i class="fas fa-clock"></i> Set Availability
+                </button>
+                <button class="tab-btn" onclick="switchTab('bookings')">
+                    <i class="fas fa-calendar-check"></i> Bookings
+                </button>
+                <button class="tab-btn" onclick="switchTab('completed')">
+                    <i class="fas fa-trophy"></i> Completed
+                </button>
+                <button class="tab-btn" onclick="switchTab('instructor-chat')">
+                    <i class="fas fa-comments"></i> Messages
+                </button>
+            </div>
+
+            <!-- Set Availability Tab -->
+            <div id="availability-tab" class="tab-content active">
+                <div class="card">
+                    <h2 class="section-title">Set Your Availability</h2>
+                    <div class="form-group">
+                        <label for="availabilityDate">Select Date:</label>
+                        <input type="date" id="availabilityDate" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="hourlyRate">Hourly Rate (₦):</label>
+                        <input type="number" id="hourlyRate" class="form-control" placeholder="e.g., 5000" min="1000">
+                        <small>Minimum rate: ₦1,000 per hour</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Available Time Slots:</label>
+                        <div class="availability-grid" id="timeSlotGrid">
+                            <!-- Time slots will be generated by JavaScript -->
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="saveAvailability()">
+                        <i class="fas fa-save"></i> Save Availability
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bookings Tab -->
+            <div id="bookings-tab" class="tab-content">
+                <div class="card">
+                    <h2 class="section-title">Pending & Confirmed Bookings</h2>
+                    <div id="instructorBookingsList">
+                        <p>No bookings yet.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Completed Tab -->
+            <div id="completed-tab" class="tab-content">
+                <div class="card">
+                    <h2 class="section-title">Completed Sessions</h2>
+                    <div id="completedSessionsList">
+                        <p>No completed sessions yet.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instructor Chat Tab -->
+            <div id="instructor-chat-tab" class="tab-content">
+                <div class="card">
+                    <h2 class="section-title">Student Messages</h2>
+                    <div id="instructorChatContainer">
+                        <p>No active conversations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin View -->
+        <div id="adminView" class="hidden">
+            <div class="dashboard-header">
+                <h1><i class="fas fa-chart-line"></i> Admin Dashboard</h1>
+                <p>Monitor platform performance and commission earnings</p>
+            </div>
+
+            <div class="grid-3 mb-2">
+                <div class="stat-card revenue">
+                    <h3 id="totalCommission">₦0</h3>
+                    <p>Total Commission Earned</p>
+                </div>
+                <div class="stat-card sessions">
+                    <h3 id="totalSessions">0</h3>
+                    <p>Total Sessions Completed</p>
+                </div>
+                <div class="stat-card pending">
+                    <h3 id="pendingSessions">0</h3>
+                    <p>Pending Sessions</p>
+                </div>
+            </div>
+
+            <div class="tab-nav">
+                <button class="tab-btn active" onclick="switchTab('statistics')">
+                    <i class="fas fa-chart-bar"></i> Statistics
+                </button>
+                <button class="tab-btn" onclick="switchTab('transactions')">
+                    <i class="fas fa-money-bill-wave"></i> Transactions
+                </button>
+                <button class="tab-btn" onclick="switchTab('mentors')">
+                    <i class="fas fa-users"></i> Mentors
+                </button>
+            </div>
+
+            <!-- Statistics Tab -->
+            <div id="statistics-tab" class="tab-content active">
+                <div class="grid-2">
+                    <div class="card">
+                        <h2 class="section-title">Revenue Analytics</h2>
+                        <div id="revenueChart">
+                            <!-- Chart placeholder -->
+                            <p>Revenue chart will be displayed here</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h2 class="section-title">Top Performing Mentors</h2>
+                        <div id="topMentorsList">
+                            <p>Loading mentor rankings...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transactions Tab -->
+            <div id="transactions-tab" class="tab-content">
+                <div class="card">
+                    <h2 class="section-title">All Transactions</h2>
+                    <div id="transactionsList">
+                        <p>Loading transactions...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mentors Tab -->
+            <div id="mentors-tab" class="tab-content">
+                <div class="card">
+                    <h2 class="section-title">Mentor Management</h2>
+                    <div id="allMentorsList">
+                        <p>Loading mentors...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Access Denied View -->
+        <div id="accessDeniedView" class="access-denied hidden">
+            <i class="fas fa-lock"></i>
+            <h2>Access Restricted</h2>
+            <p>This mentorship platform is available to registered members, instructors, and admins only. Please contact support if you believe this is an error.</p>
+            <a href="contact.html" class="btn btn-primary"><i class="fas fa-envelope"></i> Contact Support</a>
+        </div>
+    </div>
+
+    <!-- Chat Modal -->
+    <div id="chatModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="chatModalTitle">Chat with Mentor</h3>
+                <span class="close" onclick="closeChatModal()">&times;</span>
+            </div>
+            <div class="chat-container">
+                <div class="chat-header">
+                    <img id="chatPartnerAvatar" src="" alt="Partner" class="instructor-avatar">
+                    <div>
+                        <h4 id="chatPartnerName">Partner Name</h4>
+                        <p id="chatPartnerStatus">Online</p>
+                    </div>
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Messages will be loaded here -->
+                </div>
+              <div class="chat-input">
+    <input type="text" id="messageInput" placeholder="Type your message..." onkeypress="handleMessageKeyPress(event)">
+    <button class="btn btn-info btn-sm" onclick="sendImage()" title="Send Image">
+        <i class="fas fa-image"></i>
+    </button>
+    <button class="btn btn-primary" onclick="sendMessage()">
+        <i class="fas fa-paper-plane"></i>
+    </button>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Complete Payment</h3>
+                <span class="close" onclick="closePaymentModal()">&times;</span>
+            </div>
+            <div id="paymentContent">
+                <div class="session-card">
+                    <div class="session-info">
+                        <h4 id="paymentSessionTitle">Session Details</h4>
+                        <p id="paymentSessionDetails">Session information</p>
+                        <p><strong>Amount: <span id="paymentAmount">₦0</span></strong></p>
+                        <small>Platform fee (10%): <span id="platformFee">₦0</span></small>
+                    </div>
+                </div>
+                <button class="btn btn-success" onclick="processPayment()" style="width: 100%; margin-top: 1rem;">
+                    <i class="fas fa-credit-card"></i> Pay with Paystack
+                </button>
+            </div>
+        </div>
+    </div>
+
+    
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+    <!-- Firebase and Application Logic -->
+ <script type="module">
+  // --- Firebase Imports ---
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, collection, query, where, getDocs, addDoc, updateDoc, serverTimestamp, onSnapshot, orderBy, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+
+// --- Firebase Configuration ---
+const firebaseConfig = {
+    apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
+    authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
+    projectId: "andrew-cares-village-f4cb6",
+    storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
+    messagingSenderId: "255087116955",
+    appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// --- Cloudinary Configuration ---
+const CLOUDINARY_CONFIG = {
+    cloudName: 'dkd6x857p', // Replace with your Cloudinary cloud name
+    uploadPreset: 'Andrew Cares', // Replace with your unsigned upload preset
+    apiKey: '717475754827976' // Replace with your Cloudinary API key
+};
+
+// --- Global State ---
+let currentUser = null;
+let currentUserData = null;
+let calendar = null;
+let selectedInstructorId = null;
+let currentChatSession = null;
+let activeTab = 'browse';
+
+// --- Paystack Configuration ---
+const PAYSTACK_PUBLIC_KEY = 'pk_test_4f982216f23d912048d00f1a9c9f77a7b54647bc'; // Replace with your Paystack public key
+
+// --- DOM Elements ---
+const memberView = document.getElementById('memberView');
+const instructorView = document.getElementById('instructorView');
+const adminView = document.getElementById('adminView');
+const accessDeniedView = document.getElementById('accessDeniedView');
+
+// --- Cloudinary Upload Function ---
+async function uploadToCloudinary(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_CONFIG.uploadPreset);
+    formData.append('cloud_name', CLOUDINARY_CONFIG.cloudName);
+    
+    try {
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/image/upload`, {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (!response.ok) {
+            throw new Error('Upload failed');
+        }
+        
+        const data = await response.json();
+        return data.secure_url;
+    } catch (error) {
+        console.error('Cloudinary upload error:', error);
+        throw error;
+    }
+}
+
+// --- File Upload Helper ---
+function createFileUploadInput(callback) {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.style.display = 'none';
+    
+    input.addEventListener('change', async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            try {
+                // Show loading state
+                const loadingMsg = document.createElement('div');
+                loadingMsg.textContent = 'Uploading image...';
+                loadingMsg.className = 'upload-loading';
+                document.body.appendChild(loadingMsg);
+                
+                const imageUrl = await uploadToCloudinary(file);
+                
+                // Remove loading state
+                document.body.removeChild(loadingMsg);
+                
+                callback(imageUrl);
+            } catch (error) {
+                alert('Failed to upload image. Please try again.');
+                console.error('Upload error:', error);
+            }
+        }
+    });
+    
+    document.body.appendChild(input);
+    input.click();
+    document.body.removeChild(input);
+}
+
+// --- Initialization ---
+onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+        window.location.href = 'index.html';
+        return;
+    }
+    
+    currentUser = user;
+    const userSnap = await getDoc(doc(db, "users", user.uid));
+    
+    if (!userSnap.exists()) {
+        window.location.href = 'index.html';
+        return;
+    }
+    
+    currentUserData = userSnap.data();
+    initializeView();
+});
+
+function initializeView() {
+    const userRole = currentUserData.role;
+
+    // Hide all views first
+    memberView.classList.add('hidden');
+    instructorView.classList.add('hidden');
+    adminView.classList.add('hidden');
+    accessDeniedView.classList.add('hidden');
+
+    if (userRole === 'admin') {
+        adminView.classList.remove('hidden');
+        initializeAdmin();
+    } else if (userRole === 'instructor') {
+        instructorView.classList.remove('hidden');
+        initializeInstructor();
+    } else if (userRole === 'member') {
+        memberView.classList.remove('hidden');
+        initializeMember();
+    } else {
+        accessDeniedView.classList.remove('hidden');
+    }
+}
+
+// --- Tab Management ---
+window.switchTab = function(tabName) {
+    // Update active tab button
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+
+    // Hide all tab contents
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    
+    // Show selected tab content
+    document.getElementById(tabName + '-tab').classList.add('active');
+    activeTab = tabName;
+};
+
+// --- Member Functions ---
+function initializeMember() {
+    initializeMemberCalendar();
+    loadMentorsForMember();
+    loadMemberSessions();
+    setupMemberChat();
+}
+
+function initializeMemberCalendar() {
+    // Wait for FullCalendar to load
+    if (typeof FullCalendar === 'undefined') {
+        console.log('FullCalendar not loaded yet, retrying...');
+        setTimeout(initializeMemberCalendar, 500);
+        return;
+    }
+    
+    try {
+        const calendarEl = document.getElementById('memberCalendar');
+        if (!calendarEl) {
+            console.error('Calendar element not found');
+            return;
+        }
+        
+        calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'timeGridWeek',
+            headerToolbar: { 
+                left: 'prev,next today', 
+                center: 'title', 
+                right: 'dayGridMonth,timeGridWeek' 
+            },
+            events: [],
+            eventClick: handleMemberEventClick,
+            allDaySlot: false,
+            slotMinTime: "08:00:00",
+            slotMaxTime: "20:00:00",
+            height: 'auto'
+        });
+        calendar.render();
+    } catch (error) {
+        console.error('Error initializing calendar:', error);
+        document.getElementById('memberCalendar').innerHTML = '<p>Calendar unavailable. Please refresh the page.</p>';
+    }
+}
+
+async function loadMentorsForMember() {
+    const instructorList = document.getElementById('memberInstructorList');
+    instructorList.innerHTML = '<p>Loading mentors...</p>';
+    
+    const q = query(collection(db, "users"), where("role", "==", "instructor"));
+    const snapshot = await getDocs(q);
+    
+    instructorList.innerHTML = '';
+    
+    for (const docSnap of snapshot.docs) {
+        const instructor = { id: docSnap.id, ...docSnap.data() };
+        
+        // Get instructor's rating and completed sessions
+        const sessionsQ = query(
+            collection(db, "bookings"), 
+            where("instructorId", "==", instructor.id),
+            where("status", "==", "completed")
+        );
+        const sessionsSnap = await getDocs(sessionsQ);
+        const completedSessions = sessionsSnap.size;
+        const avgRating = calculateAverageRating(sessionsSnap.docs);
+
+        const card = document.createElement('div');
+        card.className = 'instructor-card';
+        card.dataset.instructorId = instructor.id;
+        
+        // Use Cloudinary URL if available, otherwise fallback to UI Avatars
+        const avatarUrl = instructor.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(instructor.name)}`;
+        
+        card.innerHTML = `
+            <img src="${avatarUrl}" 
+                 alt="${instructor.name}" class="instructor-avatar"
+                 onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(instructor.name)}'">
+            <div class="instructor-info">
+                <h4>${instructor.name}</h4>
+                <p>${instructor.expertise?.join(', ') || 'General Mentorship'}</p>
+                <div class="instructor-rating">
+                    ${'★'.repeat(Math.floor(avgRating))} ${avgRating.toFixed(1)} (${completedSessions} sessions)
+                </div>
+                <small>From ₦${instructor.hourlyRate || 5000}/hour</small>
+            </div>
+        `;
+        card.onclick = () => selectMentorForMember(instructor.id, instructor.name, card);
+        instructorList.appendChild(card);
+    }
+}
+
+function calculateAverageRating(sessionDocs) {
+    if (sessionDocs.length === 0) return 5.0;
+    const totalRating = sessionDocs.reduce((sum, doc) => sum + (doc.data().rating || 5), 0);
+    return totalRating / sessionDocs.length;
+}
+
+async function selectMentorForMember(instructorId, instructorName, cardElement) {
+    selectedInstructorId = instructorId;
+    
+    // Update UI
+    document.querySelectorAll('.instructor-card').forEach(c => c.classList.remove('active'));
+    cardElement.classList.add('active');
+    document.getElementById('memberBookingTitle').textContent = `Booking with ${instructorName}`;
+
+    // Load instructor's available slots
+    try {
+        const q = query(
+            collection(db, "mentorshipSlots"), 
+            where("instructorId", "==", instructorId)
+        );
+        const snapshot = await getDocs(q);
+        
+        let events = [];
+        snapshot.forEach(docSnap => {
+            const data = docSnap.data();
+            if (data.timeSlots && Array.isArray(data.timeSlots)) {
+                data.timeSlots.forEach(timeSlot => {
+                    events.push({
+                        id: `${docSnap.id}_${timeSlot.time}`,
+                        title: `Available - ₦${timeSlot.rate}/hr`,
+                        start: `${data.date}T${timeSlot.time}`,
+                        end: new Date(new Date(`${data.date}T${timeSlot.time}`).getTime() + 45 * 60000).toISOString(),
+                        extendedProps: { 
+                            slotDocId: docSnap.id, 
+                            timeSlot: timeSlot.time, 
+                            instructorName,
+                            hourlyRate: timeSlot.rate
+                        }
+                    });
+                });
+            }
+        });
+
+        // Filter out already booked sessions
+        const bookingsQ = query(
+            collection(db, "bookings"), 
+            where("instructorId", "==", instructorId)
+        );
+        const bookingsSnapshot = await getDocs(bookingsQ);
+        const bookedSlots = new Set(
+            bookingsSnapshot.docs.map(d => `${d.data().slotDocId}_${d.data().timeSlot}`)
+        );
+        
+        const availableEvents = events.filter(event => !bookedSlots.has(event.id));
+
+        if (calendar) {
+            calendar.removeAllEvents();
+            calendar.addEventSource(availableEvents);
+        }
+    } catch (error) {
+        console.error('Error loading mentor availability:', error);
+    }
+}
+
+async function handleMemberEventClick(info) {
+    const { slotDocId, timeSlot, instructorName, hourlyRate } = info.event.extendedProps;
+    const startTime = info.event.start;
+
+    if (confirm(`Book a session with ${instructorName} at ${startTime.toLocaleString()}?\nRate: ₦${hourlyRate}/hour`)) {
+        try {
+            const bookingRef = await addDoc(collection(db, "bookings"), {
+                studentId: currentUser.uid,
+                studentName: currentUserData.name,
+                instructorId: selectedInstructorId,
+                instructorName: instructorName,
+                slotDocId: slotDocId,
+                timeSlot: timeSlot,
+                startTime: startTime,
+                hourlyRate: hourlyRate,
+                status: 'negotiating',
+                createdAt: serverTimestamp()
+            });
+
+            // Create chat session
+            await setDoc(doc(db, "chatSessions", bookingRef.id), {
+                bookingId: bookingRef.id,
+                studentId: currentUser.uid,
+                instructorId: selectedInstructorId,
+                participants: [currentUser.uid, selectedInstructorId],
+                createdAt: serverTimestamp(),
+                lastMessage: null
+            });
+
+            alert("Session booked! You can now chat with your mentor to finalize details.");
+            info.event.remove();
+            loadMemberSessions();
+        } catch (error) {
+            console.error("Booking error:", error);
+            alert("Failed to book session. Please try again.");
+        }
+    }
+}
+
+function loadMemberSessions() {
+    const sessionsList = document.getElementById('memberSessionsList');
+    const q = query(
+        collection(db, "bookings"), 
+        where("studentId", "==", currentUser.uid), 
+        orderBy("createdAt", "desc")
+    );
+    
+    onSnapshot(q, (snapshot) => {
+        sessionsList.innerHTML = snapshot.empty ? '<p>You have no sessions yet.</p>' : '';
+        
+        snapshot.forEach(docSnap => {
+            const session = { id: docSnap.id, ...docSnap.data() };
+            const sessionEl = document.createElement('div');
+            sessionEl.className = 'session-card';
+            
+            const sessionDate = session.startTime.toDate();
+            const statusClass = `status-${session.status}`;
+            
+            sessionEl.innerHTML = `
+                <div class="session-info">
+                    <h4>${sessionDate.toLocaleString()}</h4>
+                    <p>with ${session.instructorName}</p>
+                    <p>Rate: ₦${session.hourlyRate}/hour</p>
+                </div>
+                <div class="flex flex-center gap-1">
+                    <span class="session-status ${statusClass}">${session.status}</span>
+                    <button class="btn btn-info btn-sm" onclick="openChat('${session.id}', '${session.instructorId}', '${session.instructorName}')">
+                        <i class="fas fa-comments"></i> Chat
+                    </button>
+                    ${session.status === 'negotiating' ? `
+                        <button class="btn btn-success btn-sm" onclick="openPaymentModal('${session.id}')">
+                            <i class="fas fa-credit-card"></i> Pay
+                        </button>
+                    ` : ''}
+                    ${session.status !== 'completed' ? `
+                        <button class="btn btn-danger btn-sm" onclick="cancelBooking('${session.id}')">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    ` : ''}
+                </div>
+            `;
+            sessionsList.appendChild(sessionEl);
+        });
+    });
+}
+
+function setupMemberChat() {
+    const chatContainer = document.getElementById('memberChatContainer');
+    // This will be populated when user selects a chat
+}
+
+// --- Instructor Functions ---
+function initializeInstructor() {
+    generateTimeSlots();
+    loadInstructorBookings();
+    loadCompletedSessions();
+    setupInstructorChat();
+}
+
+function generateTimeSlots() {
+    const grid = document.getElementById('timeSlotGrid');
+    const timeSlots = [
+        '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', 
+        '15:00', '16:00', '17:00', '18:00', '19:00'
+    ];
+    
+    grid.innerHTML = '';
+    timeSlots.forEach(time => {
+        const slot = document.createElement('div');
+        slot.className = 'time-slot';
+        slot.textContent = time;
+        slot.dataset.time = time;
+        slot.onclick = () => toggleTimeSlot(slot);
+        grid.appendChild(slot);
+    });
+}
+
+function toggleTimeSlot(slot) {
+    slot.classList.toggle('selected');
+}
+
+window.saveAvailability = async function() {
+    const date = document.getElementById('availabilityDate').value;
+    const hourlyRate = parseInt(document.getElementById('hourlyRate').value);
+    const selectedSlots = document.querySelectorAll('.time-slot.selected');
+    
+    if (!date || !hourlyRate || selectedSlots.length === 0) {
+        alert('Please fill all fields and select at least one time slot.');
+        return;
+    }
+
+    if (hourlyRate < 1000) {
+        alert('Minimum hourly rate is ₦1,000.');
+        return;
+    }
+
+    const timeSlots = Array.from(selectedSlots).map(slot => ({
+        time: slot.dataset.time,
+        rate: hourlyRate
+    }));
+
+    try {
+        await setDoc(doc(db, "mentorshipSlots", `${currentUser.uid}_${date}`), {
+            instructorId: currentUser.uid,
+            date: date,
+            timeSlots: timeSlots,
+            createdAt: serverTimestamp()
+        });
+
+        alert('Availability saved successfully!');
+        
+        // Reset form
+        document.getElementById('availabilityDate').value = '';
+        document.getElementById('hourlyRate').value = '';
+        selectedSlots.forEach(slot => slot.classList.remove('selected'));
+        
+    } catch (error) {
+        console.error('Error saving availability:', error);
+        alert('Failed to save availability. Please try again.');
+    }
+};
+
+function loadInstructorBookings() {
+    const bookingsList = document.getElementById('instructorBookingsList');
+    const q = query(
+        collection(db, "bookings"), 
+        where("instructorId", "==", currentUser.uid),
+        where("status", "in", ["negotiating", "confirmed"]),
+        orderBy("createdAt", "desc")
+    );
+    
+    onSnapshot(q, (snapshot) => {
+        bookingsList.innerHTML = snapshot.empty ? '<p>No bookings yet.</p>' : '';
+        
+        snapshot.forEach(docSnap => {
+            const booking = { id: docSnap.id, ...docSnap.data() };
+            const bookingEl = document.createElement('div');
+            bookingEl.className = 'session-card';
+            
+            const sessionDate = booking.startTime.toDate();
+            const statusClass = `status-${booking.status}`;
+            
+            bookingEl.innerHTML = `
+                <div class="session-info">
+                    <h4>${sessionDate.toLocaleString()}</h4>
+                    <p>with ${booking.studentName}</p>
+                    <p>Rate: ₦${booking.hourlyRate}/hour</p>
+                </div>
+                <div class="flex flex-center gap-1">
+                    <span class="session-status ${statusClass}">${booking.status}</span>
+                    <button class="btn btn-info btn-sm" onclick="openChat('${booking.id}', '${booking.studentId}', '${booking.studentName}')">
+                        <i class="fas fa-comments"></i> Chat
+                    </button>
+                    ${booking.status === 'confirmed' ? `
+                        <button class="btn btn-success btn-sm" onclick="markSessionComplete('${booking.id}')">
+                            <i class="fas fa-check"></i> Complete
+                        </button>
+                    ` : ''}
+                </div>
+            `;
+            bookingsList.appendChild(bookingEl);
+        });
+    });
+}
+
+function loadCompletedSessions() {
+    const completedList = document.getElementById('completedSessionsList');
+    const q = query(
+        collection(db, "bookings"), 
+        where("instructorId", "==", currentUser.uid),
+        where("status", "==", "completed"),
+        orderBy("completedAt", "desc")
+    );
+    
+    onSnapshot(q, (snapshot) => {
+        completedList.innerHTML = snapshot.empty ? '<p>No completed sessions yet.</p>' : '';
+        
+        snapshot.forEach(docSnap => {
+            const session = { id: docSnap.id, ...docSnap.data() };
+            const sessionEl = document.createElement('div');
+            sessionEl.className = 'session-card';
+            
+            const sessionDate = session.startTime.toDate();
+            const earnings = Math.round(session.finalAmount * 0.9); // 90% after platform fee
+            
+            sessionEl.innerHTML = `
+                <div class="session-info">
+                    <h4>${sessionDate.toLocaleString()}</h4>
+                    <p>with ${session.studentName}</p>
+                    <p><strong>Earned: ₦${earnings}</strong></p>
+                    <div class="instructor-rating">
+                        Rating: ${'★'.repeat(session.rating || 5)} ${session.rating || 5}/5
+                    </div>
+                </div>
+                <div class="flex flex-center gap-1">
+                    <span class="session-status status-completed">Completed</span>
+                </div>
+            `;
+            completedList.appendChild(sessionEl);
+        });
+    });
+}
+
+function setupInstructorChat() {
+    // Similar to member chat setup
+}
+
+window.markSessionComplete = async function(bookingId) {
+    if (confirm('Mark this session as completed?')) {
+        try {
+            await updateDoc(doc(db, "bookings", bookingId), {
+                status: 'completed',
+                completedAt: serverTimestamp(),
+                rating: 5 // Default rating, can be updated by student later
+            });
+            alert('Session marked as completed!');
+        } catch (error) {
+            console.error('Error completing session:', error);
+            alert('Failed to complete session.');
+        }
+    }
+};
+
+// --- Admin Functions ---
+function initializeAdmin() {
+    loadAdminStatistics();
+    loadTransactions();
+    loadAllMentors();
+}
+
+async function loadAdminStatistics() {
+    try {
+        // Get all completed bookings
+        const completedQ = query(
+            collection(db, "bookings"), 
+            where("status", "==", "completed")
+        );
+        const completedSnap = await getDocs(completedQ);
+        
+        let totalCommission = 0;
+        completedSnap.forEach(doc => {
+            const booking = doc.data();
+            totalCommission += Math.round(booking.finalAmount * 0.1); // 10% commission
+        });
+        
+        // Get pending sessions
+        const pendingQ = query(
+            collection(db, "bookings"), 
+            where("status", "in", ["negotiating", "confirmed"])
+        );
+        const pendingSnap = await getDocs(pendingQ);
+        
+        // Update DOM
+        document.getElementById('totalCommission').textContent = `₦${totalCommission.toLocaleString()}`;
+        document.getElementById('totalSessions').textContent = completedSnap.size;
+        document.getElementById('pendingSessions').textContent = pendingSnap.size;
+        
+    } catch (error) {
+        console.error('Error loading admin statistics:', error);
+    }
+}
+
+function loadTransactions() {
+    const transactionsList = document.getElementById('transactionsList');
+    const q = query(
+        collection(db, "bookings"), 
+        where("status", "==", "completed"),
+        orderBy("completedAt", "desc")
+    );
+    
+    onSnapshot(q, (snapshot) => {
+        transactionsList.innerHTML = snapshot.empty ? '<p>No transactions yet.</p>' : '';
+        
+        snapshot.forEach(docSnap => {
+            const transaction = { id: docSnap.id, ...docSnap.data() };
+            const transactionEl = document.createElement('div');
+            transactionEl.className = 'session-card';
+            
+            const completedDate = transaction.completedAt.toDate();
+            const commission = Math.round(transaction.finalAmount * 0.1);
+            const instructorEarning = Math.round(transaction.finalAmount * 0.9);
+            
+            transactionEl.innerHTML = `
+                <div class="session-info">
+                    <h4>Transaction #${transaction.id.substr(-6).toUpperCase()}</h4>
+                    <p>${transaction.studentName} → ${transaction.instructorName}</p>
+                    <p>Completed: ${completedDate.toLocaleString()}</p>
+                    <p><strong>Total: ₦${transaction.finalAmount}</strong></p>
+                </div>
+                <div class="session-info text-right">
+                    <p>Commission (10%): <strong>₦${commission}</strong></p>
+                    <p>Instructor (90%): ₦${instructorEarning}</p>
+                    <span class="session-status status-completed">Completed</span>
+                </div>
+            `;
+            transactionsList.appendChild(transactionEl);
+        });
+    });
+}
+
+async function loadAllMentors() {
+    const mentorsList = document.getElementById('allMentorsList');
+    const q = query(collection(db, "users"), where("role", "==", "instructor"));
+    const snapshot = await getDocs(q);
+    
+    mentorsList.innerHTML = '';
+    
+    for (const docSnap of snapshot.docs) {
+        const mentor = { id: docSnap.id, ...docSnap.data() };
+        
+        // Get mentor statistics
+        const sessionsQ = query(
+            collection(db, "bookings"), 
+            where("instructorId", "==", mentor.id),
+            where("status", "==", "completed")
+        );
+        const sessionsSnap = await getDocs(sessionsQ);
+        
+        let totalEarnings = 0;
+        sessionsSnap.forEach(doc => {
+            totalEarnings += Math.round(doc.data().finalAmount * 0.9);
+        });
+        
+        const mentorEl = document.createElement('div');
+        mentorEl.className = 'session-card';
+        mentorEl.innerHTML = `
+            <div class="session-info">
+                <h4>${mentor.name}</h4>
+                <p>${mentor.email}</p>
+                <p>Expertise: ${mentor.expertise?.join(', ') || 'Not specified'}</p>
+            </div>
+            <div class="session-info text-right">
+                <p>Completed Sessions: ${sessionsSnap.size}</p>
+                <p><strong>Total Earnings: ₦${totalEarnings.toLocaleString()}</strong></p>
+                <button class="btn btn-info btn-sm" onclick="viewMentorDetails('${mentor.id}')">
+                    <i class="fas fa-eye"></i> View Details
+                </button>
+            </div>
+        `;
+        mentorsList.appendChild(mentorEl);
+    }
+}
+
+// --- Chat Functions ---
+window.openChat = function(sessionId, partnerId, partnerName) {
+    currentChatSession = sessionId;
+    
+    document.getElementById('chatModalTitle').textContent = `Chat - ${partnerName}`;
+    document.getElementById('chatPartnerName').textContent = partnerName;
+    document.getElementById('chatPartnerAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(partnerName)}`;
+    
+    document.getElementById('chatModal').style.display = 'block';
+    loadChatMessages(sessionId);
+};
+
+function loadChatMessages(sessionId) {
+    const messagesContainer = document.getElementById('chatMessages');
+    const q = query(
+        collection(db, "chatSessions", sessionId, "messages"),
+        orderBy("timestamp", "asc")
+    );
+    
+    onSnapshot(q, (snapshot) => {
+        messagesContainer.innerHTML = '';
+        
+        snapshot.forEach(docSnap => {
+            const message = { id: docSnap.id, ...docSnap.data() };
+            const messageEl = document.createElement('div');
+            messageEl.className = `message ${message.senderId === currentUser.uid ? 'sent' : 'received'}`;
+            
+            const timestamp = message.timestamp ? message.timestamp.toDate().toLocaleTimeString() : '';
+            
+            // Handle different message types
+            let messageContent = '';
+            if (message.type === 'image') {
+                messageContent = `<img src="${message.content}" alt="Shared image" style="max-width: 200px; border-radius: 8px; cursor: pointer;" onclick="window.open('${message.content}', '_blank')">`;
+            } else {
+                messageContent = message.content;
+            }
+            
+            messageEl.innerHTML = `
+                <div class="message-content">
+                    ${messageContent}
+                    <div class="message-time">${timestamp}</div>
+                </div>
+            `;
+            messagesContainer.appendChild(messageEl);
+        });
+        
+        // Scroll to bottom
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    });
+}
+
+window.sendMessage = async function() {
+    const input = document.getElementById('messageInput');
+    const content = input.value.trim();
+    
+    if (!content || !currentChatSession) return;
+    
+    try {
+        await addDoc(collection(db, "chatSessions", currentChatSession, "messages"), {
+            senderId: currentUser.uid,
+            senderName: currentUserData.name,
+            content: content,
+            type: 'text',
+            timestamp: serverTimestamp()
+        });
+        
+        input.value = '';
+    } catch (error) {
+        console.error('Error sending message:', error);
+        alert('Failed to send message.');
+    }
+};
+
+// --- Image Upload in Chat ---
+window.sendImage = function() {
+    if (!currentChatSession) return;
+    
+    createFileUploadInput(async (imageUrl) => {
+        try {
+            await addDoc(collection(db, "chatSessions", currentChatSession, "messages"), {
+                senderId: currentUser.uid,
+                senderName: currentUserData.name,
+                content: imageUrl,
+                type: 'image',
+                timestamp: serverTimestamp()
+            });
+        } catch (error) {
+            console.error('Error sending image:', error);
+            alert('Failed to send image.');
+        }
+    });
+};
+
+window.handleMessageKeyPress = function(event) {
+    if (event.key === 'Enter') {
+        sendMessage();
+    }
+};
+
+window.closeChatModal = function() {
+    document.getElementById('chatModal').style.display = 'none';
+    currentChatSession = null;
+};
+
+// --- Payment Functions ---
+window.openPaymentModal = async function(sessionId) {
+    try {
+        const sessionDoc = await getDoc(doc(db, "bookings", sessionId));
+        const session = sessionDoc.data();
+        
+        const amount = session.hourlyRate; // 1 hour session
+        const platformFee = Math.round(amount * 0.1);
+        const finalAmount = amount;
+        
+        document.getElementById('paymentSessionTitle').textContent = `Session with ${session.instructorName}`;
+        document.getElementById('paymentSessionDetails').textContent = session.startTime.toDate().toLocaleString();
+        document.getElementById('paymentAmount').textContent = `₦${finalAmount.toLocaleString()}`;
+        document.getElementById('platformFee').textContent = `₦${platformFee.toLocaleString()}`;
+        
+        // Store payment data globally for processing
+        window.currentPaymentData = {
+            sessionId,
+            amount: finalAmount,
+            email: currentUser.email,
+            name: currentUserData.name
+        };
+        
+        document.getElementById('paymentModal').style.display = 'block';
+    } catch (error) {
+        console.error('Error opening payment modal:', error);
+        alert('Failed to load payment details.');
+    }
+};
+
+window.processPayment = async function() {
+    if (!window.currentPaymentData) return;
+    
+    try {
+        // Get instructor's subaccount details
+        const instructorDoc = await getDoc(doc(db, "users", selectedInstructorId));
+        const instructorData = instructorDoc.data();
+        
+        if (!instructorData.paystackSubaccount) {
+            alert('Instructor payout not configured. Please contact support.');
+            return;
+        }
+        
+        const amount = window.currentPaymentData.amount;
+        const instructorShare = Math.round(amount * 0.9); // 90% to instructor
+        const adminCommission = Math.round(amount * 0.1); // 10% commission
+        
+        const handler = PaystackPop.setup({
+            key: PAYSTACK_PUBLIC_KEY,
+            email: window.currentPaymentData.email,
+            amount: amount * 100, // Convert to kobo
+            currency: 'NGN',
+            ref: `ACVM_${Date.now()}`,
+            
+            // Automatic split configuration
+            split: {
+                type: "percentage",
+                bearer_type: "subaccount",
+                subaccounts: [
+                    {
+                        subaccount: instructorData.paystackSubaccount,
+                        share: 90 // 90% to instructor
+                    }
+                    // Remaining 10% goes to main account (admin commission)
+                ]
+            },
+            
+            metadata: {
+                sessionId: window.currentPaymentData.sessionId,
+                userId: currentUser.uid,
+                instructorId: selectedInstructorId,
+                split_details: {
+                    instructor_amount: instructorShare,
+                    admin_commission: adminCommission
+                }
+            },
+            
+            onClose: function() {
+                alert('Payment cancelled.');
+            },
+            callback: function(response) {
+                handlePaymentSuccess(response);
+            }
+        });
+        
+        handler.openIframe();
+    } catch (error) {
+        console.error('Error processing payment:', error);
+        alert('Payment processing error. Please try again.');
+    }
+};
+
+// Function to create instructor subaccount (call when instructor registers)
+async function createInstructorSubaccount(instructorId, bankDetails) {
+    try {
+        const response = await fetch('https://api.paystack.co/subaccount', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${PAYSTACK_SECRET_KEY}`, // Server-side only!
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                business_name: bankDetails.businessName,
+                settlement_bank: bankDetails.bankCode,
+                account_number: bankDetails.accountNumber,
+                percentage_charge: 90, // Instructor gets 90%
+                description: `Subaccount for instructor ${bankDetails.businessName}`
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.status) {
+            // Save subaccount code to instructor's profile
+            await updateDoc(doc(db, "users", instructorId), {
+                paystackSubaccount: data.data.subaccount_code,
+                bankDetails: bankDetails,
+                payoutEnabled: true
+            });
+            
+            return data.data.subaccount_code;
+        } else {
+            throw new Error(data.message);
+        }
+    } catch (error) {
+        console.error('Error creating subaccount:', error);
+        throw error;
+    }
+}
+function setupInstructorBankDetails() {
+    return `
+        <div class="card">
+            <h3>Bank Account Setup</h3>
+            <p>Configure your bank account to receive payments automatically.</p>
+            
+            <div class="form-group">
+                <label for="businessName">Business Name:</label>
+                <input type="text" id="businessName" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="bankCode">Bank:</label>
+                <select id="bankCode" class="form-control" required>
+                    <option value="">Select Bank</option>
+                    <option value="044">Access Bank</option>
+                    <option value="014">Afribank</option>
+                    <option value="023">Citibank</option>
+                    <option value="050">EcoBank</option>
+                    <option value="011">First Bank</option>
+                    <option value="214">First City Monument Bank</option>
+                    <option value="070">Fidelity Bank</option>
+                    <option value="058">Guaranty Trust Bank</option>
+                    <option value="030">Heritage Bank</option>
+                    <option value="301">Jaiz Bank</option>
+                    <option value="082">Keystone Bank</option>
+                    <option value="014">MainStreet Bank</option>
+                    <option value="076">Polaris Bank</option>
+                    <option value="101">ProvidusBank</option>
+                    <option value="221">Stanbic IBTC Bank</option>
+                    <option value="068">Standard Chartered Bank</option>
+                    <option value="232">Sterling Bank</option>
+                    <option value="100">SunTrust Bank</option>
+                    <option value="032">Union Bank</option>
+                    <option value="033">United Bank for Africa</option>
+                    <option value="215">Unity Bank</option>
+                    <option value="035">Wema Bank</option>
+                    <option value="057">Zenith Bank</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="accountNumber">Account Number:</label>
+                <input type="text" id="accountNumber" class="form-control" required maxlength="10">
+            </div>
+            
+            <button class="btn btn-primary" onclick="setupBankAccount()">
+                Setup Bank Account
+            </button>
+        </div>
+    `;
+}
+
+// Setup bank account function
+window.setupBankAccount = async function() {
+    const businessName = document.getElementById('businessName').value;
+    const bankCode = document.getElementById('bankCode').value;
+    const accountNumber = document.getElementById('accountNumber').value;
+    
+    if (!businessName || !bankCode || !accountNumber) {
+        alert('Please fill all fields.');
+        return;
+    }
+    
+    try {
+        const subaccountCode = await createInstructorSubaccount(currentUser.uid, {
+            businessName,
+            bankCode,
+            accountNumber
+        });
+        
+        alert('Bank account setup successful! You can now receive payments automatically.');
+        
+    } catch (error) {
+        console.error('Bank setup error:', error);
+        alert('Failed to setup bank account. Please check your details and try again.');
+    }
+};
+
+// Manual payout function (backup option)
+async function processManualPayout(sessionId) {
+    try {
+        const sessionDoc = await getDoc(doc(db, "bookings", sessionId));
+        const session = sessionDoc.data();
+        
+        const instructorEarnings = Math.round(session.finalAmount * 0.9);
+        
+        // Create transfer to instructor
+        const transferResponse = await fetch('https://api.paystack.co/transfer', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${PAYSTACK_SECRET_KEY}`, // Server-side only!
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                source: "balance",
+                amount: instructorEarnings * 100, // Convert to kobo
+                recipient: session.instructorPaystackRecipient, // Pre-created recipient code
+                reason: `Payment for mentorship session ${sessionId}`
+            })
+        });
+        
+        const transferData = await transferResponse.json();
+        
+        if (transferData.status) {
+            // Update session with payout status
+            await updateDoc(doc(db, "bookings", sessionId), {
+                instructorPaidOut: true,
+                payoutReference: transferData.data.transfer_code,
+                payoutDate: serverTimestamp()
+            });
+            
+            return true;
+        } else {
+            throw new Error(transferData.message);
+        }
+    } catch (error) {
+        console.error('Manual payout error:', error);
+        throw error;
+    }
+}
+
+async function handlePaymentSuccess(response) {
+    try {
+        // Update booking status to confirmed
+        await updateDoc(doc(db, "bookings", window.currentPaymentData.sessionId), {
+            status: 'confirmed',
+            finalAmount: window.currentPaymentData.amount,
+            paymentReference: response.reference,
+            paidAt: serverTimestamp()
+        });
+        
+        // Record transaction for admin
+        await addDoc(collection(db, "transactions"), {
+            bookingId: window.currentPaymentData.sessionId,
+            amount: window.currentPaymentData.amount,
+            commission: Math.round(window.currentPaymentData.amount * 0.1),
+            paymentReference: response.reference,
+            status: 'successful',
+            createdAt: serverTimestamp()
+        });
+        
+        alert('Payment successful! Your session is now confirmed.');
+        closePaymentModal();
+        
+    } catch (error) {
+        console.error('Error processing payment success:', error);
+        alert('Payment was successful but there was an error updating your booking. Please contact support.');
+    }
+}
+
+window.closePaymentModal = function() {
+    document.getElementById('paymentModal').style.display = 'none';
+    window.currentPaymentData = null;
+};
+
+// --- Profile Image Upload ---
+window.updateProfileImage = function() {
+    createFileUploadInput(async (imageUrl) => {
+        try {
+            await updateDoc(doc(db, "users", currentUser.uid), {
+                avatarUrl: imageUrl
+            });
+            
+            // Update current user data
+            currentUserData.avatarUrl = imageUrl;
+            
+            // Update UI if needed
+            const avatarElements = document.querySelectorAll(`[data-user-id="${currentUser.uid}"] .instructor-avatar`);
+            avatarElements.forEach(img => img.src = imageUrl);
+            
+            alert('Profile image updated successfully!');
+        } catch (error) {
+            console.error('Error updating profile image:', error);
+            alert('Failed to update profile image.');
+        }
+    });
+};
+
+// --- Utility Functions ---
+window.cancelBooking = async function(bookingId) {
+    if (confirm("Are you sure you want to cancel this booking?")) {
+        try {
+            await deleteDoc(doc(db, "bookings", bookingId));
+            alert("Booking cancelled.");
+        } catch (error) {
+            console.error("Cancellation error:", error);
+            alert("Failed to cancel booking.");
+        }
+    }
+};
+
+window.viewMentorDetails = function(mentorId) {
+    // This could open a detailed view or modal
+    alert(`Viewing details for mentor: ${mentorId}`);
+};
+
+// Close modals when clicking outside
+window.onclick = function(event) {
+    const chatModal = document.getElementById('chatModal');
+    const paymentModal = document.getElementById('paymentModal');
+    
+    if (event.target === chatModal) {
+        closeChatModal();
+    }
+    
+    if (event.target === paymentModal) {
+        closePaymentModal();
+    }
+};
+ </script>
+</body>
+</html>

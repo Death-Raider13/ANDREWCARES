@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Andrew Cares Village</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:wght@400;700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* --- CSS STYLES --- */
+
+        /* 1. Global Styles & Variables */
+        :root {
+            --background-color: #F4F2ED;
+            --text-primary: #333333;
+            --text-secondary: #555555;
+            --color-primary: #B38B00; /* Rich Gold */
+            --color-secondary: #001F3F; /* Deep Navy Blue */
+            --card-bg: #FFFFFF;
+            --border-color: #EAEAEA;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--background-color );
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        a { text-decoration: none; color: var(--color-primary); font-weight: 500; }
+        a:hover { text-decoration: underline; }
+
+        /* 2. Header & Footer Styles */
+        .main-header, .main-footer {
+            background-color: var(--card-bg);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .main-footer {
+            border-top: 1px solid var(--border-color);
+            border-bottom: none;
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 3rem;
+        }
+        
+        .footer-links a {
+            margin: 0 1rem;
+        }
+
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--color-secondary);
+            text-align: center;
+        }
+
+        /* 3. Static Content Page Layout */
+        .content-container {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .content-container h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            color: var(--color-secondary);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .content-container h2 {
+            font-family: 'Lora', serif;
+            font-size: 1.8rem;
+            color: var(--color-primary);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .content-container p {
+            margin-bottom: 1rem;
+        }
+
+        .content-container ul {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .content-container li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .last-updated {
+            text-align: center;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-header,
+            .main-footer {
+                padding: 1rem;
+            }
+            
+            .content-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            
+            .content-container h1 {
+                font-size: 2rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .content-container h2 {
+                font-size: 1.5rem;
+                margin-top: 2rem;
+            }
+            
+            .content-container ul {
+                margin-left: 1.5rem;
+            }
+            
+            .footer-links a {
+                margin: 0 0.5rem;
+                display: inline-block;
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header,
+            .main-footer {
+                padding: 0.75rem;
+            }
+            
+            .content-container {
+                margin: 0.5rem;
+                padding: 1rem;
+            }
+            
+            .content-container h1 {
+                font-size: 1.75rem;
+            }
+            
+            .content-container h2 {
+                font-size: 1.3rem;
+            }
+            
+            .logo {
+                font-size: 1.25rem;
+            }
+            
+            .content-container ul {
+                margin-left: 1rem;
+            }
+            
+            .footer-links {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                margin-bottom: 1rem;
+            }
+            
+            .footer-links a {
+                margin: 0;
+            }
+        }
+
+        /* Accessibility improvements */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- 1. HTML: Header -->
+    <header class="main-header">
+        <div class="logo">
+            <a href="index.html">Andrew Cares Village</a>
+        </div>
+    </header>
+
+    <!-- 2. HTML: Main Content -->
+    <main class="content-container">
+        <h1>Privacy Policy</h1>
+        <p class="last-updated">Last Updated: August 21, 2025</p>
+
+        <p>Welcome to Andrew Cares Village. We are committed to protecting your privacy and handling your personal data in an open and transparent manner. This privacy policy explains how we collect, use, and share your personal information when you use our website and services.</p>
+
+        <h2>1. Information We Collect</h2>
+        <p>We collect information to provide and improve our services. The types of information we collect include:</p>
+        <ul>
+            <li><strong>Information You Provide to Us:</strong> This includes personal data you provide when you create an account, such as your name, email address, and password. It also includes any information you add to your profile, like a biography or avatar.</li>
+            <li><strong>Payment Information:</strong> When you subscribe to a membership plan, we collect payment information through our payment processor, Paystack. This includes your name, payment card details, and billing address. We do not store your full payment card details on our servers.</li>
+            <li><strong>Content You Create:</strong> We collect content you create on the platform, including posts on the community feed, private messages, and group chat messages.</li>
+            <li><strong>Usage Information:</strong> We automatically collect information about your interactions with our services, such as the courses you view, your progress, and the pages you visit.</li>
+        </ul>
+
+        <h2>2. How We Use Your Information</h2>
+        <p>We use the information we collect for various purposes, including:</p>
+        <ul>
+            <li>To provide, operate, and maintain our services.</li>
+            <li>To process your membership payments and manage your account.</li>
+            <li>To personalize your experience and show you relevant content.</li>
+            <li>To facilitate communication between users (e.g., private messages, friend requests).</li>
+            <li>To communicate with you, including sending you service-related announcements and responding to your inquiries.</li>
+            <li>To monitor and analyze usage and trends to improve our platform.</li>
+            <li>To enforce our terms of service and protect the safety and security of our community.</li>
+        </ul>
+
+        <h2>3. How We Share Your Information</h2>
+        <p>We do not sell your personal data. We may share your information in the following circumstances:</p>
+        <ul>
+            <li><strong>With Other Users:</strong> Your profile information (name, avatar, bio) is visible to other users. Your activity, such as posts on the community feed, is also visible.</li>
+            <li><strong>With Service Providers:</strong> We share information with third-party vendors and service providers that perform services on our behalf, such as payment processing (Paystack) and cloud hosting (Firebase). These providers only have access to the information necessary to perform their functions and are contractually obligated to protect your data.</li>
+            <li><strong>For Legal Reasons:</strong> We may disclose your information if required to do so by law or in response to a valid request from a law enforcement or government agency.</li>
+        </ul>
+        
+        <h2>4. Data Security</h2>
+        <p>We take the security of your data seriously and use technical and administrative measures to protect it. We use Firebase, a Google platform, for our backend services, which provides robust security features. However, no method of transmission over the Internet or electronic storage is 100% secure, and we cannot guarantee its absolute security.</p>
+        
+        <h2>5. Your Rights and Choices</h2>
+        <p>You have certain rights regarding your personal information. You can access and update your profile information through your account settings. You can also request the deletion of your account by contacting us. Please note that some information may remain in our records after your account is deleted for legal or operational purposes.</p>
+
+        <h2>6. Changes to This Privacy Policy</h2>
+        <p>We may update this privacy policy from time to time. We will notify you of any significant changes by posting the new policy on this page and updating the "Last Updated" date. We encourage you to review this policy periodically.</p>
+
+        <h2>7. Contact Us</h2>
+        <p>If you have any questions about this Privacy Policy, please contact us at: [Your Contact Email Address]</p>
+
+    </main>
+
+    <!-- 3. HTML: Footer -->
+    <footer class="main-footer">
+        <div class="footer-links">
+            <a href="about.html">About Us</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+        </div>
+        <p>&copy; 2025 Andrew Cares Village. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

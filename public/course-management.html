@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Management - Andrew Cares Village</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --background-color: #F4F2ED; --text-primary: #333333; --text-secondary: #555555;
+            --color-primary: #B38B00; --color-secondary: #001F3F; --card-bg: #FFFFFF;
+            --border-color: #EAEAEA; --hover-bg: #F9F9F9; --success-color: #4CAF50;
+            --error-color: #D32F2F; --warning-color: #FF9800; --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.05 );
+            --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.15); --border-radius: 8px; --transition: all 0.3s ease;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Montserrat', sans-serif; background-color: var(--background-color); color: var(--text-primary); line-height: 1.6; }
+        .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid #f3f3f3; border-top: 2px solid var(--color-primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 999; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .main-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; border-bottom: 1px solid var(--border-color); background-color: var(--card-bg); box-shadow: var(--shadow-light); position: sticky; top: 0; z-index: 100; }
+        .logo { font-family: 'Cinzel', serif; font-weight: 700; font-size: 1.5rem; color: var(--color-secondary); text-decoration: none; }
+        .user-profile-nav { position: relative; display: flex; align-items: center; gap: 0.7rem; cursor: pointer; }
+        .user-avatar-nav { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-color); }
+        .page-container { max-width: 1400px; margin: 2rem auto; padding: 0 1rem; }
+        .course-overview { background: var(--card-bg); border-radius: var(--border-radius); padding: 2rem; margin-bottom: 2rem; box-shadow: var(--shadow-light); }
+        .course-header { display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: start; margin-bottom: 1rem; }
+        .course-info h2 { font-family: 'Cinzel', serif; color: var(--color-secondary); font-size: 2rem; margin-bottom: 1rem; }
+        .course-meta { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
+        .meta-item { display: flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); }
+        .course-status { display: inline-block; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; text-transform: uppercase; font-size: 0.9rem; }
+        .status-draft { background-color: #fff3cd; color: #856404; } .status-pending_approval { background-color: #cce5ff; color: #004085; }
+        .status-published { background-color: #d4edda; color: #155724; } .status-needs_revision { background-color: #f8d7da; color: #721c24; }
+        .course-actions { display: flex; flex-direction: column; gap: 1rem; }
+        .btn { padding: 0.75rem 1.5rem; border: none; border-radius: var(--border-radius); cursor: pointer; font-weight: 600; transition: var(--transition); display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; }
+        .btn-primary { background-color: var(--color-primary); color: white; } .btn-primary:hover { background-color: #9c7a00; }
+        .btn-secondary { background-color: transparent; color: var(--color-primary); border: 2px solid var(--color-primary); } .btn-secondary:hover { background-color: var(--color-primary); color: white; }
+        .btn-success { background-color: var(--success-color); color: white; } .btn-warning { background-color: var(--warning-color); color: white; }
+        .analytics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .analytics-card { background: var(--card-bg); border-radius: var(--border-radius); padding: 1.5rem; box-shadow: var(--shadow-light); text-align: center; }
+        .analytics-card h3 { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem; text-transform: uppercase; }
+        .analytics-card .value { font-size: 2.5rem; font-weight: 700; color: var(--color-primary); }
+        .tabs-container { background: var(--card-bg); border-radius: var(--border-radius); box-shadow: var(--shadow-light); margin-bottom: 2rem; }
+        .tabs { display: flex; background: var(--hover-bg); border-radius: var(--border-radius) var(--border-radius) 0 0; overflow-x: auto; }
+        .tab-btn { padding: 1rem 2rem; background: none; border: none; cursor: pointer; font-weight: 500; color: var(--text-secondary); transition: var(--transition); white-space: nowrap; border-bottom: 3px solid transparent; }
+        .tab-btn.active { color: var(--color-primary); border-bottom-color: var(--color-primary); background-color: var(--card-bg); }
+        .tab-content { display: none; padding: 2rem; } .tab-content.active { display: block; }
+        .empty-state { text-align: center; padding: 3rem 2rem; color: var(--text-secondary); } .empty-state i { font-size: 3rem; color: var(--border-color); margin-bottom: 1rem; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-item { display: flex; align-items: center; padding: 1rem; border: 1px solid var(--border-color); border-radius: var(--border-radius); margin-bottom: 1rem; cursor: pointer; transition: var(--transition); }
+        .lesson-item:hover { background-color: var(--hover-bg); border-color: var(--color-primary); }
+        .lesson-item.active { background-color: #fff8e1; border-color: var(--color-primary); }
+        .lesson-item-icon { font-size: 1.5rem; color: var(--color-primary); margin-right: 1rem; }
+        .lesson-item-details { flex-grow: 1; } .lesson-item-details h4 { margin-bottom: 0.25rem; }
+        .video-player { width: 100%; max-width: 800px; margin: 0 auto 2rem; border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow-medium); background-color: #000; }
+        .video-player iframe, .video-player video { width: 100%; height: 450px; border: none; display: block; }
+        .student-feedback { background: var(--card-bg); border-radius: var(--border-radius); padding: 2rem; box-shadow: var(--shadow-light); }
+        .rating-overview { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .rating-score { font-size: 3rem; font-weight: 700; color: var(--color-primary); }
+        .star-rating { display: flex; gap: 0.25rem; } .star { color: #ffd700; } .star.empty { color: var(--border-color); }
+        .feedback-list { max-height: 400px; overflow-y: auto; }
+        .feedback-item { padding: 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; gap: 1rem; }
+        .feedback-item:last-child { border-bottom: none; }
+        .feedback-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .admin-actions {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+    border-left: 4px solid var(--color-primary);
+}
+
+.feedback-form {
+    margin-top: 1rem;
+}
+
+.feedback-textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.btn-approve {
+    background: var(--success-text);
+    color: white;
+}
+
+.btn-revision {
+    background: var(--warning-text);
+    color: white;
+}
+/* Enhanced Lesson Preview Styles */
+.lesson-content-blocks {
+    max-height: 600px;
+    overflow-y: auto;
+    padding: 1rem 0;
+}
+
+.content-block-preview {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.content-block-preview:hover {
+    box-shadow: var(--shadow-medium);
+    border-color: var(--color-primary);
+}
+
+.block-header {
+    background: linear-gradient(135deg, var(--hover-bg), var(--background-color));
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+.block-header i {
+    font-size: 1.1rem;
+}
+
+/* Video Block Styles */
+.video-block .video-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    background: #000;
+}
+
+.video-block .video-wrapper iframe,
+.video-block .video-wrapper video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.empty-video {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--text-secondary);
+    background: var(--hover-bg);
+}
+
+.empty-video i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+/* Text Block Styles */
+.text-content {
+    padding: 1rem;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.text-content h1, .text-content h2, .text-content h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: var(--color-secondary);
+}
+
+.text-content p {
+    margin-bottom: 1rem;
+}
+
+.text-content ul, .text-content ol {
+    padding-left: 2rem;
+    margin-bottom: 1rem;
+}
+
+.text-content blockquote {
+    border-left: 4px solid var(--color-primary);
+    padding-left: 1rem;
+    margin: 1rem 0;
+    font-style: italic;
+    color: var(--text-secondary);
+}
+
+.text-content code {
+    background: var(--hover-bg);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+.text-content pre {
+    background: var(--hover-bg);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+/* File Block Styles */
+.file-preview {
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.file-info i {
+    font-size: 2.5rem;
+    color: var(--color-primary);
+}
+
+.file-details strong {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+}
+
+.file-meta {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.empty-file {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+    background: var(--hover-bg);
+}
+
+.empty-file i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.5;
+}
+
+.btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+/* Quiz Block Styles */
+.quiz-preview {
+    padding: 1rem;
+}
+
+.quiz-question {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: var(--hover-bg);
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--color-primary);
+}
+
+.quiz-options {
+    margin-bottom: 1rem;
+}
+
+.quiz-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: var(--border-radius);
+    background: var(--background-color);
+    transition: var(--transition);
+}
+
+.quiz-option.correct-option {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    border-left: 3px solid var(--success-color);
+    color: #155724;
+}
+
+.quiz-option i {
+    color: var(--text-secondary);
+}
+
+.quiz-option.correct-option i {
+    color: var(--success-color);
+}
+
+.correct-answer-note {
+    padding: 0.75rem;
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--warning-color);
+    color: #856404;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Unknown Block Styles */
+.unknown-block {
+    opacity: 0.7;
+}
+
+.unknown-content {
+    padding: 1rem;
+    text-align: center;
+    color: var(--text-secondary);
+    background: var(--hover-bg);
+    font-style: italic;
+}
+
+/* Lesson Info Styles */
+.lesson-info-header {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.lesson-info-header h3 {
+    margin-bottom: 0.5rem;
+    color: var(--color-secondary);
+}
+
+.lesson-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.lesson-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.free-preview-badge {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    color: #155724;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+.lesson-description {
+    margin-top: 1rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .lesson-content-blocks {
+        max-height: 400px;
+    }
+    
+    .file-preview {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .lesson-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .video-block .video-wrapper {
+        padding-bottom: 75%; /* Adjust for mobile */
+    }
+}
+/* Enhanced Lesson List Styles */
+.lesson-item-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.lesson-content-types {
+    margin-top: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.content-type-icon {
+    font-size: 0.85rem;
+    color: var(--color-primary);
+    opacity: 0.7;
+    transition: var(--transition);
+}
+
+.lesson-item:hover .content-type-icon {
+    opacity: 1;
+}
+
+.free-badge {
+    background: linear-gradient(135deg, var(--success-color), #66bb6a);
+    color: white;
+    padding: 0.15rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Enhanced lesson item spacing */
+.lesson-item-details {
+    flex-grow: 1;
+    min-width: 0; /* Allow text truncation */
+}
+
+.lesson-item-details h4 {
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Scrollbar styling for lesson content */
+.lesson-content-blocks::-webkit-scrollbar {
+    width: 6px;
+}
+
+.lesson-content-blocks::-webkit-scrollbar-track {
+    background: var(--hover-bg);
+    border-radius: 3px;
+}
+
+.lesson-content-blocks::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 3px;
+    opacity: 0.5;
+}
+
+.lesson-content-blocks::-webkit-scrollbar-thumb:hover {
+    opacity: 0.8;
+}
+/* Enhanced Section/Lesson Hierarchy Styles */
+.section-item {
+    margin-bottom: 1.5rem;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.section-header {
+    background: linear-gradient(135deg, var(--color-secondary), #2c3e50);
+    color: white;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: move;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.section-icon {
+    font-size: 1.1rem;
+    color: var(--color-primary);
+}
+
+.section-title {
+    flex: 1;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.section-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.section-actions button {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: var(--transition);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.section-actions button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.btn-delete-section:hover {
+    background: rgba(231, 76, 60, 0.8) !important;
+}
+
+.lessons-container {
+    background: var(--background-color);
+    min-height: 60px;
+    border-top: 1px solid var(--border-color);
+}
+
+.lesson-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: var(--transition);
+    background: var(--card-bg);
+    margin: 0;
+    position: relative;
+    padding-left: 2rem; /* Indent lessons under sections */
+}
+
+.lesson-item:last-child {
+    border-bottom: none;
+}
+
+.lesson-item:hover {
+    background-color: var(--hover-bg);
+    padding-left: 2.2rem; /* Slight increase on hover */
+}
+
+.lesson-item.active {
+    background: linear-gradient(135deg, #fff8e1, #ffecb3);
+    border-left: 4px solid var(--color-primary);
+    padding-left: 1.8rem; /* Adjust for border */
+}
+
+.lesson-item::before {
+    content: '';
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    width: 2px;
+    height: 20px;
+    background: var(--border-color);
+    transform: translateY(-50%);
+    opacity: 0.5;
+}
+
+.lesson-drag-handle {
+    color: var(--text-secondary);
+    margin-right: 0.75rem;
+    cursor: grab;
+    font-size: 0.9rem;
+}
+
+.lesson-drag-handle:active {
+    cursor: grabbing;
+}
+
+.lesson-icon {
+    color: var(--color-primary);
+    margin-right: 0.75rem;
+    font-size: 1.1rem;
+}
+
+.lesson-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.lesson-title {
+    display: block;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.lesson-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.25rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.lesson-content-types {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.content-type-icon {
+    font-size: 0.85rem;
+    color: var(--color-primary);
+    opacity: 0.7;
+    transition: var(--transition);
+}
+
+.lesson-item:hover .content-type-icon {
+    opacity: 1;
+}
+
+.free-badge {
+    background: linear-gradient(135deg, var(--success-color), #66bb6a);
+    color: white;
+    padding: 0.15rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.empty-lessons-placeholder {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+    background: var(--hover-bg);
+    font-style: italic;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0.7;
+    transition: var(--transition);
+}
+
+.empty-lessons-placeholder:hover {
+    opacity: 1;
+    color: var(--color-primary);
+}
+
+.empty-lessons-placeholder i {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .section-header {
+        padding: 0.75rem;
+        font-size: 0.95rem;
+    }
+    
+    .lesson-item {
+        padding: 0.75rem;
+        padding-left: 1.5rem;
+    }
+    
+    .lesson-item:hover {
+        padding-left: 1.7rem;
+    }
+    
+    .lesson-item.active {
+        padding-left: 1.3rem;
+    }
+    
+    .lesson-meta {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+}
+    </style>
+    </head>
+    <body>
+        <header class="main-header">
+            <a href="home.html" class="logo">Andrew Cares Village</a>
+            <div class="user-profile-nav">
+                <img id="userAvatarNav" src alt="User Avatar" class="user-avatar-nav">
+                <span id="userNameNav">Loading...</span>
+            </div>
+        </header>
+        <div id="loadingOverlay" class="loading-overlay" style="display: none;"><div class="loading-spinner"></div></div>
+        <main class="page-container">
+            <div id="courseOverview" class="course-overview" style="display: none;">
+                <div class="course-header">
+                    <div class="course-info">
+                        <h2 id="courseTitle">Loading...</h2>
+                        <div class="course-meta">
+                            <div class="meta-item"><i class="fas fa-tag"></i><span id="courseDiscipline">-</span></div>
+                            <div class="meta-item"><i class="fas fa-signal"></i><span id="courseLevel">-</span></div>
+                            <div class="meta-item"><i class="fas fa-calendar"></i><span id="courseCreated">-</span></div>
+                            <div class="meta-item"><span id="courseStatus" class="course-status">-</span></div>
+                        </div>
+                        <p id="courseDescription">Loading...</p>
+                    </div>
+                    <div class="course-actions"></div>
+                </div>
+            </div>
+            <div id="analyticsSection" style="display: none;">
+                <div class="analytics-grid">
+                    <div class="analytics-card"><h3>Total Students</h3><div class="value" id="totalStudents">0</div></div>
+                    <div class="analytics-card"><h3>Completion Rate</h3><div class="value" id="completionRate">0%</div></div>
+                    <div class="analytics-card"><h3>Average Rating</h3><div class="value" id="averageRating">0.0</div></div>
+                </div>
+            </div>
+            <div id="tabsContainer" class="tabs-container" style="display: none;">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="lessons"><i class="fas fa-list-ul"></i> Lessons</button>
+                    <button class="tab-btn" data-tab="feedback"><i class="fas fa-comments"></i> Feedback</button>
+                    <button class="tab-btn" data-tab="progress"><i class="fas fa-chart-bar"></i> Student Progress</button>
+                </div>
+                <div id="lessonsTab" class="tab-content active">
+                    <div id="lessonPreviewContainer" style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+                        <div id="lessonListContainer">
+                            <h3>Course Lessons</h3>
+                            <ul id="lessonList" class="lesson-list"></ul>
+                        </div>
+                        <div id="lessonDetailContainer">
+                            <div id="videoPlayerContainer" class="video-player">
+                                <div class="empty-state"><i class="fas fa-play-circle"></i><p>Select a lesson to preview</p></div>
+                            </div>
+                            <div id="lessonInfoContainer" style="padding: 1rem;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="feedbackTab" class="tab-content">
+                    <div class="student-feedback">
+                        <div class="rating-overview">
+                            <div class="rating-score" id="overallRating">0.0</div>
+                            <div>
+                                <div class="star-rating" id="overallStars"></div>
+                                <p><span id="totalReviews">0</span> reviews</p>
+                            </div>
+                        </div>
+                        <div class="feedback-list" id="feedbackList"></div>
+                    </div>
+                </div>
+                <div id="progressTab" class="tab-content">
+                    <h3>Individual Student Progress</h3>
+                    <div id="studentProgressList"></div>
+                </div>
+            </div>
+        </main>
+<!-- In course-management.html, replace the entire script block with this one -->
+<script type="module">
+    // --- Firebase v9 SDK Imports ---
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc, serverTimestamp, collection, query, where, orderBy, onSnapshot,getDocs} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+
+    // --- Firebase Configuration ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
+        authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
+        projectId: "andrew-cares-village-f4cb6",
+        storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
+        messagingSenderId: "255087116955",
+        appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
+    };
+
+    // --- Initialize Firebase ---
+    const app = initializeApp(firebaseConfig );
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // --- Main Application Class ---
+    class CourseManagementApp {
+        constructor() {
+            this.state = {
+                currentUser: null, userData: null, courseId: null, courseData: null,
+                lessons: [], students: [], feedback: [], viewMode: 'instructor',
+                unsubscribers: [] // To hold our real-time listeners
+            };
+            this.elements = this.getDOMElements();
+            this.startAuthentication();
+        }
+
+        getDOMElements() {
+            const ids = [
+                'loadingOverlay', 'userNameNav', 'userAvatarNav', 'courseOverview', 'analyticsSection',
+                'tabsContainer', 'courseTitle', 'courseDiscipline', 'courseLevel', 'courseCreated',
+                'courseStatus', 'courseDescription', 'totalStudents', 'completionRate', 'averageRating',
+                'lessonList', 'videoPlayerContainer', 'lessonInfoContainer', 'overallRating', 'overallStars',
+                'totalReviews', 'feedbackList', 'studentProgressList'
+            ];
+            const elements = {};
+            ids.forEach(id => elements[id] = document.getElementById(id));
+            elements.courseActions = document.querySelector('.course-actions');
+            elements.tabs = document.querySelector('.tabs');
+            return elements;
+        }
+
+        startAuthentication() {
+            this.showLoading(true);
+            onAuthStateChanged(auth, async (user) => {
+                if (!user) { window.location.href = 'index.html'; return; }
+                this.state.currentUser = user;
+                try {
+                    const userDocRef = doc(db, "users", user.uid);
+                    const userDocSnap = await getDoc(userDocRef);
+                    if (!userDocSnap.exists()) throw new Error("User profile not found.");
+                    this.state.userData = { uid: user.uid, ...userDocSnap.data() };
+                    
+                    this.updateHeaderUI();
+                    this.initializeEventListeners();
+
+                    const urlParams = new URLSearchParams(window.location.search);
+                    this.state.courseId = urlParams.get('id');
+                    this.state.viewMode = window.location.href.includes('view=admin') ? 'admin' : 'instructor';
+                    if (!this.state.courseId) throw new Error("No course ID provided.");
+
+                    this.checkPagePermissions();
+                    await this.loadInitialData();
+                    this.setupRealtimeListeners(); // **NEW: Set up listeners after initial load**
+
+                } catch (error) {
+                    console.error("Initialization Error:", error);
+                    alert(`Error: ${error.message}`);
+                    this.redirectToAppropriateDashboard();
+                } finally {
+                    this.showLoading(false);
+                }
+            });
+        }
+
+        async loadInitialData() {
+            const courseDocRef = doc(db, "courses", this.state.courseId);
+            const courseDocSnap = await getDoc(courseDocRef);
+            if (!courseDocSnap.exists()) throw new Error("Course not found.");
+            this.state.courseData = { id: courseDocSnap.id, ...courseDocSnap.data() };
+            
+            this.checkCourseOwnership();
+            this.updateCourseUI();
+            this.setupPageForRole();
+            this.showMainContent();
+
+            const lessonsQuery = query(collection(db, "courses", this.state.courseId, "lessons"), orderBy("order", "asc"));
+            const lessonsSnap = await getDocs(lessonsQuery);
+            this.state.lessons = lessonsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            this.renderLessonList();
+        }
+
+        setupRealtimeListeners() {
+            // Clean up old listeners before creating new ones
+            this.state.unsubscribers.forEach(unsub => unsub());
+            this.state.unsubscribers = [];
+
+            // Only listen for analytics if the course is published
+            if (this.state.courseData.status === 'published') {
+                // Real-time listener for enrollments (student progress)
+                const enrollmentsQuery = query(collection(db, "enrollments"), where("courseId", "==", this.state.courseId));
+                const unsubEnrollments = onSnapshot(enrollmentsQuery, (snapshot) => {
+                    this.state.students = snapshot.docs.map(doc => doc.data());
+                    this.updateAnalyticsUI();
+                    this.renderStudentProgressList();
+                }, (error) => console.error("Enrollment listener error:", error));
+                this.state.unsubscribers.push(unsubEnrollments);
+
+                // Real-time listener for reviews (feedback)
+                const feedbackQuery = query(collection(db, "courseReviews"), where("courseId", "==", this.state.courseId), orderBy("createdAt", "desc"));
+                const unsubFeedback = onSnapshot(feedbackQuery, (snapshot) => {
+                    this.state.feedback = snapshot.docs.map(doc => doc.data());
+                    this.updateAnalyticsUI();
+                    this.renderFeedbackList();
+                }, (error) => console.error("Feedback listener error:", error));
+                this.state.unsubscribers.push(unsubFeedback);
+            }
+        }
+
+        initializeEventListeners() {
+            const logoutButton = document.getElementById('logoutButton');
+            if (logoutButton) logoutButton.addEventListener('click', this.handleLogout);
+            if (this.elements.tabs) {
+                this.elements.tabs.addEventListener('click', (e) => {
+                    if (e.target.matches('.tab-btn')) this.switchTab(e.target.dataset.tab);
+                });
+            }
+            // Add a listener to clean up when the user leaves the page
+            window.addEventListener('beforeunload', () => {
+                this.state.unsubscribers.forEach(unsub => unsub());
+            });
+        }
+
+        updateHeaderUI() {
+            const { name, avatarUrl } = this.state.userData;
+            if (this.elements.userNameNav) this.elements.userNameNav.textContent = name || 'User';
+            if (this.elements.userAvatarNav) this.elements.userAvatarNav.src = avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(name || 'U'  )}`;
+        }
+
+        checkPagePermissions() {
+            const { role } = this.state.userData;
+            if (role !== 'instructor' && role !== 'admin') throw new Error("Access Denied.");
+            if (role === 'instructor' && this.state.viewMode === 'admin') throw new Error("Access Denied.");
+        }
+        
+        checkCourseOwnership() {
+            const { role } = this.state.userData;
+            if (role === 'instructor' && this.state.courseData.instructorId !== this.state.currentUser.uid) throw new Error("Access Denied.");
+        }
+
+        updateCourseUI() {
+            const { title, description, status, discipline, level, createdAt } = this.state.courseData;
+            if (this.elements.courseTitle) this.elements.courseTitle.textContent = title;
+            if (this.elements.courseDescription) this.elements.courseDescription.textContent = description || 'No description provided.';
+            if (this.elements.courseStatus) {
+                this.elements.courseStatus.textContent = (status || 'draft').replace('_', ' ');
+                this.elements.courseStatus.className = `course-status status-${status || 'draft'}`;
+            }
+            if (this.elements.courseDiscipline) this.elements.courseDiscipline.textContent = discipline || '-';
+            if (this.elements.courseLevel) this.elements.courseLevel.textContent = level || '-';
+            if (this.elements.courseCreated) this.elements.courseCreated.textContent = createdAt ? new Date(createdAt.seconds * 1000).toLocaleDateString() : '-';
+        }
+
+        setupPageForRole() {
+            const { role } = this.state.userData;
+            const { courseActions, analyticsSection, tabsContainer } = this.elements;
+            if (role === 'admin' && this.state.viewMode === 'admin') {
+                if(analyticsSection) analyticsSection.style.display = 'none';
+                if(tabsContainer) tabsContainer.style.display = 'block';
+                if(courseActions) {
+                    courseActions.innerHTML = `
+                        <button id="approveBtn" class="btn btn-success"><i class="fas fa-check"></i> Approve</button>
+                        <button id="reviseBtn" class="btn btn-warning"><i class="fas fa-edit"></i> Request Revision</button>`;
+                    document.getElementById('approveBtn').addEventListener('click', () => this.handleCourseApproval('published'));
+                    document.getElementById('reviseBtn').addEventListener('click', () => this.handleCourseApproval('needs_revision'));
+                }
+            } else {
+                if(courseActions) courseActions.innerHTML = `<a href="course-editor.html?id=${this.state.courseId}" class="btn btn-primary"><i class="fas fa-edit"></i> Edit Course</a>`;
+                if (this.state.courseData.status === 'published') {
+                    if(analyticsSection) analyticsSection.style.display = 'grid';
+                    if(tabsContainer) tabsContainer.style.display = 'block';
+                } else {
+                    if(analyticsSection) analyticsSection.style.display = 'none';
+                    if(tabsContainer) tabsContainer.style.display = 'block';
+                }
+            }
+        }
+
+      
+
+       renderLessonList() {
+    if (!this.elements.lessonList) return;
+    if (this.state.lessons.length === 0) {
+        this.elements.lessonList.innerHTML = `<li class="empty-state"><p>No lessons found.</p></li>`;
+        return;
+    }
+    
+    this.elements.lessonList.innerHTML = this.state.lessons.map(lesson => {
+        const contentCount = lesson.contentBlocks ? lesson.contentBlocks.length : 0;
+        const hasVideo = lesson.contentBlocks?.some(block => block.type === 'video') || false;
+        const hasQuiz = lesson.contentBlocks?.some(block => block.type === 'quiz') || false;
+        const hasFiles = lesson.contentBlocks?.some(block => block.type === 'file') || false;
+        
+        let contentIcons = '';
+        if (hasVideo) contentIcons += '<i class="fas fa-video content-type-icon" title="Contains video"></i>';
+        if (hasQuiz) contentIcons += '<i class="fas fa-question-circle content-type-icon" title="Contains quiz"></i>';
+        if (hasFiles) contentIcons += '<i class="fas fa-paperclip content-type-icon" title="Contains files"></i>';
+        
+        return `
+            <li class="lesson-item" data-lesson-id="${lesson.id}">
+                <i class="fas fa-play-circle lesson-item-icon"></i>
+                <div class="lesson-item-details">
+                    <h4>${this.sanitize(lesson.title)}</h4>
+                    <div class="lesson-item-meta">
+                        <small>${lesson.duration || 'N/A'} mins</small>
+                        <small>${contentCount} blocks</small>
+                        ${lesson.settings?.isFreePreview ? '<span class="free-badge">FREE</span>' : ''}
+                    </div>
+                    <div class="lesson-content-types">${contentIcons}</div>
+                </div>
+            </li>`;
+    }).join('');
+    
+    this.elements.lessonList.querySelectorAll('.lesson-item').forEach(item => 
+        item.addEventListener('click', () => this.handleLessonClick(item.dataset.lessonId))
+    );
+}
+handleLessonClick(lessonId) {
+    const lesson = this.state.lessons.find(l => l.id === lessonId);
+    if (!lesson) return;
+    
+    // Update active lesson UI
+    if (this.elements.lessonList) {
+        this.elements.lessonList.querySelectorAll('.lesson-item').forEach(item => 
+            item.classList.toggle('active', item.dataset.lessonId === lessonId)
+        );
+    }
+    
+    // Render lesson content blocks
+    if (this.elements.videoPlayerContainer) {
+        this.elements.videoPlayerContainer.innerHTML = this.renderLessonContent(lesson);
+    }
+    
+    // Update lesson info
+    if (this.elements.lessonInfoContainer) {
+        this.elements.lessonInfoContainer.innerHTML = `
+            <div class="lesson-info-header">
+                <h3>${this.sanitize(lesson.title)}</h3>
+                <div class="lesson-meta">
+                    <span><i class="fas fa-clock"></i> ${lesson.duration || 'N/A'} mins</span>
+                    <span><i class="fas fa-layer-group"></i> ${(lesson.contentBlocks || []).length} blocks</span>
+                    ${lesson.settings?.isFreePreview ? '<span class="free-preview-badge"><i class="fas fa-unlock"></i> Free Preview</span>' : ''}
+                </div>
+            </div>
+            ${lesson.description ? `<p class="lesson-description">${this.sanitize(lesson.description)}</p>` : ''}
+        `;
+    }
+}
+renderCurriculum(lessons) {
+    dom.curriculumList.innerHTML = '';
+    const sections = {};
+
+    // First, create section containers - sections should be parent items
+    lessons.filter(l => l.type === 'section').forEach(section => {
+        sections[section.id] = { ...section, lessons: [] };
+    });
+
+    // Then add lessons to their respective sections
+    lessons.filter(l => l.type === 'lesson').forEach(lesson => {
+        if (lesson.sectionId && sections[lesson.sectionId]) {
+            sections[lesson.sectionId].lessons.push(lesson);
+        } else {
+            // Handle orphaned lessons - create a default section for them
+            console.warn(`Lesson "${lesson.title}" has no valid section. SectionId: ${lesson.sectionId}`);
+            
+            // Create a temporary section for orphaned lessons
+            if (!sections['orphaned']) {
+                sections['orphaned'] = {
+                    id: 'orphaned',
+                    title: 'Uncategorized Lessons',
+                    type: 'section',
+                    order: 999,
+                    lessons: []
+                };
+            }
+            sections['orphaned'].lessons.push(lesson);
+        }
+    });
+
+    // Debug: Log the sections to see the structure
+    console.log('Sections structure:', sections);
+
+    // Render sections and their lessons
+    Object.values(sections)
+        .sort((a, b) => (a.order || 0) - (b.order || 0))
+        .forEach(section => {
+            const sectionEl = document.createElement('div');
+            sectionEl.className = 'section-item';
+            sectionEl.dataset.sectionId = section.id;
+            
+            sectionEl.innerHTML = `
+                <div class="section-header">
+                    <i class="fas fa-grip-vertical"></i>
+                    <i class="fas fa-folder-open section-icon"></i>
+                    <span class="section-title">${this.sanitize(section.title)}</span>
+                    <div class="section-actions">
+                        <button class="btn-add-lesson" data-section-id="${section.id}" title="Add Lesson">
+                            <i class="fas fa-plus-circle"></i>
+                        </button>
+                        ${section.id !== 'orphaned' ? `<button class="btn-delete-section" data-section-id="${section.id}" title="Delete Section">
+                            <i class="fas fa-trash"></i>
+                        </button>` : ''}
+                    </div>
+                </div>
+            `;
+
+            const lessonsContainer = document.createElement('div');
+            lessonsContainer.className = 'lessons-container';
+            
+            // Sort and render lessons within this section
+            section.lessons
+                .sort((a, b) => (a.order || 0) - (b.order || 0))
+                .forEach(lesson => {
+                    const lessonEl = document.createElement('div');
+                    lessonEl.className = 'lesson-item';
+                    lessonEl.dataset.lessonId = lesson.id;
+                    
+                    if (lesson.id === activeLessonId) {
+                        lessonEl.classList.add('active');
+                    }
+
+                    // Count content blocks and determine content types
+                    const contentCount = lesson.contentBlocks ? lesson.contentBlocks.length : 0;
+                    const hasVideo = lesson.contentBlocks?.some(block => block.type === 'video') || false;
+                    const hasQuiz = lesson.contentBlocks?.some(block => block.type === 'quiz') || false;
+                    const hasFiles = lesson.contentBlocks?.some(block => block.type === 'file') || false;
+                    
+                    let contentIcons = '';
+                    if (hasVideo) contentIcons += '<i class="fas fa-video content-type-icon" title="Contains video"></i>';
+                    if (hasQuiz) contentIcons += '<i class="fas fa-question-circle content-type-icon" title="Contains quiz"></i>';
+                    if (hasFiles) contentIcons += '<i class="fas fa-paperclip content-type-icon" title="Contains files"></i>';
+                    
+                    lessonEl.innerHTML = `
+                        <i class="fas fa-grip-vertical lesson-drag-handle"></i>
+                        <i class="fas fa-play-circle lesson-icon"></i>
+                        <div class="lesson-details">
+                            <span class="lesson-title">${this.sanitize(lesson.title)}</span>
+                            <div class="lesson-meta">
+                                <small>${lesson.duration || 'N/A'} mins</small>
+                                <small>${contentCount} blocks</small>
+                                ${lesson.settings?.isFreePreview ? '<span class="free-badge">FREE</span>' : ''}
+                            </div>
+                            <div class="lesson-content-types">${contentIcons}</div>
+                        </div>
+                    `;
+                    
+                    lessonEl.onclick = () => this.openLessonInEditor(lesson.id);
+                    lessonsContainer.appendChild(lessonEl);
+                });
+
+            // If section has no lessons, show placeholder
+            if (section.lessons.length === 0) {
+                const placeholderEl = document.createElement('div');
+                placeholderEl.className = 'empty-lessons-placeholder';
+                placeholderEl.innerHTML = `
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Click + to add lessons</span>
+                `;
+                lessonsContainer.appendChild(placeholderEl);
+            }
+
+            sectionEl.appendChild(lessonsContainer);
+            dom.curriculumList.appendChild(sectionEl);
+        });
+
+    // Add event listeners for section actions
+    document.querySelectorAll('.btn-add-lesson').forEach(btn => {
+        btn.onclick = (e) => {
+            e.stopPropagation();
+            this.createNewLesson(e.currentTarget.dataset.sectionId);
+        };
+    });
+
+    document.querySelectorAll('.btn-delete-section').forEach(btn => {
+        btn.onclick = (e) => {
+            e.stopPropagation();
+            this.deleteSection(e.currentTarget.dataset.sectionId);
+        };
+    });
+    
+    this.initializeSortable();
+}
+renderLessonContent(lesson) {
+    const contentBlocks = lesson.contentBlocks || [];
+    
+    if (contentBlocks.length === 0) {
+        return `<div class="empty-state">
+            <i class="fas fa-file-alt"></i>
+            <p>This lesson has no content yet</p>
+        </div>`;
+    }
+    
+    let renderedContent = '<div class="lesson-content-blocks">';
+    
+    contentBlocks.forEach((block, index) => {
+        switch (block.type) {
+            case 'video':
+                renderedContent += this.renderVideoBlock(block, index);
+                break;
+            case 'text':
+                renderedContent += this.renderTextBlock(block, index);
+                break;
+            case 'file':
+                renderedContent += this.renderFileBlock(block, index);
+                break;
+            case 'quiz':
+                renderedContent += this.renderQuizBlock(block, index);
+                break;
+            default:
+                renderedContent += this.renderUnknownBlock(block, index);
+        }
+    });
+    
+    renderedContent += '</div>';
+    return renderedContent;
+}
+
+renderVideoBlock(block, index) {
+    if (!block.url) {
+        return `<div class="content-block-preview video-block">
+            <div class="block-header">
+                <i class="fas fa-video"></i>
+                <span>Video Content ${index + 1}</span>
+            </div>
+            <div class="empty-video">
+                <i class="fas fa-video-slash"></i>
+                <p>No video configured</p>
+            </div>
+        </div>`;
+    }
+    
+    let videoHtml = '';
+    
+    if (block.videoType === 'youtube' || block.url.includes('youtube.com/embed')) {
+        videoHtml = `<iframe src="${block.url}" frameborder="0" allowfullscreen 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        loading="lazy" title="YouTube video player"></iframe>`;
+    } else {
+        videoHtml = `<video src="${block.url}" controls preload="metadata" 
+                        style="width: 100%; height: 100%;">
+                        Your browser doesn't support HTML5 video.
+                     </video>`;
+    }
+    
+    return `<div class="content-block-preview video-block">
+        <div class="block-header">
+            <i class="fas fa-video"></i>
+            <span>${block.videoType === 'recorded' ? 'Recorded Video' : 'Video Content'} ${index + 1}</span>
+        </div>
+        <div class="video-wrapper">${videoHtml}</div>
+    </div>`;
+}
+
+renderTextBlock(block, index) {
+    const content = block.content || '';
+    
+    return `<div class="content-block-preview text-block">
+        <div class="block-header">
+            <i class="fas fa-paragraph"></i>
+            <span>Text Content ${index + 1}</span>
+        </div>
+        <div class="text-content">${content || '<em>No content</em>'}</div>
+    </div>`;
+}
+
+renderFileBlock(block, index) {
+    if (!block.url) {
+        return `<div class="content-block-preview file-block">
+            <div class="block-header">
+                <i class="fas fa-paperclip"></i>
+                <span>File Attachment ${index + 1}</span>
+            </div>
+            <div class="empty-file">
+                <i class="fas fa-file-slash"></i>
+                <p>No file attached</p>
+            </div>
+        </div>`;
+    }
+    
+    const fileIcon = this.getFileIcon(block.name);
+    const fileSize = block.size ? `${(block.size / 1024).toFixed(2)} KB` : '';
+    
+    return `<div class="content-block-preview file-block">
+        <div class="block-header">
+            <i class="fas fa-paperclip"></i>
+            <span>File Attachment ${index + 1}</span>
+        </div>
+        <div class="file-preview">
+            <div class="file-info">
+                <i class="fas ${fileIcon}"></i>
+                <div class="file-details">
+                    <strong>${this.sanitize(block.name)}</strong>
+                    <div class="file-meta">${fileSize}</div>
+                </div>
+            </div>
+            <a href="${block.url}" target="_blank" class="btn btn-secondary btn-small">
+                <i class="fas fa-download"></i> Download
+            </a>
+        </div>
+    </div>`;
+}
+
+renderQuizBlock(block, index) {
+    const question = block.question || 'No question set';
+    const options = block.options || [];
+    const correctAnswer = options.findIndex(opt => opt.isCorrect);
+    
+    let optionsHtml = '';
+    if (options.length > 0) {
+        optionsHtml = options.map((option, optIndex) => `
+            <div class="quiz-option ${option.isCorrect ? 'correct-option' : ''}">
+                <i class="fas ${option.isCorrect ? 'fa-check-circle' : 'fa-circle'}"></i>
+                <span>${this.sanitize(option.text) || `Option ${optIndex + 1}`}</span>
+            </div>
+        `).join('');
+    } else {
+        optionsHtml = '<em>No options configured</em>';
+    }
+    
+    return `<div class="content-block-preview quiz-block">
+        <div class="block-header">
+            <i class="fas fa-question-circle"></i>
+            <span>Quiz Question ${index + 1}</span>
+        </div>
+        <div class="quiz-preview">
+            <div class="quiz-question">
+                <strong>Q: ${this.sanitize(question)}</strong>
+            </div>
+            <div class="quiz-options">${optionsHtml}</div>
+            ${correctAnswer >= 0 ? `<div class="correct-answer-note">
+                <i class="fas fa-lightbulb"></i>
+                Correct answer: Option ${correctAnswer + 1}
+            </div>` : ''}
+        </div>
+    </div>`;
+}
+
+renderUnknownBlock(block, index) {
+    return `<div class="content-block-preview unknown-block">
+        <div class="block-header">
+            <i class="fas fa-question"></i>
+            <span>Unknown Block Type ${index + 1}</span>
+        </div>
+        <div class="unknown-content">
+            <p>Unsupported content type: ${block.type}</p>
+        </div>
+    </div>`;
+}
+
+getFileIcon(filename) {
+    if (!filename) return 'fa-file';
+    
+    const ext = filename.split('.').pop()?.toLowerCase();
+    const iconMap = {
+        'pdf': 'fa-file-pdf',
+        'doc': 'fa-file-word',
+        'docx': 'fa-file-word',
+        'xls': 'fa-file-excel',
+        'xlsx': 'fa-file-excel',
+        'ppt': 'fa-file-powerpoint',
+        'pptx': 'fa-file-powerpoint',
+        'jpg': 'fa-file-image',
+        'jpeg': 'fa-file-image',
+        'png': 'fa-file-image',
+        'gif': 'fa-file-image',
+        'mp4': 'fa-file-video',
+        'avi': 'fa-file-video',
+        'mov': 'fa-file-video',
+        'mp3': 'fa-file-audio',
+        'wav': 'fa-file-audio',
+        'zip': 'fa-file-archive',
+        'rar': 'fa-file-archive',
+        'txt': 'fa-file-alt'
+    };
+    
+    return iconMap[ext] || 'fa-file';
+}
+        createVideoPlayerHTML(url) {
+            if (!url) return `<div class="empty-state"><i class="fas fa-video-slash"></i><p>No video for this lesson.</p></div>`;
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                const videoIdMatch = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/);
+                if (videoIdMatch && videoIdMatch[2]) return `<iframe src="https://www.youtube.com/embed/${videoIdMatch[2]}" frameborder="0" allowfullscreen></iframe>`;
+            }
+            return `<video controls src="${url}" style="width:100%; height:100%;"></video>`;
+        }
+
+        updateAnalyticsUI( ) {
+            const { students, feedback } = this.state;
+            const completedStudents = students.filter(s => s.progress >= 100).length;
+            const totalRating = feedback.reduce((sum, r) => sum + r.rating, 0);
+            const avgRating = feedback.length > 0 ? (totalRating / feedback.length) : 0;
+
+            if(this.elements.totalStudents) this.elements.totalStudents.textContent = students.length;
+            if(this.elements.completionRate) this.elements.completionRate.textContent = `${students.length > 0 ? Math.round((completedStudents / students.length) * 100) : 0}%`;
+            if(this.elements.averageRating) this.elements.averageRating.textContent = avgRating.toFixed(1);
+            if(this.elements.overallRating) this.elements.overallRating.textContent = avgRating.toFixed(1);
+            if(this.elements.overallStars) this.elements.overallStars.innerHTML = this.generateStarsHTML(avgRating);
+            if(this.elements.totalReviews) this.elements.totalReviews.textContent = feedback.length;
+        }
+
+       // In course-management.html
+
+renderFeedbackList() {
+    if (!this.elements.feedbackList) return;
+    if (this.state.feedback.length === 0) {
+        this.elements.feedbackList.innerHTML = `<div class="empty-state"><p>No feedback submitted yet.</p></div>`;
+        return;
+    }
+    this.elements.feedbackList.innerHTML = this.state.feedback.map(review => {
+        // **THE FIX IS HERE: Use the correct avatar URL or a placeholder**
+        const avatarSrc = this.sanitize(review.studentAvatar) || `https://ui-avatars.com/api/?name=${encodeURIComponent(review.studentName || 'A' )}&background=001F3F&color=fff`;
+        return `
+            <div class="feedback-item">
+                <img src="${avatarSrc}" alt="avatar" class="feedback-avatar">
+                <div>
+                    <strong>${this.sanitize(review.studentName)}</strong>
+                    <div class="star-rating">${this.generateStarsHTML(review.rating)}</div>
+                    <p>${this.sanitize(review.comment)}</p>
+                </div>
+            </div>`;
+    }).join('');
+}
+
+        
+        renderStudentProgressList() {
+            if (!this.elements.studentProgressList) return;
+            if (this.state.students.length === 0) {
+                this.elements.studentProgressList.innerHTML = `<div class="empty-state"><p>No students enrolled yet.</p></div>`;
+                return;
+            }
+            // Simple list for now, can be expanded
+            this.elements.studentProgressList.innerHTML = this.state.students.map(student => `
+                <div style="display:flex; justify-content:space-between; padding: 0.5rem; border-bottom: 1px solid #eee;">
+                    <span>${this.sanitize(student.studentName)}</span>
+                    <span>${Math.round(student.progress || 0)}%</span>
+                </div>
+            `).join('');
+        }
+
+        generateStarsHTML(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) stars += `<i class="fas fa-star ${i <= rating ? 'star' : 'empty'}"></i>`;
+            return stars;
+        }
+
+        switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tabId));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.toggle('active', content.id === `${tabId}Tab`));
+        }
+
+        showLoading(show) { if (this.elements.loadingOverlay) this.elements.loadingOverlay.style.display = show ? 'flex' : 'none'; }
+        showMainContent() { if (this.elements.courseOverview) this.elements.courseOverview.style.display = 'block'; }
+        redirectToAppropriateDashboard() { window.location.href = this.state.userData?.role === 'admin' ? 'admin.html' : 'instructor.html'; }
+        handleLogout = () => signOut(auth).then(() => window.location.href = 'index.html');
+        sanitize(str) { const temp = document.createElement('div'); temp.textContent = str || ''; return temp.innerHTML; }
+    }
+    function checkAdminMode() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const mode = urlParams.get('mode');
+    const returnUrl = urlParams.get('return');
+    
+    if (mode === 'admin_preview') {
+        setupAdminPreviewMode(returnUrl);
+        return true;
+    }
+    return false;
+}
+
+// Setup admin preview mode
+function setupAdminPreviewMode(returnUrl) {
+    // Add admin preview banner
+    const banner = document.createElement('div');
+    banner.innerHTML = `
+        <div style="background: linear-gradient(135deg, #ff6b6b, #ee5a24); color: white; padding: 1rem; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-shield-alt" style="font-size: 1.2rem;"></i>
+                    <strong>ADMIN PREVIEW MODE</strong>
+                </div>
+                <div style="font-size: 0.9rem; opacity: 0.9;">
+                    You are previewing this course for approval
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button onclick="approveFromPreview()" class="admin-action-btn approve">
+                        <i class="fas fa-check"></i> Approve Course
+                    </button>
+                    <button onclick="rejectFromPreview()" class="admin-action-btn reject">
+                        <i class="fas fa-times"></i> Reject Course
+                    </button>
+                    <button onclick="returnToAdmin()" class="admin-action-btn neutral">
+                        <i class="fas fa-arrow-left"></i> Back to Admin
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertBefore(banner, document.body.firstChild);
+    // Add admin preview styles
+    const adminStyles = document.createElement('style');
+    adminStyles.textContent = `
+        .admin-action-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.85rem;
+        }
+        
+        .admin-action-btn.approve {
+            background: rgba(46, 204, 113, 0.9);
+            color: white;
+        }
+        
+        .admin-action-btn.approve:hover {
+            background: #27ae60;
+            transform: translateY(-1px);
+        }
+        
+        .admin-action-btn.reject {
+            background: rgba(231, 76, 60, 0.9);
+            color: white;
+        }
+        
+        .admin-action-btn.reject:hover {
+            background: #c0392b;
+            transform: translateY(-1px);
+        }
+        
+        .admin-action-btn.neutral {
+            background: rgba(52, 73, 94, 0.9);
+            color: white;
+        }
+        
+        .admin-action-btn.neutral:hover {
+            background: #34495e;
+            transform: translateY(-1px);
+        }
+        
+        /* Add admin notes section */
+        .admin-notes {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border-left: 4px solid #d35400;
+        }
+        
+        /* Highlight important course info for admin */
+        .admin-highlight {
+            border: 2px solid #3498db;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+    `;
+    document.head.appendChild(adminStyles);
+    
+    // Add admin notes section after course header
+    setTimeout(() => {
+        addAdminNotesSection();
+    }, 1000);
+}
+
+// Add admin evaluation notes
+function addAdminNotesSection() {
+    const courseHeader = document.querySelector('.course-header, .course-info, h1');
+    if (courseHeader) {
+        const adminNotes = document.createElement('div');
+        adminNotes.className = 'admin-notes';
+        adminNotes.innerHTML = `
+            <h4 style="margin: 0 0 1rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-clipboard-check"></i>
+                Admin Evaluation Checklist
+            </h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                <div>
+                    <h5>Content Quality:</h5>
+                    <label><input type="checkbox" class="admin-check"> Clear learning objectives</label><br>
+                    <label><input type="checkbox" class="admin-check"> Well-structured lessons</label><br>
+                    <label><input type="checkbox" class="admin-check"> Appropriate difficulty level</label><br>
+                    <label><input type="checkbox" class="admin-check"> Good pacing</label>
+                </div>
+                <div>
+                    <h5>Technical Standards:</h5>
+                    <label><input type="checkbox" class="admin-check"> All videos work properly</label><br>
+                    <label><input type="checkbox" class="admin-check"> Materials are accessible</label><br>
+                    <label><input type="checkbox" class="admin-check"> Navigation is intuitive</label><br>
+                    <label><input type="checkbox" class="admin-check"> No broken links</label>
+                </div>
+                <div>
+                    <h5>Compliance:</h5>
+                    <label><input type="checkbox" class="admin-check"> Appropriate content</label><br>
+                    <label><input type="checkbox" class="admin-check"> No copyright issues</label><br>
+                    <label><input type="checkbox" class="admin-check"> Meets platform standards</label><br>
+                    <label><input type="checkbox" class="admin-check"> Complete course structure</label>
+                </div>
+            </div>
+            <div style="margin-top: 1rem;">
+                <textarea id="adminFeedback" placeholder="Add notes or feedback for the instructor..." 
+                         style="width: 100%; height: 80px; padding: 0.5rem; border-radius: 4px; border: 1px solid #ddd;"></textarea>
+            </div>
+        `;
+        
+        courseHeader.parentNode.insertBefore(adminNotes, courseHeader.nextSibling);
+    }
+}
+
+// Admin action functions
+async function approveFromPreview() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const courseId = urlParams.get('id');
+    
+    if (!courseId) {
+        alert('Course ID not found');
+        return;
+    }
+    
+    const feedback = document.getElementById('adminFeedback')?.value || '';
+    
+    if (confirm('Approve and publish this course?')) {
+        try {
+            // You'll need to import Firebase functions here or call parent window
+            const response = await fetch('/api/admin/approve-course', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    courseId: courseId,
+                    feedback: feedback,
+                    adminNotes: getAdminChecklistData()
+                })
+            });
+            
+            if (response.ok) {
+                alert('Course approved successfully!');
+                window.close(); // Close preview window
+            } else {
+                alert('Failed to approve course');
+            }
+        } catch (error) {
+            console.error('Error approving course:', error);
+            
+            // Fallback: use parent window's Firebase connection
+            if (window.opener && window.opener.approveCourse) {
+                await window.opener.approveCourse(courseId, 'Course Title');
+                alert('Course approved successfully!');
+                window.close();
+            } else {
+                alert('Failed to approve course. Please return to admin panel.');
+            }
+        }
+    }
+}
+
+async function rejectFromPreview() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const courseId = urlParams.get('id');
+    
+    if (!courseId) {
+        alert('Course ID not found');
+        return;
+    }
+    
+    const feedback = document.getElementById('adminFeedback')?.value;
+    
+    if (!feedback || !feedback.trim()) {
+        alert('Please provide feedback before rejecting the course.');
+        document.getElementById('adminFeedback')?.focus();
+        return;
+    }
+    
+    if (confirm('Reject this course and send back for revision?')) {
+        try {
+            // Similar to approve, but for rejection
+            if (window.opener && window.opener.rejectCourse) {
+                // Pass the feedback to the parent window's reject function
+                const courseTitle = document.querySelector('h1, .course-title')?.textContent || 'Course';
+                await window.opener.updateCourseWithFeedback(courseId, feedback, getAdminChecklistData());
+                await window.opener.rejectCourse(courseId, courseTitle, feedback);
+                alert('Course rejected and feedback sent to instructor.');
+                window.close();
+            } else {
+                alert('Failed to reject course. Please return to admin panel.');
+            }
+        } catch (error) {
+            console.error('Error rejecting course:', error);
+            alert('Failed to reject course. Please try again.');
+        }
+    }
+}
+
+function returnToAdmin() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const returnUrl = urlParams.get('return');
+    
+    if (returnUrl === 'admin') {
+        // Try to focus the admin window or redirect
+        if (window.opener) {
+            window.opener.focus();
+            window.close();
+        } else {
+            window.location.href = 'admin.html#course-approvals';
+        }
+    } else {
+        window.close();
+    }
+}
+
+function getAdminChecklistData() {
+    const checkboxes = document.querySelectorAll('.admin-check');
+    const checkedItems = Array.from(checkboxes)
+        .filter(cb => cb.checked)
+        .map(cb => cb.parentNode.textContent.trim());
+    
+    return {
+        checkedItems: checkedItems,
+        totalItems: checkboxes.length,
+        completionRate: `${Math.round((checkedItems.length / checkboxes.length) * 100)}%`
+    };
+}
+
+// Make functions globally accessible
+window.approveFromPreview = approveFromPreview;
+window.rejectFromPreview = rejectFromPreview;
+window.returnToAdmin = returnToAdmin;
+
+// Initialize admin mode check when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    checkAdminMode();
+});
+
+    new CourseManagementApp();
+    
+</script>
+</body>
+</html>
+

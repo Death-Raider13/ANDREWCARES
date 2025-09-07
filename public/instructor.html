@@ -1,0 +1,1922 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Instructor's Dojo - Andrew Cares Village</title>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <style>
+        /* All your existing CSS goes here. It is correct. */
+        :root {
+            --background-color: #F4F2ED;
+            --text-primary: #333333;
+            --text-secondary: #555555;
+            --color-primary: #B38B00;
+            --color-secondary: #001F3F;
+            --card-bg: #FFFFFF;
+            --border-color: #EAEAEA;
+            --hover-bg: #F9F9F9;
+            --success-bg: #e8f5e9;
+            --success-text: #2e7d32;
+            --pending-bg: #fff3e0;
+            --pending-text: #ef6c00;
+            --draft-bg: #f5f5f5;
+            --draft-text: #616161;
+            --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.08 );
+        }
+        body { font-family: 'Montserrat', sans-serif; background-color: var(--background-color); color: var(--text-primary); }
+        .main-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; border-bottom: 1px solid var(--border-color); background-color: var(--card-bg); box-shadow: var(--shadow-light); position: sticky; top: 0; z-index: 100; }
+        .logo { font-family: 'Cinzel', serif; font-weight: 700; font-size: 1.5rem; color: var(--color-secondary); text-decoration: none; }
+        .user-profile-nav { display: flex; align-items: center; gap: 0.7rem; }
+        .user-avatar-nav { width: 40px; height: 40px; border-radius: 50%; }
+        .dashboard-container { max-width: 1400px; margin: 2rem auto; padding: 0 2rem; }
+        .dashboard-header h1 { font-family: 'Cinzel', serif; font-size: 3rem; color: var(--color-secondary); }
+        .dashboard-tabs { display: flex; border-bottom: 1px solid var(--border-color); margin-bottom: 2rem; }
+        .tab-link { padding: 1rem 1.5rem; cursor: pointer; font-weight: 500; border-bottom: 3px solid transparent; color: var(--text-secondary); text-decoration: none; }
+        .tab-link.active { color: var(--color-primary); border-bottom-color: var(--color-primary); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .widget { background-color: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-light); margin-bottom: 2rem; }
+        .widget-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .widget-title { font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--color-secondary); }
+        .action-btn { padding: 0.8rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; border: none; background-color: var(--color-primary); color: white; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.3s ease; }
+        .action-btn:hover { background-color: #9a7600; }
+        .table-container { overflow-x: auto; }
+        .course-table { width: 100%; border-collapse: collapse; }
+        .course-table th, .course-table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .status-badge { padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
+        .status-badge.published { background-color: var(--success-bg); color: var(--success-text); }
+        .status-badge.draft { background-color: var(--draft-bg); color: var(--draft-text); }
+        .table-actions { display: flex; gap: 1rem; }
+        .empty-state { text-align: center; padding: 3rem; color: var(--text-secondary); }
+        .spinner { width: 40px; height: 40px; border: 4px solid var(--border-color); border-top: 4px solid var(--color-primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .form-group { display: flex; flex-direction: column; margin-bottom: 1rem; }
+        .form-group label { margin-bottom: 0.5rem; font-weight: 600; }
+        .form-group input, .form-group select, .form-group textarea { padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; }
+
+        /* Modal Styles */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000; display: none; align-items: center; justify-content: center; }
+        .modal { background-color: var(--card-bg); border-radius: 12px; width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
+        .modal-header { padding: 1.5rem 2rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .modal-title { font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--color-secondary); margin: 0; }
+        .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-secondary); }
+        .modal-body { padding: 2rem; }
+        .form-section { margin-bottom: 2rem; }
+        .section-title { font-family: 'Cinzel', serif; font-size: 1.2rem; color: var(--color-secondary); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--color-primary); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-row.full { grid-template-columns: 1fr; }
+        .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+        .skill-tag { background-color: var(--color-primary); color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem; display: flex; align-items: center; gap: 0.3rem; }
+        .skill-tag .remove { cursor: pointer; font-weight: bold; }
+        .add-skill-container { display: flex; gap: 0.5rem; align-items: flex-end; }
+        .add-skill-btn { background-color: var(--color-secondary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
+        .course-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .stat-card { text-align: center; padding: 1rem; background-color: var(--hover-bg); border-radius: 8px; }
+        .stat-number { font-size: 1.5rem; font-weight: bold; color: var(--color-primary); }
+        .stat-label { font-size: 0.9rem; color: var(--text-secondary); }
+        .modal-footer { padding: 1.5rem 2rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 1rem; }
+        .btn-secondary { background-color: var(--border-color); color: var(--text-primary); border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 500; }
+        .difficulty-selector { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+        .difficulty-option { padding: 0.5rem 1rem; border: 2px solid var(--border-color); border-radius: 20px; cursor: pointer; background-color: white; transition: all 0.3s ease; }
+        .difficulty-option.selected { border-color: var(--color-primary); background-color: var(--color-primary); color: white; }
+        .completion-badge { background-color: var(--success-bg); color: var(--success-text); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 0.3rem; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-header {
+                padding: 1rem;
+            }
+            
+            .dashboard-container {
+                padding: 0 1rem;
+                margin: 1rem auto;
+            }
+            
+            .dashboard-header h1 {
+                font-size: 2rem;
+            }
+            
+            .dashboard-tabs {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            
+            .tab-link {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .widget {
+                padding: 1.5rem;
+            }
+            
+            .widget-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .course-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .table-container {
+                overflow-x: auto;
+            }
+            
+            .course-table {
+                min-width: 600px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal {
+                width: 95%;
+                margin: 1rem;
+            }
+            
+            .modal-header,
+            .modal-body,
+            .modal-footer {
+                padding: 1rem;
+            }
+            
+            .course-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header {
+                padding: 0.75rem;
+            }
+            
+            .dashboard-container {
+                padding: 0 0.5rem;
+            }
+            
+            .dashboard-header h1 {
+                font-size: 1.75rem;
+            }
+            
+            .widget {
+                padding: 1rem;
+            }
+            
+            .widget-title {
+                font-size: 1.25rem;
+            }
+            
+            .action-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .course-table th,
+            .course-table td {
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+            
+            .table-actions {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .skill-tags {
+                gap: 0.25rem;
+            }
+            
+            .skill-tag {
+                font-size: 0.75rem;
+                padding: 0.25rem 0.6rem;
+            }
+            
+            .course-stats {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+            
+            .difficulty-selector {
+                flex-wrap: wrap;
+            }
+            
+            .modal-footer {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .modal-footer button {
+                width: 100%;
+            }
+        }
+
+        /* Touch device improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .action-btn:hover,
+            .tab-link:hover {
+                transform: none;
+            }
+            
+            .course-table th,
+            .course-table td {
+                padding: 0.75rem;
+            }
+        }
+
+        /* Accessibility improvements */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        /* Enhanced Course Cards */
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.course-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: var(--shadow-light);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.course-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-medium);
+    border-color: var(--color-primary);
+}
+
+.course-card-header {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, var(--color-secondary), #003366);
+    color: white;
+    position: relative;
+}
+
+.course-status-indicator {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--success-text);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+.course-status-indicator.draft { background: var(--draft-text); }
+.course-status-indicator.pending { background: var(--pending-text); }
+.course-status-indicator.needs_revision { background: var(--danger-text); }
+
+.course-card-body {
+    padding: 1.5rem;
+}
+
+.course-meta {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.course-meta .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.course-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: var(--hover-bg);
+    border-radius: 8px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+}
+
+.course-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.btn {
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+}
+
+.btn-primary {
+    background: var(--color-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #9a7600;
+    transform: translateY(-1px);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+}
+
+.btn-outline:hover {
+    background: var(--color-primary);
+    color: white;
+}
+
+.btn-danger {
+    background: var(--danger-text);
+    color: white;
+}
+
+.btn-success {
+    background: var(--success-text);
+    color: white;
+}
+
+/* Progress indicators */
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 0.5rem 0;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), #d4af00);
+    transition: width 0.3s ease;
+}
+
+/* Enhanced modals */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal {
+    background: var(--card-bg);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-heavy);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Toast notifications */
+.toast {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    box-shadow: var(--shadow-medium);
+    border-left: 4px solid var(--success-text);
+    z-index: 10000;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s ease;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.toast.error {
+    border-left-color: var(--danger-text);
+}
+
+.toast.warning {
+    border-left-color: var(--warning-text);
+}
+/* Add these to your existing CSS */
+.btn-small {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    text-decoration: none;
+    background: var(--color-primary);
+    color: white;
+    margin-right: 0.5rem;
+}
+
+.table-actions {
+    white-space: nowrap;
+}
+
+.filter-select {
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    margin-right: 1rem;
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.filter-controls {
+    display: flex;
+    align-items: center;
+}
+
+.view-toggle {
+    margin: 1rem 0;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.toggle-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    background: white;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.toggle-btn.active {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+/* Course Grid Layout */
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.course-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: var(--shadow-light);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.course-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-medium);
+    border-color: var(--color-primary);
+}
+
+.course-card-header {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, var(--color-secondary), #003366);
+    color: white;
+    position: relative;
+}
+
+.course-status-indicator {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--success-text);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+.course-status-indicator.draft { background: var(--draft-text); }
+.course-status-indicator.pending { background: var(--pending-text); }
+.course-status-indicator.needs_revision { background: var(--danger-text); }
+.course-status-indicator.published { background: var(--success-text); }
+
+.course-card-body {
+    padding: 1.5rem;
+}
+
+.course-meta {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+}
+
+.course-meta .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.course-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: var(--hover-bg);
+    border-radius: 8px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+}
+
+.course-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 0.5rem 0;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), #d4af00);
+    transition: width 0.3s ease;
+}
+
+.empty-state {
+    padding: 4rem 2rem;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.empty-state i {
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    margin: 1rem 0 0.5rem 0;
+    color: var(--text-primary);
+}
+
+.empty-state p {
+    margin-bottom: 2rem;
+}
+.btn-danger {
+    background: var(--danger-text);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #b71c1c;
+    transform: translateY(-1px);
+}
+
+/* Different stats layout for published vs unpublished */
+.course-stats .stat-item:last-child .stat-number {
+    font-size: 1rem;
+    font-weight: normal;
+}
+ 
+        .profile-dropdown { 
+            display: none; 
+            position: absolute; 
+            top: 120%; 
+            right: 0; 
+            background-color: var(--card-bg); 
+            border-radius: 8px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15); 
+            width: 220px; 
+            z-index: 1001; 
+            border: 1px solid var(--border-color); 
+        }
+        
+        .user-profile:hover .profile-dropdown { display: block; }
+        
+        .profile-dropdown a, .profile-dropdown button { 
+            display: flex; 
+            align-items: center; 
+            gap: 0.8rem; 
+            width: 100%; 
+            padding: 0.8rem 1.2rem; 
+            background: none; 
+            border: none; 
+            text-align: left; 
+            cursor: pointer; 
+            color: var(--text-primary); 
+        }
+        
+        .profile-dropdown a:hover, .profile-dropdown button:hover { 
+            background-color: var(--hover-bg); 
+        }
+        
+        .profile-dropdown .logout-button { color: var(--danger-color); }
+        
+        .profile-dropdown i { 
+            width: 20px; 
+            text-align: center; 
+            color: var(--text-secondary); 
+        }
+          .user-profile { 
+            position: relative; 
+            display: flex; 
+            align-items: center; 
+            gap: 0.7rem; 
+            cursor: pointer; 
+        }
+    </style>
+    </head>
+    <body>
+        <header class="main-header">
+            <a href="home.html" class="logo">Andrew Cares Village</a>
+            <div class="header-actions">
+                <div id="userProfileNav" class="user-profile-nav">
+                    <img id="userAvatarNav" src alt="User Avatar"
+                        class="user-avatar-nav">
+                    <span id="userNameNav"
+                        class="user-name-nav">Loading...</span>
+                </div>
+                   </div>
+                 <div class="profile-dropdown" id="profileDropdown">
+                            <a id="myProfileLink" href="profile.html"><i
+                                    class="fas fa-user"></i> My Profile</a>
+                            <a href="messages.html"><i
+                                    class="fas fa-comments"></i> Messages</a>
+                            <button id="logoutButton" class="logout-button"><i
+                                    class="fas fa-sign-out-alt"></i>
+                                Logout</button>
+                     
+            </div>
+        </header>
+
+        <main class="dashboard-container">
+            <div class="dashboard-header">
+                <h1>Instructor's Dojo</h1>
+                <p id="welcomeMessage">Welcome, sensei. Your space to create,
+                    manage, and inspire.</p>
+            </div>
+
+            <nav class="dashboard-tabs">
+                <a class="tab-link active" data-tab="curriculum">My
+                    Curriculum</a>
+            </nav>
+
+            <!-- Curriculum Tab -->
+            <div id="tab-curriculum" class="tab-content active">
+                <div class="widget">
+                    <div class="widget-header">
+                        <h2 class="widget-title">Your Courses</h2>
+                        <div class="header-controls">
+                            <div class="filter-controls">
+                                <select id="statusFilter" class="filter-select"
+                                    title="Select course status">
+                                    <option value>All Status</option>
+                                    <option value="draft">Draft</option>
+                                    <option value="pending">Pending
+                                        Review</option>
+                                    <option value="published">Published</option>
+                                    <option value="needs_revision">Needs
+                                        Revision</option>
+                                </select>
+                                <select id="disciplineFilter"
+                                    class="filter-select"
+                                    title="Select course discipline">
+                                    <option value>All Disciplines</option>
+                                    <option value="Trading">
+                                        Forex Trading</option>
+                                    <option
+                                        value="Technology">Fitness</option>
+                                    <option value="Business">Martial Arts</option>
+                                </select>
+                            </div>
+                            <button class="action-btn" id="createNewCourseBtn">
+                                <i class="fas fa-plus"></i> Create New Course
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="view-toggle">
+                        <button class="toggle-btn active" data-view="grid">
+                            <i class="fas fa-th-large"></i> Grid
+                        </button>
+                        <button class="toggle-btn" data-view="list">
+                            <i class="fas fa-list"></i> List
+                        </button>
+                    </div>
+
+                    <div id="coursesContainer" class="course-grid">
+                        <!-- Courses will be rendered here -->
+                    </div>
+
+                    <div id="coursesTable" class="table-container"
+                        style="display: none;">
+                        <table class="course-table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Discipline</th>
+                                    <th>Level</th>
+                                    <th>Status</th>
+                                    <th>Students</th>
+                                    <th>Progress</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="courseTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Create Course Modal -->
+        <div id="createCourseModal" class="modal-overlay">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2 class="modal-title">Create New Course</h2>
+                    <button class="close-btn"
+                        id="closeCourseModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="createCourseForm">
+                        <!-- Basic Course Information -->
+                        <div class="form-section">
+                            <h3 class="section-title">Course Overview</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="courseTitle">Course Title
+                                        *</label>
+                                    <input type="text" id="courseTitle"
+                                        placeholder="e.g., Complete Beginner to Pro Trader"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="courseDiscipline">Discipline
+                                        *</label>
+                                    <select id="courseDiscipline" required>
+                                        <option value>Select Discipline</option>
+                                        <option value="Trading">Forex
+                                            Trading</option>
+                                        <option
+                                            value="Technology">Fitness</option>
+                                        <option
+                                            value="Business">Martial Arts</option>
+                                       
+                                      
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="courseLevel">Course Level
+                                        *</label>
+                                    <div class="difficulty-selector">
+                                        <div class="difficulty-option"
+                                            data-level="Beginner">Beginner</div>
+                                        <div class="difficulty-option"
+                                            data-level="Intermediate">Intermediate</div>
+                                        <div class="difficulty-option"
+                                            data-level="Advanced">Advanced</div>
+                                    </div>
+                                    <input type="hidden" id="courseLevel"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="courseDuration">Duration
+                                        *</label>
+                                    <select id="courseDuration" required>
+                                        <option value>Select Duration</option>
+                                        <option value="1-3 months">1-3
+                                            months</option>
+                                        <option value="3-6 months">3-6
+                                            months</option>
+                                        <option value="6-12 months">6-12
+                                            months</option>
+                                        <option value="12+ months">12+
+                                            months</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row full">
+                                <div class="form-group">
+                                    <label for="courseDescription">Course
+                                        Description *</label>
+                                    <textarea id="courseDescription" rows="4"
+                                        placeholder="Comprehensive pathway taking you from zero knowledge to advanced proficiency with structured..."
+                                        required></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Course Structure -->
+                        <div class="form-section">
+                            <h3 class="section-title">Course Structure</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="totalModules">Number of
+                                        Modules</label>
+                                    <input type="number" id="totalModules"
+                                        min="1" max="50" value="12">
+                                </div>
+                                <div class="form-group">
+                                    <label for="estimatedStudents">Expected
+                                        Students</label>
+                                    <input type="number" id="estimatedStudents"
+                                        min="1" placeholder="e.g., 100">
+                                </div>
+                            </div>
+                            <div class="form-row full">
+                                <div class="form-group">
+                                    <label for="courseRating">Initial Rating
+                                        (1-5)</label>
+                                    <input type="number" id="courseRating"
+                                        min="1" max="5" step="0.1" value="4.5">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Skills and Learning Outcomes -->
+                        <div class="form-section">
+                            <h3 class="section-title">Skills Students Will
+                                Learn</h3>
+                            <div class="add-skill-container">
+                                <div class="form-group"
+                                    style="flex: 1; margin-bottom: 0;">
+                                    <input type="text" id="newSkill"
+                                        placeholder="Add a skill (e.g., Market Analysis)">
+                                </div>
+                                <button type="button" class="add-skill-btn"
+                                    id="addSkillBtn">Add Skill</button>
+                            </div>
+                            <div class="skill-tags" id="skillTags">
+                                <div class="skill-tag">Market Analysis <span
+                                        class="remove">&times;</span></div>
+                                <div class="skill-tag">Risk Management <span
+                                        class="remove">&times;</span></div>
+                                <div class="skill-tag">Technical Analysis <span
+                                        class="remove">&times;</span></div>
+                                <div class="skill-tag">Trading Psychology <span
+                                        class="remove">&times;</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Course Preview Stats -->
+                        <div class="form-section">
+                            <h3 class="section-title">Course Preview</h3>
+                            <div class="course-stats">
+                                <div class="stat-card">
+                                    <div class="stat-number"
+                                        id="previewModules">12</div>
+                                    <div class="stat-label">Modules</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number"
+                                        id="previewStudents">0</div>
+                                    <div class="stat-label">Students</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number"
+                                        id="previewRating">4.5</div>
+                                    <div class="stat-label">Rating</div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 1rem;">
+                                <span class="completion-badge">
+                                    <i class="fas fa-certificate"></i>
+                                    Certificate upon completion
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Additional Settings -->
+                        <div class="form-section">
+                            <h3 class="section-title">Additional Settings</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="courseLanguage">Language</label>
+                                    <select id="courseLanguage">
+                                        <option value="English">English</option>
+                                        <option value="Spanish">Spanish</option>
+                                        <option value="French">French</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="courseStatus">Initial
+                                        Status</label>
+                                    <select id="courseStatus">
+                                        <option value="draft">Draft</option>
+                                        <option
+                                            value="published">Published</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row full">
+                                <div class="form-group">
+                                    <label
+                                        for="coursePrerequisites">Prerequisites</label>
+                                    <textarea id="coursePrerequisites" rows="2"
+                                        placeholder="Any requirements or prior knowledge needed..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary"
+                        id="cancelCourse">Cancel</button>
+                    <button type="submit" form="createCourseForm"
+                        class="action-btn">
+                        <i class="fas fa-save"></i> Create Course
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, query, where, addDoc, serverTimestamp, onSnapshot, orderBy, deleteDoc, setDoc, updateDoc, writeBatch, getDocs} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
+            authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
+            projectId: "andrew-cares-village-f4cb6",
+            storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
+            messagingSenderId: "255087116955",
+            appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
+        };
+
+        const app = initializeApp(firebaseConfig );
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+        let userData = null;
+        let unsubscribers = [];
+        let selectedSkills = ['Market Analysis', 'Risk Management', 'Technical Analysis', 'Trading Psychology'];
+
+        // --- AUTHENTICATION ---
+      // Enhanced authentication with better error handling
+onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+        console.log("No user found, redirecting to login");
+        window.location.href = 'index.html';
+        return;
+    }
+    
+    currentUser = user;
+    console.log("User authenticated:", user.uid);
+
+    try {
+        const userDocSnap = await getDoc(doc(db, "users", user.uid));
+        
+        if (!userDocSnap.exists()) {
+            console.error("User document not found");
+            // Create a basic user document if it doesn't exist
+            const userData = {
+                name: user.displayName || user.email || "Instructor",
+                email: user.email,
+                role: "instructor", // Default to instructor
+                avatarUrl: user.photoURL || null,
+                createdAt: serverTimestamp()
+            };
+            
+            // Try to create the user document
+            await setDoc(doc(db, "users", user.uid), userData);
+            console.log("Created new instructor profile");
+            
+            // Set userData for the app
+            userData.uid = user.uid;
+            this.userData = userData;
+        } else {
+            const data = userDocSnap.data();
+            console.log("User data loaded:", data);
+            
+            // If role is missing, set as instructor
+            if (!data.role) {
+                await updateDoc(doc(db, "users", user.uid), { role: "instructor" });
+                data.role = "instructor";
+            }
+            
+            // Allow both instructor and admin roles
+            if (data.role !== 'instructor' && data.role !== 'admin') {
+                throw new Error(`Invalid role: ${data.role}. Access denied.`);
+            }
+            
+            userData = { uid: user.uid, ...data };
+            
+        }
+        
+        console.log("Starting application with user:", userData);
+        startApplication();
+        
+    } catch (error) {
+        console.error("Authentication Error:", error);
+        
+        // More user-friendly error handling
+        const errorMessage = error.message || "Authentication failed";
+        
+        // Show error in UI instead of alert
+        document.body.innerHTML = `
+            <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background: var(--background-color);">
+                <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); max-width: 500px; text-align: center;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #f57c00; margin-bottom: 1rem;"></i>
+                    <h2>Authentication Error</h2>
+                    <p style="margin: 1rem 0; color: #666;">${errorMessage}</p>
+                    <div style="margin-top: 2rem;">
+                        <button onclick="window.location.href='index.html'" style="padding: 0.8rem 2rem; background: var(--color-primary); color: white; border: none; border-radius: 8px; cursor: pointer; margin-right: 1rem;">
+                            Return to Login
+                        </button>
+                        <button onclick="location.reload()" style="padding: 0.8rem 2rem; background: #666; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                            Retry
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+});
+        // --- APPLICATION START ---
+      function startApplication() {
+        
+    console.log("Starting application...");
+    
+    try {
+        
+        updateHeaderUI();
+        
+        setupModalListeners();
+        
+        setupEventListeners();
+        
+        
+        // Start with curriculum tab
+        switchTab('curriculum');
+        
+        console.log("Application started successfully");
+        
+    } catch (error) {
+        console.error("Error starting application:", error);
+        showToast("Application failed to start properly. Please refresh the page.", "error");
+    }
+}
+
+function updateHeaderUI() {
+    console.log("Updating header UI with:", userData);
+    
+    const userNameElement = document.getElementById('userNameNav');
+    const userAvatarElement = document.getElementById('userAvatarNav');
+    const welcomeElement = document.getElementById('welcomeMessage');
+    
+    if (userNameElement) {
+        userNameElement.textContent = userData.name || 'Instructor';
+    }
+    
+    if (userAvatarElement) {
+        userAvatarElement.src = userData.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name || 'I')}`;
+    }
+    
+    if (welcomeElement) {
+        const firstName = (userData.name || '').split(' ')[0] || 'Instructor';
+        welcomeElement.textContent = `Welcome, Sensei ${firstName}.`;
+    }
+    
+}
+ // --- Event Listeners & UI Setup ---
+            function setupHeaderEventListeners() {
+                const userProfile = document.getElementById('userProfile');
+                const profileDropdown = document.getElementById('profileDropdown');
+                const logoutButton = document.getElementById('logoutButton');
+                const myProfileLink = document.getElementById('myProfileLink');
+
+                userProfile.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    profileDropdown.style.display = profileDropdown.style.display === 'block' ? 'none' : 'block';
+                });
+                window.addEventListener('click', () => { profileDropdown.style.display = 'none'; });
+                logoutButton.addEventListener('click', () => {
+                    signOut(auth).then(() => { window.location.href = 'index.html'; });
+                });
+                myProfileLink.href = `profile.html?id=${currentUser.uid}`;
+            }
+
+        // --- EVENT LISTENERS ---
+       function setupEventListeners() {
+    console.log("Setting up event listeners");
+    
+    // Dashboard tabs with null check
+    const dashboardTabs = document.querySelector('.dashboard-tabs');
+    if (dashboardTabs) {
+        dashboardTabs.addEventListener('click', (e) => {
+            if (e.target.matches('.tab-link')) {
+                e.preventDefault();
+                switchTab(e.target.dataset.tab);
+            }
+        });
+    }
+    
+    // Create course button
+    const createBtn = document.getElementById('createNewCourseBtn');
+    if (createBtn) {
+        createBtn.addEventListener('click', () => {
+            const modal = document.getElementById('createCourseModal');
+            if (modal) {
+                modal.style.display = 'flex';
+            }
+        });
+    }
+
+    // Setup view toggle and filters
+    setupViewToggle();
+    setupFilters();
+    
+    console.log("Event listeners setup complete");
+}
+
+        function setupModalListeners() {
+            // Modal close events
+            document.getElementById('closeCourseModal').addEventListener('click', closeModal);
+            document.getElementById('cancelCourse').addEventListener('click', closeModal);
+            document.getElementById('createCourseModal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) closeModal();
+            });
+
+            // Difficulty selector
+            document.querySelectorAll('.difficulty-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.difficulty-option').forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    document.getElementById('courseLevel').value = option.dataset.level;
+                });
+            });
+
+            // Skill management
+            document.getElementById('addSkillBtn').addEventListener('click', addSkill);
+            document.getElementById('newSkill').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addSkill();
+                }
+            });
+
+            // Preview updates
+            document.getElementById('totalModules').addEventListener('input', updatePreview);
+            document.getElementById('estimatedStudents').addEventListener('input', updatePreview);
+            document.getElementById('courseRating').addEventListener('input', updatePreview);
+           
+
+            // Form submission
+            document.getElementById('createCourseForm').addEventListener('submit', handleCourseCreation);
+
+            updateSkillTags();
+        }
+
+        function closeModal() {
+            document.getElementById('createCourseModal').style.display = 'none';
+        }
+
+        function addSkill() {
+            const skillInput = document.getElementById('newSkill');
+            const skill = skillInput.value.trim();
+            if (skill && !selectedSkills.includes(skill)) {
+                selectedSkills.push(skill);
+                skillInput.value = '';
+                updateSkillTags();
+            }
+        }
+
+        function removeSkill(skill) {
+            selectedSkills = selectedSkills.filter(s => s !== skill);
+            updateSkillTags();
+        }
+
+        function updateSkillTags() {
+            const container = document.getElementById('skillTags');
+            container.innerHTML = selectedSkills.map(skill => 
+                `<div class="skill-tag">${skill} <span class="remove" onclick="removeSkill('${skill}')">&times;</span></div>`
+            ).join('');
+        }
+
+        function updatePreview() {
+            document.getElementById('previewModules').textContent = document.getElementById('totalModules').value || '0';
+            document.getElementById('previewStudents').textContent = document.getElementById('estimatedStudents').value || '0';
+            document.getElementById('previewRating').textContent = document.getElementById('courseRating').value || '0';
+           
+        }
+
+        async function handleCourseCreation(e) {
+    e.preventDefault();
+    
+    const courseData = {
+        title: document.getElementById('courseTitle').value,
+        discipline: document.getElementById('courseDiscipline').value,
+        level: document.getElementById('courseLevel').value,
+        duration: document.getElementById('courseDuration').value,
+        description: document.getElementById('courseDescription').value,
+        totalModules: parseInt(document.getElementById('totalModules').value) || 0,
+        estimatedStudents: parseInt(document.getElementById('estimatedStudents').value) || 0,
+        price: 0, // Always free
+        isFree: true, // Explicit free flag
+        accessLevel: 'public', // Add this to ensure public access
+        rating: parseFloat(document.getElementById('courseRating').value) || 0,
+        skills: selectedSkills,
+        language: document.getElementById('courseLanguage').value,
+        status: document.getElementById('courseStatus').value,
+        prerequisites: document.getElementById('coursePrerequisites').value,
+        instructorId: currentUser.uid,
+        instructorName: userData.name,
+        instructorAvatar: userData.avatarUrl, // Add instructor avatar
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(), // Add update timestamp
+        enrolledStudents: 0,
+        completedStudents: 0,
+        isApproved: document.getElementById('courseStatus').value === 'published' // Auto-approve if published
+    };
+
+    try {
+        await addDoc(collection(db, "courses"), courseData);
+        showToast('Course created successfully!', 'success');
+        closeModal();
+        document.getElementById('createCourseForm').reset();
+        selectedSkills = ['Market Analysis', 'Risk Management', 'Technical Analysis', 'Trading Psychology'];
+        updateSkillTags();
+        updatePreview();
+    } catch (error) {
+        console.error('Error creating course:', error);
+        showToast('Failed to create course. Please try again.', 'error');
+    }
+}
+        // Make removeSkill globally accessible
+        window.removeSkill = removeSkill;
+
+        function switchTab(tabId) {
+            // Cleanup previous tab's listeners
+            unsubscribers.forEach(unsub => unsub());
+            unsubscribers = [];
+
+            document.querySelectorAll('.tab-link').forEach(tab => tab.classList.toggle('active', tab.dataset.tab === tabId));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.toggle('active', content.id === `tab-${tabId}`));
+
+            // Load content for the new tab
+            if (tabId === 'curriculum') loadCourses();
+        }
+
+      
+function loadCourses() {
+    console.log("Loading courses for user:", currentUser.uid);
+    
+    const coursesContainer = document.getElementById('coursesContainer');
+    const courseTableBody = document.getElementById('courseTableBody');
+    
+    if (coursesContainer) {
+        showLoading(coursesContainer, false, 'Loading your courses...');
+    }
+    
+    // Remove the existing query and replace with this:
+    const q = query(
+        collection(db, "courses"), 
+        where("instructorId", "==", currentUser.uid), 
+        orderBy("createdAt", "desc")
+    );
+    
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+        console.log("Courses snapshot received:", snapshot.size, "courses");
+        
+        const courses = snapshot.docs.map(doc => {
+            const data = doc.data();
+            console.log("Course data:", data);
+            return {
+                id: doc.id,
+                ...data
+            };
+        });
+
+        renderCoursesSync(courses);
+        if (courseTableBody) {
+            renderCourseTable(courses);
+        }
+    }, (error) => {
+        console.error("Error loading courses:", error);
+        showToast("Failed to load courses. Please refresh the page.", "error");
+    });
+    
+    unsubscribers.push(unsubscribe);
+}
+function renderCoursesSync(courses) {
+    const container = document.getElementById('coursesContainer');
+    
+    if (!container) {
+        console.error("coursesContainer not found");
+        return;
+    }
+    
+    if (courses.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                <i class="fas fa-graduation-cap" style="font-size: 4rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
+                <h3>No courses yet</h3>
+                <p>Create your first course to start sharing knowledge with students.</p>
+                <button class="action-btn" onclick="document.getElementById('createNewCourseBtn').click()">
+                    <i class="fas fa-plus"></i> Create Your First Course
+                </button>
+            </div>
+        `;
+        return;
+    }
+
+    // Create course cards synchronously
+    const courseCards = courses.map(course => createCourseCardSync(course));
+    container.innerHTML = courseCards.join('');
+    
+    console.log("Rendered", courses.length, "course cards");
+}
+// Add renderCourseTable function
+function renderCourseTable(courses) {
+    const tableBody = document.getElementById('courseTableBody');
+    if (!tableBody) return;
+
+    if (courses.length === 0) {
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="7" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                    No courses found
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    tableBody.innerHTML = courses.map(course => {
+        const statusInfo = getStatusInfo(course.status);
+        const completionPercent = calculateCourseCompletion(course);
+        
+        return `
+            <tr>
+                <td>${escapeHtml(course.title)}</td>
+                <td>${course.discipline || 'General'}</td>
+                <td>${course.level || 'Beginner'}</td>
+                <td>
+                    <span class="status-badge ${course.status}">
+                        <i class="fas fa-${statusInfo.icon}"></i>
+                        ${statusInfo.text}
+                    </span>
+                </td>
+                <td>${course.enrolledStudents || 0}</td>
+                <td>
+                    <div class="progress-bar" style="width: 100px;">
+                        <div class="progress-fill" style="width: ${completionPercent}%"></div>
+                    </div>
+                    <small>${completionPercent}%</small>
+                </td>
+                <td class="table-actions">
+                    <a href="course-editor.html?id=${course.id}" class="btn-small">Edit</a>
+                    ${course.status === 'published' ? `<a href="course-management.html?id=${course.id}" class="btn-small">View</a>` : ''}
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+function createCourseStatsSection(course) {
+    if (course.status === 'published') {
+        // For published courses, show real metrics
+        return `
+            <div class="course-stats">
+                <div class="stat-item">
+                    <div class="stat-number">${course.enrolledStudents || 0}</div>
+                    <div class="stat-label">Students</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">${course.totalReviews || 0}</div>
+                    <div class="stat-label">Reviews</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">${course.totalReviews > 0 ? parseFloat(course.averageRating || 0).toFixed(1) : 'N/A'}</div>
+                    <div class="stat-label">Rating</div>
+                </div>
+            </div>
+        `;
+    } else {
+        // For unpublished courses, show completion metrics
+        const completionPercent = calculateCourseCompletion(course);
+        return `
+            <div class="course-stats">
+                <div class="stat-item">
+                    <div class="stat-number">${course.totalModules || 0}</div>
+                    <div class="stat-label">Modules</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">${completionPercent}%</div>
+                    <div class="stat-label">Complete</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">${course.status === 'draft' ? 'Draft' : 'Review'}</div>
+                    <div class="stat-label">Status</div>
+                </div>
+            </div>
+        `;
+    }
+}
+
+// Updated createCourseCardSync function
+function createCourseCardSync(course) {
+    const statusInfo = getStatusInfo(course.status || 'draft');
+    const completionPercent = calculateCourseCompletion(course);
+    
+    return `
+        <div class="course-card" data-course-id="${course.id}">
+            <div class="course-card-header">
+                <div class="course-status-indicator ${course.status || 'draft'}"></div>
+                <h3 style="margin: 0 2rem 0.5rem 0; font-size: 1.2rem;">${escapeHtml(course.title || 'Untitled Course')}</h3>
+                <div class="course-meta" style="color: rgba(255,255,255,0.8); font-size: 0.85rem;">
+                    <div class="meta-item">
+                        <i class="fas fa-tag"></i>
+                        <span>${course.discipline || 'General'}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-signal"></i>
+                        <span>${course.level || 'Beginner'}</span>
+                    </div>
+                    ${course.createdAt ? `<div class="meta-item">
+                        <i class="fas fa-calendar"></i>
+                        <span>${formatDate(course.createdAt)}</span>
+                    </div>` : ''}
+                </div>
+            </div>
+
+            <div class="course-card-body">
+                <p style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.4;">
+                    ${course.description ? escapeHtml(course.description.substring(0, 120)) + '...' : 'No description available'}
+                </p>
+
+                ${createCourseStatsSection(course)}
+
+                ${course.status !== 'published' ? `
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${completionPercent}%"></div>
+                </div>
+                ` : ''}
+
+                <div style="margin: 1rem 0;">
+                    <span class="status-badge ${course.status || 'draft'}" style="font-size: 0.75rem; padding: 0.3rem 0.8rem;">
+                        <i class="fas fa-${statusInfo.icon}"></i>
+                        ${statusInfo.text}
+                    </span>
+                </div>
+
+                <div class="course-actions">
+                    ${createCourseActions(course, completionPercent)}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+
+
+
+// Fix createCourseCard to be async
+async function createCourseCard(course) {
+    const statusInfo = getStatusInfo(course.status);
+    const completionPercent = calculateCourseCompletion(course);
+    
+    return `
+        <div class="course-card" data-course-id="${course.id}">
+            <div class="course-card-header">
+                <div class="course-status-indicator ${course.status}"></div>
+                <h3 style="margin: 0 2rem 0.5rem 0; font-size: 1.2rem;">${escapeHtml(course.title)}</h3>
+                <div class="course-meta" style="color: rgba(255,255,255,0.8); font-size: 0.85rem;">
+                    <div class="meta-item">
+                        <i class="fas fa-tag"></i>
+                        <span>${course.discipline || 'General'}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-signal"></i>
+                        <span>${course.level || 'Beginner'}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card-body">
+                <p style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.4;">
+                    ${course.description ? escapeHtml(course.description.substring(0, 120)) + '...' : 'No description available'}
+                </p>
+
+                <div class="course-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">${course.enrolledStudents || 0}</div>
+                        <div class="stat-label">Students</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">${parseFloat(course.rating || 0).toFixed(1)}</div>
+                        <div class="stat-label">Rating</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">${completionPercent}%</div>
+                        <div class="stat-label">Complete</div>
+                    </div>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${completionPercent}%"></div>
+                </div>
+
+                <div style="margin: 1rem 0;">
+                    <span class="status-badge ${course.status}" style="font-size: 0.75rem; padding: 0.3rem 0.8rem;">
+                        <i class="fas fa-${statusInfo.icon}"></i>
+                        ${statusInfo.text}
+                    </span>
+                </div>
+
+                <div class="course-actions">
+                    ${createCourseActions(course, completionPercent)}
+                </div>
+            </div>
+        </div>
+    `;
+}
+// Updated course actions with delete button
+function createCourseActions(course, completionPercent) {
+    let actions = `
+        <a href="course-editor.html?id=${course.id}" class="btn btn-primary">
+            <i class="fas fa-edit"></i> Edit
+        </a>
+    `;
+
+    // Only show analytics for published courses
+    if (course.status === 'published') {
+        actions += `
+            <a href="course-management.html?id=${course.id}" class="btn btn-outline">
+                <i class="fas fa-chart-bar"></i> Analytics
+            </a>
+        `;
+    }
+
+    // Submit for review button (only for drafts with sufficient completion)
+    if (course.status === 'draft' && completionPercent >= 60) {
+        actions += `
+            <button class="btn btn-success" onclick="submitForReview('${course.id}')">
+                <i class="fas fa-paper-plane"></i> Submit
+            </button>
+        `;
+    }
+
+    // View feedback button for courses needing revision
+    if (course.status === 'needs_revision') {
+        actions += `
+            <button class="btn btn-warning" onclick="viewFeedback('${course.id}')">
+                <i class="fas fa-exclamation-triangle"></i> Feedback
+            </button>
+        `;
+    }
+
+    // Delete button (only for non-published courses)
+    if (course.status !== 'published') {
+        actions += `
+            <button class="btn btn-danger" onclick="deleteCourse('${course.id}', '${escapeHtml(course.title)}')">
+                <i class="fas fa-trash"></i> Delete
+            </button>
+        `;
+    }
+
+    return actions;
+}
+
+// Add HTML escaping function
+function escapeHtml(text) {
+    if (!text) return '';
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+}
+
+function getStatusInfo(status) {
+    const statusMap = {
+        'draft': { text: 'Draft', icon: 'edit', color: 'var(--draft-text)' },
+        'pending': { text: 'Under Review', icon: 'clock', color: 'var(--pending-text)' },
+        'published': { text: 'Published', icon: 'check-circle', color: 'var(--success-text)' },
+        'needs_revision': { text: 'Needs Revision', icon: 'exclamation-triangle', color: 'var(--danger-text)' }
+    };
+    return statusMap[status] || statusMap['draft'];
+}
+async function checkLessonsCompletion(courseId) {
+    try {
+        const lessonsQuery = query(
+            collection(db, "courses", courseId, "lessons"), 
+            where("type", "==", "lesson")
+        );
+        const lessonsSnapshot = await getDocs(lessonsQuery);
+        
+        if (lessonsSnapshot.empty) return false;
+        
+        let completedLessons = 0;
+        lessonsSnapshot.forEach(doc => {
+            const lesson = doc.data();
+            if (lesson.contentBlocks && lesson.contentBlocks.length > 0) {
+                completedLessons++;
+            }
+        });
+        
+        return completedLessons > 0;
+    } catch (error) {
+        console.error("Error checking lessons completion:", error);
+        return false;
+    }
+}
+function calculateCourseCompletion(course) {
+    let completionScore = 0;
+    const requirements = [
+        { field: 'title', weight: 15 },
+        { field: 'description', weight: 15 },
+        { field: 'discipline', weight: 10 },
+        { field: 'level', weight: 10 },
+        { field: 'skills', weight: 15, check: (val) => Array.isArray(val) && val.length > 0 },
+        { field: 'totalModules', weight: 10, check: (val) => val > 0 },
+        { field: 'duration', weight: 10 },
+        { field: 'prerequisites', weight: 15, check: (val) => val && val.length > 10 }
+    ];
+
+    requirements.forEach(req => {
+        const value = course[req.field];
+        const isComplete = req.check ? req.check(value) : Boolean(value && value.toString().trim());
+        if (isComplete) completionScore += req.weight;
+    });
+
+    return Math.min(100, completionScore);
+}
+
+
+// Submit course for review
+async function submitForReview(courseId) {
+    if (!confirm('Submit this course for admin review? You won\'t be able to edit it until reviewed.')) {
+        return;
+    }
+
+    try {
+        showToast('Submitting course for review...', 'info');
+        
+        await updateDoc(doc(db, "courses", courseId), {
+            status: 'pending',
+            submittedAt: serverTimestamp()
+        });
+
+        showToast('Course submitted for review successfully!', 'success');
+    } catch (error) {
+        console.error('Error submitting course:', error);
+        showToast('Failed to submit course for review', 'error');
+    }
+}
+
+// View admin feedback
+async function viewFeedback(courseId) {
+    try {
+        const courseDoc = await getDoc(doc(db, "courses", courseId));
+        const courseData = courseDoc.data();
+        
+        if (courseData.adminFeedback) {
+            alert(`Admin Feedback:\n\n${courseData.adminFeedback}`);
+        } else {
+            alert('No feedback available yet.');
+        }
+    } catch (error) {
+        console.error('Error loading feedback:', error);
+        alert('Failed to load feedback.');
+    }
+}
+
+// Toast notification system
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+            <span>${message}</span>
+        </div>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.classList.add('show'), 100);
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => document.body.removeChild(toast), 300);
+    }, 4000);
+}
+function setupViewToggle() {
+    const toggleButtons = document.querySelectorAll('.toggle-btn');
+    if (toggleButtons.length === 0) {
+        console.log("No toggle buttons found");
+        return;
+    }
+    
+    toggleButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const view = e.target.dataset.view || e.target.closest('.toggle-btn').dataset.view;
+            
+            toggleButtons.forEach(b => b.classList.remove('active'));
+            (e.target.closest('.toggle-btn') || e.target).classList.add('active');
+            
+            const gridView = document.getElementById('coursesContainer');
+            const tableView = document.getElementById('coursesTable');
+            
+            if (gridView && tableView) {
+                if (view === 'grid') {
+                    gridView.style.display = 'grid';
+                    tableView.style.display = 'none';
+                } else {
+                    gridView.style.display = 'none';
+                    tableView.style.display = 'block';
+                }
+            }
+        });
+    });
+}
+
+
+function setupFilters() {
+    const statusFilter = document.getElementById('statusFilter');
+    const disciplineFilter = document.getElementById('disciplineFilter');
+    
+    [statusFilter, disciplineFilter].forEach(filter => {
+        if (filter) {
+            filter.addEventListener('change', applyFilters);
+        }
+    });
+}
+
+
+// Add CSS animation for spinner
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+`;
+document.head.appendChild(style);
+
+// Add delete course function
+async function deleteCourse(courseId, courseTitle) {
+    const confirmMessage = `Are you sure you want to permanently delete "${courseTitle}"?\n\nThis action cannot be undone and will delete:\n- All course content\n- All lessons and materials\n- All student progress data`;
+    
+    if (!confirm(confirmMessage)) {
+        return;
+    }
+
+    try {
+        showToast('Deleting course...', 'info');
+        
+        // Delete all subcollections first (lessons)
+        const lessonsQuery = query(collection(db, "courses", courseId, "lessons"));
+        const lessonsSnapshot = await getDocs(lessonsQuery);
+        
+        const batch = writeBatch(db);
+        lessonsSnapshot.forEach((doc) => {
+            batch.delete(doc.ref);
+        });
+        
+        // Delete the main course document
+        batch.delete(doc(db, "courses", courseId));
+        
+        await batch.commit();
+        
+        showToast('Course deleted successfully', 'success');
+        
+    } catch (error) {
+        console.error('Error deleting course:', error);
+        showToast('Failed to delete course. Please try again.', 'error');
+    }
+}
+
+// Make it globally accessible
+window.deleteCourse = deleteCourse;
+
+function applyFilters() {
+    // Implementation for filtering courses
+    const statusFilter = document.getElementById('statusFilter')?.value;
+    const disciplineFilter = document.getElementById('disciplineFilter')?.value;
+    
+    const cards = document.querySelectorAll('.course-card');
+    
+    cards.forEach(card => {
+        let show = true;
+        
+        // Add filtering logic here based on stored course data
+        if (show) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+
+// Make functions globally accessible
+window.submitForReview = submitForReview;
+window.viewFeedback = viewFeedback;
+window.showToast = showToast;
+
+// --- UTILITY FUNCTIONS ---
+function showLoading(element, isTable, text = 'Loading...') {
+            const content = `<div class="empty-state"><div class="spinner"></div><p>${text}</p></div>`;
+            if (isTable) {
+                const colSpan = element.closest('table')?.querySelector('thead tr')?.childElementCount || 1;
+                element.innerHTML = `<tr><td colspan="${colSpan}">${content}</td></tr>`;
+            } else {
+                element.innerHTML = content;
+            }
+        }
+        function formatDate(timestamp) {
+    if (!timestamp) return '';
+    const date = timestamp.seconds ? new Date(timestamp.seconds * 1000) : new Date(timestamp);
+    return date.toLocaleDateString();
+}
+    </script>
+    </body>
+</html>

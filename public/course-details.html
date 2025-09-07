@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Details - Andrew Cares Village</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:wght@400;700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --background-color: #F4F2ED; --text-primary: #333333; --text-secondary: #555555;
+            --color-primary: #B38B00; --color-secondary: #001F3F; --card-bg: #FFFFFF;
+            --border-color: #EAEAEA; --hover-bg: #F9F9F9; --success-color: #2e7d32;
+            --shadow-light: 0 4px 15px rgba(0,0,0,0.05 ); --border-radius: 12px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Montserrat', sans-serif; background-color: var(--background-color); color: var(--text-primary); line-height: 1.6; }
+        a { text-decoration: none; color: inherit; }
+        .main-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; border-bottom: 1px solid var(--border-color); background-color: var(--card-bg); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-family: 'Cinzel', serif; font-weight: 700; font-size: 1.5rem; color: var(--color-secondary); }
+        .header-actions { display: flex; align-items: center; gap: 1.5rem; }
+        .user-profile { position: relative; display: flex; align-items: center; gap: 0.7rem; cursor: pointer; }
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .course-container { display: grid; grid-template-columns: 2.5fr 1fr; gap: 2rem; max-width: 1800px; margin: 2rem auto; padding: 0 2rem; }
+        .video-content-area { display: flex; flex-direction: column; gap: 1.5rem; }
+        .video-player-wrapper { position: relative; padding-top: 56.25%; background-color: #000; border-radius: var(--border-radius); overflow: hidden; }
+        .video-player-wrapper iframe, .video-player-wrapper video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        .video-placeholder { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center; padding: 2rem; }
+        .video-placeholder i { font-size: 4rem; margin-bottom: 1rem; }
+        .lesson-content-area { background-color: var(--card-bg); padding: 2rem; border-radius: var(--border-radius); }
+        .lesson-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem; }
+        .lesson-header h1 { font-family: 'Cinzel', serif; font-size: 2.5rem; color: var(--color-secondary); }
+        .btn-complete { padding: 0.6rem 1.2rem; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; background-color: var(--border-color); color: var(--text-secondary); transition: background-color 0.3s; }
+        .btn-complete.completed { background-color: var(--success-color); color: white; }
+        .btn-complete:disabled { opacity: 0.7; cursor: not-allowed; }
+        .lesson-description { line-height: 1.7; }
+        .curriculum-sidebar { background-color: var(--card-bg); border-radius: var(--border-radius); padding: 1.5rem; height: fit-content; max-height: 85vh; overflow-y: auto; }
+        .curriculum-sidebar h2 { font-family: 'Cinzel', serif; font-size: 1.8rem; margin-bottom: 1rem; }
+        .progress-bar { width: 100%; background-color: var(--border-color); border-radius: 5px; height: 10px; margin: 0.5rem 0 1.5rem 0; overflow: hidden; }
+        .progress-bar-inner { background-color: var(--color-primary); height: 100%; border-radius: 5px; transition: width 0.5s ease; }
+        .lesson-list { list-style-type: none; padding: 0; }
+        .lesson-item { display: flex; align-items: center; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s; border-left: 4px solid transparent; }
+        .lesson-item:hover { background-color: var(--hover-bg); }
+        .lesson-item.active { background-color: #fff8e1; border-left-color: var(--color-primary); }
+        .lesson-item.completed .lesson-icon { color: var(--success-color); }
+        .lesson-item.locked { opacity: 0.6; cursor: not-allowed; background-color: #f1f1f1; }
+        .lesson-item.locked:hover { background-color: #f1f1f1; }
+        .lesson-icon { font-size: 1.2rem; margin-right: 1rem; width: 20px; text-align: center; }
+        .lesson-title { flex-grow: 1; font-weight: 500; }
+        .enrollment-cta { text-align: center; padding: 4rem 2rem; background-color: var(--card-bg); border-radius: var(--border-radius); max-width: 800px; margin: 2rem auto; }
+        .enrollment-cta h1 { font-family: 'Cinzel', serif; font-size: 2.5rem; margin-bottom: 1rem; }
+        .enrollment-cta p { font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 2rem; }
+        .btn-enroll { padding: 1rem 2.5rem; font-size: 1.2rem; background-color: var(--color-primary); color: white; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.3s; }
+        .btn-enroll:hover { background-color: #9c7a00; }
+        .btn-enroll:disabled { background-color: #ccc; cursor: not-allowed; }
+        .review-section { background-color: var(--hover-bg); padding: 2rem; border-radius: var(--border-radius); margin-top: 1.5rem; }
+        .star-rating-input { display: flex; flex-direction: row-reverse; justify-content: center; gap: 0.5rem; font-size: 2rem; }
+        .star-rating-input input { display: none; }
+        .star-rating-input label { color: #ccc; cursor: pointer; transition: color 0.2s; }
+        .star-rating-input :checked ~ label { color: var(--color-primary); }
+        .star-rating-input label:hover, .star-rating-input label:hover ~ label { color: var(--color-primary); }
+        textarea { width: 100%; padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; margin: 1rem 0; font-family: inherit; font-size: 1rem; }
+        .skeleton { animation: skeleton-loading 1s linear infinite alternate; background-color: #e0e0e0; }
+        @keyframes skeleton-loading { 0% { opacity: 0.6; } 100% { opacity: 1; } }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 1rem; }
+        .modal-overlay.visible { display: flex; }
+        .modal-container { background: var(--card-bg); padding: 2.5rem; border-radius: var(--border-radius); text-align: center; max-width: 600px; }
+        .modal-container h2 { font-family: 'Cinzel', serif; color: var(--color-secondary); font-size: 2.2rem; margin-bottom: 1rem; }
+        .modal-container p { color: var(--text-secondary); margin-bottom: 2rem; }
+        .modal-container .btn-primary { background-color: var(--color-primary); color: white; padding: 0.8rem 1.5rem; border-radius: 8px; text-decoration: none; display: inline-block; }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <a href="home.html" class="logo">Andrew Cares Village</a>
+        <div class="header-actions">
+            <div id="userProfile" class="user-profile">
+                <img id="userAvatar" src="" alt="User Avatar" class="user-avatar">
+                <span id="userName">Loading...</span>
+            </div>
+        </div>
+    </header>
+    <main id="page-container">
+        <div id="skeleton-loader" style="text-align: center; padding: 5rem;">
+            <div class="skeleton" style="width: 200px; height: 40px; margin: 0 auto 2rem auto;"></div>
+            <div class="skeleton" style="width: 80%; height: 20px; margin: 0 auto;"></div>
+        </div>
+    </main>
+
+    <!-- Completion Modal -->
+    <div id="completionModal" class="modal-overlay">
+        <div class="modal-container">
+            <i class="fas fa-award" style="font-size: 4rem; color: var(--color-primary); margin-bottom: 1rem;"></i>
+            <h2>Course Completed!</h2>
+            <p>Congratulations on completing this course. Your dedication has paid off!</p>
+            <div id="modal-actions" style="display: flex; flex-direction: column; gap: 1rem;">
+                <!-- Certificate and Testimonial buttons will be added here by JS -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, getDocs, query, orderBy, where, addDoc, serverTimestamp, runTransaction, updateDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
+            authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
+            projectId: "andrew-cares-village-f4cb6",
+            storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
+            messagingSenderId: "255087116955",
+            appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
+        };
+
+        const app = initializeApp(firebaseConfig );
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        class CourseDetailsPage {
+            constructor() {
+                this.state = {
+                    currentUser: null, userData: null,
+                    courseId: new URLSearchParams(window.location.search).get('id'),
+                    courseData: null, lessons: [], enrollment: null, activeLessonId: null, hasReviewed: false, hasTestimonial: false
+                };
+                this.elements = {
+                    container: document.getElementById('page-container'),
+                    userName: document.getElementById('userName'),
+                    userAvatar: document.getElementById('userAvatar'),
+                    completionModal: document.getElementById('completionModal'),
+                    modalActions: document.getElementById('modal-actions')
+                };
+                this.start();
+            }
+
+            async start() {
+                if (!this.state.courseId) { this.renderError("No course specified."); return; }
+                onAuthStateChanged(auth, async (user) => {
+                    if (!user) { window.location.href = 'index.html'; return; }
+                    this.state.currentUser = user;
+                    try {
+                        const userDoc = await getDoc(doc(db, "users", user.uid));
+                        if (!userDoc.exists()) throw new Error("User profile not found.");
+                        this.state.userData = userDoc.data();
+                        this.updateHeaderUI();
+
+                        const courseDoc = await getDoc(doc(db, "courses", this.state.courseId));
+                        if (!courseDoc.exists()) throw new Error("Course not found.");
+                        this.state.courseData = { id: courseDoc.id, ...courseDoc.data() };
+                        document.title = `${this.state.courseData.title} - Andrew Cares Village`;
+
+                        await this.checkStudentStatus();
+                        this.renderPage();
+                    } catch (error) {
+                        console.error("Error:", error);
+                        this.renderError(error.message);
+                    }
+                });
+            }
+
+            updateHeaderUI() {
+                this.elements.userName.textContent = this.state.userData.name;
+                this.elements.userAvatar.src = this.state.userData.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(this.state.userData.name )}`;
+            }
+
+            async checkStudentStatus() {
+    try {
+        const enrollmentQuery = query(
+            collection(db, "enrollments"), 
+            where("studentId", "==", this.state.currentUser.uid), 
+            where("courseId", "==", this.state.courseId)
+        );
+        const enrollmentSnap = await getDocs(enrollmentQuery);
+        if (!enrollmentSnap.empty) {
+            const enrollmentDoc = enrollmentSnap.docs[0];
+            this.state.enrollment = { id: enrollmentDoc.id, ...enrollmentDoc.data() };
+        }
+
+        // Check for existing review
+        const reviewQuery = query(
+            collection(db, "courseReviews"), 
+            where("studentId", "==", this.state.currentUser.uid), 
+            where("courseId", "==", this.state.courseId)
+        );
+        this.state.hasReviewed = !(await getDocs(reviewQuery)).empty;
+        
+        // Check for existing testimonial
+        const testimonialQuery = query(
+            collection(db, "testimonials"), 
+            where("studentId", "==", this.state.currentUser.uid), 
+            where("courseId", "==", this.state.courseId)
+        );
+        this.state.hasTestimonial = !(await getDocs(testimonialQuery)).empty;
+
+    } catch (e) { 
+        console.warn("Pre-check failed (collections might not exist yet):", e.message); 
+    }
+}
+
+            renderPage() {
+                if (this.state.enrollment) { this.renderEnrolledView(); } 
+                else { this.renderPublicView(); }
+            }
+
+            renderPublicView() {
+                const hasAccess = this.checkAccess();
+                this.elements.container.innerHTML = `
+                    <div class="enrollment-cta">
+                        <img src="${this.sanitize(this.state.courseData.thumbnailUrl) || 'https://via.placeholder.com/600x338/001F3F/FFFFFF?text=Andrew+Cares'}" style="width:100%; max-width:600px; border-radius:12px; margin-bottom:2rem; box-shadow: 0 10px 25px rgba(0,0,0,0.1 );">
+                        <h1>${this.sanitize(this.state.courseData.title)}</h1>
+                        <p>${this.sanitize(this.state.courseData.description)}</p>
+                        <button id="enroll-btn" class="btn-enroll" ${!hasAccess.canEnroll ? 'disabled' : ''}>${hasAccess.buttonText}</button>
+                    </div>`;
+                const enrollBtn = document.getElementById('enroll-btn');
+                if (hasAccess.canEnroll) {
+                    enrollBtn.addEventListener('click', () => this.handleEnrollment());
+                } else {
+                    enrollBtn.addEventListener('click', () => window.location.href = 'charter.html');
+                }
+            }
+
+            checkAccess() {
+                const userTier = this.state.userData.membershipTier;
+                const courseLevel = this.state.courseData.level;
+                if (['villager', 'patron', 'elder', 'founder'].includes(userTier)) return { canEnroll: true, buttonText: 'Enroll Now' };
+                if (userTier === 'apprentice' && courseLevel === 'Beginner') return { canEnroll: true, buttonText: 'Start Preview' };
+                return { canEnroll: false, buttonText: 'Upgrade to Enroll' };
+            }
+
+            async renderEnrolledView() {
+                const lessonsQuery = query(collection(db, "courses", this.state.courseId, "lessons"), orderBy("order", "asc"));
+                const lessonsSnap = await getDocs(lessonsQuery);
+                this.state.lessons = lessonsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                this.elements.container.innerHTML = `
+                    <div class="course-container">
+                        <div class="video-content-area">
+                            <div class="video-player-wrapper" id="videoPlayerWrapper"><div class="video-placeholder"><i class="fas fa-play-circle"></i><p>Select a lesson to begin</p></div></div>
+                            <div class="lesson-content-area" id="lesson-content-area"></div>
+                        </div>
+                        <aside class="curriculum-sidebar">
+                            <h2>${this.sanitize(this.state.courseData.title)}</h2>
+                            <div class="progress-bar"><div id="progress-bar-inner" class="progress-bar-inner"></div></div>
+                            <ul class="lesson-list" id="lessonList"></ul>
+                            <div class="review-section" id="review-section"></div>
+                        </aside>
+                    </div>`;
+                this.renderLessonList();
+                this.updateProgress();
+                this.renderReviewSection();
+                const firstUncompleted = this.state.lessons.find(l => !this.state.enrollment.completedLessons?.includes(l.id));
+                this.selectLesson(firstUncompleted ? firstUncompleted.id : this.state.lessons[0]?.id);
+            }
+
+            renderLessonList() {
+                const lessonListEl = document.getElementById('lessonList');
+                const isApprentice = this.state.userData.membershipTier === 'apprentice';
+                lessonListEl.innerHTML = this.state.lessons.map((lesson, index) => {
+                    const isCompleted = this.state.enrollment.completedLessons?.includes(lesson.id);
+                    const isLocked = isApprentice && index >= 3;
+                    return `
+                        <li class="lesson-item ${isCompleted ? 'completed' : ''} ${isLocked ? 'locked' : ''}" data-lesson-id="${lesson.id}" data-locked="${isLocked}">
+                            <span class="lesson-icon"><i class="far ${isLocked ? 'fa-lock' : (isCompleted ? 'fa-check-circle' : 'fa-play-circle')}"></i></span>
+                            <span class="lesson-title">${this.sanitize(lesson.title)}</span>
+                        </li>`;
+                }).join('');
+                lessonListEl.querySelectorAll('.lesson-item').forEach(item => item.addEventListener('click', () => {
+                    if (item.dataset.locked === 'true') {
+                        alert("Upgrade your membership to access this lesson.");
+                        window.location.href = 'charter.html';
+                    } else {
+                        this.selectLesson(item.dataset.lessonId);
+                    }
+                }));
+            }
+
+            selectLesson(lessonId) {
+                if (!lessonId) {
+                    document.getElementById('videoPlayerWrapper').innerHTML = `<div class="video-placeholder"><i class="fas fa-check-circle"></i><p>All lessons completed!</p></div>`;
+                    document.getElementById('lesson-content-area').innerHTML = '<h1>Congratulations!</h1><p>You have completed all lessons in this course.</p>';
+                    return;
+                }
+                this.state.activeLessonId = lessonId;
+                const lesson = this.state.lessons.find(l => l.id === lessonId);
+                if (!lesson) return;
+                document.querySelectorAll('.lesson-item').forEach(item => item.classList.toggle('active', item.dataset.lessonId === lessonId));
+                const embedUrl = this.convertToEmbedUrl(lesson.videoUrl);
+                document.getElementById('videoPlayerWrapper').innerHTML = embedUrl ? `<iframe src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>` : `<div class="video-placeholder"><i class="fas fa-video-slash"></i><p>No video for this lesson.</p></div>`;
+                const isCompleted = this.state.enrollment.completedLessons?.includes(lessonId);
+                document.getElementById('lesson-content-area').innerHTML = `
+                    <div class="lesson-header">
+                        <h1>${this.sanitize(lesson.title)}</h1>
+                        <button id="complete-btn" class="btn-complete ${isCompleted ? 'completed' : ''}" data-lesson-id="${lessonId}">${isCompleted ? 'Completed' : 'Mark as Complete'}</button>
+                    </div>
+                    <p class="lesson-description">${this.sanitize(lesson.description)}</p>`;
+                document.getElementById('complete-btn').addEventListener('click', (e) => this.handleMarkComplete(e));
+            }
+
+            updateProgress() {
+                const completedCount = this.state.enrollment.completedLessons?.length || 0;
+                const totalLessons = this.state.lessons.length;
+                const progressPercent = totalLessons > 0 ? (completedCount / totalLessons) * 100 : 0;
+                const progressBarInner = document.getElementById('progress-bar-inner');
+                if(progressBarInner) progressBarInner.style.width = `${progressPercent}%`;
+                if (Math.round(progressPercent) !== Math.round(this.state.enrollment.progress || 0)) {
+                    updateDoc(doc(db, "enrollments", this.state.enrollment.id), { progress: progressPercent, lastActivityAt: serverTimestamp() });
+                }
+            }
+
+            renderReviewSection() {
+                const reviewSection = document.getElementById('review-section');
+                if (this.state.hasReviewed) {
+                    reviewSection.innerHTML = '<h4><i class="fas fa-check-circle" style="color: var(--success-color);"></i> Thank you for your feedback!</h4>';
+                    return;
+                }
+                reviewSection.innerHTML = `
+                    <h4>Leave a Review</h4>
+                    <div class="star-rating-input">
+                        <input type="radio" id="star5" name="rating" value="5"><label for="star5" title="5 stars">★</label>
+                        <input type="radio" id="star4" name="rating" value="4"><label for="star4" title="4 stars">★</label>
+                        <input type="radio" id="star3" name="rating" value="3"><label for="star3" title="3 stars">★</label>
+                        <input type="radio" id="star2" name="rating" value="2"><label for="star2" title="2 stars">★</label>
+                        <input type="radio" id="star1" name="rating" value="1"><label for="star1" title="1 star">★</label>
+                    </div>
+                    <textarea id="review-comment" placeholder="Share your thoughts..."></textarea>
+                    <button id="submit-review-btn" class="btn-enroll" style="width:100%;">Submit Review</button>`;
+                document.getElementById('submit-review-btn').addEventListener('click', () => this.handleSubmitReview());
+            }
+
+            async handleEnrollment() {
+                const btn = document.getElementById('enroll-btn');
+                btn.disabled = true; btn.textContent = 'Enrolling...';
+                try {
+                    const enrollmentData = {
+                        courseId: this.state.courseId, courseTitle: this.state.courseData.title,
+                        studentId: this.state.currentUser.uid, studentName: this.state.userData.name,
+                        studentAvatar: this.state.userData.avatarUrl || null, enrolledAt: serverTimestamp(),
+                        progress: 0, completedLessons: []
+                    };
+                    const docRef = await addDoc(collection(db, "enrollments"), enrollmentData);
+                    this.state.enrollment = { id: docRef.id, ...enrollmentData };
+                    this.renderPage();
+                } catch (error) {
+                    console.error("Enrollment failed:", error); this.renderError("Could not enroll in the course.");
+                }
+            }
+
+            async handleMarkComplete(e) {
+                const lessonId = e.target.dataset.lessonId;
+                const enrollmentRef = doc(db, "enrollments", this.state.enrollment.id);
+                e.target.disabled = true;
+                try {
+                    let wasAlreadyCompleted = false;
+                    await runTransaction(db, async (transaction) => {
+                        const enrollmentDoc = await transaction.get(enrollmentRef);
+                        if (!enrollmentDoc.exists()) throw "Enrollment not found!";
+                        const completedLessons = new Set(enrollmentDoc.data().completedLessons || []);
+                        wasAlreadyCompleted = completedLessons.has(lessonId);
+                        if (!wasAlreadyCompleted) {
+                            completedLessons.add(lessonId);
+                            transaction.update(enrollmentRef, { completedLessons: Array.from(completedLessons) });
+                            this.state.enrollment.completedLessons = Array.from(completedLessons);
+                        }
+                    });
+                    this.selectLesson(lessonId);
+                    this.renderLessonList();
+                    this.updateProgress();
+
+                    // Check for course completion
+                    if (!wasAlreadyCompleted && this.state.enrollment.completedLessons.length === this.state.lessons.length) {
+                        this.handleCourseCompletion();
+                    }
+                } catch (error) {
+                    console.error("Failed to mark complete:", error); alert("Could not update progress."); e.target.disabled = false;
+                }
+            }
+
+            // In course-details.html
+
+async handleSubmitReview() {
+    const rating = document.querySelector('input[name="rating"]:checked')?.value;
+    const comment = document.getElementById('review-comment').value.trim();
+    if (!rating) { alert("Please select a star rating."); return; }
+    const btn = document.getElementById('submit-review-btn');
+    btn.disabled = true; btn.textContent = 'Submitting...';
+    try {
+        const reviewData = {
+            courseId: this.state.courseId,
+            studentId: this.state.currentUser.uid,
+            studentName: this.state.userData.name,
+            // **THE FIX IS HERE: Add the student's avatar URL**
+            studentAvatar: this.state.userData.avatarUrl || null,
+            rating: Number(rating),
+            comment: comment,
+            createdAt: serverTimestamp()
+        };
+        await addDoc(collection(db, "courseReviews"), reviewData);
+        this.state.hasReviewed = true;
+        this.renderReviewSection();
+    } catch (error) {
+        console.error("Failed to submit review:", error);
+        alert("Could not submit your review.");
+        btn.disabled = false;
+        btn.textContent = 'Submit Review';
+    }
+}
+
+
+            handleCourseCompletion() {
+                this.elements.modalActions.innerHTML = ''; // Clear previous actions
+                if (this.state.courseData.certificate?.enabled) {
+                    const certBtn = document.createElement('a');
+                    certBtn.href = `certificate.html?enrollmentId=${this.state.enrollment.id}`;
+                    certBtn.className = 'btn-primary';
+                    certBtn.target = '_blank';
+                    certBtn.innerHTML = '<i class="fas fa-certificate"></i> View Your Certificate';
+                    this.elements.modalActions.appendChild(certBtn);
+                }
+                if (!this.state.hasTestimonial) {
+                    const testBtn = document.createElement('button');
+                    testBtn.className = 'btn-primary';
+                    testBtn.innerHTML = '<i class="fas fa-quote-left"></i> Leave a Testimonial';
+                    testBtn.onclick = () => this.handleTestimonialRequest();
+                    this.elements.modalActions.appendChild(testBtn);
+                }
+                this.elements.completionModal.classList.add('visible');
+            }
+
+           
+handleTestimonialRequest() {
+    const testimonial = prompt("Thank you for your dedication! If you loved this course, please share a few words about your experience.");
+    if (testimonial && testimonial.trim() !== '') {
+        this.submitTestimonial(testimonial.trim());
+    }
+}
+
+async submitTestimonial(testimonialText) {
+    try {
+        // Create testimonial data that matches what the profile page expects
+        const testimonialData = {
+            courseId: this.state.courseId,
+            courseTitle: this.state.courseData.title,
+            instructorId: this.state.courseData.instructorId, // Key addition!
+            studentId: this.state.currentUser.uid,
+            studentName: this.state.userData.name,
+            studentAvatar: this.state.userData.avatarUrl || null, // Add avatar
+            text: testimonialText, // Use 'text' field name (not 'testimonial')
+            rating: 5, // Default to 5 stars for testimonials
+            createdAt: serverTimestamp()
+        };
+        
+        await addDoc(collection(db, "testimonials"), testimonialData);
+        this.state.hasTestimonial = true;
+        alert("Thank you for your testimonial!");
+        this.elements.completionModal.classList.remove('visible');
+    } catch (error) {
+        console.error("Failed to submit testimonial:", error);
+        alert("Could not save your testimonial at this time.");
+    }
+}
+
+            renderError(message) { this.elements.container.innerHTML = `<div style="text-align:center; padding: 4rem;"><h1>Error</h1><p>${this.sanitize(message)}</p></div>`; }
+            sanitize(str) { const temp = document.createElement('div'); temp.textContent = str || ''; return temp.innerHTML; }
+            convertToEmbedUrl(url) {
+                if (!url || typeof url !== 'string') return '';
+                const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+                const match = url.match(regExp);
+                return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : url;
+            }
+        }
+        new CourseDetailsPage( );
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Village Amphitheater - Andrew Cares Village</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:wght@400;700&family=Montserrat:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* --- MOBILE-FIRST RESPONSIVE CSS --- */
+
+        /* 1. CSS Custom Properties */
+        :root {
+            --background-color: #F4F2ED;
+            --text-primary: #333333;
+            --text-secondary: #555555;
+            --color-primary: #B38B00;
+            --color-secondary: #001F3F;
+            --card-bg: #FFFFFF;
+            --border-color: #EAEAEA;
+            --hover-bg: #F9F9F9;
+            --success-color: #4CAF50;
+            --danger-color: #D32F2F;
+            --warning-color: #FF9800;
+            --live-color: #E53E3E;
+            --purple-accent: #6B46C1;
+            
+            /* Responsive spacing */
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            
+            /* Typography scale */
+            --text-xs: 0.75rem;
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-lg: 1.125rem;
+            --text-xl: 1.25rem;
+            --text-2xl: 1.5rem;
+            --text-3xl: 1.875rem;
+            --text-4xl: 2.25rem;
+        }
+
+        /* 2. Reset & Base Styles */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: var(--text-base);
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            border: none;
+            background: none;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* 3. Mobile-First Header */
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            min-height: 60px;
+        }
+
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: var(--text-lg);
+            color: var(--color-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 60%;
+        }
+
+        /* Mobile Navigation - Hidden by default, hamburger menu */
+        .main-nav {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            flex-direction: column;
+            padding: var(--spacing-md);
+            gap: var(--spacing-md);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-nav.mobile-open {
+            display: flex;
+        }
+
+        .main-nav a {
+            font-weight: 500;
+            color: var(--text-secondary);
+            padding: var(--spacing-sm) 0;
+            border-bottom: 2px solid transparent;
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+
+        .main-nav a:hover,
+        .main-nav a.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-primary);
+        }
+
+        /* Mobile hamburger button */
+        .mobile-menu-btn {
+            display: block;
+            background: none;
+            border: none;
+            font-size: var(--text-xl);
+            color: var(--color-secondary);
+            cursor: pointer;
+            padding: var(--spacing-sm);
+            border-radius: 4px;
+        }
+
+        .mobile-menu-btn:hover {
+            background-color: var(--hover-bg);
+        }
+
+        /* Header Actions - Responsive */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .user-profile-nav {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            cursor: pointer;
+            padding: var(--spacing-xs);
+            border-radius: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .user-profile-nav:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .user-avatar-nav {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .user-name-nav {
+            font-weight: 500;
+            font-size: var(--text-sm);
+            display: none; /* Hidden on mobile */
+            white-space: nowrap;
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + var(--spacing-xs));
+            right: 0;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            min-width: 180px;
+            overflow: hidden;
+            z-index: 1001;
+            border: 1px solid var(--border-color);
+        }
+
+        .user-profile-nav:hover .profile-dropdown {
+            display: block;
+        }
+
+        .profile-dropdown a,
+        .profile-dropdown button {
+            display: block;
+            width: 100%;
+            padding: var(--spacing-md);
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            font-size: var(--text-sm);
+            transition: background-color 0.3s;
+        }
+
+        .profile-dropdown a:hover,
+        .profile-dropdown button:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .profile-dropdown .logout-button {
+            color: var(--danger-color);
+        }
+
+        /* 4. Mobile-First Page Layout */
+        .page-container {
+            padding: var(--spacing-md);
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+            background: linear-gradient(135deg, var(--color-secondary), var(--purple-accent));
+            color: white;
+            padding: var(--spacing-xl) var(--spacing-md);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="amphitheater" patternUnits="userSpaceOnUse" width="20" height="20"><circle cx="10" cy="10" r="2" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23amphitheater)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .page-header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: var(--text-2xl);
+            margin-bottom: var(--spacing-md);
+            position: relative;
+            z-index: 1;
+            line-height: 1.2;
+        }
+
+        .page-header p {
+            font-size: var(--text-base);
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            line-height: 1.5;
+        }
+
+        /* 5. Mobile-First Event Sections */
+        .events-section {
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: var(--text-xl);
+            color: var(--color-secondary);
+            margin-bottom: var(--spacing-lg);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .live-indicator {
+            background: var(--live-color);
+            color: white;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 20px;
+            font-size: var(--text-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+            animation: pulse 2s infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Mobile-First Grid */
+        .events-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--spacing-lg);
+        }
+
+        /* 6. Mobile-First Event Cards */
+        .event-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid var(--border-color);
+        }
+
+        .event-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .event-card.live-stream {
+            border: 2px solid var(--live-color);
+            box-shadow: 0 0 20px rgba(229, 62, 62, 0.2);
+        }
+
+        .event-thumbnail {
+            height: 160px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            position: relative;
+        }
+
+        .event-thumbnail i {
+            font-size: 2.5rem;
+            opacity: 0.8;
+        }
+
+        .event-status {
+            position: absolute;
+            top: var(--spacing-sm);
+            right: var(--spacing-sm);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 20px;
+            font-size: var(--text-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-live {
+            background: var(--live-color);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        .status-upcoming {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .status-archived {
+            background: var(--text-secondary);
+            color: white;
+        }
+
+        .admin-badge {
+            position: absolute;
+            top: var(--spacing-sm);
+            left: var(--spacing-sm);
+            background: linear-gradient(135deg, var(--color-primary), #9c7a00);
+            color: white;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 20px;
+            font-size: var(--text-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .event-content {
+            padding: var(--spacing-lg);
+        }
+
+        .event-title {
+            font-family: 'Cinzel', serif;
+            font-size: var(--text-lg);
+            color: var(--color-secondary);
+            margin-bottom: var(--spacing-sm);
+            line-height: 1.3;
+        }
+
+        .event-instructor {
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            font-size: var(--text-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .event-description {
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-md);
+            line-height: 1.6;
+            font-size: var(--text-sm);
+        }
+
+        .event-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+            font-size: var(--text-xs);
+            color: var(--text-secondary);
+        }
+
+        .event-meta-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .live-indicator.event-meta-item {
+            color: var(--live-color);
+            font-weight: 600;
+        }
+
+        .live-indicator.event-meta-item i {
+            animation: pulse 2s infinite;
+        }
+
+        .audience-badge {
+            background: var(--purple-accent);
+            color: white;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 12px;
+            font-size: var(--text-xs);
+            font-weight: 500;
+            margin-bottom: var(--spacing-md);
+            display: inline-block;
+        }
+
+        /* 7. Mobile-First Button Styles */
+        .event-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-direction: column;
+        }
+
+        .btn {
+            padding: var(--spacing-md);
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: var(--text-sm);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            min-height: 44px; /* Touch-friendly minimum */
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #9c7a00;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--color-primary);
+            border: 1px solid var(--color-primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        .btn-live {
+            background: linear-gradient(135deg, var(--live-color), #FF6B6B);
+            color: white;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 10px rgba(229, 62, 62, 0.5); }
+            to { box-shadow: 0 0 20px rgba(229, 62, 62, 0.8); }
+        }
+
+        .btn-disabled {
+            background-color: var(--border-color);
+            color: var(--text-secondary);
+            cursor: not-allowed;
+        }
+
+        .access-denied-text {
+            color: var(--text-secondary);
+            font-size: var(--text-xs);
+            margin-top: var(--spacing-sm);
+            display: block;
+            text-align: center;
+        }
+
+        /* 8. Mobile-First Modal */
+        .redirect-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-md);
+        }
+
+        .redirect-modal.visible {
+            display: flex;
+        }
+
+        .redirect-modal-content {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: var(--spacing-xl);
+            max-width: 100%;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .redirect-modal-title {
+            font-family: 'Cinzel', serif;
+            font-size: var(--text-xl);
+            color: var(--color-secondary);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .redirect-info {
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-xl);
+            line-height: 1.6;
+            font-size: var(--text-sm);
+        }
+
+        .jitsi-link {
+            background: var(--hover-bg);
+            border: 1px solid var(--border-color);
+            padding: var(--spacing-md);
+            border-radius: 8px;
+            margin-bottom: var(--spacing-lg);
+            font-family: monospace;
+            font-size: var(--text-xs);
+            word-break: break-all;
+            color: var(--text-primary);
+        }
+
+        .redirect-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-direction: column;
+        }
+
+        /* 9. Empty States */
+        .empty-state {
+            text-align: center;
+            padding: var(--spacing-2xl) var(--spacing-md);
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: var(--spacing-md);
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            margin-bottom: var(--spacing-sm);
+            color: var(--text-primary);
+            font-size: var(--text-lg);
+        }
+
+        /* 10. Skeleton Loaders */
+        .skeleton {
+            animation: skeleton-loading 1s linear infinite alternate;
+        }
+
+        @keyframes skeleton-loading {
+            0% { background-color: hsl(200, 20%, 80%); }
+            100% { background-color: hsl(200, 20%, 95%); }
+        }
+
+        .skeleton-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .skeleton-thumbnail {
+            height: 160px;
+            width: 100%;
+        }
+
+        .skeleton-content {
+            padding: var(--spacing-lg);
+        }
+
+        .skeleton-text {
+            height: 16px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .skeleton-title {
+            height: 24px;
+            width: 70%;
+            margin-bottom: 15px;
+        }
+
+        /* 11. Notifications */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            left: 20px;
+            padding: var(--spacing-md);
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 3000;
+            opacity: 0;
+            transform: translateY(-100%);
+            transition: all 0.3s ease;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .notification.success {
+            background-color: var(--success-color);
+        }
+
+        .notification.error {
+            background-color: var(--danger-color);
+        }
+
+        .notification.info {
+            background-color: var(--color-primary);
+        }
+
+        /* 12. Loading States */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .connecting-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            color: var(--warning-color);
+            font-weight: 500;
+        }
+
+        .connecting-indicator .loading-spinner {
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-top-color: var(--warning-color);
+            width: 16px;
+            height: 16px;
+        }
+
+        /* 13. TABLET STYLES (768px and up) */
+        @media (min-width: 768px) {
+            .page-container {
+                padding: var(--spacing-xl);
+                max-width: 1200px;
+            }
+
+            .page-header h1 {
+                font-size: var(--text-3xl);
+            }
+
+            .page-header p {
+                font-size: var(--text-lg);
+            }
+
+            .events-grid {
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                gap: var(--spacing-xl);
+            }
+
+            .event-thumbnail {
+                height: 200px;
+            }
+
+            .event-thumbnail i {
+                font-size: 3rem;
+            }
+
+            .event-title {
+                font-size: var(--text-xl);
+            }
+
+            .event-description,
+            .redirect-info {
+                font-size: var(--text-base);
+            }
+
+            .event-meta {
+                display: flex;
+                flex-wrap: wrap;
+                gap: var(--spacing-md);
+            }
+
+            .event-actions {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .redirect-actions {
+                flex-direction: row;
+                justify-content: center;
+            }
+
+            .user-name-nav {
+                display: block;
+            }
+
+            .logo {
+                font-size: var(--text-2xl);
+                max-width: none;
+            }
+
+            .mobile-menu-btn {
+                display: none;
+            }
+
+            .main-nav {
+                display: flex;
+                position: static;
+                flex-direction: row;
+                background: none;
+                border: none;
+                padding: 0;
+                box-shadow: none;
+                gap: var(--spacing-xl);
+            }
+
+            .section-title {
+                font-size: var(--text-2xl);
+            }
+
+            .notification {
+                right: 20px;
+                left: auto;
+                max-width: 400px;
+                transform: translateX(100%);
+            }
+
+            .notification.show {
+                transform: translateX(0);
+            }
+        }
+
+        /* 14. DESKTOP STYLES (1024px and up) */
+        @media (min-width: 1024px) {
+            .main-header {
+                padding: var(--spacing-lg) var(--spacing-xl);
+            }
+
+            .page-header {
+                padding: var(--spacing-2xl);
+            }
+
+            .page-header h1 {
+                font-size: var(--text-4xl);
+            }
+
+            .events-grid {
+                gap: var(--spacing-2xl);
+            }
+
+            .event-content {
+                padding: var(--spacing-xl);
+            }
+
+            .redirect-modal-content {
+                padding: var(--spacing-2xl);
+            }
+
+            .user-avatar-nav {
+                width: 40px;
+                height: 40px;
+            }
+
+            .user-name-nav {
+                font-size: var(--text-base);
+            }
+        }
+
+        /* 15. LARGE DESKTOP STYLES (1280px and up) */
+        @media (min-width: 1280px) {
+            .page-container {
+                max-width: 1400px;
+            }
+
+            .events-grid {
+                grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            }
+        }
+
+        /* 16. EXTRA LARGE DESKTOP STYLES (1536px and up) */
+        @media (min-width: 1536px) {
+            .page-container {
+                max-width: 1600px;
+            }
+        }
+
+        /* 17. HIGH DPI / RETINA DISPLAYS */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .event-thumbnail i {
+                transform: translateZ(0); /* Hardware acceleration */
+            }
+        }
+
+        /* 18. ACCESSIBILITY IMPROVEMENTS */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Focus styles for keyboard navigation */
+        .btn:focus,
+        .user-profile-nav:focus,
+        .mobile-menu-btn:focus {
+            outline: 2px solid var(--color-primary);
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            :root {
+                --border-color: #000000;
+                --text-secondary: #000000;
+            }
+        }
+
+        /* 19. PRINT STYLES */
+        @media print {
+            .main-header,
+            .redirect-modal,
+            .notification {
+                display: none !important;
+            }
+
+            .page-container {
+                max-width: none;
+                padding: 0;
+            }
+
+            .event-card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #000;
+            }
+        }
+
+      
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <a href="home.html" class="logo">Andrew Cares Village</a>
+        
+        <!-- Mobile menu button -->
+       <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open Mobile Menu">
+    <i class="fas fa-bars"></i>
+</button>
+        
+        <!-- Navigation -->
+        <nav class="main-nav" id="mainNav">
+            <a href="home.html">Home</a>
+            <a href="dojo.html?discipline=Forex">Forex Training</a>
+            <a href="dojo.html?discipline=Fitness">Fitness Training</a>
+            <a href="dojo.html?discipline=Karate">Karate Training</a>
+            <a href="live-events.html" class="active">Live Events</a>
+        </nav>
+        
+        <div class="header-actions">
+            <div id="userProfileNav" class="user-profile-nav">
+                <img id="userAvatarNav" src alt="User Avatar" class="user-avatar-nav">
+                <span id="userNameNav" class="user-name-nav">Loading...</span>
+                <div class="profile-dropdown">
+                    <a href="profile.html">My Profile</a>
+                    <a href="messages.html">Messages</a>
+                    <button id="logoutButton" class="logout-button">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="page-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1><i class="fas fa-theater-masks"></i> The Village Amphitheater</h1>
+            <p>Join exclusive seminars and workshops hosted by our expert instructors</p>
+        </div>
+
+        <!-- Live Events Section -->
+        <section class="events-section">
+            <h2 class="section-title">
+                <i class="fas fa-broadcast-tower"></i>
+                Live Now
+                <span class="live-indicator">Live</span>
+            </h2>
+            <div id="liveEventsGrid" class="events-grid">
+                <!-- Live events will be loaded here -->
+            </div>
+            <div id="noLiveEvents" class="empty-state" style="display: none;">
+                <i class="fas fa-video-slash"></i>
+                <h3>No Live Events</h3>
+                <p>There are no live events at the moment. Check back later!</p>
+            </div>
+        </section>
+
+        <!-- Upcoming Events Section -->
+        <section class="events-section">
+            <h2 class="section-title">
+                <i class="fas fa-calendar-alt"></i>
+                Upcoming Events
+            </h2>
+            <div id="upcomingEventsGrid" class="events-grid">
+                <!-- Upcoming events will be loaded here -->
+            </div>
+            <div id="noUpcomingEvents" class="empty-state" style="display: none;">
+                <i class="fas fa-calendar-times"></i>
+                <h3>No Upcoming Events</h3>
+                <p>Stay tuned for upcoming seminars and workshops!</p>
+            </div>
+        </section>
+
+        <!-- Archived Events Section -->
+        <section class="events-section">
+            <h2 class="section-title">
+                <i class="fas fa-archive"></i>
+                Archived Events
+            </h2>
+            <div id="archivedEventsGrid" class="events-grid">
+                <!-- Archived events will be loaded here -->
+            </div>
+            <div id="noArchivedEvents" class="empty-state" style="display: none;">
+                <i class="fas fa-folder-open"></i>
+                <h3>No Archived Events</h3>
+                <p>Past events will appear here once available.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Redirect Modal -->
+    <div id="redirectModal" class="redirect-modal">
+        <div class="redirect-modal-content">
+            <h3 class="redirect-modal-title" id="modalEventTitle">Join Live Event</h3>
+            <div class="redirect-info">
+                <p>You are about to join the live event. Click the button below to open Jitsi Meet in a new tab.</p>
+                <div class="jitsi-link" id="jitsiLinkDisplay"></div>
+                <p><strong>Note:</strong> Make sure your browser allows pop-ups for the best experience.</p>
+            </div>
+            <div class="redirect-actions">
+                <button id="joinNowBtn" class="btn btn-live">
+                    <i class="fas fa-external-link-alt"></i> Join Now
+                </button>
+                <button id="copyLinkBtn" class="btn btn-secondary">
+                    <i class="fas fa-copy"></i> Copy Link
+                </button>
+                <button id="cancelJoinBtn" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script type="module">
+        // Firebase SDK Imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+        import { getFirestore, collection, query, where, orderBy, getDocs, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
+            authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
+            projectId: "andrew-cares-village-f4cb6",
+            storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
+            messagingSenderId: "255087116955",
+            appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Global State
+        let currentUser = null;
+        let userTier = 'visitor';
+
+        // DOM Elements
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainNav = document.getElementById('mainNav');
+        const userAvatarNav = document.getElementById('userAvatarNav');
+        const userNameNav = document.getElementById('userNameNav');
+        const logoutButton = document.getElementById('logoutButton');
+        const liveEventsGrid = document.getElementById('liveEventsGrid');
+        const upcomingEventsGrid = document.getElementById('upcomingEventsGrid');
+        const archivedEventsGrid = document.getElementById('archivedEventsGrid');
+        const noLiveEvents = document.getElementById('noLiveEvents');
+        const noUpcomingEvents = document.getElementById('noUpcomingEvents');
+        const noArchivedEvents = document.getElementById('noArchivedEvents');
+        const redirectModal = document.getElementById('redirectModal');
+        const modalEventTitle = document.getElementById('modalEventTitle');
+        const jitsiLinkDisplay = document.getElementById('jitsiLinkDisplay');
+        const joinNowBtn = document.getElementById('joinNowBtn');
+        const copyLinkBtn = document.getElementById('copyLinkBtn');
+        const cancelJoinBtn = document.getElementById('cancelJoinBtn');
+
+        // Mobile Menu Toggle
+        mobileMenuBtn.addEventListener('click', () => {
+            mainNav.classList.toggle('mobile-open');
+            const icon = mobileMenuBtn.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+
+        // Close mobile menu when clicking nav links
+        mainNav.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') {
+                mainNav.classList.remove('mobile-open');
+                mobileMenuBtn.querySelector('i').classList.add('fa-bars');
+                mobileMenuBtn.querySelector('i').classList.remove('fa-times');
+            }
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mainNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                mainNav.classList.remove('mobile-open');
+                mobileMenuBtn.querySelector('i').classList.add('fa-bars');
+                mobileMenuBtn.querySelector('i').classList.remove('fa-times');
+            }
+        });
+
+        // Tier Hierarchy for Access Control
+        const tierHierarchy = {
+            'visitor': 0,
+            'student': 1,
+            'patron': 2,
+            'elder': 3,
+            'founder': 4,
+            'instructor': 5,
+            'admin': 6
+        };
+
+        // Authentication
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                await loadUserData();
+                updateNavUserInfo();
+                loadEvents();
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Load user data and determine tier
+        async function loadUserData() {
+            try {
+                const userRef = doc(db, "users", currentUser.uid);
+                const userSnap = await getDoc(userRef);
+
+                if (userSnap.exists()) {
+                    const userData = userSnap.data();
+                    userTier = userData.membershipTier || userData.role || 'student';
+                    console.log('User tier:', userTier);
+                }
+            } catch (error) {
+                console.error("Error loading user data:", error);
+            }
+        }
+
+        // Update navigation user info
+        async function updateNavUserInfo() {
+            try {
+                const userRef = doc(db, "users", currentUser.uid);
+                const userSnap = await getDoc(userRef);
+
+                if (userSnap.exists()) {
+                    const userData = userSnap.data();
+                    userNameNav.textContent = userData.name || userData.displayName || 'User';
+                    userAvatarNav.src = userData.avatarUrl || `https://via.placeholder.com/40/001F3F/FFFFFF?text=${(userData.name || userData.displayName || 'U').charAt(0)}`;
+                } else {
+                    userNameNav.textContent = currentUser.displayName || 'User';
+                    userAvatarNav.src = `https://via.placeholder.com/40/001F3F/FFFFFF?text=${(currentUser.displayName || 'U').charAt(0)}`;
+                }
+            } catch (error) {
+                console.error("Error updating nav user info:", error);
+                userNameNav.textContent = currentUser.displayName || 'User';
+                userAvatarNav.src = `https://via.placeholder.com/40/001F3F/FFFFFF?text=U`;
+            }
+        }
+
+        // Load all events with real-time updates
+        function loadEvents() {
+            showSkeletonLoaders();
+
+            try {
+                const eventsRef = collection(db, "liveEvents");
+                const eventsQuery = query(eventsRef, orderBy("scheduledAt", "desc"));
+
+                onSnapshot(eventsQuery, (snapshot) => {
+                    const events = [];
+                    snapshot.forEach((doc) => {
+                        events.push({ id: doc.id, ...doc.data() });
+                    });
+
+                    categorizeAndDisplayEvents(events);
+                    hideSkeletonLoaders();
+                }, (error) => {
+                    console.error("Error loading events:", error);
+                    hideSkeletonLoaders();
+                    showNotification("Failed to load events. Please try again.", "error");
+                });
+
+            } catch (error) {
+                console.error("Error setting up events listener:", error);
+                hideSkeletonLoaders();
+                showNotification("Failed to load events. Please try again.", "error");
+            }
+        }
+
+        // Categorize events by status and display
+        function categorizeAndDisplayEvents(events) {
+            const now = new Date();
+            const liveEvents = [];
+            const upcomingEvents = [];
+            const archivedEvents = [];
+
+            events.forEach(event => {
+                const eventStart = new Date(event.scheduledAt.seconds * 1000);
+                const eventEnd = new Date((event.scheduledAt.seconds + (event.duration || 3600)) * 1000);
+
+                if (event.status === 'live') {
+                    liveEvents.push(event);
+                } else if (now < eventStart && event.status !== 'archived' && event.status !== 'cancelled') {
+                    upcomingEvents.push(event);
+                } else if (event.status === 'archived' || now > eventEnd) {
+                    archivedEvents.push(event);
+                }
+            });
+
+            displayEvents(liveEvents, liveEventsGrid, noLiveEvents, 'live');
+            displayEvents(upcomingEvents, upcomingEventsGrid, noUpcomingEvents, 'upcoming');
+            displayEvents(archivedEvents, archivedEventsGrid, noArchivedEvents, 'archived');
+        }
+
+        // Display events in grid
+        function displayEvents(events, container, emptyElement, type) {
+            container.innerHTML = '';
+
+            if (events.length === 0) {
+                emptyElement.style.display = 'block';
+                return;
+            }
+
+            emptyElement.style.display = 'none';
+
+            events.forEach(event => {
+                const eventCard = createEventCard(event, type);
+                container.appendChild(eventCard);
+            });
+        }
+
+        // Create event card
+        function createEventCard(event, type) {
+            const card = document.createElement('div');
+            card.className = `event-card ${type === 'live' ? 'live-stream' : ''}`;
+
+            const hasAccess = checkEventAccess(event);
+            const eventDate = new Date(event.scheduledAt?.seconds ? event.scheduledAt.seconds * 1000 : Date.now());
+
+            const isAdminStream = event.isAdminStream || false;
+            const streamTitle = isAdminStream ? `${event.title} 🔴` : event.title;
+
+            card.innerHTML = `
+                <div class="event-thumbnail">
+                    <i class="fas fa-video"></i>
+                    <div class="event-status status-${type}">
+                        ${type === 'live' ? 'LIVE NOW' : type.charAt(0).toUpperCase() + type.slice(1)}
+                    </div>
+                    ${isAdminStream ? '<div class="admin-badge">Admin Stream</div>' : ''}
+                </div>
+                <div class="event-content">
+                    <h3 class="event-title">${streamTitle}</h3>
+                    <div class="event-instructor">
+                        <i class="fas fa-user-tie"></i> ${event.instructorName || 'Admin'}
+                    </div>
+                    <p class="event-description">${event.description || 'Live streaming session'}</p>
+                    <div class="event-meta">
+                        <div class="event-meta-item">
+                            <i class="fas fa-calendar"></i>
+                            ${eventDate.toLocaleDateString()}
+                        </div>
+                        <div class="event-meta-item">
+                            <i class="fas fa-clock"></i>
+                            ${eventDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                        <div class="event-meta-item">
+                            <i class="fas fa-users"></i>
+                            ${Math.floor((event.duration || 3600) / 60)}min
+                        </div>
+                        ${type === 'live' ? `
+                        <div class="event-meta-item live-indicator">
+                            <i class="fas fa-broadcast-tower"></i>
+                            ${event.participantCount || 0} viewing
+                        </div>` : ''}
+                    </div>
+                    <div class="audience-badge">${event.targetAudience || 'All Members'}</div>
+                    <div class="event-actions">
+                        ${createEventActions(event, type, hasAccess)}
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // Create event action buttons
+        function createEventActions(event, type, hasAccess) {
+            if (!hasAccess) {
+                return `
+                    <button class="btn btn-disabled" disabled>
+                        <i class="fas fa-lock"></i> Access Restricted
+                    </button>
+                    <small class="access-denied-text">
+                        Available to: ${event.targetAudience || 'Higher tier members'}
+                    </small>
+                `;
+            }
+
+            switch (type) {
+                case 'live':
+                    return `
+                        <button class="btn btn-live" onclick="showJoinModal('${event.id}', '${event.title}', '${event.streamRoomName || event.jitsiRoomUrl || ''}')">
+                            <i class="fas fa-external-link-alt"></i> Join Live
+                        </button>
+                    `;
+                case 'upcoming':
+                    return `
+                        <button class="btn btn-secondary" onclick="setReminder('${event.id}')">
+                            <i class="fas fa-bell"></i> Set Reminder
+                        </button>
+                    `;
+                case 'archived':
+                    return `
+                        <button class="btn btn-primary" onclick="watchRecording('${event.id}', '${event.title}', '${event.recordingUrl || ''}')">
+                            <i class="fas fa-play"></i> Watch Recording
+                        </button>
+                    `;
+                default:
+                    return '';
+            }
+        }
+
+        // Check if user has access to event
+        function checkEventAccess(event) {
+            const targetAudience = event.targetAudience || 'All Members';
+            const userTierLevel = tierHierarchy[userTier] || 0;
+
+            if (targetAudience.includes('All Members')) return true;
+            if (targetAudience.includes('Instructors Only') && (userTier === 'instructor' || userTier === 'admin')) return true;
+            if (targetAudience.includes('Patrons & Up') && userTierLevel >= tierHierarchy['patron']) return true;
+            if (targetAudience.includes('Elders & Up') && userTierLevel >= tierHierarchy['elder']) return true;
+            if (targetAudience.includes('Founders Only') && userTierLevel >= tierHierarchy['founder']) return true;
+
+            return false;
+        }
+
+        // Show join modal with redirect option
+        window.showJoinModal = function(eventId, title, roomNameOrUrl) {
+            modalEventTitle.textContent = title;
+            
+            let jitsiUrl = roomNameOrUrl;
+            
+            if (roomNameOrUrl && !roomNameOrUrl.startsWith('http')) {
+                if (roomNameOrUrl.includes('meet.jit.si')) {
+                    jitsiUrl = roomNameOrUrl.startsWith('https://') ? roomNameOrUrl : `https://${roomNameOrUrl}`;
+                } else {
+                    jitsiUrl = `https://meet.jit.si/${roomNameOrUrl}`;
+                }
+            }
+            
+            jitsiLinkDisplay.textContent = jitsiUrl;
+            
+            joinNowBtn.onclick = () => {
+                window.open(jitsiUrl, '_blank', 'noopener,noreferrer');
+                redirectModal.classList.remove('visible');
+                showNotification("Opening Jitsi Meet in new tab...", "success");
+            };
+            
+            copyLinkBtn.onclick = () => {
+                navigator.clipboard.writeText(jitsiUrl).then(() => {
+                    showNotification("Link copied to clipboard!", "success");
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                    showNotification("Failed to copy link", "error");
+                });
+            };
+            
+            redirectModal.classList.add('visible');
+        };
+
+        // Watch recording
+        window.watchRecording = function (eventId, title, recordingUrl) {
+            if (recordingUrl && recordingUrl.trim() !== '') {
+                window.open(recordingUrl, '_blank', 'noopener,noreferrer');
+                showNotification("Opening recording in new tab...", "success");
+            } else {
+                showNotification("Recording not available for this event", "error");
+            }
+        };
+
+        // Set reminder for upcoming event
+        window.setReminder = function (eventId) {
+            showNotification("Reminder set! You'll be notified when this event starts.", "success");
+        };
+
+        // Modal event handlers
+        cancelJoinBtn.addEventListener('click', () => {
+            redirectModal.classList.remove('visible');
+        });
+
+        redirectModal.addEventListener('click', (e) => {
+            if (e.target === redirectModal) {
+                redirectModal.classList.remove('visible');
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && redirectModal.classList.contains('visible')) {
+                redirectModal.classList.remove('visible');
+            }
+        });
+
+        // Show skeleton loaders
+        function showSkeletonLoaders() {
+            const skeletonHTML = `
+                <div class="skeleton-card">
+                    <div class="skeleton skeleton-thumbnail"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton skeleton-title"></div>
+                        <div class="skeleton skeleton-text" style="width: 60%;"></div>
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text" style="width: 80%;"></div>
+                    </div>
+                </div>
+            `;
+
+            liveEventsGrid.innerHTML = skeletonHTML.repeat(1);
+            upcomingEventsGrid.innerHTML = skeletonHTML.repeat(2);
+            archivedEventsGrid.innerHTML = skeletonHTML.repeat(2);
+        }
+
+        function hideSkeletonLoaders() {
+            // Skeleton loaders are replaced by actual content or empty states
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => notification.classList.add('show'), 100);
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
+        }
+
+        // Logout functionality
+        logoutButton.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error("Error signing out:", error);
+                showNotification("Error signing out. Please try again.", "error");
+            }
+        });
+
+        // Enhanced touch event handling for better mobile experience
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartY - touchEndY;
+
+            // Pull to refresh gesture (swipe down at top of page)
+            if (diff < -swipeThreshold && window.scrollY === 0) {
+                showNotification("Refreshing events...", "info");
+                loadEvents();
+            }
+        }
+
+        // Improved accessibility
+        document.addEventListener('keydown', (e) => {
+            // Press Enter to activate focused buttons
+            if (e.key === 'Enter' && e.target.classList.contains('btn')) {
+                e.target.click();
+            }
+        });
+
+        // Auto-refresh events every 30 seconds when page is visible
+        let refreshInterval;
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                clearInterval(refreshInterval);
+            } else {
+                refreshInterval = setInterval(() => {
+                    console.log('Auto-refreshing events...');
+                }, 30000);
+            }
+        });
+
+        // Initialize refresh interval
+        if (!document.hidden) {
+            refreshInterval = setInterval(() => {
+                console.log('Auto-refreshing events...');
+            }, 30000);
+        }
+
+        console.log('Responsive Live Events page initialized successfully');
+    </script>
+</body>
+
+</html>

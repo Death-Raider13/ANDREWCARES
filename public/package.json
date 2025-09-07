@@ -1,0 +1,13 @@
+{
+    "name": "andrew-cares-village",
+    "version": "1.0.0",
+    "description": "Community learning platform",
+    "main": "index.html",
+    "scripts": {
+        "dev": "netlify dev",
+        "build": "echo 'Build complete'"
+    },
+    "dependencies": {
+        "firebase-admin": "^11.0.0"
+    }
+}

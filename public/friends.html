@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friends Management - Andrew Cares Village</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* CSS Variables for easy theming */
+        :root {
+            --primary-blue: #1877f2;
+            --primary-blue-hover: #166fe5;
+            --secondary-blue: #42a5f5;
+            --success-green: #42b883;
+            --danger-red: #e53e3e;
+            --warning-orange: #ff9800;
+            
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #e4e6ea;
+            --bg-overlay: rgba(255, 255, 255, 0.9);
+            
+            --text-primary: #1c1e21;
+            --text-secondary: #65676b;
+            --text-muted: #8a8d91;
+            --text-inverse: #ffffff;
+            
+            --border-light: #e4e6ea;
+            --border-medium: #dadde1;
+            --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --shadow-heavy: 0 8px 32px rgba(0, 0, 0, 0.12);
+            
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --radius-full: 50px;
+            
+            --transition-fast: 0.15s ease;
+            --transition-smooth: 0.25s ease;
+        }
+
+        /* Dark theme support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #18191a;
+                --bg-secondary: #242526;
+                --bg-tertiary: #3a3b3c;
+                --bg-overlay: rgba(36, 37, 38, 0.9);
+                
+                --text-primary: #e4e6ea;
+                --text-secondary: #b0b3b8;
+                --text-muted: #8a8d91;
+                
+                --border-light: #3a3b3c;
+                --border-medium: #3e4042;
+            }
+        }
+
+        /* Reset and base styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.34;
+            font-size: 15px;
+        }
+
+        /* Header */
+        .main-header {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-light);
+            box-shadow: var(--shadow-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 12px 16px;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-full);
+            object-fit: cover;
+            border: 2px solid var(--border-light);
+            transition: var(--transition-fast);
+        }
+
+        .profile-avatar:hover {
+            border-color: var(--primary-blue);
+        }
+
+        .profile-info h3 {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text-primary);
+        }
+
+        .profile-info p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Notification Bell */
+        .notification-section {
+            position: relative;
+        }
+
+        .notification-button {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-full);
+            background: var(--bg-secondary);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-fast);
+            color: var(--text-secondary);
+        }
+
+        .notification-button:hover {
+            background: var(--bg-tertiary);
+            color: var(--primary-blue);
+        }
+
+        .notification-count {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: var(--danger-red);
+            color: white;
+            border-radius: var(--radius-full);
+            min-width: 20px;
+            height: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--bg-primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 16px;
+        }
+
+        /* Navigation Tabs */
+        .nav-container {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-light);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .nav-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 16px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: var(--transition-smooth);
+            position: relative;
+        }
+
+        .nav-tab.active {
+            color: var(--primary-blue);
+        }
+
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-blue);
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: var(--bg-secondary);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            padding: 24px;
+        }
+
+        .tab-panel {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Search Section */
+        .search-section {
+            margin-bottom: 24px;
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 48px;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-full);
+            font-size: 15px;
+            background: var(--bg-secondary);
+            transition: var(--transition-fast);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            background: var(--bg-primary);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        /* Filter Controls */
+        .filter-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-width: 140px;
+            transition: all 0.2s ease;
+        }
+
+        .filter-select:hover {
+            border-color: var(--primary-blue);
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .sort-btn {
+            padding: 8px 12px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+
+        .sort-btn:hover {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .search-results-header {
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+        }
+
+        .results-count {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .pagination-btn {
+            padding: 8px 12px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: var(--bg-secondary);
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .page-info {
+            font-size: 14px;
+            color: var(--text-secondary);
+            min-width: 100px;
+            text-align: center;
+        }
+
+        /* User Cards */
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .user-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-light);
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            border: 1px solid var(--border-light);
+        }
+
+        .user-card:hover {
+            box-shadow: var(--shadow-medium);
+            transform: translateY(-2px);
+        }
+
+        .user-header {
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-lg);
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-email {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+        }
+
+        .user-status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .user-status.friends {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .user-status.sent {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        /* Actions */
+        .user-actions {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-blue-hover);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-medium);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .btn-success {
+            background: var(--success-green);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #369870;
+        }
+
+        .btn-danger {
+            background: var(--danger-red);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c53030;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        /* Loading States */
+        .loading-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px;
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border-light);
+            border-top: 3px solid var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        /* Notifications/Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-heavy);
+            padding: 16px 20px;
+            border-left: 4px solid var(--primary-blue);
+            max-width: 400px;
+            z-index: 2000;
+            transform: translateX(100%);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            border-left-color: var(--success-green);
+        }
+
+        .toast.error {
+            border-left-color: var(--danger-red);
+        }
+
+        .toast.warning {
+            border-left-color: var(--warning-orange);
+        }
+
+        .toast-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toast-icon {
+            font-size: 18px;
+        }
+
+        .toast-message {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 12px;
+            }
+
+            .main-content {
+                padding: 16px 12px;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .nav-tab {
+                text-align: left;
+                border-bottom: 1px solid var(--border-light);
+            }
+
+            .nav-tab:last-child {
+                border-bottom: none;
+            }
+
+            .filter-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .users-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .user-actions {
+                flex-direction: column;
+            }
+        }
+
+        /* Accessibility */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Focus states */
+        .btn:focus,
+        .nav-tab:focus,
+        .search-input:focus,
+        .notification-button:focus {
+            outline: 2px solid var(--primary-blue);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="main-header" role="banner">
+        <div class="header-content">
+            <div class="profile-section">
+                <img id="profile-avatar" 
+                     src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNFQUVBRUEiLz4KPHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSI4IiB5PSI4Ij4KPHBhdGggZD0iTTEyIDEyQzE0LjIwOTEgMTIgMTYgMTAuMjA5MSAxNiA4QzE2IDUuNzkwODYgMTQuMjA5MSA0IDEyIDRDOS43OTA4NiA0IDggNS43OTA4NiA4IDhDOCAxMC4yMDkxIDkuNzkwODYgMTIgMTIgMTJaIiBmaWxsPSIjNzc3Ii8+CjxwYXRoIGQ9Ik0xMiAxNEM5LjMzIDEyIDQgMTUuMzQgNCAxOFYyMEgxMkgyMFYxOEMyMCAxNS4zNCAxNC42NyAxNCAyIDEySDEyWiIgZmlsbD0iIzc3NyIvPgo8L3N2Zz4KPC9zdmc+"
+                     alt="Profile Avatar" 
+                     class="profile-avatar">
+                <div class="profile-info">
+                    <h3 id="profile-name">Loading...</h3>
+                    <p id="profile-status">Online</p>
+                </div>
+            </div>
+            
+            <div class="notification-section">
+                <button class="notification-button" 
+                        aria-label="Notifications" 
+                        title="Friend requests">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-count visually-hidden">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="nav-container">
+            <!-- Navigation Tabs -->
+            <nav class="nav-tabs" role="tablist">
+                <button class="nav-tab active" 
+                        data-tab="my-friends" 
+                        role="tab" 
+                        aria-selected="true"
+                        aria-controls="my-friends-panel">
+                    <i class="fas fa-users"></i> My Friends
+                </button>
+                <button class="nav-tab" 
+                        data-tab="pending-requests" 
+                        role="tab"
+                        aria-controls="pending-requests-panel">
+                    <i class="fas fa-user-clock"></i> Pending Requests
+                </button>
+                <button class="nav-tab" 
+                        data-tab="sent-requests" 
+                        role="tab"
+                        aria-controls="sent-requests-panel">
+                    <i class="fas fa-paper-plane"></i> Sent Requests
+                </button>
+                <button class="nav-tab" 
+                        data-tab="find-friends" 
+                        role="tab"
+                        aria-controls="find-friends-panel">
+                    <i class="fas fa-search"></i> Find Friends
+                </button>
+            </nav>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- My Friends Panel -->
+                <section id="my-friends-panel" 
+                         class="tab-panel active" 
+                         role="tabpanel" 
+                         aria-labelledby="my-friends-tab">
+                    <div class="loading-container">
+                        <div class="spinner" aria-label="Loading friends"></div>
+                    </div>
+                </section>
+
+                <!-- Pending Requests Panel -->
+                <section id="pending-requests-panel" 
+                         class="tab-panel" 
+                         role="tabpanel" 
+                         aria-labelledby="pending-requests-tab">
+                    <div class="loading-container">
+                        <div class="spinner" aria-label="Loading requests"></div>
+                    </div>
+                </section>
+
+                <!-- Sent Requests Panel -->
+                <section id="sent-requests-panel" 
+                         class="tab-panel" 
+                         role="tabpanel" 
+                         aria-labelledby="sent-requests-tab">
+                    <div class="loading-container">
+                        <div class="spinner" aria-label="Loading sent requests"></div>
+                    </div>
+                </section>
+
+                <!-- Find Friends Panel -->
+                <section id="find-friends-panel" 
+                         class="tab-panel" 
+                         role="tabpanel" 
+                         aria-labelledby="find-friends-tab">
+                    
+                    <div class="search-section">
+                        <div class="search-container">
+                            <input type="text" 
+                                   id="search-input" 
+                                   class="search-input"
+                                   placeholder="Search people by name or email..."
+                                   autocomplete="off"
+                                   spellcheck="false">
+                            <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                        </div>
+
+                        <div class="filter-controls">
+                            <div class="filter-options">
+                                <select id="status-filter" class="filter-select" aria-label="Status filter">
+                                    <option value="all">All users</option>
+                                    <option value="online">Online (last 5 min)</option>
+                                    <option value="recent">Recently active (last hour)</option>
+                                    <option value="offline">Offline</option>
+                                </select>
+                                
+                                <select id="sort-by" class="filter-select" aria-label="Sort by">
+                                    <option value="name">Sort by name</option>
+                                    <option value="activity">Sort by activity</option>
+                                    <option value="mutual">Sort by mutual friends</option>
+                                </select>
+                                
+                                <button id="sort-order" class="sort-btn" aria-label="Sort order" title="Toggle sort order">
+                                    <i class="fas fa-sort-alpha-down"></i>
+                                </button>
+                            </div>
+
+                            <div class="pagination">
+                                <button id="prev-page" 
+                                        class="pagination-btn" 
+                                        disabled 
+                                        aria-label="Previous page">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <span class="page-info" id="page-info">Page 1</span>
+                                <button id="next-page" 
+                                        class="pagination-btn" 
+                                        disabled 
+                                        aria-label="Next page">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="search-results">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h3>Find your friends</h3>
+                            <p>Search for people to connect with</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    
+    <script>
+        // Application Configuration
+        const APP_CONFIG = {
+            firebase: {
+                apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
+                authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
+                projectId: "andrew-cares-village-f4cb6",
+                storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
+                messagingSenderId: "255087116955",
+                appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
+            },
+            pagination: {
+                itemsPerPage: 12
+            },
+            rateLimiting: {
+                requestDelay: 1000
+            }
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(APP_CONFIG.firebase);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // Application State Management
+        class AppState {
+            constructor() {
+                this.currentUser = null;
+                this.friends = new Map();
+                this.pendingRequests = new Map();
+                this.sentRequests = new Map();
+                this.allUsers = [];
+                this.filteredUsers = [];
+                this.currentPage = 1;
+                this.usersPerPage = 12;
+                this.searchQuery = '';
+                this.activeTab = 'my-friends';
+                this.rateLimitMap = new Map();
+                this.sortBy = 'name';
+                this.sortOrder = 'asc';
+                this.filterBy = 'all';
+                this.isLoading = false;
+                this.cache = new Map();
+                this.lastActivity = new Map();
+                this.listeners = new Map();
+                this.friendsListener = null;
+                this.notificationsListener = null;
+            }
+
+            // State getters
+            getFriends() { return Array.from(this.friends.values()); }
+            getPendingRequests() { return Array.from(this.pendingRequests.values()); }
+            getSentRequests() { return Array.from(this.sentRequests.values()); }
+
+            updateUsers(users) {
+                this.allUsers = users;
+                this.applyFilters();
+            }
+
+            applyFilters() {
+                let filtered = [...this.allUsers];
+                
+                // Apply search filter
+                if (this.searchQuery) {
+                    const query = this.searchQuery.toLowerCase();
+                    filtered = filtered.filter(user => 
+                        user.name.toLowerCase().includes(query) ||
+                        (user.email && user.email.toLowerCase().includes(query)) ||
+                        (user.bio && user.bio.toLowerCase().includes(query))
+                    );
+                }
+                
+                // Apply status filter
+                if (this.filterBy !== 'all') {
+                    const now = Date.now();
+                    filtered = filtered.filter(user => {
+                        const lastSeen = this.lastActivity.get(user.id) || 0;
+                        const minutesAgo = (now - lastSeen) / (1000 * 60);
+                        
+                        switch (this.filterBy) {
+                            case 'online': return minutesAgo < 5;
+                            case 'recent': return minutesAgo < 60;
+                            case 'offline': return minutesAgo >= 60;
+                            default: return true;
+                        }
+                    });
+                }
+                
+                // Apply sorting
+                filtered.sort((a, b) => {
+                    let aVal, bVal;
+                    
+                    switch (this.sortBy) {
+                        case 'name':
+                            aVal = a.name.toLowerCase();
+                            bVal = b.name.toLowerCase();
+                            break;
+                        case 'activity':
+                            aVal = this.lastActivity.get(a.id) || 0;
+                            bVal = this.lastActivity.get(b.id) || 0;
+                            break;
+                        case 'mutual':
+                            aVal = a.mutualFriends || 0;
+                            bVal = b.mutualFriends || 0;
+                            break;
+                        default:
+                            return 0;
+                    }
+                    
+                    if (this.sortOrder === 'desc') {
+                        return aVal < bVal ? 1 : aVal > bVal ? -1 : 0;
+                    }
+                    return aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
+                });
+                
+                this.filteredUsers = filtered;
+                this.currentPage = 1;
+            }
+
+            // State setters with validation
+            setCurrentUser(user) {
+                this.currentUser = user;
+                this.notifyStateChange('user', user);
+            }
+
+            updateFriends(friends) {
+                this.friends = friends;
+                this.notifyStateChange('friends', this.getFriends());
+            }
+
+            updatePendingRequests(requests) {
+                this.pendingRequests = requests;
+                this.notifyStateChange('pendingRequests', this.getPendingRequests());
+            }
+
+            updateSentRequests(requests) {
+                this.sentRequests = requests;
+                this.notifyStateChange('sentRequests', this.getSentRequests());
+            }
+
+            // Observer pattern for state changes
+            notifyStateChange(type, data) {
+                document.dispatchEvent(new CustomEvent('stateChange', {
+                    detail: { type, data }
+                }));
+            }
+
+            cleanup() {
+                if (this.friendsListener) {
+                    this.friendsListener();
+                    this.friendsListener = null;
+                }
+                if (this.notificationsListener) {
+                    this.notificationsListener();
+                    this.notificationsListener = null;
+                }
+                this.listeners.forEach(unsubscribe => {
+                    if (typeof unsubscribe === 'function') {
+                        unsubscribe();
+                    }
+                });
+                this.listeners.clear();
+            }
+        }
+
+        // Global state instance
+        const appState = new AppState();
+
+        // Utility Functions
+        class Utils {
+            static debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            }
+
+            static generateAvatar(name) {
+                if (!name || typeof name !== 'string') {
+                    name = 'User';
+                }
+                
+                const colors = ['#1877f2', '#42a5f5', '#66bb6a', '#ff7043', '#ab47bc', '#26c6da'];
+                const color = colors[name.length % colors.length];
+                
+                const initials = name.split(' ')
+                    .filter(word => word && word.length > 0)
+                    .map(word => word[0])
+                    .join('')
+                    .toUpperCase()
+                    .slice(0, 2) || 'U';
+
+                return `data:image/svg+xml;base64,${btoa(`
+                    <svg width="56" height="56" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="56" height="56" fill="${color}" rx="12"/>
+                        <text x="50%" y="50%" font-family="system-ui, -apple-system, sans-serif" 
+                              font-size="20" font-weight="600" text-anchor="middle" 
+                              dy="0.35em" fill="white">${initials}</text>
+                    </svg>
+                `)}`;
+            }
+
+            static showToast(message, type = 'info') {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                
+                const iconMap = {
+                    success: 'fa-check-circle',
+                    error: 'fa-exclamation-circle',
+                    warning: 'fa-exclamation-triangle',
+                    info: 'fa-info-circle'
+                };
+
+                toast.innerHTML = `
+                    <div class="toast-content">
+                        <i class="fas ${iconMap[type] || iconMap.info} toast-icon"></i>
+                        <span class="toast-message">${message}</span>
+                    </div>
+                `;
+
+                document.body.appendChild(toast);
+                
+                // Trigger animation
+                setTimeout(() => toast.classList.add('show'), 100);
+                
+                // Auto remove
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                }, 4000);
+            }
+
+            static formatTimeAgo(date) {
+                const now = new Date();
+                const diff = now - date;
+                const minutes = Math.floor(diff / 60000);
+                const hours = Math.floor(minutes / 60);
+                const days = Math.floor(hours / 24);
+
+                if (minutes < 1) return 'Just now';
+                if (minutes < 60) return `${minutes}m ago`;
+                if (hours < 24) return `${hours}h ago`;
+                if (days < 7) return `${days}d ago`;
+                return date.toLocaleDateString();
+            }
+
+            static sanitizeInput(input) {
+                return input.trim().replace(/[<>]/g, '');
+            }
+        }
+
+        // Rate Limiting Service
+        class RateLimiter {
+            constructor(delay = APP_CONFIG.rateLimiting.requestDelay) {
+                this.lastRequestTime = 0;
+                this.delay = delay;
+            }
+
+            canMakeRequest() {
+                const now = Date.now();
+                if (now - this.lastRequestTime < this.delay) {
+                    Utils.showToast('Please wait a moment before making another request', 'warning');
+                    return false;
+                }
+                this.lastRequestTime = now;
+                return true;
+            }
+        }
+
+        const rateLimiter = new RateLimiter();
+
+        // Firebase Service
+        class FirebaseService {
+            static async initUser() {
+                return new Promise((resolve, reject) => {
+                    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+                        try {
+                            if (user) {
+                                appState.setCurrentUser(user);
+                                await FirebaseService.loadUserData(user);
+                                await FirebaseService.loadAllMembers();
+                                resolve(user);
+                            } else {
+                                // Demo mode
+                                const demoUser = FirebaseService.createDemoUser();
+                                appState.setCurrentUser(demoUser);
+                                await FirebaseService.setupDemoData();
+                                resolve(demoUser);
+                            }
+                        } catch (error) {
+                            console.error('Auth state change error:', error);
+                            reject(error);
+                        } finally {
+                            unsubscribe();
+                        }
+                    });
+                });
+            }
+
+            static createDemoUser() {
+                return {
+                    uid: 'demo-user-' + Math.random().toString(36).substr(2, 9),
+                    displayName: 'Demo User',
+                    email: 'demo@example.com',
+                    photoURL: null
+                };
+            }
+
+            static async loadUserData(user) {
+                if (user.uid.startsWith('demo-user')) return;
+
+                try {
+                    const userRef = db.collection('users').doc(user.uid);
+                    const userSnap = await userRef.get();
+
+                    if (userSnap.exists) {
+                        const userData = userSnap.data();
+                        UIManager.updateProfileInfo(userData);
+                    } else {
+                        // Create new user document
+                        const defaultUserData = {
+                            name: user.displayName || 'New User',
+                            email: user.email,
+                            nameLower: (user.displayName || 'New User').toLowerCase(),
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            avatarUrl: user.photoURL || null
+                        };
+                        await userRef.set(defaultUserData);
+                        UIManager.updateProfileInfo(defaultUserData);
+                    }
+                } catch (error) {
+                    console.error('Error loading user data:', error);
+                    throw error;
+                }
+            }
+
+            static async loadAllMembers() {
+                if (appState.currentUser.uid.startsWith('demo-user')) return;
+
+                try {
+                    const usersRef = db.collection('users');
+                    const snapshot = await usersRef.get();
+                    
+                    appState.allUsers = snapshot.docs
+                        .map(doc => ({ id: doc.id, ...doc.data() }))
+                        .filter(user => user.id !== appState.currentUser.uid);
+                } catch (error) {
+                    console.error('Error loading members:', error);
+                    Utils.showToast('Error loading members', 'error');
+                }
+            }
+
+            static async setupDemoData() {
+                // Demo members
+                appState.allUsers = [
+                    { id: 'user1', name: 'John Doe', email: 'john@example.com' },
+                    { id: 'user2', name: 'Jane Smith', email: 'jane@example.com' },
+                    { id: 'user3', name: 'Mike Johnson', email: 'mike@example.com' },
+                    { id: 'user4', name: 'Sarah Wilson', email: 'sarah@example.com' },
+                    { id: 'user5', name: 'David Brown', email: 'david@example.com' },
+                    { id: 'user6', name: 'Emma Davis', email: 'emma@example.com' },
+                    { id: 'user7', name: 'Alex Miller', email: 'alex@example.com' },
+                    { id: 'user8', name: 'Lisa Anderson', email: 'lisa@example.com' }
+                ];
+
+                // Demo relationships
+                const friends = new Map([
+                    ['friend1', { id: 'friend1', name: 'Alice Johnson', email: 'alice@example.com', status: 'accepted' }],
+                    ['friend2', { id: 'friend2', name: 'Bob Smith', email: 'bob@example.com', status: 'accepted' }]
+                ]);
+
+                const pending = new Map([
+                    ['user5', { id: 'user5', name: 'David Brown', email: 'david@example.com', status: 'pending_from' }]
+                ]);
+
+                const sent = new Map([
+                    ['user6', { id: 'user6', name: 'Emma Davis', email: 'emma@example.com', status: 'pending_to' }]
+                ]);
+
+                appState.updateFriends(friends);
+                appState.updatePendingRequests(pending);
+                appState.updateSentRequests(sent);
+            }
+
+            static setupRealtimeListeners() {
+                if (!appState.currentUser) return;
+
+                const userId = appState.currentUser.uid;
+                
+                try {
+                    // Listen to friends collection
+                    const friendsRef = firebase.firestore().collection('users').doc(userId).collection('friends');
+                    
+                    appState.friendsListener = friendsRef.onSnapshot((snapshot) => {
+                        snapshot.docChanges().forEach((change) => {
+                            const friendData = { id: change.doc.id, ...change.doc.data() };
+                            
+                            if (change.type === 'added' || change.type === 'modified') {
+                                // Fetch user data for the friend
+                                FirebaseService.getUserData(friendData.id).then(userData => {
+                                    if (userData) {
+                                        const enrichedFriendData = { ...friendData, ...userData };
+                                        
+                                        switch (friendData.status) {
+                                            case 'accepted':
+                                                appState.friends.set(friendData.id, enrichedFriendData);
+                                                appState.pendingRequests.delete(friendData.id);
+                                                appState.sentRequests.delete(friendData.id);
+                                                break;
+                                            case 'pending_from':
+                                                appState.pendingRequests.set(friendData.id, enrichedFriendData);
+                                                break;
+                                            case 'pending_to':
+                                                appState.sentRequests.set(friendData.id, enrichedFriendData);
+                                                break;
+                                        }
+                                        
+                                        // Trigger UI updates
+                                        appState.notifyStateChange('friends', appState.getFriends());
+                                        appState.notifyStateChange('pendingRequests', appState.getPendingRequests());
+                                        appState.notifyStateChange('sentRequests', appState.getSentRequests());
+                                    }
+                                });
+                            } else if (change.type === 'removed') {
+                                appState.friends.delete(friendData.id);
+                                appState.pendingRequests.delete(friendData.id);
+                                appState.sentRequests.delete(friendData.id);
+                                
+                                // Trigger UI updates
+                                appState.notifyStateChange('friends', appState.getFriends());
+                                appState.notifyStateChange('pendingRequests', appState.getPendingRequests());
+                                appState.notifyStateChange('sentRequests', appState.getSentRequests());
+                            }
+                        });
+                    });
+
+                    // Listen to notifications for friend requests
+                    const notificationsRef = firebase.firestore().collection('notifications')
+                        .where('userId', '==', userId)
+                        .where('type', 'in', ['friend_request', 'friend_request_accepted'])
+                        .where('read', '==', false);
+                    
+                    appState.notificationsListener = notificationsRef.onSnapshot((snapshot) => {
+                        const unreadCount = snapshot.size;
+                        UIManager.updateNotificationBadge(unreadCount);
+                        
+                        // Show toast for new notifications
+                        snapshot.docChanges().forEach((change) => {
+                            if (change.type === 'added') {
+                                const notification = change.doc.data();
+                                if (notification.type === 'friend_request_accepted') {
+                                    Utils.showToast(notification.message || 'Friend request accepted', 'success');
+                                }
+                            }
+                        });
+                    });
+                } catch (error) {
+                    console.error('Error setting up realtime listeners:', error);
+                }
+            }
+
+            static async getUserData(userId) {
+                try {
+                    const userDoc = await firebase.firestore().collection('users').doc(userId).get();
+                    if (userDoc.exists) {
+                        return { id: userId, ...userDoc.data() };
+                    }
+                    return null;
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    return null;
+                }
+            }
+
+            // Friend management methods
+            static async sendFriendRequest(userId) {
+                if (!rateLimiter.canMakeRequest()) return;
+
+                if (appState.currentUser.uid.startsWith('demo-user')) {
+                    const user = appState.allUsers.find(u => u.id === userId);
+                    if (user) {
+                        const newSent = new Map(appState.sentRequests);
+                        newSent.set(userId, { ...user, status: 'pending_to' });
+                        appState.updateSentRequests(newSent);
+                        Utils.showToast(`Friend request sent to ${user.name}`, 'success');
+                    }
+                    return;
+                }
+
+                try {
+                    const currentUserDoc = await db.collection('users').doc(appState.currentUser.uid).get();
+                    const currentUserData = currentUserDoc.data();
+
+                    const batch = db.batch();
+
+                    // Add to sender's collection
+                    const senderRef = db.collection('users')
+                        .doc(appState.currentUser.uid)
+                        .collection('friends')
+                        .doc(userId);
+                    
+                    batch.set(senderRef, {
+                        status: 'pending_to',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    // Add to recipient's collection
+                    const recipientRef = db.collection('users')
+                        .doc(userId)
+                        .collection('friends')
+                        .doc(appState.currentUser.uid);
+                    
+                    batch.set(recipientRef, {
+                        status: 'pending_from',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    // Create notification
+                    const notificationRef = db.collection('notifications').doc();
+                    batch.set(notificationRef, {
+                        userId: userId,
+                        type: 'friend_request',
+                        fromUserId: appState.currentUser.uid,
+                        fromUserName: currentUserData.name || appState.currentUser.displayName,
+                        status: 'unread',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    await batch.commit();
+                    
+                    const user = appState.allUsers.find(u => u.id === userId);
+                    Utils.showToast(`Friend request sent to ${user?.name}`, 'success');
+
+                } catch (error) {
+                    console.error('Error sending friend request:', error);
+                    Utils.showToast('Failed to send friend request', 'error');
+                }
+            }
+
+            static async acceptFriendRequest(userId) {
+                if (!appState.currentUser) return;
+
+                try {
+                    const batch = firebase.firestore().batch();
+                    const currentUserRef = firebase.firestore().collection('users').doc(appState.currentUser.uid).collection('friends').doc(userId);
+                    const targetUserRef = firebase.firestore().collection('users').doc(userId).collection('friends').doc(appState.currentUser.uid);
+
+                    batch.update(currentUserRef, {
+                        status: 'accepted',
+                        acceptedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    batch.update(targetUserRef, {
+                        status: 'accepted',
+                        acceptedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    // Create acceptance notification
+                    const notificationRef = firebase.firestore().collection('notifications').doc();
+                    batch.set(notificationRef, {
+                        type: 'friend_request_accepted',
+                        userId: userId,
+                        fromUserId: appState.currentUser.uid,
+                        fromUserName: appState.currentUser.displayName || 'Someone',
+                        message: `${appState.currentUser.displayName || 'Someone'} accepted your friend request`,
+                        read: false,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    await batch.commit();
+
+                    const user = appState.pendingRequests.get(userId);
+                    Utils.showToast(`You are now friends with ${user?.name}`, 'success');
+
+                } catch (error) {
+                    console.error('Error accepting friend request:', error);
+                    Utils.showToast('Failed to accept friend request', 'error');
+                }
+            }
+
+            static async declineFriendRequest(userId) {
+                if (!appState.currentUser) return;
+
+                try {
+                    const batch = firebase.firestore().batch();
+                    const currentUserRef = firebase.firestore().collection('users').doc(appState.currentUser.uid).collection('friends').doc(userId);
+                    const targetUserRef = firebase.firestore().collection('users').doc(userId).collection('friends').doc(appState.currentUser.uid);
+
+                    // Remove friend request documents
+                    batch.delete(currentUserRef);
+                    batch.delete(targetUserRef);
+
+                    await batch.commit();
+                    Utils.showToast('Friend request declined', 'success');
+
+                } catch (error) {
+                    console.error('Error declining friend request:', error);
+                    Utils.showToast('Failed to decline friend request', 'error');
+                }
+            }
+
+            static async cancelFriendRequest(userId) {
+                if (!appState.currentUser) return;
+
+                try {
+                    const batch = firebase.firestore().batch();
+                    const currentUserRef = firebase.firestore().collection('users').doc(appState.currentUser.uid).collection('friends').doc(userId);
+                    const targetUserRef = firebase.firestore().collection('users').doc(userId).collection('friends').doc(appState.currentUser.uid);
+
+                    // Remove friend request documents
+                    batch.delete(currentUserRef);
+                    batch.delete(targetUserRef);
+
+                    await batch.commit();
+                    Utils.showToast('Friend request canceled', 'success');
+
+                } catch (error) {
+                    console.error('Error canceling friend request:', error);
+                    Utils.showToast('Failed to cancel friend request', 'error');
+                }
+            }
+
+            static async removeFriend(userId) {
+                if (!appState.currentUser) return;
+
+                try {
+                    const batch = firebase.firestore().batch();
+                    const currentUserRef = firebase.firestore().collection('users').doc(appState.currentUser.uid).collection('friends').doc(userId);
+                    const targetUserRef = firebase.firestore().collection('users').doc(userId).collection('friends').doc(appState.currentUser.uid);
+
+                    // Remove friend documents
+                    batch.delete(currentUserRef);
+                    batch.delete(targetUserRef);
+
+                    await batch.commit();
+                    Utils.showToast('Friend removed', 'success');
+
+                } catch (error) {
+                    console.error('Error removing friend:', error);
+                    Utils.showToast('Failed to remove friend', 'error');
+                }
+            }
+        }
+
+        // UI Management
+        class UIManager {
+            static init() {
+                UIManager.setupEventListeners();
+                UIManager.setupStateChangeListeners();
+            }
+
+            static setupEventListeners() {
+                // Tab navigation
+                document.querySelector('.nav-tabs').addEventListener('click', (e) => {
+                    if (e.target.classList.contains('nav-tab')) {
+                        const tabId = e.target.dataset.tab;
+                        UIManager.switchTab(tabId);
+                    }
+                });
+
+                // Search functionality
+                const searchInput = document.getElementById('search-input');
+                searchInput.addEventListener('input', Utils.debounce(() => {
+                    UIManager.handleSearch();
+                }, 300));
+                
+                // Filter controls
+                document.getElementById('status-filter').addEventListener('change', () => {
+                    appState.filterBy = document.getElementById('status-filter').value;
+                    appState.applyFilters();
+                    UIManager.renderSearchResults();
+                });
+                
+                document.getElementById('sort-by').addEventListener('change', () => {
+                    appState.sortBy = document.getElementById('sort-by').value;
+                    appState.applyFilters();
+                    UIManager.renderSearchResults();
+                });
+                
+                document.getElementById('sort-order').addEventListener('click', () => {
+                    appState.sortOrder = appState.sortOrder === 'asc' ? 'desc' : 'asc';
+                    const icon = document.querySelector('#sort-order i');
+                    icon.className = appState.sortOrder === 'asc' ? 'fas fa-sort-alpha-down' : 'fas fa-sort-alpha-up';
+                    appState.applyFilters();
+                    UIManager.renderSearchResults();
+                });
+
+                // Pagination
+                document.getElementById('prev-page').addEventListener('click', () => {
+                    if (appState.currentPage > 1) {
+                        appState.currentPage--;
+                        UIManager.handleSearch();
+                    }
+                });
+
+                document.getElementById('next-page').addEventListener('click', () => {
+                    appState.currentPage++;
+                    UIManager.handleSearch();
+                });
+
+                // Notification button
+                document.querySelector('.notification-button').addEventListener('click', () => {
+                    UIManager.switchTab('pending-requests');
+                });
+            }
+
+            static setupStateChangeListeners() {
+                document.addEventListener('stateChange', (e) => {
+                    const { type, data } = e.detail;
+                    
+                    switch (type) {
+                        case 'friends':
+                            if (document.querySelector('#my-friends-panel.active')) {
+                                UIManager.renderFriends(data);
+                            }
+                            break;
+                        case 'pendingRequests':
+                            if (document.querySelector('#pending-requests-panel.active')) {
+                                UIManager.renderPendingRequests(data);
+                            }
+                            UIManager.updateNotificationBadge(data.length);
+                            break;
+                        case 'sentRequests':
+                            if (document.querySelector('#sent-requests-panel.active')) {
+                                UIManager.renderSentRequests(data);
+                            }
+                            break;
+                    }
+                });
+            }
+
+            static switchTab(activeTabId) {
+                // Update tab buttons
+                document.querySelectorAll('.nav-tab').forEach(tab => {
+                    const isActive = tab.dataset.tab === activeTabId;
+                    tab.classList.toggle('active', isActive);
+                    tab.setAttribute('aria-selected', isActive);
+                });
+
+                // Update panels
+                document.querySelectorAll('.tab-panel').forEach(panel => {
+                    panel.classList.remove('active');
+                });
+
+                const activePanel = document.getElementById(`${activeTabId}-panel`);
+                if (activePanel) {
+                    activePanel.classList.add('active');
+                    UIManager.loadTabContent(activeTabId);
+                }
+            }
+
+            static loadTabContent(tabId) {
+                switch (tabId) {
+                    case 'my-friends':
+                        UIManager.renderFriends(appState.getFriends());
+                        break;
+                    case 'pending-requests':
+                        UIManager.renderPendingRequests(appState.getPendingRequests());
+                        break;
+                    case 'sent-requests':
+                        UIManager.renderSentRequests(appState.getSentRequests());
+                        break;
+                    case 'find-friends':
+                        if (!document.getElementById('search-input').value.trim()) {
+                            UIManager.showEmptySearchState();
+                        }
+                        break;
+                }
+            }
+
+            static updateProfileInfo(userData) {
+                const profileName = document.getElementById('profile-name');
+                const profileAvatar = document.getElementById('profile-avatar');
+
+                if (profileName) {
+                    profileName.textContent = userData.name || appState.currentUser.displayName || 'User';
+                }
+                
+                if (profileAvatar && userData.avatarUrl) {
+                    profileAvatar.src = userData.avatarUrl;
+                }
+            }
+
+            static renderFriends(friends) {
+                const container = document.getElementById('my-friends-panel');
+                
+                if (friends.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon"><i class="fas fa-users"></i></div>
+                            <h3>No friends yet</h3>
+                            <p>Use the "Find Friends" tab to connect with others</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = `
+                    <div class="users-grid">
+                        ${friends.map(friend => UIManager.createUserCard(friend, 'friend')).join('')}
+                    </div>
+                `;
+            }
+
+            static renderPendingRequests(requests) {
+                const container = document.getElementById('pending-requests-panel');
+                
+                if (requests.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon"><i class="fas fa-user-clock"></i></div>
+                            <h3>No pending requests</h3>
+                            <p>Friend requests from others will appear here</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = `
+                    <div class="users-grid">
+                        ${requests.map(request => UIManager.createUserCard(request, 'pending')).join('')}
+                    </div>
+                `;
+            }
+
+            static renderSentRequests(requests) {
+                const container = document.getElementById('sent-requests-panel');
+                
+                if (requests.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon"><i class="fas fa-paper-plane"></i></div>
+                            <h3>No sent requests</h3>
+                            <p>Requests you send will appear here</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = `
+                    <div class="users-grid">
+                        ${requests.map(request => UIManager.createUserCard(request, 'sent')).join('')}
+                    </div>
+                `;
+            }
+
+            static createUserCard(user, type) {
+                if (!user || !user.name) {
+                    console.warn('Invalid user data:', user);
+                    return '';
+                }
+                
+                const avatar = user.avatarUrl || Utils.generateAvatar(user.name || 'User');
+                
+                let statusBadge = '';
+                let actions = '';
+
+                switch (type) {
+                    case 'friend':
+                        statusBadge = '<span class="user-status friends"><i class="fas fa-check"></i> Friends</span>';
+                        actions = `
+                            <button class="btn btn-primary btn-sm" onclick="handleMessage('${user.id}')">
+                                <i class="fas fa-message"></i> Message
+                            </button>
+                            <button class="btn btn-danger btn-sm" onclick="handleRemoveFriend('${user.id}')">
+                                <i class="fas fa-user-minus"></i> Remove
+                            </button>
+                        `;
+                        break;
+                    case 'pending':
+                        statusBadge = '<span class="user-status pending"><i class="fas fa-clock"></i> Wants to be friends</span>';
+                        actions = `
+                            <button class="btn btn-success btn-sm" onclick="handleAccept('${user.id}')">
+                                <i class="fas fa-check"></i> Accept
+                            </button>
+                            <button class="btn btn-secondary btn-sm" onclick="handleDecline('${user.id}')">
+                                <i class="fas fa-times"></i> Decline
+                            </button>
+                        `;
+                        break;
+                    case 'sent':
+                        statusBadge = '<span class="user-status sent"><i class="fas fa-paper-plane"></i> Request sent</span>';
+                        actions = `
+                            <button class="btn btn-secondary btn-sm" onclick="handleCancel('${user.id}')">
+                                <i class="fas fa-times"></i> Cancel Request
+                            </button>
+                        `;
+                        break;
+                    default:
+                        actions = `
+                            <button class="btn btn-primary btn-sm" onclick="handleAddFriend('${user.id}')">
+                                <i class="fas fa-user-plus"></i> Add Friend
+                            </button>
+                        `;
+                }
+
+                return `
+                    <div class="user-card">
+                        <div class="user-header">
+                            <img src="${avatar}" alt="${user.name}" class="user-avatar">
+                            <div class="user-info">
+                                <h3 class="user-name">${user.name}</h3>
+                                <p class="user-email">${user.email}</p>
+                                ${statusBadge}
+                            </div>
+                        </div>
+                        <div class="user-actions">
+                            ${actions}
+                        </div>
+                    </div>
+                `;
+            }
+
+            static handleSearch() {
+                const query = document.getElementById('search-input').value.trim();
+                appState.searchQuery = Utils.sanitizeInput(query);
+                appState.applyFilters();
+                
+                if (query.length > 0 || appState.filterBy !== 'all') {
+                    UIManager.renderSearchResults();
+                } else {
+                    UIManager.clearSearchResults();
+                }
+                
+                UIManager.updatePagination();
+            }
+
+            static renderSearchResults() {
+                const container = document.getElementById('search-results');
+                const startIndex = (appState.currentPage - 1) * appState.usersPerPage;
+                const endIndex = startIndex + appState.usersPerPage;
+                const paginatedUsers = appState.filteredUsers.slice(startIndex, endIndex);
+                
+                // Show loading state
+                if (appState.isLoading) {
+                    container.innerHTML = `
+                        <div class="loading-container">
+                            <div class="spinner" aria-label="Loading search results"></div>
+                            <p>Searching...</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                if (paginatedUsers.length === 0) {
+                    const emptyMessage = appState.searchQuery 
+                        ? `No users found matching "${appState.searchQuery}"`
+                        : 'No users match your current filters';
+                    
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon"><i class="fas fa-search"></i></div>
+                            <h3>No users found</h3>
+                            <p>${emptyMessage}</p>
+                            <button class="btn btn-secondary" onclick="UIManager.clearAllFilters()">
+                                <i class="fas fa-times"></i> Clear filters
+                            </button>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Show results count
+                const totalResults = appState.filteredUsers.length;
+                const resultInfo = `Showing ${startIndex + 1}-${Math.min(endIndex, totalResults)} of ${totalResults} users`;
+                
+                container.innerHTML = `
+                    <div class="search-results-header">
+                        <p class="results-count">${resultInfo}</p>
+                    </div>
+                    <div class="users-grid">
+                        ${paginatedUsers.map(user => UIManager.createUserCard(user, 'search')).join('')}
+                    </div>
+                `;
+            }
+
+            static clearSearchResults() {
+                document.getElementById('search-results').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon"><i class="fas fa-search"></i></div>
+                        <h3>Find your friends</h3>
+                        <p>Search for people to connect with</p>
+                    </div>
+                `;
+            }
+
+            static clearAllFilters() {
+                document.getElementById('search-input').value = '';
+                document.getElementById('status-filter').value = 'all';
+                document.getElementById('sort-by').value = 'name';
+                appState.searchQuery = '';
+                appState.filterBy = 'all';
+                appState.sortBy = 'name';
+                appState.sortOrder = 'asc';
+                appState.currentPage = 1;
+                UIManager.clearSearchResults();
+                UIManager.updatePagination();
+            }
+
+            static showEmptySearchState() {
+                document.getElementById('search-results').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon"><i class="fas fa-search"></i></div>
+                        <h3>Find your friends</h3>
+                        <p>Search for people to connect with</p>
+                    </div>
+                `;
+                UIManager.updatePagination();
+            }
+
+            static updatePagination() {
+                const totalResults = appState.filteredUsers.length;
+                const totalPages = Math.ceil(totalResults / appState.usersPerPage);
+                
+                document.getElementById('prev-page').disabled = appState.currentPage === 1;
+                document.getElementById('next-page').disabled = appState.currentPage >= totalPages || totalResults === 0;
+                document.getElementById('page-info').textContent = totalResults > 0 
+                    ? `Page ${appState.currentPage} of ${totalPages}`
+                    : 'Page 1';
+            }
+
+            static updateNotificationBadge(count) {
+                const badge = document.querySelector('.notification-count');
+                if (count > 0) {
+                    badge.textContent = count;
+                    badge.classList.remove('visually-hidden');
+                } else {
+                    badge.classList.add('visually-hidden');
+                }
+            }
+        }
+
+        // Global action handlers
+        window.handleAddFriend = (userId) => FirebaseService.sendFriendRequest(userId);
+        window.handleAccept = (userId) => FirebaseService.acceptFriendRequest(userId);
+        window.handleDecline = async (userId) => {
+            if (confirm('Are you sure you want to decline this friend request?')) {
+                await FirebaseService.declineFriendRequest(userId);
+            }
+        };
+        window.handleCancel = async (userId) => {
+            if (confirm('Cancel this friend request?')) {
+                await FirebaseService.cancelFriendRequest(userId);
+            }
+        };
+        window.handleRemoveFriend = async (userId) => {
+            if (confirm('Are you sure you want to remove this friend?')) {
+                await FirebaseService.removeFriend(userId);
+            }
+        };
+        window.handleMessage = (userId) => {
+            Utils.showToast('Opening chat...', 'info');
+            // Navigate to messages page with friend's user ID
+            window.location.href = `messages.html?chatWith=${userId}`;
+        };
+
+        // Application initialization
+        class App {
+            static async init() {
+                try {
+                    UIManager.init();
+                    await FirebaseService.initUser();
+                    FirebaseService.setupRealtimeListeners();
+                    
+                    // Load initial content
+                    UIManager.loadTabContent('my-friends');
+                    
+                    Utils.showToast('Friends management loaded', 'success');
+                } catch (error) {
+                    console.error('App initialization error:', error);
+                    Utils.showToast('Error loading app. Some features may not work.', 'error');
+                }
+            }
+        }
+
+        // Start the application
+        document.addEventListener('DOMContentLoaded', App.init);
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            appState.cleanup();
+        });
+    </script>
+</body>
+</html>

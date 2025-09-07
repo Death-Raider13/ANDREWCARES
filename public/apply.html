@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Become an Instructor - Andrew Cares Village</title>
+
+    <!-- Fonts and Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --background-color: #F4F2ED; --text-primary: #333333; --text-secondary: #555555;
+            --color-primary: #B38B00; --color-secondary: #001F3F; --card-bg: #FFFFFF;
+            --border-color: #EAEAEA; --hover-bg: #F9F9F9; --success-color: #28a745;
+        }
+        body { font-family: 'Montserrat', sans-serif; background-color: var(--background-color ); color: var(--text-primary); line-height: 1.6; margin: 0; }
+        
+        /* --- Header (Placeholder) --- */
+        .main-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background-color: var(--card-bg); box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        .logo { font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--color-secondary); text-decoration: none; }
+
+        /* --- Page Layout & Hero Section --- */
+        .page-container { max-width: 1100px; margin: 0 auto; padding: 0 1rem; }
+        .hero-section {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: linear-gradient(rgba(0, 31, 63, 0.7), rgba(0, 31, 63, 0.7)), url('https://images.unsplash.com/photo-1517486808906-6538cb3b8656?q=80&w=2070&auto=format&fit=crop' ) no-repeat center center;
+            background-size: cover;
+            border-radius: 0 0 20px 20px;
+            color: white;
+        }
+        .hero-section h1 { font-family: 'Cinzel', serif; font-size: 3rem; margin-bottom: 1rem; }
+        .hero-section p { font-size: 1.2rem; max-width: 700px; margin: 0 auto; opacity: 0.9; }
+
+        /* --- Section Styling --- */
+        .content-section { padding: 4rem 1rem; }
+        .section-title { text-align: center; font-family: 'Cinzel', serif; font-size: 2.5rem; color: var(--color-secondary); margin-bottom: 3rem; }
+
+        /* --- Benefits Section --- */
+        .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .benefit-card { background-color: var(--card-bg); text-align: center; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.07); transition: all 0.3s ease; }
+        .benefit-card:hover { transform: translateY(-10px); box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+        .benefit-card .icon { font-size: 3rem; color: var(--color-primary); margin-bottom: 1rem; }
+        .benefit-card h3 { font-size: 1.25rem; color: var(--color-secondary); margin-bottom: 0.5rem; }
+        .benefit-card p { color: var(--text-secondary); }
+
+        /* --- How It Works Section --- */
+        .process-timeline { display: flex; justify-content: space-between; gap: 2rem; position: relative; }
+        .process-timeline::before { content: ''; position: absolute; top: 25px; left: 50px; right: 50px; height: 4px; background-color: var(--border-color); z-index: 1; }
+        .process-step { text-align: center; flex: 1; position: relative; z-index: 2; }
+        .step-number { width: 50px; height: 50px; background-color: var(--color-secondary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700; margin: 0 auto 1rem auto; border: 4px solid var(--background-color); }
+        .process-step h4 { font-size: 1.1rem; color: var(--color-secondary); margin-bottom: 0.5rem; }
+        .process-step p { color: var(--text-secondary); }
+
+        /* --- Application Button Section --- */
+        .application-section { text-align: center; }
+        .btn-apply {
+            font-size: 1.25rem;
+            font-weight: 700;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            background: var(--color-primary);
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(179, 139, 0, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .btn-apply:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(179, 139, 0, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-section h1 { font-size: 2rem; }
+            .process-timeline { flex-direction: column; }
+            .process-timeline::before { left: 23px; top: 50px; bottom: 50px; width: 4px; height: auto; }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <a href="home.html" class="logo">Andrew Cares Village</a>
+        <!-- You can paste your full header navigation here if you have one -->
+    </header>
+
+    <div class="page-container">
+        <!-- Section 1: The "Why Us?" Introduction -->
+        <section class="hero-section">
+            <h1>Share Your Passion. Build Your Business.</h1>
+            <p>Join our mission to create a safe, growth-oriented community. We handle the platform, you focus on what you do best: teaching and inspiring.</p>
+        </section>
+
+        <!-- Section 2: The "What's In It For You?" Benefits -->
+        <section class="content-section">
+            <h2 class="section-title">Why Teach With Us?</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="icon"><i class="fas fa-hand-holding-usd"></i></div>
+                    <h3>Keep 90% of Your Earnings</h3>
+                    <p>Our transparent 10% commission is one of the lowest available. We only succeed when you do.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon"><i class="fas fa-users"></i></div>
+                    <h3>Access a Ready Community</h3>
+                    <p>Connect with an engaged and dedicated community of members who are actively seeking knowledge and growth.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon"><i class="fas fa-cogs"></i></div>
+                    <h3>Focus on What You Love</h3>
+                    <p>We manage the platform, payment processing, and member support, so you can focus entirely on teaching.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: The "How It Works" Process -->
+        <section class="content-section" style="background-color: var(--hover-bg);">
+            <h2 class="section-title">A Simple Path to Partnership</h2>
+            <div class="process-timeline">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <h4>Apply Online</h4>
+                    <p>Fill out our straightforward application form with your details and credentials.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <h4>Get Vetted</h4>
+                    <p>Our team reviews your application to ensure a high standard of quality and safety for our community.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <h4>Start Teaching</h4>
+                    <p>Once approved, set up your profile, define your availability, and begin offering mentorship sessions.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: The "Let's Get Started" Application Button -->
+        <section class="content-section application-section">
+            <h2 class="section-title">Ready to Join Us?</h2>
+            <p style="max-width: 600px; margin: -2rem auto 2rem auto; color: var(--text-secondary);">Click the button below to fill out our secure application form. We can't wait to learn more about you.</p>
+            <a href="#" id="applyBtn" class="btn-apply" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-pen-alt"></i> Start Your Application
+            </a>
+        </section>
+    </div>
+
+    <script type="module">
+        // --- IMPORTANT: PASTE YOUR GOOGLE FORM LINK HERE ---
+        const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfb-1lUAH-jkKDfonRpy1v97TCzOs1ctlvHEgf5VuHZzgTOjQ/viewform"; 
+
+        document.getElementById('applyBtn').href = googleFormUrl;
+
+        // Optional: You can still use Firebase to check if a user has already applied
+        // to prevent them from seeing this page in the future, but it's not required
+        // for the form itself to work.
+    </script>
+</body>
+</html>

@@ -1,0 +1,3357 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Village Square - Andrew Cares Village</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;500;700&display=swap"
+            rel="stylesheet">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+        <style>
+        /* --- Core Styles --- */
+        :root {
+            --background-color: #F4F2ED;
+            --text-primary: #333333;
+            --text-secondary: #555555;
+            --color-primary: #B38B00;
+            --color-secondary: #001F3F;
+            --card-bg: #FFFFFF;
+            --border-color: #EAEAEA;
+            --hover-bg: #F9F9F9;
+            --success-color: #4CAF50;
+            --danger-color: #dc3545;
+            --admin-color: #8e24aa;
+            --instructor-color: #f57c00;
+            --notification-color: #ff3040;
+        }
+        
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: var(--background-color); 
+            color: var(--text-primary); 
+            line-height: 1.6; 
+            margin: 0; 
+        }
+        
+        a { text-decoration: none; color: inherit; }
+
+        /* --- Header & Layout --- */
+        .main-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 1rem 2rem; 
+            border-bottom: 1px solid var(--border-color); 
+            background-color: var(--card-bg); 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+        }
+        
+        .logo { 
+            font-family: 'Cinzel', serif; 
+            font-weight: 700; 
+            font-size: 1.5rem; 
+            color: var(--color-secondary); 
+        }
+        
+        .header-actions { 
+            display: flex; 
+            align-items: center; 
+            gap: 1.5rem; 
+        }
+
+        /* --- Mobile Hamburger Menus --- */
+        .mobile-nav-toggle, .mobile-widgets-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-primary);
+            padding: 0.5rem;
+        }
+
+        .mobile-nav-menu, .mobile-widgets-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 280px;
+            height: 100vh;
+            background: var(--card-bg);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            z-index: 2000;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+            padding-top: 80px;
+        }
+
+        .mobile-widgets-menu {
+            right: -100%;
+            left: auto;
+            transition: right 0.3s ease;
+        }
+
+        .mobile-nav-menu.show {
+            left: 0;
+        }
+
+        .mobile-widgets-menu.show {
+            right: 0;
+        }
+
+        .mobile-menu-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            color: var(--color-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            z-index: 2001;
+        }
+
+        .mobile-menu-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1999;
+        }
+
+        .mobile-menu-overlay.show {
+            display: block;
+        }
+        
+        .user-profile { 
+            position: relative; 
+            display: flex; 
+            align-items: center; 
+            gap: 0.7rem; 
+            cursor: pointer; 
+        }
+        
+        .user-avatar { 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            object-fit: cover; 
+        }
+        
+        .user-name { font-weight: 500; }
+        
+        .user-role-badge { 
+            background: var(--admin-color); 
+            color: white; 
+            padding: 2px 8px; 
+            border-radius: 10px; 
+            font-size: 0.7rem; 
+            font-weight: bold; 
+            margin-left: 0.3rem; 
+        }
+        
+        .user-role-badge.instructor { background: var(--instructor-color); }
+        
+        .profile-dropdown { 
+            display: none; 
+            position: absolute; 
+            top: 120%; 
+            right: 0; 
+            background-color: var(--card-bg); 
+            border-radius: 8px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15); 
+            width: 220px; 
+            z-index: 1001; 
+            border: 1px solid var(--border-color); 
+        }
+        
+        .user-profile:hover .profile-dropdown { display: block; }
+        
+        .profile-dropdown a, .profile-dropdown button { 
+            display: flex; 
+            align-items: center; 
+            gap: 0.8rem; 
+            width: 100%; 
+            padding: 0.8rem 1.2rem; 
+            background: none; 
+            border: none; 
+            text-align: left; 
+            cursor: pointer; 
+            color: var(--text-primary); 
+        }
+        
+        .profile-dropdown a:hover, .profile-dropdown button:hover { 
+            background-color: var(--hover-bg); 
+        }
+        
+        .profile-dropdown .logout-button { color: var(--danger-color); }
+        
+        .profile-dropdown i { 
+            width: 20px; 
+            text-align: center; 
+            color: var(--text-secondary); 
+        }
+        
+        .home-layout { 
+            display: grid; 
+            grid-template-columns: 280px 1fr 320px; 
+            gap: 2rem; 
+            max-width: 1400px; 
+            margin: 2rem auto; 
+            padding: 0 2rem; 
+        }
+        
+        .left-sidebar, .right-sidebar { 
+            position: sticky; 
+            top: 6rem; 
+            height: calc(100vh - 8rem); 
+            overflow-y: auto; 
+        }
+        
+        .main-feed { max-width: 700px; }
+
+        /* --- Widgets & Cards --- */
+        .widget { 
+            background-color: var(--card-bg); 
+            border-radius: 8px; 
+            padding: 1.5rem; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            margin-bottom: 1.5rem; 
+        }
+        
+        .widget-title { 
+            font-family: 'Cinzel', serif; 
+            font-size: 1.2rem; 
+            color: var(--color-secondary); 
+            margin-bottom: 1rem; 
+            border-bottom: 1px solid var(--border-color); 
+            padding-bottom: 0.5rem; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        
+        .nav-menu a { 
+            display: flex; 
+            align-items: center; 
+            padding: 0.8rem; 
+            border-radius: 5px; 
+            font-weight: 500; 
+            margin-bottom: 0.5rem; 
+            transition: all 0.3s; 
+        }
+        
+        .nav-menu a:hover, .nav-menu a.active { 
+            background-color: var(--hover-bg); 
+            color: var(--color-primary); 
+        }
+        
+        .nav-menu a i { 
+            margin-right: 0.8rem; 
+            width: 20px; 
+        }
+        
+        .nav-menu .instructor-apply-link { 
+            background-color: rgba(245, 124, 0, 0.1); 
+            border-left: 3px solid var(--instructor-color); 
+            margin-top: 1rem; 
+        }
+        
+        .donation-widget { text-align: center; }
+        
+        .btn-donate { 
+            background: linear-gradient(45deg, var(--success-color), #4caf50); 
+            color: white; 
+            font-size: 1.1rem; 
+            padding: 0.8rem 2rem; 
+            border-radius: 50px; 
+        }
+        
+        /* --- Post Styles --- */
+        .create-post-widget textarea { 
+            width: 100%; 
+            border: none; 
+            resize: none; 
+            font-family: 'Montserrat', sans-serif; 
+            font-size: 1rem; 
+            min-height: 60px; 
+            outline: none; 
+        }
+        
+        .media-preview { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 0.5rem; 
+            margin-top: 1rem; 
+        }
+        
+        .preview-item { position: relative; }
+        
+        .preview-image, .preview-video { 
+            width: 80px; 
+            height: 80px; 
+            object-fit: cover; 
+            border-radius: 8px; 
+        }
+        
+        .remove-btn { 
+            position: absolute; 
+            top: -5px; 
+            right: -5px; 
+            background: var(--danger-color); 
+            color: white; 
+            border: none; 
+            border-radius: 50%; 
+            width: 20px; 
+            height: 20px; 
+            cursor: pointer; 
+        }
+        
+        .post-card { 
+            background-color: var(--card-bg); 
+            border-radius: 8px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            margin-bottom: 1.5rem; 
+        }
+        
+        .post-header { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 1rem 1.5rem; 
+        }
+        
+        .post-author-info { 
+            display: flex; 
+            align-items: center; 
+            gap: 1rem; 
+        }
+        
+        .post-content { 
+            padding: 0 1.5rem 1rem 1.5rem; 
+            white-space: pre-wrap; 
+            word-wrap: break-word; 
+        }
+        
+        .post-media img, .post-media video { 
+            max-width: 100%; 
+            border-radius: 8px; 
+            margin-top: 1rem; 
+        }
+        
+        .post-actions { 
+            display: flex; 
+            justify-content: space-around; 
+            padding: 0.5rem 1.5rem; 
+            border-top: 1px solid var(--border-color); 
+        }
+        
+        .post-action-btn { 
+            background: none; 
+            border: none; 
+            padding: 0.8rem; 
+            cursor: pointer; 
+            font-size: 0.9rem; 
+            color: #65676b; 
+            display: flex; 
+            align-items: center; 
+            gap: 0.5rem; 
+            font-weight: 600; 
+        }
+        
+        .post-action-btn.liked { color: #1877f2; }
+        
+        .comments-section { 
+            padding: 1rem 1.5rem; 
+            display: none; 
+        }
+        
+        .comment-input-container { 
+            display: flex; 
+            gap: 0.5rem; 
+            margin-bottom: 1rem; 
+        }
+        
+        .comment-input { 
+            flex: 1; 
+            background: #f0f2f5; 
+            border: none; 
+            border-radius: 20px; 
+            padding: 0.7rem 1rem; 
+        }
+        
+        .comment-submit-btn { 
+            background: #1877f2; 
+            color: white; 
+            border: none; 
+            border-radius: 50%; 
+            width: 36px; 
+            height: 36px; 
+            cursor: pointer; 
+        }
+
+        /* --- UNLIMITED NESTED COMMENTS (Facebook-style) --- */
+        .comment-thread {
+            margin-bottom: 0.8rem;
+        }
+
+        .comment-item {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .comment-content {
+            flex: 1;
+        }
+
+        .comment-bubble {
+            background: #f0f2f5;
+            border-radius: 16px;
+            padding: 0.7rem 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .comment-text {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        .comment-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .comment-action-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .comment-action-btn:hover {
+            background: var(--hover-bg);
+            color: var(--color-primary);
+        }
+
+        .comment-time {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Nested replies with progressive indentation */
+        .comment-replies {
+            margin-left: 2.5rem;
+            margin-top: 0.5rem;
+            position: relative;
+        }
+
+        .comment-replies::before {
+            content: '';
+            position: absolute;
+            left: -1.25rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border-color);
+        }
+
+        /* Limit visual indentation after certain depth */
+        .comment-replies .comment-replies .comment-replies .comment-replies {
+            margin-left: 1rem;
+        }
+
+        .reply-input-container {
+            display: none;
+            margin-top: 0.5rem;
+            margin-left: 2.5rem;
+        }
+
+        .reply-input-container.show {
+            display: flex;
+        }
+
+        .reply-input {
+            flex: 1;
+            background: #f0f2f5;
+            border: none;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .reply-submit-btn {
+            background: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+
+        /* --- NOTIFICATION SYSTEM --- */
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+        }
+
+        .notification-bell:hover {
+            background: var(--hover-bg);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 0.2rem;
+            right: 0.2rem;
+            background: var(--notification-color);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .notification-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 380px;
+            max-height: 500px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            z-index: 1000;
+            margin-top: 0.5rem;
+            display: none;
+            overflow: hidden;
+        }
+
+        .notification-dropdown.show {
+            display: block;
+        }
+
+        .notification-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .notification-item {
+            display: flex;
+            gap: 0.8rem;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: relative;
+        }
+
+        .notification-item:hover {
+            background: var(--hover-bg);
+        }
+
+        .notification-item.unread {
+            background: rgba(179, 139, 0, 0.05);
+        }
+
+        .notification-item.unread::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--color-primary);
+        }
+
+        .notification-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-text {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 0.3rem;
+        }
+
+        .notification-time {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .notification-type-icon {
+            position: absolute;
+            bottom: 0.5rem;
+            right: 0.5rem;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: white;
+        }
+
+        .notification-type-icon.like { background: #1877f2; }
+        .notification-type-icon.comment { background: #42b883; }
+        .notification-type-icon.share { background: #ff6b35; }
+        .notification-type-icon.mention { background: #8e24aa; }
+        .notification-type-icon.reply { background: #f39c12; }
+
+        /* --- TAGGING SYSTEM --- */
+        .mention {
+            color: var(--color-primary);
+            font-weight: 600;
+            text-decoration: none;
+            background: rgba(179, 139, 0, 0.1);
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+        }
+
+        .mention:hover {
+            background: rgba(179, 139, 0, 0.2);
+            text-decoration: underline;
+        }
+
+        .mention-dropdown {
+            position: absolute;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            width: 280px;
+            display: none;
+        }
+
+        .mention-dropdown.show {
+            display: block;
+        }
+
+        .mention-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .mention-item:hover,
+        .mention-item.selected {
+            background: var(--hover-bg);
+        }
+
+        .mention-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .mention-info {
+            flex: 1;
+        }
+
+        .mention-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .mention-username {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* --- SEARCH ENHANCEMENT --- */
+        .search-container {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+            margin: 0 1rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.7rem 1rem 0.7rem 2.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            background: var(--hover-bg);
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--color-primary);
+            background: var(--card-bg);
+            box-shadow: 0 0 0 3px rgba(179, 139, 0, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .search-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .search-dropdown.show {
+            display: block;
+        }
+
+        .search-section {
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .search-result-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .search-result-item:hover {
+            background: var(--hover-bg);
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        /* --- POST FILTERS --- */
+        .post-filters {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-button {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-button:hover,
+        .filter-button.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 1024px) {
+            .home-layout {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 0 1rem;
+            }
+            
+            .left-sidebar, .right-sidebar {
+                position: relative;
+                top: auto;
+                height: auto;
+            }
+            
+            .left-sidebar {
+                order: 1;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 1rem;
+            }
+            
+            .main-feed {
+                order: 2;
+            }
+            
+            .right-sidebar {
+                order: 3;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-header {
+                padding: 0.8rem 1rem;
+                flex-wrap: nowrap;
+                justify-content: space-between;
+            }
+            
+            .mobile-nav-toggle, .mobile-widgets-toggle {
+                display: block;
+            }
+            
+            .mobile-nav-menu, .mobile-widgets-menu {
+                display: block;
+            }
+            
+            .header-actions {
+                gap: 0.5rem;
+                flex-wrap: nowrap;
+            }
+            
+            .logo {
+                font-size: 1.2rem;
+                flex: 1;
+                text-align: center;
+            }
+            
+            .search-container {
+                display: none; /* Hide search in header on mobile */
+            }
+            
+            .notification-bell {
+                display: none; /* Hide notifications on mobile - move to hamburger menu */
+            }
+            
+            .user-profile .user-name {
+                display: none; /* Hide username on mobile */
+            }
+            
+            .user-profile {
+                gap: 0.3rem;
+            }
+            
+            #adminButton, #instructorButton {
+                display: none !important; /* Hide role buttons on mobile */
+            }
+            
+            .home-layout {
+                padding: 0 0.5rem;
+                gap: 0.5rem;
+            }
+            
+            .left-sidebar, .right-sidebar {
+                display: none; /* Hide sidebars on mobile - content moved to hamburger menus */
+            }
+            
+            .main-feed {
+                order: 1;
+                max-width: 100%;
+            }
+            
+            .widget {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+            
+            .post-card {
+                margin-bottom: 1rem;
+            }
+            
+            .post-header {
+                padding: 0.8rem 1rem;
+            }
+            
+            .post-content {
+                padding: 0 1rem 0.8rem 1rem;
+            }
+            
+            .post-actions {
+                padding: 0.4rem 1rem;
+            }
+            
+            .notification-dropdown {
+                width: 320px;
+                right: -50px;
+            }
+            
+            .comment-replies {
+                margin-left: 1.5rem;
+            }
+            
+            .reply-input-container {
+                margin-left: 1.5rem;
+            }
+            
+            /* Mobile navigation */
+            .mobile-nav {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: var(--card-bg);
+                border-top: 1px solid var(--border-color);
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                padding: 0.5rem;
+                z-index: 1000;
+            }
+            
+            .mobile-nav-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 0.5rem;
+                color: var(--text-secondary);
+                text-decoration: none;
+                font-size: 0.7rem;
+                min-width: 50px;
+            }
+            
+            .mobile-nav-item.active {
+                color: var(--color-primary);
+            }
+            
+            .mobile-nav-item i {
+                font-size: 1.2rem;
+                margin-bottom: 0.2rem;
+            }
+        }
+
+        /* --- UTILITY CLASSES --- */
+        .hidden { display: none !important; }
+        
+        .spinner { 
+            width: 40px; 
+            height: 40px; 
+            border: 4px solid var(--border-color); 
+            border-top: 4px solid var(--color-primary); 
+            border-radius: 50%; 
+            animation: spin 1s linear infinite; 
+            margin: 2rem auto; 
+        }
+        
+        @keyframes spin { 
+            to { transform: rotate(360deg); } 
+        }
+
+        /* --- TRENDING HASHTAGS --- */
+        .trending-hashtags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .hashtag-item {
+            background: rgba(179, 139, 0, 0.1);
+            color: var(--color-primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .hashtag-item:hover {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* --- ONLINE MEMBERS --- */
+        .online-count-badge { 
+            background-color: var(--success-color); 
+            color: white; 
+            font-size: 0.8rem; 
+            font-weight: 700; 
+            padding: 0.2rem 0.6rem; 
+            border-radius: 12px; 
+        }
+        
+        .online-members-container { 
+            display: flex; 
+            align-items: center; 
+            margin-top: 1rem; 
+        }
+        
+        .online-avatar-stack { display: flex; }
+        
+        .online-avatar { 
+            width: 36px; 
+            height: 36px; 
+            border-radius: 50%; 
+            border: 2px solid var(--card-bg); 
+            object-fit: cover; 
+            margin-left: -12px; 
+        }
+        
+        .online-avatar:first-child { margin-left: 0; }
+        
+        .online-text-more { 
+            margin-left: 1rem; 
+            font-size: 0.9rem; 
+            color: var(--text-secondary); 
+            font-weight: 500; 
+        }
+
+        /* --- SHARE MODAL --- */
+        .share-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .share-modal.show {
+            display: flex;
+        }
+
+        .share-content {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .share-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .share-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .share-option:hover {
+            background: var(--hover-bg);
+            border-color: var(--color-primary);
+        }
+        </style>
+    </head>
+    <body>
+        <div id="loader"
+            style="display:flex; flex-direction:column; justify-content:center; align-items:center; position:fixed; top:0; left:0; width:100%; height:100%; background:var(--background-color); z-index:9999;">
+            <div class="spinner"></div><p>Loading Village...</p>
+        </div>
+
+        <div id="mainContent" class="hidden">
+            <header class="main-header">
+                <button class="mobile-nav-toggle" id="mobileNavToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="logo">Andrew Cares Village</div>
+                <div class="header-actions">
+                    <div class="search-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" id="globalSearch" placeholder="Search posts, people, topics...">
+                        <div class="search-dropdown" id="searchDropdown">
+                            <div class="search-section">Recent Searches</div>
+                            <div id="recentSearches"></div>
+                            <div class="search-section">People</div>
+                            <div id="peopleResults"></div>
+                            <div class="search-section">Posts</div>
+                            <div id="postResults"></div>
+                        </div>
+                    </div>
+
+                    <div class="notification-bell" id="notificationBell">
+                        <i class="fas fa-bell"></i>
+                        <div class="notification-badge" id="notificationBadge" style="display: none;">0</div>
+                        <div class="notification-dropdown" id="notificationDropdown">
+                            <div class="notification-header">
+                                <span>Notifications</span>
+                                <button id="markAllReadBtn" style="background: none; border: none; color: var(--color-primary); cursor: pointer; font-size: 0.8rem;">Mark all as read</button>
+                            </div>
+                            <div class="notification-list" id="notificationList">
+                                <div style="padding: 2rem; text-align: center; color: var(--text-secondary);">No notifications yet</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="admin.html" id="adminButton" class="hidden" style="background: var(--admin-color); color: white; padding: 0.5rem 1rem; border-radius: 20px;"><i class="fas fa-shield-alt"></i></a>
+                    <a href="instructor.html" id="instructorButton" class="hidden" style="background: var(--instructor-color); color: white; padding: 0.5rem 1rem; border-radius: 20px;"><i class="fas fa-chalkboard-teacher"></i></a>
+                    
+                    <div id="userProfile" class="user-profile">
+                        <img id="userAvatar" src alt="User Avatar" class="user-avatar">
+                        <div>
+                            <span id="userName" class="user-name">Loading...</span>
+                            <span id="userRoleBadge" class="user-role-badge hidden"></span>
+                        </div>
+                        <div class="profile-dropdown" id="profileDropdown">
+                            <a id="myProfileLink" href="profile.html"><i class="fas fa-user"></i> My Profile</a>
+                            <a href="messages.html"><i class="fas fa-comments"></i> Messages</a>
+                            <button id="logoutButton" class="logout-button"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                        </div>
+                    </div>
+                    <button class="mobile-widgets-toggle" id="mobileWidgetsToggle">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Mobile Navigation Menu -->
+            <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+            <div class="mobile-nav-menu" id="mobileNavMenu">
+                <div class="mobile-menu-header">
+                    <span>Navigation</span>
+                    <button class="mobile-menu-close" id="mobileNavClose">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="widget">
+                    <div class="nav-menu">
+                        <a href="home.html" class="active"><i class="fas fa-home"></i> Village Square</a>
+                        <a href="profile.html"><i class="fas fa-user"></i> My Profile</a>
+                        <a href="friends.html"><i class="fas fa-users"></i> Friends</a>
+                        <a href="messages.html"><i class="fas fa-comments"></i> Messages</a>
+                        <a href="resources.html"><i class="fas fa-book"></i> Resources</a>
+                        <a href="live-events.html"><i class="fas fa-calendar"></i> Live Events</a>
+                        <a href="lounge.html"><i class="fas fa-coffee"></i> Lounge</a>
+                        <a href="mentorship.html"><i class="fas fa-handshake"></i> Mentorship</a>
+                        <a href="dojo.html"><i class="fas fa-fist-raised"></i> Training Dojo</a>
+                        <a href="course-management.html"><i class="fas fa-graduation-cap"></i> My Courses</a>
+                        <a href="apply.html" class="instructor-apply-link"><i class="fas fa-chalkboard-teacher"></i> Become an Instructor</a>
+                    </div>
+                </div>
+                <!-- Mobile Search -->
+                <div class="widget">
+                    <div class="widget-title">Search</div>
+                    <div class="search-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" id="mobileGlobalSearch" placeholder="Search posts, people, topics...">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Widgets Menu -->
+            <div class="mobile-widgets-menu" id="mobileWidgetsMenu">
+                <div class="mobile-menu-header">
+                    <span>Widgets & More</span>
+                    <button class="mobile-menu-close" id="mobileWidgetsClose">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <!-- Quote of the Day Widget -->
+                <div class="widget" id="mobileQuoteWidget">
+                    <div class="widget-title">
+                        <i class="fas fa-quote-left"></i> Quote of the Day
+                    </div>
+                    <div class="quote-content" id="mobileQuoteContent">
+                        <blockquote style="font-style: italic; margin: 0; padding: 1rem; background: var(--hover-bg); border-left: 4px solid var(--color-primary); border-radius: 4px;">
+                            "The best time to plant a tree was 20 years ago. The second best time is now."
+                            <footer style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">
+                                — Chinese Proverb
+                            </footer>
+                        </blockquote>
+                    </div>
+                </div>
+
+                <!-- Village Announcements Widget -->
+                <div class="widget" id="mobileAnnouncementsWidget">
+                    <div class="widget-title">
+                        <i class="fas fa-bullhorn"></i> Village Announcements
+                    </div>
+                    <div class="announcements-list" id="mobileAnnouncementsList">
+                        <div class="announcement-item" style="padding: 0.8rem; border-bottom: 1px solid var(--border-color); margin-bottom: 0.5rem;">
+                            <div style="font-weight: 600; color: var(--color-primary); font-size: 0.9rem;">
+                                <i class="fas fa-star"></i> Welcome New Members!
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.3rem;">
+                                Join us in welcoming our newest village members this week.
+                            </div>
+                        </div>
+                        <div class="announcement-item" style="padding: 0.8rem; border-bottom: 1px solid var(--border-color); margin-bottom: 0.5rem;">
+                            <div style="font-weight: 600; color: var(--color-primary); font-size: 0.9rem;">
+                                <i class="fas fa-calendar"></i> Community Event
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.3rem;">
+                                Monthly community gathering this Saturday at 3 PM EST.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trending Topics Widget -->
+                <div class="widget" id="mobileTrendingWidget">
+                    <div class="widget-title">
+                        <i class="fas fa-fire"></i> Trending Topics
+                    </div>
+                    <div class="trending-list" id="mobileTrendingList">
+                        <div class="trending-item" style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-color);">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 0.9rem; color: var(--text-primary);">#PersonalGrowth</span>
+                                <span style="font-size: 0.8rem; color: var(--text-secondary);">24 posts</span>
+                            </div>
+                        </div>
+                        <div class="trending-item" style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-color);">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 0.9rem; color: var(--text-primary);">#Mentorship</span>
+                                <span style="font-size: 0.8rem; color: var(--text-secondary);">18 posts</span>
+                            </div>
+                        </div>
+                        <div class="trending-item" style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-color);">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 0.9rem; color: var(--text-primary);">#CommunitySupport</span>
+                                <span style="font-size: 0.8rem; color: var(--text-secondary);">15 posts</span>
+                            </div>
+                        </div>
+                        <div class="trending-item" style="padding: 0.5rem 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 0.9rem; color: var(--text-primary);">#SkillBuilding</span>
+                                <span style="font-size: 0.8rem; color: var(--text-secondary);">12 posts</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Notifications Widget -->
+                <div class="widget">
+                    <div class="widget-title">
+                        <i class="fas fa-bell"></i> Notifications
+                        <div class="notification-badge" id="mobileNotificationBadge" style="display: none;">0</div>
+                    </div>
+                    <div class="notification-list" id="mobileNotificationList">
+                        <div style="padding: 2rem; text-align: center; color: var(--text-secondary);">
+                            No notifications yet
+                        </div>
+                    </div>
+                    <button id="mobileMarkAllReadBtn" style="background: none; border: none; color: var(--color-primary); cursor: pointer; font-size: 0.8rem; width: 100%; padding: 0.5rem; border-top: 1px solid var(--border-color);">
+                        Mark all as read
+                    </button>
+                </div>
+
+                <!-- Online Friends Widget -->
+                <div class="widget online-friends-widget">
+                    <div class="widget-title">
+                        <i class="fas fa-users"></i> Online Friends
+                        <span class="online-count" id="mobileOnlineCount">0</span>
+                    </div>
+                    <div class="online-friends-list" id="mobileOnlineFriendsList">
+                        <div style="text-align: center; color: var(--text-secondary); padding: 1rem;">
+                            Loading friends...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions Widget -->
+                <div class="widget">
+                    <div class="widget-title">
+                        <i class="fas fa-bolt"></i> Quick Actions
+                    </div>
+                    <div class="nav-menu">
+                        <a href="admin.html" id="mobileAdminButton" class="hidden" style="color: var(--admin-color);"><i class="fas fa-shield-alt"></i> Admin Panel</a>
+                        <a href="instructor.html" id="mobileInstructorButton" class="hidden" style="color: var(--instructor-color);"><i class="fas fa-chalkboard-teacher"></i> Instructor Dashboard</a>
+                        <a href="profile.html"><i class="fas fa-user-edit"></i> Edit Profile</a>
+                        <a href="messages.html"><i class="fas fa-comments"></i> Messages</a>
+                        <button id="mobileLogoutButton" class="logout-button" style="width: 100%; text-align: left; background: none; border: none; padding: 0.8rem; color: var(--danger-color); cursor: pointer;">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Support Widget -->
+                <div class="widget donation-widget">
+                    <div class="widget-title">
+                        <i class="fas fa-heart"></i> Support the Village
+                    </div>
+                    <p style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-secondary);">Help us keep the community thriving and support our mission!</p>
+                    <a href="donate.html" class="btn-donate" style="display: inline-block; width: 100%; text-align: center; text-decoration: none; padding: 0.8rem 1.5rem; background: linear-gradient(45deg, var(--success-color), #4caf50); color: white; border-radius: 25px; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 10px rgba(76, 175, 80, 0.3);">
+                        <i class="fas fa-donate"></i> Donate Now
+                    </a>
+                </div>
+            </div>
+
+            <div class="home-layout">
+                <aside class="left-sidebar">
+                    <div class="widget nav-menu" id="navigationMenu"></div>
+                </aside>
+
+                <main class="main-feed" id="mainFeed">
+                    <div class="post-feed" id="postFeed"></div>
+                </main>
+
+                <aside class="right-sidebar">
+                    <div class="widget" id="quote-widget-container"></div>
+                    <div class="widget">
+                        <h3 class="widget-title">Trending Topics</h3>
+                        <div class="trending-hashtags" id="trendingHashtags">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    <div class="widget donation-widget">
+                        <h3 class="widget-title">Support the Village</h3>
+                        <p>Our platform is free for everyone. Your generous
+                            donations help us maintain the village.</p>
+                        <a href="donate.html" target="_blank"
+                            rel="noopener" class="btn-donate"><i
+                                class="fas fa-heart"></i> Donate Now</a>
+                    </div>
+                    <div class="widget">
+                        <h3 class="widget-title"><span><i
+                                    class="fas fa-users"></i> Who's
+                                Online</span><span id="online-count-badge"
+                                class="online-count-badge">0</span></h3>
+                        <div
+                            id="online-members-container"><p>Loading...</p></div>
+                    </div>
+                    <div class="widget" id="question-of-the-day-widget"
+                        style="display: none;">
+                        <h3 class="widget-title">
+                            <i class="fas fa-question-circle"></i> Question of
+                            the Day
+                        </h3>
+                        <div id="questionContent">
+                            <!-- Question content will be loaded here -->
+                        </div>
+                    </div>
+                    <div class="widget">
+                        <h3 class="widget-title">Village Announcements</h3>
+                        <div id="announcementsList"></div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+
+        <div class="share-modal" id="shareModal">
+            <div class="share-content">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3>Share Post</h3>
+                    <button onclick="closeShareModal()"
+                        style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+                </div>
+                <textarea id="shareComment" placeholder="Add your thoughts..."
+                    style="width: 100%; min-height: 80px; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 1rem;"></textarea>
+                <div class="share-options">
+                    <div class="share-option" onclick="shareToFeed()">
+                        <i class="fas fa-users"
+                            style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--color-primary);"></i>
+                        <span>Share to Feed</span>
+                    </div>
+                    <div class="share-option" onclick="shareToGroups()">
+                        <i class="fas fa-layer-group"
+                            style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--color-primary);"></i>
+                        <span>Share to Groups</span>
+                    </div>
+                    <div class="share-option" onclick="copyLink()">
+                        <i class="fas fa-link"
+                            style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--color-primary);"></i>
+                        <span>Copy Link</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://widget.cloudinary.com/v2.0/global/all.js"
+            type="text/javascript"></script>
+        <script type="module">
+            // --- Firebase & Cloudinary Imports ---
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js ";
+            import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js ";
+            import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, updateDoc, arrayUnion, arrayRemove, increment, deleteDoc, limit, where, setDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js ";
+
+            // --- Configs ---
+            const firebaseConfig = {
+                apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
+                authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
+                projectId: "andrew-cares-village-f4cb6",
+                storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
+                messagingSenderId: "255087116955",
+                appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
+            };
+            const CLOUDINARY_CONFIG = { cloudName: 'dkd6x857p', uploadPreset: 'Andrew Cares Village Hub' };
+
+            // --- App Initialization ---
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const db = getFirestore(app);
+
+            // --- Global State ---
+            let currentUser = null;
+            let currentUserData = null;
+            let uploadedFiles = [];
+            let currentQuestion = null;
+            let userResponse = null;
+            let notifications = [];
+            let unreadCount = 0;
+
+            // --- Authentication & Page Bootstrapping ---
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    currentUser = user;
+                    const userSnap = await getDoc(doc(db, "users", user.uid));
+                    if (userSnap.exists()) {
+                        currentUserData = userSnap.data();
+                        updateUserActivity();
+                        renderPage(currentUserData);
+                        loadDynamicContent();
+                        setupNotificationListener();
+                        document.getElementById('loader').style.display = 'none';
+                        document.getElementById('mainContent').classList.remove('hidden');
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                } else {
+                    window.location.href = 'index.html';
+                }
+            });
+
+            // --- Core Page Rendering ---
+            function renderPage(userData) {
+                document.getElementById('userName').textContent = userData.name;
+                document.getElementById('userAvatar').src = userData.avatarUrl || `https://ui-avatars.com/api/?name= ${encodeURIComponent(userData.name)}`;
+                const userRoleBadge = document.getElementById('userRoleBadge');
+                if (userData.role && userData.role !== 'user') {
+                    userRoleBadge.textContent = userData.role.charAt(0).toUpperCase() + userData.role.slice(1);
+                    userRoleBadge.className = `user-role-badge ${userData.role}`;
+                    userRoleBadge.classList.remove('hidden');
+                }
+                if (userData.role === 'admin') document.getElementById('adminButton').classList.remove('hidden');
+                if (userData.role === 'instructor') document.getElementById('instructorButton').classList.remove('hidden');
+                setupNavigationMenu(userData.role);
+                createPostWidget(userData);
+                setupHeaderEventListeners();
+                setDailyQuote();
+                setupNotificationSystem();
+            }
+
+            // --- Event Listeners & UI Setup ---
+            function setupHeaderEventListeners() {
+                const userProfile = document.getElementById('userProfile');
+                const profileDropdown = document.getElementById('profileDropdown');
+                const logoutButton = document.getElementById('logoutButton');
+                const myProfileLink = document.getElementById('myProfileLink');
+
+                userProfile.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    profileDropdown.style.display = profileDropdown.style.display === 'block' ? 'none' : 'block';
+                });
+                window.addEventListener('click', () => { profileDropdown.style.display = 'none'; });
+                logoutButton.addEventListener('click', () => {
+                    signOut(auth).then(() => { window.location.href = 'index.html'; });
+                });
+                myProfileLink.href = `profile.html?id=${currentUser.uid}`;
+            }
+
+            function setDailyQuote() {
+                const quotes = [
+                    { text: "The journey of a thousand miles begins with a single step.", author: "Lao Tzu" },
+                    { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
+                    { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+                    { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
+                    { text: "It does not matter how slowly you go as long as you do not stop.", author: "Confucius" },
+                    { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
+                    { text: "The journey of a thousand miles begins with a single step.", author: "Lao Tzu" },
+            { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
+            { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+            { text: "In the middle of difficulty lies opportunity.", author: "Albert Einstein" },
+            { text: "The only impossible journey is the one you never begin.", author: "Tony Robbins" },
+            { text: "Your limitation—it's only your imagination.", author: "Unknown" },
+            { text: "Push yourself, because no one else is going to do it for you.", author: "Unknown" },
+            { text: "Great things never come from comfort zones.", author: "Unknown" },
+            { text: "Dream it. Wish it. Do it.", author: "Unknown" },
+            { text: "Success doesn't just find you. You have to go out and get it.", author: "Unknown" },
+            {text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt"},
+            {text: "It does not matter how slowly you go as long as you do not stop.", author: "Confucius"},
+            {text: "Everything you’ve ever wanted is on the other side of fear.", author: "George Addair"},
+            {text: "Hardships, often prepare ordinary people for an extraordinary destiny.", author: "C.S. Lewis"},
+            {text: "Believe in yourself and all that you are. Know that there is something inside you that is greater than any obstacle.", author: "Christian D. Larson"},
+            {text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt"},
+            {text: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson"},
+            {text: "The harder the conflict, the greater the triumph.", author: "George Washington"},
+            {text: "What lies behind us and what lies before us are tiny matters compared to what lies within us.", author: "Ralph Waldo Emerson"},
+            {text: "Act as if what you do makes a difference. It does.", author: "William James"},
+            {text: "Success usually comes to those who are too busy to be looking for it.", author: "Henry David Thoreau"},
+            {text: "Don't be pushed around by the fears in your mind. Be led by the dreams in your heart.", author: "Roy T. Bennett"},
+            {text: "The best way to predict the future is to create it.", author: "Peter Drucker"},
+            {text: "You are never too old to set another goal or to dream a new dream.", author: "C.S. Lewis"},
+            {text: "It always seems impossible until it's done.", author: "Nelson Mandela"},
+            {text: "Start where you are. Use what you have. Do what you can.", author: "Arthur Ashe"},
+            {text: "The secret of getting ahead is getting started.", author: "Mark Twain"},
+            {text: "Don't limit your challenges. Challenge your limits.", author: "Unknown"},
+            {text: "The only limit to our realization of tomorrow will be our doubts of today.", author: "Franklin D. Roosevelt"},
+            {text: "The purpose of our lives is to be happy.", author: "Dalai Lama"},
+            {text: "Life is what happens when you're busy making other plans.", author: "John Lennon"},
+            { text: "You miss 100% of the shots you don't take.", author: "Wayne Gretzky" },
+            { "text": "The only way to do great work is to love what you do.", "author": "Steve Jobs" },
+            { "text": "The only bad workout is the one that didn't happen.", "author": "Unknown" },
+            { "text": "Risk comes from not knowing what you're doing.", "author": "Warren Buffett" },
+            { "text": "The ultimate aim of Karate lies not in victory or defeat, but in the perfection of the character of its participants.", "author": "Gichin Funakoshi" },
+            { "text": "The best way to predict the future is to create it.", "author": "Peter Drucker" },
+            { "text": "Effort equals results. Keep going.", "author": "Unknown" },
+            { "text": "Success doesn’t come to you, you go to it.", "author": "Marva Collins" },
+            { "text": "Energy and persistence conquer all things.", "author": "Benjamin Franklin" },
+            { "text": "Don’t be afraid to give up the good to go for the great.", "author": "John D. Rockefeller" },
+            { "text": "Train insane or remain the same.", "author": "Unknown" },
+            { "text": "Don’t count the days, make the days count.", "author": "Muhammad Ali" },
+            { "text": "You don’t get the body you want by wishing, you get it by working.", "author": "Unknown" },
+            { "text": "The hard part isn’t getting your body in shape. The hard part is getting your mind in shape.", "author": "Unknown" },
+            { "text": "When you feel like quitting, remember why you started.", "author": "Unknown" },
+            { "text": "Strong is not just physical. It’s a mindset.", "author": "Unknown" },
+            { "text": "Don’t stop when you’re tired. Stop when you’re done.", "author": "Unknown" },
+            { "text": "Your body won’t go where your mind doesn’t push it.", "author": "Unknown" },
+            { "text": "Results happen over time, not overnight.", "author": "Unknown" },
+            { "text": "A little progress each day adds up to big results.", "author": "Unknown" },
+            { "text": "Growth begins at the end of your comfort zone.", "author": "Unknown" },
+            { "text": "You are the greatest project you will ever work on.", "author": "Unknown" },
+            { "text": "Discipline is choosing between what you want now and what you want most.", "author": "Abraham Lincoln" },
+            { "text": "Your mindset determines your success.", "author": "John Maxwell" },
+            { "text": "Success is no accident. It is hard work, perseverance, and learning.", "author": "Pelé" },
+            { "text": "You don't have to be great to start, but you have to start to be great.", "author": "Zig Ziglar" },
+            { "text": "Small daily improvements are the key to staggering long-term results.", "author": "Robin Sharma" },
+            { "text": "Be so busy improving yourself that you have no time to criticize others.", "author": "Unknown" },
+            { "text": "The key to success is to focus on goals, not obstacles.", "author": "Unknown" },
+            { "text": "Your future is created by what you do today, not tomorrow.", "author": "Robert Kiyosaki" },
+            { "text": "The biggest room in the world is the room for improvement.", "author": "Helmut Schmidt" },
+            { "text": "Excuses don’t burn calories.", "author": "Unknown" },
+            { "text": "Fit is not a destination, it’s a way of life.", "author": "Unknown" },
+            { "text": "Wake up. Work out. Look hot. Kick ass.", "author": "Unknown" },
+            { "text": "One workout at a time, one day at a time.", "author": "Unknown" },
+            { "text": "The only workout you’ll ever regret is the one you didn’t do.", "author": "Unknown" },
+            { "text": "Plan your trade and trade your plan.", "author": "Unknown" },
+            { "text": "Patience in trading pays more than prediction.", "author": "Unknown" },
+            { "text": "Manage risk before chasing profit.", "author": "Unknown" },
+            { "text": "A losing trade is not a failure, it's a lesson.", "author": "Unknown" },
+            { "text": "Trade with your head, not your heart.", "author": "Unknown" },
+            { "text": "The market rewards discipline, not luck.", "author": "Unknown" },
+            { "text": "Don’t aim to be right. Aim to survive and grow.", "author": "Unknown" },
+            { "text": "Emotion is the enemy of successful trading.", "author": "Alexander Elder" },
+            { "text": "Control your losses or they’ll control you.", "author": "Paul Tudor Jones" },
+            { "text": "In trading, less is more — quality over quantity.", "author": "Unknown" },
+            { "text": "The fight is won before it begins — in training.", "author": "Unknown" },
+            { "text": "Respect is earned through effort and humility.", "author": "Unknown" },
+            { "text": "Fear is a reaction. Courage is a decision.", "author": "Winston Churchill" },
+            { "text": "Fall seven times, rise eight.", "author": "Japanese Proverb" },
+            { "text": "Speed and power are nothing without control.", "author": "Unknown" },
+            { "text": "The real opponent is within.", "author": "Unknown" },
+            { "text": "You miss 100% of the shots you don’t take.", "author": "Wayne Gretzky" },
+            { "text": "Do something today that your future self will thank you for.", "author": "Unknown" },
+            { "text": "Be yourself; everyone else is already taken.", "author": "Oscar Wilde" },
+            { "text": "Success is the sum of small efforts, repeated daily.", "author": "Robert Collier" },
+            { "text": "The harder you work for something, the greater you’ll feel when you achieve it.", "author": "Unknown" },
+            { "text": "Don't wait for opportunity. Create it.", "author": "Unknown" },
+            { "text": "Everything you can imagine is real.", "author": "Pablo Picasso" },
+            { "text": "Dream big. Start small. Act now.", "author": "Robin Sharma" },
+            { "text": "Never risk more than you can afford to lose.", "author": "Unknown" },
+{ "text": "Amateurs focus on rewards, pros focus on risk.", "author": "Unknown" },
+{ "text": "Learn the rules before you break them.", "author": "Unknown" },
+{ "text": "Every trader was once a beginner.", "author": "Unknown" },
+{ "text": "Money flows to those with patience and strategy.", "author": "Unknown" },
+{ "text": "The best traders have no ego.", "author": "Unknown" },
+{ "text": "Discipline is the bridge between goals and accomplishment.", "author": "Jim Rohn" },
+            { "text": "Karate begins and ends with respect.", "author": "Gichin Funakoshi" },
+            { "text": "Perfection is not attainable, but striving for it makes you better.", "author": "Unknown" },
+            { "text": "A true warrior fights not because he hates what's in front of him, but because he loves what's behind him.", "author": "Unknown" },
+            { "text": "Karate is more than a punch or a kick. It’s a way of life.", "author": "Unknown" },
+            { "text": "Your strongest weapon is your discipline.", "author": "Unknown" },
+            { "text": "Strength does not come from the body. It comes from the will.", "author": "Unknown" },
+            { "text": "In martial arts, mastery is a journey, not a destination.", "author": "Unknown" },
+            { "text": "Control yourself before you control others.", "author": "Unknown" },
+            { "text": "The dojo is where the ego is left at the door.", "author": "Unknown" },
+            { "text": "You were born to stand out, not fit in.", "author": "Dr. Seuss" },
+{ "text": "Your life does not get better by chance, it gets better by change.", "author": "Jim Rohn" },
+{ "text": "Every moment is a fresh beginning.", "author": "T.S. Eliot" },
+{ "text": "Be the energy you want to attract.", "author": "Unknown" },
+{ "text": "Don’t let yesterday take up too much of today.", "author": "Will Rogers" },
+{ "text": "Make each day your masterpiece.", "author": "John Wooden" },
+{ "text": "Happiness is not something ready made. It comes from your own actions.", "author": "Dalai Lama" },
+{ "text": "The only way to do great work is to love what you do.", "author": "Steve Jobs" },
+            { "text": "Success is not in what you have, but who you are.", "author": "Bo Bennett" },
+            { "text": "The best revenge is massive success.", "author": "Frank Sinatra" },
+            { "text": "Do what you can with all you have, wherever you are.", "author": "Theodore Roosevelt" },
+            { "text": "What you get by achieving your goals is not as important as what you become by achieving your goals.", "author": "Zig Ziglar" },
+            { "text": "Believe you can and you're halfway there.", "author": "Theodore Roosevelt" }
+
+                ];
+                const today = new Date().getDate();
+                const todayQuote = quotes[today % quotes.length];
+                const quoteWidgetContainer = document.getElementById('quote-widget-container');
+                if (quoteWidgetContainer) {
+                    quoteWidgetContainer.className = 'widget';
+                    quoteWidgetContainer.innerHTML = `
+                        <h3 class="widget-title">Quote of the Day</h3>
+                        <p style="font-family: 'Cinzel', serif; font-style: italic; font-size: 1.1rem; margin-bottom: 1rem; text-align: center;">"${todayQuote.text}"</p>
+                        <span style="display: block; font-weight: 700; color: var(--color-primary); text-align: center;">- ${todayQuote.author}</span>`;
+                }
+            }
+
+            function setupNavigationMenu(userRole) {
+                const menu = document.getElementById('navigationMenu');
+                const navItems = [
+                    { href: 'home.html', icon: 'fa-home', text: 'Village Square', active: true },
+                    { href: 'mentorship.html', icon: 'fa-user-graduate', text: 'Find a Mentor' },
+                    { href: 'resources.html', icon: 'fa-book-open', text: 'Public Library' },
+                    { href: 'messages.html', icon: 'fa-comments', text: 'Messages' },
+                    { href: 'friends.html', icon: 'fa-users', text: 'Find Friends' },
+                    { href: 'live-events.html', icon: 'fa-camera', text: 'Live Events' },
+                    { href: 'dojo.html?discipline=Fitness', icon: 'fa-dumbbell', text: 'Fitness Dojo' },
+                    { href: 'dojo.html?discipline=forex', icon: 'fa-chart-line', text: 'Forex Dojo' },
+                    { href: 'dojo.html?discipline=karate', icon: 'fa-fist-raised', text: 'Karate Dojo' }
+                ];
+                if (userRole !== 'instructor' && userRole !== 'admin') {
+                    navItems.push({ href: 'apply.html', icon: 'fa-chalkboard-teacher', text: 'Become an Instructor', specialClass: 'instructor-apply-link' });
+                }
+                menu.innerHTML = navItems.map(item => `<a href="${item.href}" class="${item.active ? 'active' : ''} ${item.specialClass || ''}"><i class="fas ${item.icon}"></i><span>${item.text}</span></a>`).join('');
+            }
+
+            function createPostWidget(userData) {
+                const mainFeed = document.getElementById('mainFeed');
+                const widget = document.createElement('div');
+                widget.className = 'widget create-post-widget';
+                widget.innerHTML = `
+                    <div class="post-header">
+                        <img src="${userData.avatarUrl || `https://ui-avatars.com/api/?name= ${encodeURIComponent(userData.name)}`}" alt="Your Avatar" class="user-avatar">
+                        <textarea id="postContent" placeholder="What's on your mind, ${userData.name}?"></textarea>
+                    </div>
+                    <div class="media-preview" id="mediaPreview"></div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem;">
+                        <button id="cloudinaryUploadBtn" class="post-action-btn"><i class="fas fa-paperclip"></i> Attach Media</button>
+                        <button id="postButton" class="btn-primary" style="border-radius:20px;" disabled>Post</button>
+                    </div>
+                    
+                    <div class="post-filters" id="postFilters">
+                        <button class="filter-button active" data-filter="all">All Posts</button>
+                        <button class="filter-button" data-filter="popular">Popular</button>
+                        <button class="filter-button" data-filter="recent">Recent</button>
+                        <button class="filter-button" data-filter="images">Images</button>
+                        <button class="filter-button" data-filter="videos">Videos</button>
+                        <button class="filter-button" data-filter="discussions">Discussions</button>
+                    </div>`;
+
+                mainFeed.insertBefore(widget, mainFeed.firstChild);
+                setupPostCreation();
+            }
+
+            function setupPostCreation() {
+                const postContent = document.getElementById('postContent');
+                const postButton = document.getElementById('postButton');
+                const cloudinaryUploadBtn = document.getElementById('cloudinaryUploadBtn');
+                
+                // Check if Cloudinary is available before initializing
+                if (typeof cloudinary !== 'undefined') {
+                    const uploadWidget = initializeCloudinaryWidget();
+                    cloudinaryUploadBtn.addEventListener('click', () => uploadWidget.open());
+                } else {
+                    console.warn('Cloudinary not loaded');
+                    cloudinaryUploadBtn.style.display = 'none';
+                }
+                
+                postContent.addEventListener('input', () => {
+                    postButton.disabled = !postContent.value.trim() && uploadedFiles.length === 0;
+                });
+                postButton.addEventListener('click', handlePostSubmission);
+                
+                // Setup post filters
+                document.getElementById('postFilters').addEventListener('click', (e) => {
+                    if (e.target.classList.contains('filter-button')) {
+                        document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
+                        e.target.classList.add('active');
+                        const filter = e.target.dataset.filter;
+                        filterPosts(filter);
+                    }
+                });
+                
+                // Setup mention functionality
+                setupMentionFunctionality(postContent);
+            }
+
+            // --- NOTIFICATION SYSTEM ---
+            function setupNotificationSystem() {
+                const notificationBell = document.getElementById('notificationBell');
+                const notificationDropdown = document.getElementById('notificationDropdown');
+                const markAllReadBtn = document.getElementById('markAllReadBtn');
+
+                notificationBell.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    notificationDropdown.classList.toggle('show');
+                });
+
+                markAllReadBtn.addEventListener('click', markAllNotificationsAsRead);
+
+                document.addEventListener('click', (e) => {
+                    if (!notificationBell.contains(e.target)) {
+                        notificationDropdown.classList.remove('show');
+                    }
+                });
+            }
+
+            function setupNotificationListener() {
+                const notificationsRef = collection(db, 'notifications');
+                const q = query(
+                    notificationsRef, 
+                    where('recipientId', '==', currentUser.uid),
+                    orderBy('timestamp', 'desc'),
+                    limit(50)
+                );
+
+                onSnapshot(q, (snapshot) => {
+                    notifications = [];
+                    unreadCount = 0;
+                    
+                    snapshot.forEach(doc => {
+                        const notification = { id: doc.id, ...doc.data() };
+                        notifications.push(notification);
+                        if (!notification.read) {
+                            unreadCount++;
+                        }
+                    });
+
+                    updateNotificationUI();
+                });
+            }
+
+            function updateNotificationUI() {
+                const notificationBadge = document.getElementById('notificationBadge');
+                const notificationList = document.getElementById('notificationList');
+                const mobileNotificationBadge = document.getElementById('mobileNotificationBadge');
+                const mobileNotificationList = document.getElementById('mobileNotificationList');
+
+                // Update badge (both desktop and mobile)
+                if (unreadCount > 0) {
+                    const badgeText = unreadCount > 99 ? '99+' : unreadCount;
+                    if (notificationBadge) {
+                        notificationBadge.textContent = badgeText;
+                        notificationBadge.style.display = 'flex';
+                    }
+                    if (mobileNotificationBadge) {
+                        mobileNotificationBadge.textContent = badgeText;
+                        mobileNotificationBadge.style.display = 'inline-block';
+                    }
+                } else {
+                    if (notificationBadge) notificationBadge.style.display = 'none';
+                    if (mobileNotificationBadge) mobileNotificationBadge.style.display = 'none';
+                }
+
+                // Update notification list (both desktop and mobile)
+                const notificationHTML = notifications.length === 0 ? 
+                    `<div style="padding: 2rem; text-align: center; color: var(--text-secondary);">
+                        No notifications yet
+                    </div>` :
+                    notifications.map(notification => {
+                        const timeAgo = getTimeAgo(notification.timestamp?.toDate());
+                        const iconClass = getNotificationIcon(notification.type);
+                        
+                        return `
+                            <div class="notification-item ${!notification.read ? 'unread' : ''}" 
+                                 onclick="handleNotificationClick('${notification.id}', '${notification.type}', '${notification.relatedId || ''}')">
+                                <img src="${notification.senderAvatar || `https://ui-avatars.com/api/?name= ${encodeURIComponent(notification.senderName || 'User')}`}" 
+                                     class="notification-avatar" alt="${notification.senderName}">
+                                <div class="notification-content">
+                                    <div class="notification-text">${notification.message}</div>
+                                    <div class="notification-time">${timeAgo}</div>
+                                </div>
+                                <div class="notification-type-icon ${notification.type}">
+                                    <i class="fas ${iconClass}"></i>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                if (notificationList) notificationList.innerHTML = notificationHTML;
+                if (mobileNotificationList) mobileNotificationList.innerHTML = notificationHTML;
+            }
+
+            function getNotificationIcon(type) {
+                const icons = {
+                    'like': 'fa-heart',
+                    'comment': 'fa-comment',
+                    'reply': 'fa-reply',
+                    'share': 'fa-share',
+                    'mention': 'fa-at'
+                };
+                return icons[type] || 'fa-bell';
+            }
+
+            function getTimeAgo(date) {
+                if (!date) return 'Just now';
+                
+                const now = new Date();
+                const diffInSeconds = Math.floor((now - date) / 1000);
+                
+                if (diffInSeconds < 60) return 'Just now';
+                if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+                if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+                if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)}d ago`;
+                
+                return date.toLocaleDateString();
+            }
+
+            async function createNotification(recipientId, senderId, type, message, relatedId = null) {
+                if (!recipientId || recipientId === senderId) return; // Don't notify yourself or if recipientId is null
+                
+                try {
+                    await addDoc(collection(db, 'notifications'), {
+                        recipientId: recipientId,
+                        senderId: currentUser.uid,
+                        senderName: currentUserData.name,
+                        senderAvatar: currentUserData.avatarUrl || '',
+                        type,
+                        message,
+                        relatedId,
+                        read: false,
+                        timestamp: serverTimestamp()
+                    });
+                } catch (error) {
+                    console.error('Error creating notification:', error);
+                }
+            }
+
+            async function markAllNotificationsAsRead() {
+                try {
+                    const batch = [];
+                    notifications.forEach(notification => {
+                        if (!notification.read) {
+                            batch.push(updateDoc(doc(db, 'notifications', notification.id), { read: true }));
+                        }
+                    });
+                    
+                    await Promise.all(batch);
+                } catch (error) {
+                    console.error('Error marking notifications as read:', error);
+                }
+            }
+
+            function handleNotificationClick(notificationId, type, relatedId) {
+                // Mark as read
+                updateDoc(doc(db, 'notifications', notificationId), { read: true });
+                
+                // Close mobile hamburger menu if open
+                const mobileWidgetsMenu = document.getElementById('mobileWidgetsMenu');
+                const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+                if (mobileWidgetsMenu && mobileWidgetsMenu.classList.contains('show')) {
+                    mobileWidgetsMenu.classList.remove('show');
+                    mobileMenuOverlay.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+                
+                // Close desktop dropdown
+                const notificationDropdown = document.getElementById('notificationDropdown');
+                if (notificationDropdown) {
+                    notificationDropdown.classList.remove('show');
+                }
+                
+                // Navigate based on type
+                switch (type) {
+                    case 'like':
+                    case 'comment':
+                    case 'reply':
+                    case 'share':
+                    case 'mention':
+                        if (relatedId && relatedId !== 'null' && relatedId !== '') {
+                            // First try to scroll to the post if it's already loaded
+                            const postElement = document.getElementById(`post-${relatedId}`);
+                            if (postElement) {
+                                postElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                // Highlight the post briefly
+                                postElement.style.backgroundColor = 'rgba(179, 139, 0, 0.1)';
+                                setTimeout(() => {
+                                    postElement.style.backgroundColor = '';
+                                }, 2000);
+                            } else {
+                                // If post not found, reload the page to ensure it's loaded
+                                window.location.reload();
+                            }
+                        }
+                        break;
+                    default:
+                        // For other notification types, just close menus
+                        break;
+                }
+            }
+
+            // Make function globally accessible for onclick handlers
+            window.handleNotificationClick = handleNotificationClick;
+
+            // --- Data Handling & Firestore ---
+            async function handlePostSubmission() {
+                const postButton = document.getElementById('postButton');
+                postButton.disabled = true;
+                const content = document.getElementById('postContent').value.trim();
+                if (!content && uploadedFiles.length === 0) return;
+                
+                try {
+                    const processedContent = processContentForMentions(content);
+                    
+                    const postData = {
+                        content: processedContent.text,
+                        mentions: processedContent.mentions,
+                        authorId: currentUser.uid,
+                        authorName: currentUserData.name,
+                        authorAvatar: currentUserData.avatarUrl,
+                        timestamp: serverTimestamp(),
+                        likes: [],
+                        likeCount: 0,
+                        commentCount: 0,
+                        media: uploadedFiles
+                    };
+                    
+                    const docRef = await addDoc(collection(db, "posts"), postData);
+                    
+                    // Create notifications for mentions
+                    processedContent.mentions.forEach(mention => {
+                        if (mention.userId && mention.userId !== currentUser.uid) {
+                            createNotification(
+                                mention.userId,
+                                currentUser.uid,
+                                'mention',
+                                `${currentUserData.name} mentioned you in a post`,
+                                docRef.id
+                            );
+                        }
+                    });
+                    
+                    document.getElementById('postContent').value = '';
+                    document.getElementById('mediaPreview').innerHTML = '';
+                    uploadedFiles = [];
+                } catch (error) {
+                    console.error("Error creating post:", error);
+                } finally {
+                    postButton.disabled = false;
+                }
+            }
+
+            function processContentForMentions(content) {
+                const mentions = [];
+                const mentionRegex = /@(\w+)/g;
+                let match;
+                
+                while ((match = mentionRegex.exec(content)) !== null) {
+                    // In a real app, you'd look up the user by username
+                    // For now, we'll just store the mention text
+                    mentions.push({
+                        username: match[1],
+                        userId: null // Would be populated from user lookup
+                    });
+                }
+                
+                // Replace mentions with styled spans
+                const processedText = content.replace(mentionRegex, '<span class="mention">@$1</span>');
+                
+                return {
+                    text: processedText,
+                    mentions: mentions
+                };
+            }
+
+         function loadDynamicContent() {
+    loadPosts();
+    loadAnnouncements();
+    loadOnlineMembers();
+    listenForActiveQuestion();
+    loadTrendingHashtags();
+    initializeSearch();
+    setupPostUpdateListener(); // Add this line
+}
+
+            function loadPosts() {
+                const postFeed = document.getElementById('postFeed');
+                const q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(20));
+                onSnapshot(q, (snapshot) => {
+                    const existingPosts = postFeed.querySelectorAll('.post-card');
+                    existingPosts.forEach(p => p.remove());
+                    snapshot.forEach(doc => {
+                        postFeed.appendChild(createPostCard({ id: doc.id, ...doc.data() }));
+                    });
+                });
+            }
+
+            function createPostCard(post) {
+                const postCard = document.createElement('div');
+                postCard.className = 'post-card';
+                postCard.id = `post-${post.id}`;
+                const isLiked = post.likes?.includes(currentUser.uid);
+                let mediaHtml = post.media?.map(media => 
+                    media.type === 'image' ? 
+                        `<img src="${media.url}" alt="Post media">` : 
+                        `<video src="${media.url}" controls></video>`
+                ).join('') || '';
+                
+                // Handle shared posts
+                let sharedContent = '';
+                if (post.isShared && post.sharedPost) {
+                    const sharedMedia = post.sharedPost.media?.map(media => 
+                        media.type === 'image' ? 
+                            `<img src="${media.url}" alt="Shared media" style="max-width: 100%; border-radius: 8px;">` : 
+                            `<video src="${media.url}" controls style="max-width: 100%; border-radius: 8px;"></video>`
+                    ).join('') || '';
+                    
+                    sharedContent = `
+                        <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; margin-top: 1rem; background: var(--hover-bg);">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <img src="${post.sharedPost.authorAvatar || `https://ui-avatars.com/api/?name= ${encodeURIComponent(post.sharedPost.authorName)}`}" 
+                                     style="width: 24px; height: 24px; border-radius: 50%;">
+                                <strong style="font-size: 0.9rem;">${post.sharedPost.authorName}</strong>
+                            </div>
+                            <p style="margin: 0.5rem 0;">${post.sharedPost.content}</p>
+                            ${sharedMedia}
+                        </div>
+                    `;
+                }
+                
+                postCard.innerHTML = `
+                    <div class="post-header">
+                        <div class="post-author-info">
+                            <img src="${post.authorAvatar || `https://ui-avatars.com/api/?name= ${encodeURIComponent(post.authorName)}`}" alt="${post.authorName}" class="user-avatar">
+                            <div>
+                                <strong>${post.authorName}</strong>
+                                ${post.isShared ? '<span style="color: var(--text-secondary); font-size: 0.8rem;"> shared a post</span>' : ''}
+                                <p style="font-size:0.8rem;color:var(--text-secondary);">${post.timestamp ? post.timestamp.toDate().toLocaleString() : 'Just now'}</p>
+                            </div>
+                        </div>
+                        ${post.authorId === currentUser.uid ? `<button onclick="window.deletePost('${post.id}')" style="background:none;border:none;cursor:pointer;color:var(--danger-color);"><i class="fas fa-trash"></i></button>` : ''}
+                    </div>
+                    <div class="post-content">
+                        <p>${post.content}</p>
+                        ${mediaHtml ? `<div class="post-media">${mediaHtml}</div>` : ''}
+                        ${sharedContent}
+                    </div>
+                    <div class="post-actions">
+                        <button class="post-action-btn ${isLiked ? 'liked' : ''}" onclick="window.toggleLike('${post.id}')">
+                            <i class="fas fa-heart"></i> <span class="like-count">${post.likeCount || 0}</span>
+                        </button>
+                        <button class="post-action-btn" onclick="window.toggleComments('${post.id}')">
+                            <i class="far fa-comment"></i> ${post.commentCount || 0}
+                        </button>
+                        <button class="post-action-btn" onclick="window.sharePost('${post.id}')">
+                            <i class="fas fa-share"></i> Share
+                        </button>
+                    </div>
+                    <div class="comments-section" id="comments-${post.id}"></div>
+                `;
+                
+                return postCard;
+            }
+
+            function loadAnnouncements() {
+                const announcementsList = document.getElementById('announcementsList');
+                if (!announcementsList) return;
+                
+                const q = query(collection(db, "announcements"), orderBy("timestamp", "desc"), limit(5));
+                onSnapshot(q, (snapshot) => {
+                    announcementsList.innerHTML = snapshot.empty ? '<p>No announcements right now.</p>' : '';
+                    snapshot.forEach(doc => {
+                        const announcement = doc.data();
+                        const item = document.createElement('div');
+                        item.innerHTML = `<p><strong>${announcement.title}</strong><br>${announcement.content}</p>`;
+                        announcementsList.appendChild(item);
+                    });
+                });
+            }
+
+            function loadOnlineMembers() {
+                const onlineQuery = query(collection(db, "users"), where("lastActive", ">=", new Date(Date.now() - 10 * 60 * 1000)), orderBy("lastActive", "desc"));
+                onSnapshot(onlineQuery, (snapshot) => {
+                    const onlineCountBadge = document.getElementById('online-count-badge');
+                    const container = document.getElementById('online-members-container');
+                    const mobileOnlineCount = document.getElementById('mobileOnlineCount');
+                    const mobileOnlineFriendsList = document.getElementById('mobileOnlineFriendsList');
+                    
+                    const totalOnline = snapshot.size;
+                    if (onlineCountBadge) onlineCountBadge.textContent = totalOnline;
+                    
+                    // Update desktop widget
+                    if (container) {
+                        if (totalOnline === 0) { 
+                            container.innerHTML = `<p>No one is currently online.</p>`; 
+                        } else {
+                            const maxAvatarsToShow = 7;
+                            const membersToShow = snapshot.docs.slice(0, maxAvatarsToShow);
+                            let avatarHtml = '<div class="online-avatar-stack">';
+                            membersToShow.forEach(doc => {
+                                const member = doc.data();
+                                avatarHtml += `<img src="${member.avatarUrl || `https://ui-avatars.com/api/?name= ${encodeURIComponent(member.name)}`}" alt="${member.name}" title="${member.name}" class="online-avatar">`;
+                            });
+                            avatarHtml += '</div>';
+                            let textHtml = totalOnline > maxAvatarsToShow ? `<span class="online-text-more">+${totalOnline - maxAvatarsToShow} more online</span>` : '';
+                            container.innerHTML = avatarHtml + textHtml;
+                        }
+                    }
+                    
+                    // Update mobile widget with friends only
+                    updateMobileOnlineFriends(snapshot);
+                });
+            }
+
+            async function updateMobileOnlineFriends(onlineSnapshot) {
+                try {
+                    const user = auth.currentUser;
+                    if (!user) return;
+
+                    const mobileOnlineCount = document.getElementById('mobileOnlineCount');
+                    const mobileOnlineFriendsList = document.getElementById('mobileOnlineFriendsList');
+                    
+                    if (!mobileOnlineCount || !mobileOnlineFriendsList) return;
+
+                    // Get user's friends
+                    const friendsRef = collection(db, 'users', user.uid, 'friends');
+                    const friendsSnapshot = await getDocs(friendsRef);
+                    
+                    if (friendsSnapshot.empty) {
+                        mobileOnlineFriendsList.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 1rem;">No friends yet</div>';
+                        mobileOnlineCount.textContent = '0';
+                        return;
+                    }
+
+                    const friendIds = friendsSnapshot.docs.map(doc => doc.id);
+                    const onlineFriends = [];
+
+                    // Filter online users to only include friends
+                    onlineSnapshot.docs.forEach(doc => {
+                        const userId = doc.id;
+                        const userData = doc.data();
+                        
+                        if (friendIds.includes(userId)) {
+                            onlineFriends.push({
+                                id: userId,
+                                name: userData.displayName || userData.name || userData.email,
+                                avatar: userData.photoURL || userData.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.displayName || userData.name || 'User')}`,
+                                lastActive: userData.lastActive
+                            });
+                        }
+                    });
+
+                    mobileOnlineCount.textContent = onlineFriends.length;
+
+                    if (onlineFriends.length === 0) {
+                        mobileOnlineFriendsList.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 1rem;">No friends online</div>';
+                    } else {
+                        mobileOnlineFriendsList.innerHTML = onlineFriends.map(friend => `
+                            <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.5rem 0; cursor: pointer;" onclick="window.location.href='messages.html?user=${friend.id}'">
+                                <img src="${friend.avatar}" alt="${friend.name}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                                <div style="flex: 1;">
+                                    <div style="font-size: 0.9rem; font-weight: 500;">${friend.name}</div>
+                                    <div style="font-size: 0.8rem; color: var(--success-color);">
+                                        <i class="fas fa-circle" style="font-size: 0.6rem;"></i> Online
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                } catch (error) {
+                    console.error('Error updating mobile online friends:', error);
+                    const mobileOnlineFriendsList = document.getElementById('mobileOnlineFriendsList');
+                    if (mobileOnlineFriendsList) {
+                        mobileOnlineFriendsList.innerHTML = '<div style="text-align: center; color: var(--danger-color); padding: 1rem;">Error loading friends</div>';
+                    }
+                }
+            }
+
+            async function updateUserActivity() {
+                if (currentUser) {
+                    try {
+                        await updateDoc(doc(db, "users", currentUser.uid), { lastActive: serverTimestamp() });
+                    } catch (error) { console.error("Error updating user activity:", error); }
+                }
+            }
+
+            setInterval(updateUserActivity, 5 * 60 * 1000);
+
+            // --- UNLIMITED NESTED COMMENTS SYSTEM ---
+            function loadComments(postId) {
+                const container = document.getElementById(`comments-${postId}`);
+                if (!container) return;
+                
+                container.innerHTML = `
+                    <div class="comment-input-container">
+                        <img src="${currentUserData.avatarUrl || `https://ui-avatars.com/api/?name= ${encodeURIComponent(currentUserData.name)}`}" class="user-avatar" style="width:32px;height:32px;">
+                        <input type="text" class="comment-input" id="comment-input-${postId}" placeholder="Write a comment...">
+                        <button class="comment-submit-btn" onclick="window.submitComment('${postId}')"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                    <div id="comments-list-${postId}"></div>`;
+                
+                loadNestedComments(postId);
+                
+                // Setup mention functionality for comment input
+                const commentInput = document.getElementById(`comment-input-${postId}`);
+                if (commentInput) {
+                    setupMentionFunctionality(commentInput);
+                }
+            }
+
+            function loadNestedComments(postId) {
+                const q = query(collection(db, `posts/${postId}/comments`), orderBy("timestamp", "asc"));
+                onSnapshot(q, (snapshot) => {
+                    const comments = [];
+                    snapshot.forEach(doc => {
+                        comments.push({ id: doc.id, ...doc.data() });
+                    });
+                    renderNestedComments(comments, `comments-list-${postId}`, postId);
+                });
+            }
+
+            function renderNestedComments(comments, containerId, postId) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                
+                // Build comment tree
+                const commentTree = buildCommentTree(comments);
+                
+                // Render the tree
+                container.innerHTML = commentTree.map(comment => 
+                    renderCommentWithReplies(comment, postId, 0)
+                ).join('');
+            }
+
+            function buildCommentTree(comments) {
+                const commentMap = new Map();
+                const rootComments = [];
+                
+                // First pass: create map of all comments
+                comments.forEach(comment => {
+                    comment.replies = [];
+                    commentMap.set(comment.id, comment);
+                });
+                
+                // Second pass: build tree structure
+                comments.forEach(comment => {
+                    if (comment.parentId && commentMap.has(comment.parentId)) {
+                        commentMap.get(comment.parentId).replies.push(comment);
+                    } else {
+                        rootComments.push(comment);
+                    }
+                });
+                
+                return rootComments;
+            }
+
+            function renderCommentWithReplies(comment, postId, depth) {
+                const timeAgo = getTimeAgo(comment.timestamp?.toDate());
+                const indentClass = depth > 3 ? 'comment-replies' : '';
+                
+                let repliesHtml = '';
+                if (comment.replies && comment.replies.length > 0) {
+                    repliesHtml = `
+                        <div class="comment-replies">
+                            ${comment.replies.map(reply => 
+                                renderCommentWithReplies(reply, postId, depth + 1)
+                            ).join('')}
+                        </div>
+                    `;
+                }
+                
+                return `
+                    <div class="comment-thread">
+                        <div class="comment-item">
+                            <img src="${comment.authorAvatar || `https://ui-avatars.com/api/?name= ${encodeURIComponent(comment.authorName)}`}" 
+                                 class="user-avatar" style="width:32px;height:32px;">
+                            <div class="comment-content">
+                                <div class="comment-bubble">
+                                    <div class="comment-author">${comment.authorName}</div>
+                                    <p class="comment-text">${comment.content}</p>
+                                </div>
+                                <div class="comment-actions">
+                                    <span class="comment-time">${timeAgo}</span>
+                                    <button class="comment-action-btn" onclick="window.showReplyInput('${postId}', '${comment.id}')">
+                                        Reply
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="reply-input-container" id="reply-input-${comment.id}">
+                            <img src="${currentUserData.avatarUrl || `https://ui-avatars.com/api/?name= ${encodeURIComponent(currentUserData.name)}`}" 
+                                 class="user-avatar" style="width:28px;height:28px;">
+                            <input type="text" class="reply-input" id="reply-input-field-${comment.id}" placeholder="Write a reply...">
+                            <button class="reply-submit-btn" onclick="window.submitReply('${postId}', '${comment.id}')">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        ${repliesHtml}
+                    </div>
+                `;
+            }
+
+            // --- MENTION FUNCTIONALITY ---
+            function setupMentionFunctionality(inputElement) {
+                let mentionDropdown = null;
+                let mentionStartPos = -1;
+                let selectedIndex = -1;
+                
+                inputElement.addEventListener('input', (e) => {
+                    const value = e.target.value;
+                    const cursorPos = e.target.selectionStart;
+                    
+                    // Find the last @ symbol before cursor
+                    const textBeforeCursor = value.substring(0, cursorPos);
+                    const lastAtIndex = textBeforeCursor.lastIndexOf('@');
+                    
+                    if (lastAtIndex !== -1) {
+                        const textAfterAt = textBeforeCursor.substring(lastAtIndex + 1);
+                        
+                        // Check if there's a space after @, if so, hide dropdown
+                        if (textAfterAt.includes(' ')) {
+                            hideMentionDropdown();
+                            return;
+                        }
+                        
+                        mentionStartPos = lastAtIndex;
+                        showMentionDropdown(inputElement, textAfterAt);
+                    } else {
+                        hideMentionDropdown();
+                    }
+                });
+                
+                inputElement.addEventListener('keydown', (e) => {
+                    if (mentionDropdown && mentionDropdown.classList.contains('show')) {
+                        const items = mentionDropdown.querySelectorAll('.mention-item');
+                        
+                        if (e.key === 'ArrowDown') {
+                            e.preventDefault();
+                            selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+                            updateMentionSelection(items, selectedIndex);
+                        } else if (e.key === 'ArrowUp') {
+                            e.preventDefault();
+                            selectedIndex = Math.max(selectedIndex - 1, 0);
+                            updateMentionSelection(items, selectedIndex);
+                        } else if (e.key === 'Enter' && selectedIndex >= 0) {
+                            e.preventDefault();
+                            items[selectedIndex].click();
+                        } else if (e.key === 'Escape') {
+                            hideMentionDropdown();
+                        }
+                    }
+                });
+                
+                async function showMentionDropdown(inputElement, searchTerm) {
+                    try {
+                        const usersRef = collection(db, 'users');
+                        const usersSnapshot = await getDocs(usersRef);
+                        const users = [];
+                        
+                        usersSnapshot.forEach(doc => {
+                            const user = doc.data();
+                            if (user.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+                                users.push({ id: doc.id, ...user });
+                            }
+                        });
+                        
+                        if (users.length === 0) {
+                            hideMentionDropdown();
+                            return;
+                        }
+                        
+                        if (!mentionDropdown) {
+                            mentionDropdown = document.createElement('div');
+                            mentionDropdown.className = 'mention-dropdown';
+                            document.body.appendChild(mentionDropdown);
+                        }
+                        
+                        mentionDropdown.innerHTML = users.slice(0, 5).map((user, index) => `
+                            <div class="mention-item ${index === 0 ? 'selected' : ''}" data-user-id="${user.id}" data-user-name="${user.name}">
+                                <img src="${user.avatarUrl || `https://ui-avatars.com/api/?name= ${encodeURIComponent(user.name)}`}" class="mention-avatar">
+                                <div class="mention-info">
+                                    <div class="mention-name">${user.name}</div>
+                                    <div class="mention-username">@${user.name.toLowerCase().replace(/\s+/g, '')}</div>
+                                </div>
+                            </div>
+                        `).join('');
+                        
+                        // Position dropdown
+                        const rect = inputElement.getBoundingClientRect();
+                        mentionDropdown.style.position = 'fixed';
+                        mentionDropdown.style.top = `${rect.bottom + 5}px`;
+                        mentionDropdown.style.left = `${rect.left}px`;
+                        mentionDropdown.classList.add('show');
+                        selectedIndex = 0;
+                        
+                        // Add click handlers
+                        mentionDropdown.querySelectorAll('.mention-item').forEach((item, index) => {
+                            item.addEventListener('click', () => {
+                                const userName = item.dataset.userName;
+                                const userId = item.dataset.userId;
+                                insertMention(inputElement, userName, userId);
+                                hideMentionDropdown();
+                            });
+                        });
+                        
+                    } catch (error) {
+                        console.error('Error loading users for mentions:', error);
+                    }
+                }
+                
+                function updateMentionSelection(items, selectedIndex) {
+                    items.forEach((item, index) => {
+                        item.classList.toggle('selected', index === selectedIndex);
+                    });
+                }
+                
+                function insertMention(inputElement, userName, userId) {
+                    const value = inputElement.value;
+                    const beforeMention = value.substring(0, mentionStartPos);
+                    const afterCursor = value.substring(inputElement.selectionStart);
+                    const newValue = `${beforeMention}@${userName} ${afterCursor}`;
+                    
+                    inputElement.value = newValue;
+                    const newCursorPos = beforeMention.length + userName.length + 2;
+                    inputElement.setSelectionRange(newCursorPos, newCursorPos);
+                    inputElement.focus();
+                }
+                
+                function hideMentionDropdown() {
+                    if (mentionDropdown) {
+                        mentionDropdown.classList.remove('show');
+                        selectedIndex = -1;
+                    }
+                    mentionStartPos = -1;
+                }
+                
+                // Hide dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (mentionDropdown && !mentionDropdown.contains(e.target) && e.target !== inputElement) {
+                        hideMentionDropdown();
+                    }
+                });
+            }
+
+            // --- Search Functions ---
+            function initializeSearch() {
+                const searchInput = document.getElementById('globalSearch');
+                const searchDropdown = document.getElementById('searchDropdown');
+                
+                if (!searchInput || !searchDropdown) return;
+                
+                searchInput.addEventListener('input', debounce(handleSearchInput, 300));
+                searchInput.addEventListener('focus', () => {
+                    loadRecentSearches();
+                    searchDropdown.classList.add('show');
+                });
+                
+                document.addEventListener('click', (e) => {
+                    if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
+                        searchDropdown.classList.remove('show');
+                    }
+                });
+            }
+
+            function debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            }
+
+            function handleSearchInput(e) {
+                const query = e.target.value.trim();
+                if (query.length > 0) {
+                    performSearch(query);
+                } else {
+                    loadRecentSearches();
+                }
+            }
+
+            async function performSearch(query) {
+                try {
+                    // Search users
+                    const usersRef = collection(db, 'users');
+                    const usersSnapshot = await getDocs(usersRef);
+                    const userResults = [];
+                    
+                    usersSnapshot.forEach(doc => {
+                        const user = doc.data();
+                        if (user.name.toLowerCase().includes(query.toLowerCase())) {
+                            userResults.push({ id: doc.id, ...user });
+                        }
+                    });
+                    
+                    // Search posts
+                    const postsRef = collection(db, 'posts');
+                    const postsSnapshot = await getDocs(postsRef);
+                    const postResults = [];
+                    
+                    postsSnapshot.forEach(doc => {
+                        const post = doc.data();
+                        if (post.content.toLowerCase().includes(query.toLowerCase())) {
+                            postResults.push({ id: doc.id, ...post });
+                        }
+                    });
+                    
+                    displaySearchResults(userResults, postResults);
+                    saveRecentSearch(query);
+                } catch (error) {
+                    console.error('Error performing search:', error);
+                }
+            }
+
+            function displaySearchResults(users, posts) {
+                const peopleResults = document.getElementById('peopleResults');
+                const postResults = document.getElementById('postResults');
+                
+                if (peopleResults) {
+                    peopleResults.innerHTML = users.slice(0, 5).map(user => `
+                        <div class="search-result-item" onclick="viewProfile('${user.id}')">
+                            <img src="${user.avatarUrl || `https://ui-avatars.com/api/?name= ${encodeURIComponent(user.name)}`}" 
+                                 style="width: 32px; height: 32px; border-radius: 50%;">
+                            <span>${user.name}</span>
+                        </div>
+                    `).join('') || '<p style="padding: 0.8rem; color: var(--text-secondary);">No people found</p>';
+                }
+                
+                if (postResults) {
+                    postResults.innerHTML = posts.slice(0, 5).map(post => `
+                        <div class="search-result-item" onclick="scrollToPost('${post.id}')">
+                            <i class="fas fa-file-text" style="width: 32px; text-align: center; color: var(--text-secondary);"></i>
+                            <span>${post.content.substring(0, 50)}${post.content.length > 50 ? '...' : ''}</span>
+                        </div>
+                    `).join('') || '<p style="padding: 0.8rem; color: var(--text-secondary);">No posts found</p>';
+                }
+            }
+
+            function saveRecentSearch(searchQuery) {
+                let recentSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+                recentSearches = recentSearches.filter(s => s !== searchQuery);
+                recentSearches.unshift(searchQuery);
+                recentSearches = recentSearches.slice(0, 5);
+                localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+            }
+
+            function loadRecentSearches() {
+                const recentSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+                const container = document.getElementById('recentSearches');
+                if (container) {
+                    container.innerHTML = recentSearches.map(search => `
+                        <div class="search-result-item" onclick="document.getElementById('globalSearch').value='${search}'; performSearch('${search}')">
+                            <i class="fas fa-history" style="width: 32px; text-align: center; color: var(--text-secondary);"></i>
+                            <span>${search}</span>
+                        </div>
+                    `).join('') || '<p style="padding: 0.8rem; color: var(--text-secondary);">No recent searches</p>';
+                }
+            }
+
+            function filterPosts(filter) {
+                const postFeed = document.getElementById('postFeed');
+                let queryRef;
+                
+                try {
+                    switch(filter) {
+                        case 'popular':
+                            queryRef = query(collection(db, "posts"), orderBy("likeCount", "desc"), limit(20));
+                            break;
+                        case 'recent':
+                            queryRef = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(20));
+                            break;
+                        case 'images':
+                            queryRef = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(20));
+                            break;
+                        case 'videos':
+                            queryRef = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(20));
+                            break;
+                        case 'discussions':
+                            queryRef = query(collection(db, "posts"), orderBy("commentCount", "desc"), limit(20));
+                            break;
+                        default:
+                            queryRef = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(20));
+                    }
+                    
+                    onSnapshot(queryRef, (snapshot) => {
+                        postFeed.innerHTML = '';
+                        snapshot.forEach(doc => {
+                            const post = { id: doc.id, ...doc.data() };
+                            
+                            // Apply client-side filtering for media types
+                            if (filter === 'images' && (!post.media || !post.media.some(m => m.type === 'image'))) {
+                                return;
+                            }
+                            if (filter === 'videos' && (!post.media || !post.media.some(m => m.type === 'video'))) {
+                                return;
+                            }
+                            
+                            postFeed.appendChild(createPostCard(post));
+                        });
+                    });
+                } catch (error) {
+                    console.error("Error filtering posts:", error);
+                }
+            }
+
+            function loadTrendingHashtags() {
+                const sampleHashtags = [
+                    '#PersonalGrowth', '#FinancialLiteracy', '#Fitness', 
+                    '#Mindfulness', '#Entrepreneurship', '#Learning'
+                ];
+                
+                const container = document.getElementById('trendingHashtags');
+                if (container) {
+                    container.innerHTML = sampleHashtags.map(hashtag => 
+                        `<a href="#" class="hashtag-item" onclick="window.searchHashtag('${hashtag}')">${hashtag}</a>`
+                    ).join('');
+                }
+            }
+
+            // --- Share Modal Functions ---
+            let currentSharePostId = null;
+
+            function sharePost(postId) {
+                currentSharePostId = postId;
+                const modal = document.getElementById('shareModal');
+                if (modal) {
+                    modal.classList.add('show');
+                    const commentField = document.getElementById('shareComment');
+                    if (commentField) commentField.focus();
+                }
+            }
+
+            function closeShareModal() {
+                const modal = document.getElementById('shareModal');
+                if (modal) {
+                    modal.classList.remove('show');
+                    const commentField = document.getElementById('shareComment');
+                    if (commentField) commentField.value = '';
+                }
+                currentSharePostId = null;
+            }
+
+            async function shareToFeed() {
+                const commentField = document.getElementById('shareComment');
+                const comment = commentField ? commentField.value.trim() : '';
+                
+                if (!currentSharePostId) return;
+                
+                try {
+                    const originalPostRef = doc(db, "posts", currentSharePostId);
+                    const originalPost = await getDoc(originalPostRef);
+                    
+                    if (originalPost.exists()) {
+                        const postData = originalPost.data();
+                        
+                        await addDoc(collection(db, "posts"), {
+                            content: comment,
+                            sharedPost: {
+                                id: currentSharePostId,
+                                content: postData.content,
+                                authorName: postData.authorName,
+                                authorAvatar: postData.authorAvatar,
+                                media: postData.media || []
+                            },
+                            authorId: currentUser.uid,
+                            authorName: currentUserData.name,
+                            authorAvatar: currentUserData.avatarUrl,
+                            timestamp: serverTimestamp(),
+                            likes: [],
+                            likeCount: 0,
+                            commentCount: 0,
+                            isShared: true
+                        });
+                        
+                        // Create notification for original post author
+                        createNotification(
+                            postData.authorId,
+                            currentUser.uid,
+                            'share',
+                            `${currentUserData.name} shared your post`,
+                            currentSharePostId
+                        );
+                        
+                        closeShareModal();
+                    }
+                } catch (error) {
+                    console.error("Error sharing post:", error);
+                }
+            }
+
+            function shareToGroups() {
+                // Placeholder function - implement group sharing functionality
+                alert('Group sharing feature coming soon!');
+                closeShareModal();
+            }
+
+            function copyLink() {
+                if (!currentSharePostId) return;
+                const postUrl = `${window.location.origin}/post/${currentSharePostId}`;
+                navigator.clipboard.writeText(postUrl).then(() => {
+                    alert('Link copied to clipboard!');
+                    closeShareModal();
+                }).catch(err => {
+                    console.error('Failed to copy link:', err);
+                });
+            }
+
+            // --- Cloudinary & Utility Functions ---
+            function initializeCloudinaryWidget() {
+                if (typeof cloudinary === 'undefined') {
+                    console.warn('Cloudinary not available');
+                    return null;
+                }
+                
+                return cloudinary.createUploadWidget(CLOUDINARY_CONFIG, (error, result) => {
+                    if (!error && result && result.event === "success") {
+                        uploadedFiles.push({ 
+                            url: result.info.secure_url, 
+                            type: result.info.resource_type, 
+                            name: result.info.original_filename 
+                        });
+                        updateMediaPreview();
+                        const postButton = document.getElementById('postButton');
+                        if (postButton) postButton.disabled = false;
+                    }
+                });
+            }
+
+            function updateMediaPreview() {
+                const previewContainer = document.getElementById('mediaPreview');
+                if (previewContainer) {
+                    previewContainer.innerHTML = uploadedFiles.map((file, index) => `
+                        <div class="preview-item">
+                            ${file.type === 'image' ? 
+                                `<img src="${file.url}" class="preview-image" alt="${file.name}">` : 
+                                `<video src="${file.url}" class="preview-video"></video>`
+                            }
+                            <button class="remove-btn" onclick="window.removeMediaFile(${index})" type="button">&times;</button>
+                        </div>`
+                    ).join('');
+                }
+            }
+
+            function removeMediaFile(index) {
+                uploadedFiles.splice(index, 1);
+                updateMediaPreview();
+                const postButton = document.getElementById('postButton');
+                const postContent = document.getElementById('postContent');
+                if (postButton && postContent) {
+                    postButton.disabled = !postContent.value.trim() && uploadedFiles.length === 0;
+                }
+            }
+
+            function searchHashtag(hashtag) {
+                const searchInput = document.getElementById('globalSearch');
+                if (searchInput) {
+                    searchInput.value = hashtag;
+                    performSearch(hashtag);
+                }
+            }
+
+            function viewProfile(userId) {
+                window.location.href = `profile.html?id=${userId}`;
+            }
+
+            function scrollToPost(postId) {
+                const element = document.getElementById(`post-${postId}`);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+
+      window.toggleLike = async (postId) => {
+    try {
+        const postRef = doc(db, "posts", postId);
+        const postSnap = await getDoc(postRef);
+        if (!postSnap.exists()) return;
+        
+        const postData = postSnap.data();
+        const likes = postData.likes || [];
+        const isLiked = likes.includes(currentUser.uid);
+        
+        await updateDoc(postRef, {
+            likes: isLiked ? arrayRemove(currentUser.uid) : arrayUnion(currentUser.uid),
+            likeCount: increment(isLiked ? -1 : 1)
+        });
+        
+        // Create notification for like (only if not unliking)
+        if (!isLiked && postData.authorId !== currentUser.uid) {
+            createNotification(
+                postData.authorId,
+                currentUser.uid,
+                'like',
+                `${currentUserData.name} liked your post`,
+                postId
+            );
+        }
+        
+        // Update UI immediately
+        const likeButton = document.querySelector(`#post-${postId} .post-action-btn:first-child`);
+        const likeCount = likeButton.querySelector('span');
+        const newCount = isLiked ? (postData.likeCount || 1) - 1 : (postData.likeCount || 0) + 1;
+        
+        likeButton.classList.toggle('liked', !isLiked);
+        likeCount.textContent = newCount;
+        
+    } catch (error) {
+        console.error("Error toggling like:", error);
+    }
+};
+            window.deletePost = async (postId) => {
+                if (confirm("Are you sure you want to delete this post?")) {
+                    try {
+                        await deleteDoc(doc(db, "posts", postId));
+                    } catch (error) {
+                        console.error("Error deleting post:", error);
+                    }
+                }
+            };
+
+            window.toggleComments = (postId) => {
+                const commentsSection = document.getElementById(`comments-${postId}`);
+                if (!commentsSection) return;
+                
+                const isVisible = commentsSection.style.display === 'block';
+                commentsSection.style.display = isVisible ? 'none' : 'block';
+                if (!isVisible) loadComments(postId);
+            };
+
+        function updateCommentCount(postId, incrementBy = 1) {
+    const commentButton = document.querySelector(`#post-${postId} .post-action-btn:nth-child(2)`);
+    if (commentButton) {
+        const currentText = commentButton.innerHTML;
+        const match = currentText.match(/(\d+)/);
+        const currentCount = match ? parseInt(match[1]) : 0;
+        const newCount = currentCount + incrementBy;
+        commentButton.innerHTML = `<i class="far fa-comment"></i> ${newCount}`;
+    }
+}
+
+// Update your submitComment function to call this:
+window.submitComment = async (postId) => {
+    const input = document.getElementById(`comment-input-${postId}`);
+    if (!input) return;
+    
+    const content = input.value.trim();
+    if (!content) return;
+    
+    try {
+        const processedContent = processContentForMentions(content);
+        
+        await addDoc(collection(db, `posts/${postId}/comments`), {
+            content: processedContent.text,
+            mentions: processedContent.mentions,
+            authorId: currentUser.uid, 
+            authorName: currentUserData.name,
+            authorAvatar: currentUserData.avatarUrl, 
+            timestamp: serverTimestamp()
+        });
+        
+        // Update UI immediately
+        updateCommentCount(postId, 1);
+        
+        await updateDoc(doc(db, "posts", postId), { commentCount: increment(1) });
+        
+        // Get post data for notification
+        const postSnap = await getDoc(doc(db, "posts", postId));
+        if (postSnap.exists()) {
+            const postData = postSnap.data();
+            
+            // Create notification for post author
+            if (postData.authorId !== currentUser.uid) {
+                createNotification(
+                    postData.authorId,
+                    currentUser.uid,
+                    'comment',
+                    `${currentUserData.name} commented on your post`,
+                    postId
+                );
+            }
+            
+            // Create notifications for mentions
+            processedContent.mentions.forEach(mention => {
+                if (mention.userId && mention.userId !== currentUser.uid) {
+                    createNotification(
+                        mention.userId,
+                        currentUser.uid,
+                        'mention',
+                        `${currentUserData.name} mentioned you in a comment`,
+                        postId
+                    );
+                }
+            });
+        }
+        
+        input.value = '';
+    } catch (error) {
+        console.error("Error submitting comment:", error);
+    }
+};
+function setupPostUpdateListener() {
+    const postsRef = collection(db, "posts");
+    const q = query(postsRef, orderBy("timestamp", "desc"), limit(20));
+    
+    onSnapshot(q, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+            if (change.type === "modified") {
+                const post = change.doc.data();
+                const postId = change.doc.id;
+                
+                // Update like count
+                const likeButton = document.querySelector(`#post-${postId} .post-action-btn:first-child`);
+                if (likeButton) {
+                    const likeCount = likeButton.querySelector('span');
+                    likeCount.textContent = post.likeCount || 0;
+                    
+                    const isLiked = post.likes?.includes(currentUser.uid);
+                    likeButton.classList.toggle('liked', isLiked);
+                }
+                
+                // Update comment count
+                const commentButton = document.querySelector(`#post-${postId} .post-action-btn:nth-child(2)`);
+                if (commentButton) {
+                    commentButton.innerHTML = `<i class="far fa-comment"></i> ${post.commentCount || 0}`;
+                }
+            }
+        });
+    });
+}
+
+            window.showReplyInput = (postId, commentId) => {
+                const replyContainer = document.getElementById(`reply-input-${commentId}`);
+                if (replyContainer) {
+                    replyContainer.classList.toggle('show');
+                    if (replyContainer.classList.contains('show')) {
+                        const replyInput = document.getElementById(`reply-input-field-${commentId}`);
+                        if (replyInput) {
+                            replyInput.focus();
+                            setupMentionFunctionality(replyInput);
+                        }
+                    }
+                }
+            };
+
+            window.submitReply = async (postId, parentCommentId) => {
+                const input = document.getElementById(`reply-input-field-${parentCommentId}`);
+                if (!input) return;
+                
+                const content = input.value.trim();
+                if (!content) return;
+                
+                try {
+                    const processedContent = processContentForMentions(content);
+                    
+                    await addDoc(collection(db, `posts/${postId}/comments`), {
+                        content: processedContent.text,
+                        mentions: processedContent.mentions,
+                        authorId: currentUser.uid, 
+                        authorName: currentUserData.name,
+                        authorAvatar: currentUserData.avatarUrl, 
+                        timestamp: serverTimestamp(),
+                        parentId: parentCommentId
+                    });
+                    
+                    await updateDoc(doc(db, "posts", postId), { commentCount: increment(1) });
+                    
+                    // Get parent comment data for notification
+                    const parentCommentSnap = await getDoc(doc(db, `posts/${postId}/comments`, parentCommentId));
+                    if (parentCommentSnap.exists()) {
+                        const parentCommentData = parentCommentSnap.data();
+                        
+                        // Create notification for parent comment author
+                        if (parentCommentData.authorId !== currentUser.uid) {
+                            createNotification(
+                                parentCommentData.authorId,
+                                currentUser.uid,
+                                'reply',
+                                `${currentUserData.name} replied to your comment`,
+                                postId
+                            );
+                        }
+                        
+                        // Create notifications for mentions
+                        processedContent.mentions.forEach(mention => {
+                            if (mention.userId && mention.userId !== currentUser.uid) {
+                                createNotification(
+                                    mention.userId,
+                                    currentUser.uid,
+                                    'mention',
+                                    `${currentUserData.name} mentioned you in a reply`,
+                                    postId
+                                );
+                            }
+                        });
+                    }
+                    
+                    input.value = '';
+                    document.getElementById(`reply-input-${parentCommentId}`).classList.remove('show');
+                } catch (error) {
+                    console.error("Error submitting reply:", error);
+                }
+            };
+
+            // --- Expose functions to global scope ---
+            window.sharePost = sharePost;
+            window.closeShareModal = closeShareModal;
+            window.shareToFeed = shareToFeed;
+            window.shareToGroups = shareToGroups;
+            window.copyLink = copyLink;
+            window.removeMediaFile = removeMediaFile;
+            window.searchHashtag = searchHashtag;
+            window.viewProfile = viewProfile;
+            window.scrollToPost = scrollToPost;
+
+            // --- Question of the Day Functions (Placeholder) ---
+            function listenForActiveQuestion() {
+                // Placeholder for question of the day functionality
+                const widget = document.getElementById('question-of-the-day-widget');
+                if (widget) {
+                    widget.style.display = 'none';
+                }
+            }
+
+            // --- Mobile Menu Functionality ---
+            function initializeMobileMenus() {
+                const mobileNavToggle = document.getElementById('mobileNavToggle');
+                const mobileWidgetsToggle = document.getElementById('mobileWidgetsToggle');
+                const mobileNavMenu = document.getElementById('mobileNavMenu');
+                const mobileWidgetsMenu = document.getElementById('mobileWidgetsMenu');
+                const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+                const mobileNavClose = document.getElementById('mobileNavClose');
+                const mobileWidgetsClose = document.getElementById('mobileWidgetsClose');
+
+                // Open navigation menu
+                mobileNavToggle?.addEventListener('click', () => {
+                    mobileNavMenu.classList.add('show');
+                    mobileMenuOverlay.classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                });
+
+                // Open widgets menu
+                mobileWidgetsToggle?.addEventListener('click', () => {
+                    mobileWidgetsMenu.classList.add('show');
+                    mobileMenuOverlay.classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                });
+
+                // Close navigation menu
+                mobileNavClose?.addEventListener('click', () => {
+                    mobileNavMenu.classList.remove('show');
+                    mobileMenuOverlay.classList.remove('show');
+                    document.body.style.overflow = '';
+                });
+
+                // Close widgets menu
+                mobileWidgetsClose?.addEventListener('click', () => {
+                    mobileWidgetsMenu.classList.remove('show');
+                    mobileMenuOverlay.classList.remove('show');
+                    document.body.style.overflow = '';
+                });
+
+                // Close menus when clicking overlay
+                mobileMenuOverlay?.addEventListener('click', () => {
+                    mobileNavMenu.classList.remove('show');
+                    mobileWidgetsMenu.classList.remove('show');
+                    mobileMenuOverlay.classList.remove('show');
+                    document.body.style.overflow = '';
+                });
+
+                // Close menus on escape key
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        mobileNavMenu.classList.remove('show');
+                        mobileWidgetsMenu.classList.remove('show');
+                        mobileMenuOverlay.classList.remove('show');
+                        document.body.style.overflow = '';
+                    }
+                });
+
+                // Handle window resize - close menus if screen gets larger
+                window.addEventListener('resize', () => {
+                    if (window.innerWidth > 768) {
+                        mobileNavMenu.classList.remove('show');
+                        mobileWidgetsMenu.classList.remove('show');
+                        mobileMenuOverlay.classList.remove('show');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+
+            // Initialize mobile menus when DOM is loaded
+            document.addEventListener('DOMContentLoaded', initializeMobileMenus);
+
+            // --- Mobile Widget Functionality ---
+            function initializeMobileWidgets() {
+                // Connect mobile logout button
+                const mobileLogoutBtn = document.getElementById('mobileLogoutButton');
+                mobileLogoutBtn?.addEventListener('click', async () => {
+                    try {
+                        await signOut(auth);
+                        window.location.href = 'login.html';
+                    } catch (error) {
+                        console.error('Logout error:', error);
+                    }
+                });
+
+                // Connect mobile mark all read button
+                const mobileMarkAllReadBtn = document.getElementById('mobileMarkAllReadBtn');
+                mobileMarkAllReadBtn?.addEventListener('click', () => {
+                    markAllNotificationsAsRead();
+                });
+
+                // Show/hide mobile admin and instructor buttons based on user role
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        checkUserRole(user.uid).then(role => {
+                            const mobileAdminBtn = document.getElementById('mobileAdminButton');
+                            const mobileInstructorBtn = document.getElementById('mobileInstructorButton');
+                            
+                            if (role === 'admin') {
+                                mobileAdminBtn?.classList.remove('hidden');
+                                mobileInstructorBtn?.classList.remove('hidden');
+                            } else if (role === 'instructor') {
+                                mobileInstructorBtn?.classList.remove('hidden');
+                            }
+                        });
+                    }
+                });
+
+                // Mobile online friends are now handled by loadOnlineMembers() function
+                
+                // Load mobile announcements from Firestore
+                loadMobileAnnouncements();
+                
+                // Load mobile trending topics from Firestore
+                loadMobileTrendingTopics();
+                
+                // Load mobile quote of the day
+                loadMobileQuoteOfTheDay();
+            }
+
+            // This function is now replaced by updateMobileOnlineFriends() which is called from loadOnlineMembers()
+
+            // Load village announcements for mobile
+            async function loadMobileAnnouncements() {
+                try {
+                    const announcementsRef = collection(db, 'announcements');
+                    const q = query(announcementsRef, orderBy('createdAt', 'desc'), limit(3));
+                    const snapshot = await getDocs(q);
+                    
+                    const mobileAnnouncementsList = document.getElementById('mobileAnnouncementsList');
+                    
+                    if (snapshot.empty) {
+                        mobileAnnouncementsList.innerHTML = `
+                            <div class="announcement-item" style="padding: 0.8rem; text-align: center; color: var(--text-secondary);">
+                                No announcements at this time
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    const announcements = snapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data()
+                    }));
+
+                    mobileAnnouncementsList.innerHTML = announcements.map(announcement => `
+                        <div class="announcement-item" style="padding: 0.8rem; border-bottom: 1px solid var(--border-color); margin-bottom: 0.5rem;">
+                            <div style="font-weight: 600; color: var(--color-primary); font-size: 0.9rem;">
+                                <i class="fas fa-${announcement.icon || 'bullhorn'}"></i> ${announcement.title}
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.3rem;">
+                                ${announcement.content}
+                            </div>
+                            ${announcement.createdAt ? `
+                                <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 0.3rem;">
+                                    ${announcement.createdAt.toDate().toLocaleDateString()}
+                                </div>
+                            ` : ''}
+                        </div>
+                    `).join('');
+                } catch (error) {
+                    console.error('Error loading mobile announcements:', error);
+                    // Keep default announcements if Firestore fails
+                }
+            }
+
+            // Load trending topics for mobile
+            async function loadMobileTrendingTopics() {
+                try {
+                    const postsRef = collection(db, 'posts');
+                    const snapshot = await getDocs(postsRef);
+                    
+                    const topicCounts = {};
+                    
+                    snapshot.docs.forEach(doc => {
+                        const post = doc.data();
+                        const content = post.content || '';
+                        const hashtags = content.match(/#\w+/g) || [];
+                        
+                        hashtags.forEach(tag => {
+                            topicCounts[tag] = (topicCounts[tag] || 0) + 1;
+                        });
+                    });
+
+                    const sortedTopics = Object.entries(topicCounts)
+                        .sort(([,a], [,b]) => b - a)
+                        .slice(0, 4);
+
+                    const mobileTrendingList = document.getElementById('mobileTrendingList');
+                    
+                    if (sortedTopics.length === 0) {
+                        // Keep default trending topics if no hashtags found
+                        return;
+                    }
+
+                    mobileTrendingList.innerHTML = sortedTopics.map(([topic, count]) => `
+                        <div class="trending-item" style="padding: 0.5rem 0; border-bottom: 1px solid var(--border-color); cursor: pointer;" onclick="searchPosts('${topic}')">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 0.9rem; color: var(--text-primary);">${topic}</span>
+                                <span style="font-size: 0.8rem; color: var(--text-secondary);">${count} posts</span>
+                            </div>
+                        </div>
+                    `).join('');
+                } catch (error) {
+                    console.error('Error loading mobile trending topics:', error);
+                    // Keep default trending topics if Firestore fails
+                }
+            }
+
+            // Load quote of the day for mobile using hardcoded quotes
+            function loadMobileQuoteOfTheDay() {
+                const quotes = [
+                    { text: "The best time to plant a tree was 20 years ago. The second best time is now.", author: "Chinese Proverb" },
+                    { text: "Your limitation—it's only your imagination.", author: "Unknown" },
+                    { text: "Push yourself, because no one else is going to do it for you.", author: "Unknown" },
+                    { text: "Great things never come from comfort zones.", author: "Unknown" },
+                    { text: "Dream it. Wish it. Do it.", author: "Unknown" },
+                    { text: "Success doesn't just find you. You have to go out and get it.", author: "Unknown" },
+                    { text: "The harder you work for something, the greater you'll feel when you achieve it.", author: "Unknown" },
+                    { text: "Dream bigger. Do bigger.", author: "Unknown" },
+                    { text: "Don't stop when you're tired. Stop when you're done.", author: "Unknown" },
+                    { text: "Wake up with determination. Go to bed with satisfaction.", author: "Unknown" },
+                    { text: "Do something today that your future self will thank you for.", author: "Sean Patrick Flanery" },
+                    { text: "Little things make big days.", author: "Unknown" },
+                    { text: "It's going to be hard, but hard does not mean impossible.", author: "Unknown" },
+                    { text: "Don't wait for opportunity. Create it.", author: "Unknown" },
+                    { text: "Sometimes we're tested not to show our weaknesses, but to discover our strengths.", author: "Unknown" },
+                    { text: "The key to success is to focus on goals, not obstacles.", author: "Unknown" },
+                    { text: "Dream it. Believe it. Build it.", author: "Unknown" }
+                ];
+                
+                const today = new Date().getDate();
+                const todayQuote = quotes[today % quotes.length];
+                const mobileQuoteContent = document.getElementById('mobileQuoteContent');
+                
+                if (mobileQuoteContent) {
+                    mobileQuoteContent.innerHTML = `
+                        <blockquote style="font-style: italic; margin: 0; padding: 1rem; background: var(--hover-bg); border-left: 4px solid var(--color-primary); border-radius: 4px;">
+                            "${todayQuote.text}"
+                            <footer style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">
+                                — ${todayQuote.author}
+                            </footer>
+                        </blockquote>
+                    `;
+                }
+            }
+
+            // Search posts by hashtag
+            function searchPosts(hashtag) {
+                const searchInput = document.getElementById('globalSearch') || document.getElementById('mobileGlobalSearch');
+                if (searchInput) {
+                    searchInput.value = hashtag;
+                    // Trigger search functionality
+                    performSearch(hashtag);
+                }
+            }
+
+            // Initialize mobile widgets when auth state changes
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    initializeMobileWidgets();
+                }
+            });
+
+        </script>
+    </body>
+</html>

@@ -1,0 +1,2933 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>User Profile - Andrew Cares Village</title>
+
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:wght@400;700&family=Montserrat:wght@400;500;700&display=swap"
+            rel="stylesheet">
+
+        <!-- Font Awesome for Icons -->
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+            integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        <style>
+        /* --- OPTIMIZED CSS STYLES --- */
+
+        /* 1. CSS Variables for consistency */
+        :root {
+            --background-color: #F4F2ED;
+            --text-primary: #333333;
+            --text-secondary: #555555;
+            --color-primary: #B38B00;
+            --color-secondary: #001F3F;
+            --card-bg: #FFFFFF;
+            --border-color: #EAEAEA;
+            --hover-bg: #F9F9F9;
+            --success-color: #4CAF50;
+            --danger-color: #D32F2F;
+            --warning-color: #FF9800;
+            --info-color: #2196F3;
+
+            /* Transitions */
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.3s ease;
+            --transition-slow: 0.5s ease;
+
+            /* Shadows */
+            --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --shadow-heavy: 0 8px 25px rgba(0, 0, 0, 0.15);
+
+            /* Border radius */
+            --radius-small: 4px;
+            --radius-medium: 8px;
+            --radius-large: 16px;
+            --radius-round: 50%;
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .relative {
+            position: relative;
+        }
+
+        .loading-spinner-wrapper {
+            margin: 2rem auto;
+            display: block;
+        }
+
+        .help-text {
+            display: block;
+            margin-top: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* Indicator Styles */
+        .online-indicator {
+            position: absolute;
+            right: -4px;
+            bottom: -4px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--success-color);
+            border: 2px solid var(--card-bg);
+            display: none;
+        }
+
+        .online-indicator.active {
+            display: block;
+        }
+
+        /* Profile Content */
+        #profileContent.loaded {
+            display: block;
+        }
+
+        /* Action Buttons */
+        .action-btn {
+            display: none;
+        }
+
+        .action-btn.visible {
+            display: inline-flex;
+        }
+
+        /* Tab Buttons */
+        .tab-btn.hidden {
+            display: none;
+        }
+
+        /* Avatar Styles */
+        .avatar-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .avatar-initials {
+            width: 150px;
+            height: 150px;
+            border-radius: var(--radius-round);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            border: 4px solid var(--color-primary);
+            box-shadow: var(--shadow-medium);
+            transition: transform var(--transition-normal);
+        }
+
+        .avatar-initials:hover {
+            transform: scale(1.02);
+        }
+
+        .avatar-initials.nav {
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            border: 2px solid var(--border-color);
+        }
+
+        .avatar-upload-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: var(--radius-round);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+            cursor: pointer;
+        }
+
+        .avatar-container:hover .avatar-upload-overlay {
+            opacity: 1;
+        }
+
+        .avatar-upload-overlay i {
+            color: white;
+            font-size: 2rem;
+        }
+
+        /* 2. Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        /* 3. Header Styles */
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-light);
+        }
+
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--color-secondary);
+        }
+
+        .main-nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .main-nav a {
+            font-weight: 500;
+            color: var(--text-secondary);
+            padding-bottom: 5px;
+            border-bottom: 2px solid transparent;
+            transition: color var(--transition-fast), border-bottom-color var(--transition-fast);
+        }
+
+        .main-nav a:hover {
+            color: var(--color-primary);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-profile-nav {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            cursor: pointer;
+        }
+
+        .user-avatar-nav {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-round);
+            object-fit: cover;
+            border: 2px solid var(--border-color);
+            transition: border-color var(--transition-fast);
+        }
+
+        .user-avatar-nav:hover {
+            border-color: var(--color-primary);
+        }
+
+        .user-name-nav {
+            font-weight: 500;
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 120%;
+            right: 0;
+            background-color: var(--card-bg);
+            border-radius: var(--radius-medium);
+            box-shadow: var(--shadow-heavy);
+            width: 200px;
+            overflow: hidden;
+            z-index: 1001;
+        }
+
+        .user-profile-nav:hover .profile-dropdown {
+            display: block;
+        }
+
+        .profile-dropdown a,
+        .profile-dropdown button {
+            display: block;
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background-color var(--transition-fast);
+        }
+
+        .profile-dropdown a:hover,
+        .profile-dropdown button:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .profile-dropdown .logout-button {
+            color: var(--danger-color);
+        }
+
+        /* 4. Profile Layout */
+        .profile-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, var(--card-bg) 0%, #f8f9fa 100%);
+            border-radius: var(--radius-large);
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            box-shadow: var(--shadow-medium);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+        }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: var(--radius-round);
+            object-fit: cover;
+            border: 4px solid var(--color-primary);
+            box-shadow: var(--shadow-medium);
+            transition: transform var(--transition-normal);
+        }
+
+        .profile-avatar:hover {
+            transform: scale(1.02);
+        }
+
+        .profile-info {
+            flex-grow: 1;
+        }
+
+        .profile-info h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            color: var(--color-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-rank {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .profile-bio {
+            margin-top: 1rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .profile-actions {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--radius-medium);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            border: none;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left var(--transition-normal);
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #9c7a00;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--color-primary);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #b71c1c;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        /* 5. Profile Details Widget */
+        .profile-details {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-large);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-medium);
+            margin-bottom: 2rem;
+        }
+
+        .widget-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            color: var(--color-secondary);
+        }
+
+        .details-list {
+            list-style: none;
+        }
+
+        .details-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+            padding: 0.5rem;
+            border-radius: var(--radius-small);
+            transition: background-color var(--transition-fast);
+        }
+
+        .details-list li:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .details-list li i {
+            width: 25px;
+            color: var(--color-primary);
+            margin-right: 0.5rem;
+        }
+
+        /* 6. Profile Tabs */
+        .profile-tabs {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-large);
+            box-shadow: var(--shadow-medium);
+            overflow: hidden;
+        }
+
+        .tab-navigation {
+            display: flex;
+            background: linear-gradient(135deg, var(--hover-bg) 0%, #f0f0f0 100%);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all var(--transition-normal);
+            position: relative;
+        }
+
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            transition: width var(--transition-normal);
+        }
+
+        .tab-btn.active {
+            background-color: var(--card-bg);
+            color: var(--color-primary);
+        }
+
+        .tab-btn.active::after {
+            width: 100%;
+        }
+
+        .tab-content {
+            padding: 2rem;
+            min-height: 400px;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 7. Course Cards */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .course-card {
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--hover-bg) 100%);
+            border-radius: var(--radius-large);
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            transform: scaleX(0);
+            transition: transform var(--transition-normal);
+        }
+
+        .course-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .course-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .course-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--color-secondary);
+            font-size: 1.1rem;
+        }
+
+        .course-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .course-progress {
+            background-color: var(--border-color);
+            height: 8px;
+            border-radius: var(--radius-small);
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary), #d4af37);
+            transition: width 1s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .course-meta {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* 8. Activity Feed */
+        .activity-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+            border-radius: var(--radius-medium);
+            transition: background-color var(--transition-fast);
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .activity-item::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 1.2rem;
+            width: 8px;
+            height: 8px;
+            background-color: var(--color-primary);
+            border-radius: var(--radius-round);
+        }
+
+        .activity-item:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .activity-text {
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .activity-timestamp {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        /* 9. Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.visible {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--radius-large);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow-heavy);
+            animation: slideUp 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: var(--color-secondary);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: color var(--transition-fast);
+        }
+
+        .close-btn:hover {
+            color: var(--danger-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-medium);
+            font-family: inherit;
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(179, 139, 0, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .avatar-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: var(--radius-round);
+            object-fit: cover;
+            margin-top: 0.5rem;
+            border: 2px solid var(--border-color);
+        }
+
+        /* 10. Skeleton Loader */
+        .skeleton {
+            animation: skeleton-loading 1.5s ease-in-out infinite alternate;
+            border-radius: var(--radius-small);
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                background-color: #e2e5e7;
+            }
+
+            100% {
+                background-color: #f2f2f2;
+            }
+        }
+
+        .skeleton-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: var(--radius-round);
+        }
+
+        .skeleton-text {
+            height: 16px;
+            border-radius: var(--radius-small);
+            margin-bottom: 10px;
+        }
+
+        .skeleton-h1 {
+            height: 40px;
+            width: 60%;
+            margin-bottom: 1rem;
+            border-radius: var(--radius-small);
+        }
+
+        /* 11. Notification System */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-medium);
+            color: white;
+            font-weight: 500;
+            z-index: 3000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all var(--transition-normal);
+            box-shadow: var(--shadow-heavy);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            max-width: 400px;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, var(--success-color), #45a049);
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, var(--danger-color), #b71c1c);
+        }
+
+        .notification.warning {
+            background: linear-gradient(135deg, var(--warning-color), #f57c00);
+        }
+
+        .notification.info {
+            background: linear-gradient(135deg, var(--info-color), #1976d2);
+        }
+
+        /* 12. Online Status Indicator */
+        .online-indicator {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 20px;
+            height: 20px;
+            background-color: var(--success-color);
+            border: 3px solid var(--card-bg);
+            border-radius: var(--radius-round);
+            animation: pulse 2s infinite;
+        }
+
+        .online-indicator.offline {
+            background-color: var(--text-secondary);
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+            }
+        }
+
+        /* 13. Loading States */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: var(--radius-round);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: inherit;
+        }
+
+        /* File Upload Styles */
+        .file-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-medium);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            margin-bottom: 1rem;
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--color-primary);
+            background-color: rgba(179, 139, 0, 0.05);
+        }
+
+        .file-upload-area.dragover {
+            border-color: var(--color-primary);
+            background-color: rgba(179, 139, 0, 0.1);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-hint {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* 14. Responsive Design */
+        @media (max-width: 768px) {
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.5rem;
+            }
+
+            .profile-container {
+                padding: 0 1rem;
+                margin: 1rem auto;
+            }
+
+            .main-nav {
+                display: none;
+            }
+
+            .tab-navigation {
+                flex-direction: column;
+            }
+
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-info h1 {
+                font-size: 2rem;
+            }
+
+            .profile-actions {
+                justify-content: center;
+            }
+
+            .modal-content {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header {
+                padding: 1rem;
+            }
+
+            .profile-avatar,
+            .avatar-initials {
+                width: 120px;
+                height: 120px;
+            }
+
+            .avatar-initials {
+                font-size: 2.5rem;
+            }
+
+            .profile-info h1 {
+                font-size: 1.5rem;
+            }
+
+            .action-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* 15. Accessibility Improvements */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Focus styles */
+        *:focus {
+            outline: 2px solid var(--color-primary);
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            :root {
+                --border-color: #000000;
+                --text-secondary: #000000;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+    </head>
+
+    <body>
+        <!-- Header -->
+        <header class="main-header">
+            <a href="home.html" class="logo">Andrew Cares Village</a>
+            <nav class="main-nav">
+                <a href="home.html">Home</a>
+                <a href="dojo.html?discipline=Forex">Forex Training</a>
+                <a href="dojo.html?discipline=Fitness">Fitness Training</a>
+                <a href="dojo.html?discipline=Karate">Karate Training</a>
+            </nav>
+            <div class="header-actions">
+                <div id="userProfileNav" class="user-profile-nav">
+                    <div style="position: relative;">
+                        <img id="userAvatarNav" src alt="User Avatar"
+                            class="user-avatar-nav" style="display: none;">
+                        <div id="userAvatarInitialsNav"
+                            class="avatar-initials nav"
+                            style="display: none;">U</div>
+                        <div id="onlineIndicatorNav" class="online-indicator"
+                            style="display: none;"></div>
+                    </div>
+                    <span id="userNameNav"
+                        class="user-name-nav">Loading...</span>
+                    <div class="profile-dropdown">
+                        <a href="profile.html">My Profile</a>
+                        <a href="messages.html">Messages</a>
+                        <button id="logoutButton"
+                            class="logout-button">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="profile-container" id="profileContainer">
+            <!-- Loading State -->
+            <div id="loadingState" class="profile-header">
+                <div class="skeleton skeleton-avatar"></div>
+                <div class="profile-info">
+                    <div class="skeleton skeleton-h1"></div>
+                    <div class="skeleton skeleton-text"
+                        style="width: 30%;"></div>
+                    <div class="skeleton skeleton-text"
+                        style="width: 80%; margin-top: 1rem;"></div>
+                    <div class="skeleton skeleton-text"
+                        style="width: 70%;"></div>
+                </div>
+            </div>
+
+            <!-- Profile Content (Hidden initially) -->
+            <div id="profileContent" style="display: none;">
+                <!-- Profile Header -->
+                <div class="profile-header">
+                    <div class="avatar-container" style="position: relative;">
+                        <img id="userAvatar" src alt="User Avatar"
+                            class="profile-avatar" style="display: none;">
+                        <div id="userAvatarInitials" class="avatar-initials"
+                            style="display: none;">U</div>
+                        <div id="avatarUploadOverlay"
+                            class="avatar-upload-overlay"
+                            style="display: none;">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                        <div id="onlineIndicator" class="online-indicator"
+                            style="display: none;"></div>
+                    </div>
+                    <div class="profile-info">
+                        <h1 id="userName">Loading...</h1>
+                        <div id="userRank" class="profile-rank">
+                            <i class="fas fa-star"></i>
+                            <span>Student</span>
+                        </div>
+                        <p id="userBio" class="profile-bio">No biography
+                            set.</p>
+                        <div class="profile-actions">
+                            <button id="editProfileBtn"
+                                class="action-btn btn-primary"
+                                style="display: none;">
+                                <i class="fas fa-edit"></i> Edit Profile
+                            </button>
+                            <div id="friendActions"></div>
+                            <button id="sendMessageBtn"
+                                class="action-btn btn-secondary"
+                                style="display: none;">
+                                <i class="fas fa-envelope"></i> Send Message
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Details -->
+                <div class="profile-details">
+                    <h3 class="widget-title">Profile Information</h3>
+                    <ul class="details-list">
+                        <li><i class="fas fa-envelope"></i> <span
+                                id="userEmail">Loading...</span></li>
+                        <li><i class="fas fa-calendar"></i> <span
+                                id="joinDate">Loading...</span></li>
+                        <li><i class="fas fa-users"></i> <span
+                                id="friendCount">0 friends</span></li>
+                        <li><i class="fas fa-graduation-cap"></i> <span
+                                id="courseCount">0 courses</span></li>
+                        <li><i class="fas fa-clock"></i> <span
+                                id="lastSeen">Loading...</span></li>
+                    </ul>
+                </div>
+
+                <!-- Profile Tabs -->
+                <div class="profile-tabs">
+                    <div class="tab-navigation">
+                        <button class="tab-btn active" data-tab="activity">
+                            <i class="fas fa-chart-line"></i> Activity
+                        </button>
+                        <button class="tab-btn" data-tab="courses"
+                            id="coursesTab">
+                            <i class="fas fa-book"></i> Courses
+                        </button>
+                        <button class="tab-btn" data-tab="achievements"
+                            id="achievementsTab">
+                            <i class="fas fa-trophy"></i> Achievements
+                        </button>
+                        <button class="tab-btn" data-tab="testimonials"
+                            id="testimonialsTab" style="display: none;">
+                            <i class="fas fa-star"></i> Testimonials
+                        </button>
+                    </div>
+
+                    <div class="tab-content">
+                        <!-- Activity Tab -->
+                        <div class="tab-panel active" id="activityPanel">
+                            <h3><i class="fas fa-chart-line"></i> Recent
+                                Activity</h3>
+                            <div id="activityFeed">
+                                <div class="loading-spinner"
+                                    style="margin: 2rem auto; display: block;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Courses Tab -->
+                        <div class="tab-panel" id="coursesPanel">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <h3 id="coursesTitle"><i
+                                        class="fas fa-book"></i> Courses
+                                    Enrolled</h3>
+                                <div class="course-stats"
+                                    id="courseStats"></div>
+                            </div>
+                            <div class="course-grid" id="courseGrid">
+                                <div class="loading-spinner"
+                                    style="margin: 2rem auto; display: block;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Achievements Tab -->
+                        <div class="tab-panel" id="achievementsPanel">
+                            <h3><i class="fas fa-trophy"></i> Achievements</h3>
+                            <div id="achievementsList">
+                                <div class="loading-spinner"
+                                    style="margin: 2rem auto; display: block;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Testimonials Tab (Instructors only) -->
+                        <div class="tab-panel" id="testimonialsPanel">
+                            <h3><i class="fas fa-star"></i> Student
+                                Testimonials</h3>
+                            <div id="testimonialsList">
+                                <div class="loading-spinner"
+                                    style="margin: 2rem auto; display: block;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Edit Profile Modal -->
+        <div id="editModal" class="modal" role="dialog"
+            aria-labelledby="modalTitle" aria-hidden="true">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle" class="modal-title">Edit Profile</h2>
+                    <button id="closeModalBtn" class="close-btn"
+                        aria-label="Close modal">&times;</button>
+                </div>
+                <form id="editForm">
+                    <div class="form-group">
+                        <label for="avatarUpload">Profile Picture:</label>
+
+                        <!-- File Upload Area -->
+                        <div id="fileUploadArea" class="file-upload-area">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="upload-text">
+                                Click to upload or drag and drop
+                            </div>
+                            <div class="upload-hint">
+                                Max size: 5MB. Supported formats: JPG, PNG, GIF,
+                                WebP
+                            </div>
+                        </div>
+
+                        <input type="file" id="avatarUpload" accept="image/*"
+                            style="display: none;"
+                            aria-describedby="avatarHelp">
+
+                        <!-- Avatar Preview -->
+                        <div id="avatarPreviewContainer"
+                            style="display: none; text-align: center; margin-top: 1rem;">
+                            <img id="avatarPreview" class="avatar-preview" src
+                                alt="Avatar preview">
+                            <div style="margin-top: 0.5rem;">
+                                <button type="button" id="removeAvatarBtn"
+                                    class="action-btn btn-danger"
+                                    style="font-size: 0.8rem; padding: 0.5rem 1rem;">
+                                    <i class="fas fa-trash"></i> Remove Image
+                                </button>
+                            </div>
+                        </div>
+
+                        <small id="avatarHelp" class="help-text">
+                            If no image is uploaded, your initials will be used
+                            as your profile picture.
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bioTextarea">Biography:</label>
+                        <textarea id="bioTextarea"
+                            placeholder="Tell us about yourself..."
+                            maxlength="500"
+                            aria-describedby="bioHelp"></textarea>
+                        <small id="bioHelp" class="help-text">
+                            <span id="bioCharCount">0</span>/500 characters
+                        </small>
+                    </div>
+
+                    <div class="profile-actions">
+                        <button type="submit" class="action-btn btn-primary"
+                            id="saveChangesBtn">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                        <button type="button" id="cancelEditBtn"
+                            class="action-btn btn-secondary">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- JavaScript -->
+        <script type="module">
+        // Firebase SDK Imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+        import {
+            getAuth,
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+        import {
+            getFirestore,
+            doc,
+            getDoc,
+            updateDoc,
+            setDoc,
+            collection,
+            query,
+            where,
+            getDocs,
+            writeBatch,
+            arrayUnion,
+            arrayRemove,
+            collectionGroup,
+            orderBy,
+            limit,
+            onSnapshot,
+            serverTimestamp,
+            Timestamp
+        } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
+            authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
+            projectId: "andrew-cares-village-f4cb6",
+            storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
+            messagingSenderId: "255087116955",
+            appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Global State Management
+        class ProfileState {
+            constructor() {
+                this.currentAuthUser = null;
+                this.viewedUserId = null;
+                this.viewedUserData = null;
+                this.realTimeListeners = [];
+                this.cache = new Map();
+                this.isLoading = false;
+                this.lastRefresh = null;
+                this.refreshInterval = 30000; // 30 seconds
+                this.uploadingAvatar = false;
+                this.selectedFile = null;
+            }
+
+            shouldRefresh() {
+                return !this.lastRefresh || (Date.now() - this.lastRefresh) > this.refreshInterval;
+            }
+
+            cleanup() {
+                this.realTimeListeners.forEach(cleanup => cleanup());
+                this.realTimeListeners = [];
+                this.cache.clear();
+                this.isLoading = false;
+                this.uploadingAvatar = false;
+                this.selectedFile = null;
+            }
+
+            setCache(key, data, ttl = 300000) {
+                this.cache.set(key, {
+                    data,
+                    timestamp: Date.now(),
+                    ttl
+                });
+            }
+
+            getCache(key) {
+                const cached = this.cache.get(key);
+                if (!cached) return null;
+
+                if (Date.now() - cached.timestamp > cached.ttl) {
+                    this.cache.delete(key);
+                    return null;
+                }
+
+                return cached.data;
+            }
+        }
+
+        const profileState = new ProfileState();
+
+        // DOM Elements
+        const elements = {
+            // Navigation
+            userProfileNav: document.getElementById('userProfileNav'),
+            userAvatarNav: document.getElementById('userAvatarNav'),
+            userAvatarInitialsNav: document.getElementById('userAvatarInitialsNav'),
+            userNameNav: document.getElementById('userNameNav'),
+            onlineIndicatorNav: document.getElementById('onlineIndicatorNav'),
+            logoutButton: document.getElementById('logoutButton'),
+
+            // Main Content
+            profileContainer: document.getElementById('profileContainer'),
+            loadingState: document.getElementById('loadingState'),
+            profileContent: document.getElementById('profileContent'),
+
+            // Profile Header
+            userAvatar: document.getElementById('userAvatar'),
+            userAvatarInitials: document.getElementById('userAvatarInitials'),
+            avatarUploadOverlay: document.getElementById('avatarUploadOverlay'),
+            userName: document.getElementById('userName'),
+            userRank: document.getElementById('userRank'),
+            userBio: document.getElementById('userBio'),
+            userEmail: document.getElementById('userEmail'),
+            joinDate: document.getElementById('joinDate'),
+            friendCount: document.getElementById('friendCount'),
+            courseCount: document.getElementById('courseCount'),
+            lastSeen: document.getElementById('lastSeen'),
+            onlineIndicator: document.getElementById('onlineIndicator'),
+
+            // Actions
+            friendActions: document.getElementById('friendActions'),
+            sendMessageBtn: document.getElementById('sendMessageBtn'),
+            editProfileBtn: document.getElementById('editProfileBtn'),
+
+            // Modal
+            editModal: document.getElementById('editModal'),
+            closeModalBtn: document.getElementById('closeModalBtn'),
+            cancelEditBtn: document.getElementById('cancelEditBtn'),
+            editForm: document.getElementById('editForm'),
+            bioTextarea: document.getElementById('bioTextarea'),
+            bioCharCount: document.getElementById('bioCharCount'),
+            avatarUploadInput: document.getElementById('avatarUpload'),
+            fileUploadArea: document.getElementById('fileUploadArea'),
+            avatarPreview: document.getElementById('avatarPreview'),
+            avatarPreviewContainer: document.getElementById('avatarPreviewContainer'),
+            removeAvatarBtn: document.getElementById('removeAvatarBtn'),
+            saveChangesBtn: document.getElementById('saveChangesBtn'),
+
+            // Tabs
+            tabBtns: document.querySelectorAll('.tab-btn'),
+            tabPanels: document.querySelectorAll('.tab-panel'),
+            coursesTab: document.getElementById('coursesTab'),
+            testimonialsTab: document.getElementById('testimonialsTab'),
+            achievementsTab: document.getElementById('achievementsTab'),
+            coursesTitle: document.getElementById('coursesTitle'),
+            courseGrid: document.getElementById('courseGrid'),
+            courseStats: document.getElementById('courseStats'),
+            activityFeed: document.getElementById('activityFeed'),
+            achievementsList: document.getElementById('achievementsList'),
+            testimonialsList: document.getElementById('testimonialsList')
+        };
+
+        // Utility functions
+        class Utils {
+            static showNotification(message, type = 'info', duration = 4000) {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+
+                const icon = this.getNotificationIcon(type);
+                notification.innerHTML = `
+                    <i class="${icon}"></i>
+                    <span>${message}</span>
+                `;
+
+                document.body.appendChild(notification);
+
+                requestAnimationFrame(() => {
+                    notification.classList.add('show');
+                });
+
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    setTimeout(() => {
+                        if (document.body.contains(notification)) {
+                            document.body.removeChild(notification);
+                        }
+                    }, 300);
+                }, duration);
+
+                return notification;
+            }
+
+            static getNotificationIcon(type) {
+                const icons = {
+                    success: 'fas fa-check-circle',
+                    error: 'fas fa-exclamation-circle',
+                    warning: 'fas fa-exclamation-triangle',
+                    info: 'fas fa-info-circle'
+                };
+                return icons[type] || icons.info;
+            }
+
+            static formatDate(timestamp) {
+                if (!timestamp) return 'Unknown';
+
+                let date;
+                if (timestamp.seconds) {
+                    date = new Date(timestamp.seconds * 1000);
+                } else if (timestamp instanceof Date) {
+                    date = timestamp;
+                } else {
+                    date = new Date(timestamp);
+                }
+
+                return date.toLocaleDateString('en-US', {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+            }
+
+            static formatRelativeTime(timestamp) {
+                if (!timestamp) return 'Unknown';
+
+                let date;
+                if (timestamp.seconds) {
+                    date = new Date(timestamp.seconds * 1000);
+                } else {
+                    date = new Date(timestamp);
+                }
+
+                const now = new Date();
+                const diffInSeconds = Math.floor((now - date) / 1000);
+
+                if (diffInSeconds < 60) return 'Just now';
+                if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+                if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+                if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)} days ago`;
+
+                return this.formatDate(timestamp);
+            }
+
+            static generateInitialsAvatar(name) {
+                const initials = name ? name.split(' ').map(n => n.charAt(0).toUpperCase()).slice(0, 2).join('') : 'U';
+                return initials;
+            }
+
+            static generateCloudinaryInitialsUrl(name, size = 300) {
+                const initials = this.generateInitialsAvatar(name);
+                const colors = [
+                    'B38B00,001F3F', // Gold and Navy
+                    '4CAF50,2E7D32', // Green
+                    '2196F3,1565C0', // Blue
+                    'FF9800,F57C00', // Orange
+                    '9C27B0,7B1FA2', // Purple
+                    'F44336,C62828', // Red
+                    '009688,00695C', // Teal
+                    '795548,5D4037'  // Brown
+                ];
+
+                // Simple hash function to pick consistent color for each user
+                let hash = 0;
+                for (let i = 0; i < name.length; i++) {
+                    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+                }
+                const colorIndex = Math.abs(hash) % colors.length;
+                const [bg, fg] = colors[colorIndex].split(',');
+
+                return `https://res.cloudinary.com/dkd6x857p/image/upload/w_${size},h_${size},c_fill,b_${bg},co_${fg},g_center,l_text:Arial_${Math.floor(size / 3)}:${initials}/v1/default_avatar.png`;
+            }
+
+            static debounce(func, wait) {
+                let timeout;
+                return function executedfunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            }
+
+        // Enhanced Cloudinary upload method
+            static async uploadToCloudinary(file, options = {}) {
+                const CLOUD_NAME = "dkd6x857p";
+                const UPLOAD_PRESET = "Andrew Cares Village Hub";
+                const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+
+                try {
+                    // Validate file first
+                    this.validateFile(file);
+
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('upload_preset', UPLOAD_PRESET);
+
+                    // Enhanced transformations for profile pictures
+                    //formData.append('transformation', 'w_300,h_300,c_fill,g_face,q_auto,f_auto');
+                    formData.append('folder', 'profile_pictures');
+                    formData.append('tags', 'profile,user_upload');
+
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        body: formData,
+                        // Don't set Content-Type header - let browser set it with boundary
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(
+                            errorData.error?.message ||
+                            `Upload failed with status: ${response.status}`
+                        );
+                    }
+
+                    const data = await response.json();
+
+                    console.log('Cloudinary upload successful:', data);
+                    return data.secure_url;
+
+                } catch (error) {
+                    console.error('Cloudinary upload error:', error);
+
+                    // Provide user-friendly error messages
+                    if (error.message.includes('Invalid image file')) {
+                        throw new Error('Please upload a valid image file (JPG, PNG, GIF, or WebP)');
+                    } else if (error.message.includes('File size too large')) {
+                        throw new Error('Image file is too large. Please use an image under 5MB.');
+                    } else if (error.message.includes('Upload preset')) {
+                        throw new Error('Upload configuration error. Please try again later.');
+                    } else {
+                        throw new Error(`Upload failed: ${error.message}`);
+                    }
+                }
+            }
+
+            // Enhanced file validation
+            static validateFile(file) {
+                const maxSize = 5 * 1024 * 1024; // 5MB
+                const allowedTypes = [
+                    'image/jpeg',
+                    'image/jpg',
+                    'image/png',
+                    'image/gif',
+                    'image/webp'
+                ];
+
+                if (!file) {
+                    throw new Error('No file selected');
+                }
+
+                if (!allowedTypes.includes(file.type)) {
+                    throw new Error(`Invalid file type: ${file.type}. Please use JPG, PNG, GIF, or WebP.`);
+                }
+
+                if (file.size > maxSize) {
+                    const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                    throw new Error(`File too large: ${sizeMB}MB. Maximum size is 5MB.`);
+                }
+
+                return true;
+            }
+
+        }  // End of Utils class
+
+        // Avatar Management Class
+        class AvatarManager {
+            static displayAvatar(userData, containerType = 'main') {
+                const name = userData.name || 'User';
+                const avatarUrl = userData.avatarUrl;
+
+                if (containerType === 'nav') {
+                    if (avatarUrl) {
+                        elements.userAvatarNav.src = avatarUrl;
+                        elements.userAvatarNav.style.display = 'block';
+                        elements.userAvatarInitialsNav.style.display = 'none';
+                    } else {
+                        const initials = Utils.generateInitialsAvatar(name);
+                        elements.userAvatarInitialsNav.textContent = initials;
+                        elements.userAvatarInitialsNav.style.display = 'flex';
+                        elements.userAvatarNav.style.display = 'none';
+                    }
+                } else {
+                    if (avatarUrl) {
+                        elements.userAvatar.src = avatarUrl;
+                        elements.userAvatar.style.display = 'block';
+                        elements.userAvatarInitials.style.display = 'none';
+                    } else {
+                        const initials = Utils.generateInitialsAvatar(name);
+                        elements.userAvatarInitials.textContent = initials;
+                        elements.userAvatarInitials.style.display = 'flex';
+                        elements.userAvatar.style.display = 'none';
+                    }
+                }
+            }
+
+            static setupAvatarUpload() {
+                // File upload area click handler
+                elements.fileUploadArea.addEventListener('click', () => {
+                    elements.avatarUploadInput.click();
+                });
+
+                // File input change handler
+                elements.avatarUploadInput.addEventListener('change', AvatarManager.handleFileSelect);
+
+                // Avatar overlay click handler (for own profile)
+                elements.avatarUploadOverlay.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    elements.avatarUploadInput.click();
+                });
+
+                // Drag and drop handlers
+                elements.fileUploadArea.addEventListener('dragover', AvatarManager.handleDragOver);
+                elements.fileUploadArea.addEventListener('dragleave', AvatarManager.handleDragLeave);
+                elements.fileUploadArea.addEventListener('drop', AvatarManager.handleDrop);
+
+                // Remove avatar button
+                elements.removeAvatarBtn.addEventListener('click', AvatarManager.removeSelectedFile);
+            }
+
+            static handleDragOver(e) {
+                e.preventDefault();
+                elements.fileUploadArea.classList.add('dragover');
+            }
+
+            static handleDragLeave(e) {
+                e.preventDefault();
+                elements.fileUploadArea.classList.remove('dragover');
+            }
+
+            static async handleDrop(e) {
+                e.preventDefault();
+                elements.fileUploadArea.classList.remove('dragover');
+
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    await AvatarManager.processFile(files[0]);
+                }
+            }
+
+            static async handleFileSelect(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    await AvatarManager.processFile(file);
+                }
+            }
+
+            static async processFile(file) {
+                try {
+                    Utils.validateFile(file);
+                    profileState.selectedFile = file;
+
+                    // Show preview
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        elements.avatarPreview.src = e.target.result;
+                        elements.avatarPreviewContainer.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+
+                } catch (error) {
+                    Utils.showNotification(error.message, 'error');
+                    AvatarManager.removeSelectedFile();
+                }
+            }
+
+            static removeSelectedFile() {
+                profileState.selectedFile = null;
+                elements.avatarUploadInput.value = '';
+                elements.avatarPreview.src = '';
+                elements.avatarPreviewContainer.style.display = 'none';
+            }
+
+           // Enhanced avatar upload with progress
+            static async uploadAvatar() {
+                if (!profileState.selectedFile) {
+                    return null;
+                }
+
+                try {
+                    profileState.uploadingAvatar = true;
+
+                    // Update UI to show upload progress
+                    elements.saveChangesBtn.innerHTML = '<span class="loading-spinner"></span> Uploading image...';
+                    elements.saveChangesBtn.disabled = true;
+
+                    Utils.showNotification('📤 Uploading profile picture...', 'info');
+
+                    const avatarUrl = await Utils.uploadToCloudinary(profileState.selectedFile);
+
+                    Utils.showNotification('✅ Profile picture uploaded successfully!', 'success');
+                    return avatarUrl;
+
+                } catch (error) {
+                    console.error('Error uploading avatar:', error);
+                    Utils.showNotification(`❌ ${error.message}`, 'error');
+                    throw error;
+                } finally {
+                    profileState.uploadingAvatar = false;
+                    elements.saveChangesBtn.disabled = false;
+                }
+            }
+        }
+
+        // Real-time Data Management
+        class RealtimeManager {
+            static setupUserPresence(userId) {
+                if (!userId) return;
+
+                const userRef = doc(db, "users", userId);
+
+                const updatePresence = () => {
+                    updateDoc(userRef, {
+                        lastSeen: serverTimestamp(),
+                        isOnline: true
+                    }).catch(console.error);
+                };
+
+                updatePresence();
+                const presenceInterval = setInterval(updatePresence, 30000);
+
+                const handleVisibilityChange = () => {
+                    if (document.hidden) {
+                        updateDoc(userRef, { isOnline: false }).catch(console.error);
+                    } else {
+                        updatePresence();
+                    }
+                };
+
+                document.addEventListener('visibilitychange', handleVisibilityChange);
+
+                const handleBeforeUnload = () => {
+                    updateDoc(userRef, { isOnline: false }).catch(console.error);
+                };
+
+                window.addEventListener('beforeunload', handleBeforeUnload);
+
+                return () => {
+                    clearInterval(presenceInterval);
+                    document.removeEventListener('visibilitychange', handleVisibilityChange);
+                    window.removeEventListener('beforeunload', handleBeforeUnload);
+                };
+            }
+
+            static listenToUserData(userId, callback) {
+                const userRef = doc(db, "users", userId);
+                return onSnapshot(userRef, callback, (error) => {
+                    console.error("Error listening to user data:", error);
+                    Utils.showNotification('Connection error. Some data may not be up to date.', 'warning');
+                });
+            }
+
+            static listenToUserActivity(userId, callback) {
+                const activityRef = collection(db, "users", userId, "activities");
+                const q = query(activityRef, orderBy("timestamp", "desc"), limit(10));
+
+                return onSnapshot(q, callback, (error) => {
+                    console.error("Error listening to activity:", error);
+                });
+            }
+
+            static async logActivity(userId, activityType, activityData) {
+                try {
+                    const activityRef = collection(db, "users", userId, "activities");
+                    await setDoc(doc(activityRef), {
+                        type: activityType,
+                        data: activityData,
+                        timestamp: serverTimestamp()
+                    });
+                } catch (error) {
+                    console.error("Error logging activity:", error);
+                }
+            }
+        }
+
+        // Profile Management Class
+        class ProfileManager {
+            static async loadProfile(userId) {
+                try {
+                    profileState.isLoading = true;
+
+                    const cacheKey = `profile_${userId}`;
+                    const cached = profileState.getCache(cacheKey);
+
+                    if (cached) {
+                        ProfileManager.updateProfileDisplay(cached);
+                        ProfileManager.showProfileContent();
+                    }
+
+                    const unsubscribe = RealtimeManager.listenToUserData(userId, (userSnap) => {
+                        if (userSnap.exists()) {
+                            const userData = userSnap.data();
+                            profileState.viewedUserData = userData;
+                            profileState.setCache(cacheKey, userData);
+                            ProfileManager.updateProfileDisplay(userData);
+                            ProfileManager.showProfileContent();
+                            ProfileManager.setupProfileFeatures();
+                        } else {
+                            ProfileManager.showError("User not found");
+                        }
+                    });
+
+                    profileState.realTimeListeners.push(unsubscribe);
+
+                } catch (error) {
+                    console.error("Error loading profile:", error);
+                    ProfileManager.showError("Failed to load profile. Please try again.");
+                } finally {
+                    profileState.isLoading = false;
+                }
+            }
+
+            static updateProfileDisplay(userData) {
+                // Update avatar display
+                AvatarManager.displayAvatar(userData, 'main');
+                AvatarManager.displayAvatar(userData, 'nav');
+
+                elements.userName.textContent = userData.name || 'Unknown User';
+                elements.userBio.textContent = userData.bio || 'No biography set.';
+                elements.userEmail.textContent = userData.email || 'Email not available';
+                elements.joinDate.textContent = `Joined ${Utils.formatDate(userData.createdAt)}`;
+
+                if (userData.isOnline) {
+                    elements.lastSeen.innerHTML = '<i class="fas fa-circle" style="color: var(--success-color);"></i> Online now';
+                    elements.onlineIndicator.style.display = 'block';
+                    elements.onlineIndicator.className = 'online-indicator';
+                } else {
+                    elements.lastSeen.innerHTML = `<i class="fas fa-clock"></i> Last seen ${Utils.formatRelativeTime(userData.lastSeen)}`;
+                    elements.onlineIndicator.style.display = 'block';
+                    elements.onlineIndicator.className = 'online-indicator offline';
+                }
+
+                ProfileManager.updateUserRole(userData.role || 'student');
+                ProfileManager.updateUserStats(userData);
+            }
+
+            static updateUserRole(role) {
+                const rankSpan = elements.userRank.querySelector('span');
+                const rankIcon = elements.userRank.querySelector('i');
+
+                const roleConfig = {
+                    instructor: {
+                        title: 'Instructor',
+                        icon: 'fas fa-chalkboard-teacher',
+                        showTestimonials: true,
+                        coursesTitle: 'Courses Taught'
+                    },
+                    admin: {
+                        title: 'Administrator',
+                        icon: 'fas fa-crown',
+                        showTestimonials: false,
+                        coursesTitle: 'Courses Managed'
+                    },
+                    student: {
+                        title: 'Student',
+                        icon: 'fas fa-graduation-cap',
+                        showTestimonials: false,
+                        coursesTitle: 'Courses Enrolled'
+                    }
+                };
+
+                const config = roleConfig[role] || roleConfig.student;
+
+                rankSpan.textContent = config.title;
+                rankIcon.className = config.icon;
+                elements.coursesTitle.innerHTML = `<i class="fas fa-book"></i> ${config.coursesTitle}`;
+                elements.testimonialsTab.style.display = config.showTestimonials ? 'block' : 'none';
+            }
+
+            static updateUserStats(userData) {
+                const friendsCount = userData.friends?.length || 0;
+                elements.friendCount.innerHTML = `<i class="fas fa-users"></i> ${friendsCount} friends`;
+                elements.courseCount.innerHTML = '<i class="fas fa-graduation-cap"></i> <span class="loading-spinner"></span>';
+            }
+
+            static showProfileContent() {
+                elements.loadingState.style.display = 'none';
+                elements.profileContent.style.display = 'block';
+            }
+
+            static showError(message) {
+                elements.loadingState.innerHTML = `
+                    <div style="text-align: center; padding: 2rem;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--warning-color); margin-bottom: 1rem;"></i>
+                        <h2>${message}</h2>
+                        <button onclick="window.location.reload()" class="action-btn btn-primary" style="margin-top: 1rem;">
+                            <i class="fas fa-refresh"></i> try Again
+                        </button>
+                    </div>
+                `;
+            }
+
+            static setupProfileFeatures() {
+                if (profileState.viewedUserId === profileState.currentAuthUser?.uid) {
+                    ProfileManager.setupOwnProfile();
+                } else {
+                    ProfileManager.setupOtherProfile();
+                }
+
+                ProfileManager.loadFriendData();
+                ProfileManager.loadCourseData();
+                ProfileManager.loadActivityData();
+                ProfileManager.loadAchievements();
+            }
+
+            static setupOwnProfile() {
+                elements.editProfileBtn.style.display = 'inline-flex';
+                elements.sendMessageBtn.style.display = 'none';
+                elements.avatarUploadOverlay.style.display = 'flex';
+                ProfileManager.setupEditfunctionality();
+            }
+
+            static setupOtherProfile() {
+                elements.editProfileBtn.style.display = 'none';
+                elements.sendMessageBtn.style.display = 'inline-flex';
+                elements.avatarUploadOverlay.style.display = 'none';
+                ProfileManager.setupFriendshipfunctionality();
+                ProfileManager.setupMessagingfunctionality();
+            }
+
+            // Edit Profile functionality
+            static setupEditfunctionality() {
+                elements.editProfileBtn.addEventListener('click', ProfileManager.openEditModal);
+                elements.closeModalBtn.addEventListener('click', ProfileManager.closeEditModal);
+                elements.cancelEditBtn.addEventListener('click', ProfileManager.closeEditModal);
+                elements.editForm.addEventListener('submit', ProfileManager.handleProfileUpdate);
+
+                // Setup avatar upload
+                AvatarManager.setupAvatarUpload();
+
+                elements.bioTextarea.addEventListener('input', (e) => {
+                    const count = e.target.value.length;
+                    elements.bioCharCount.textContent = count;
+
+                    if (count > 450) {
+                        elements.bioCharCount.style.color = 'var(--warning-color)';
+                    } else if (count > 500) {
+                        elements.bioCharCount.style.color = 'var(--danger-color)';
+                    } else {
+                        elements.bioCharCount.style.color = 'var(--text-secondary)';
+                    }
+                });
+            }
+
+            static openEditModal() {
+                const currentBio = elements.userBio.textContent === 'No biography set.' ? '' : elements.userBio.textContent;
+                elements.bioTextarea.value = currentBio;
+                elements.bioCharCount.textContent = currentBio.length;
+
+                // Reset avatar upload state
+                AvatarManager.removeSelectedFile();
+
+                elements.editModal.classList.add('visible');
+                elements.editModal.setAttribute('aria-hidden', 'false');
+                elements.bioTextarea.focus();
+            }
+
+            static closeEditModal() {
+                elements.editModal.classList.remove('visible');
+                elements.editModal.setAttribute('aria-hidden', 'true');
+                elements.editForm.reset();
+                AvatarManager.removeSelectedFile();
+            }
+
+            static async handleProfileUpdate(e) {
+                e.preventDefault();
+                const newBio = elements.bioTextarea.value.trim();
+                const originalText = elements.saveChangesBtn.innerHTML;
+
+                try {
+                    elements.saveChangesBtn.innerHTML = '<i class="loading-spinner"></i> Saving...';
+                    elements.saveChangesBtn.disabled = true;
+
+                    const userRef = doc(db, "users", profileState.currentAuthUser.uid);
+                    const updates = {
+                        bio: newBio,
+                        updatedAt: serverTimestamp()
+                    };
+
+                    // Handle avatar upload if a file is selected
+                    if (profileState.selectedFile) {
+                        try {
+                            const avatarUrl = await AvatarManager.uploadAvatar();
+                            updates.avatarUrl = avatarUrl;
+
+                            await RealtimeManager.logActivity(
+                                profileState.currentAuthUser.uid,
+                                'avatar_updated',
+                                { avatarUrl }
+                            );
+                        } catch (avatarError) {
+                            // Avatar upload failed, but continue with bio update
+                            console.error('Avatar upload failed:', avatarError);
+                        }
+                    }
+
+                    await updateDoc(userRef, updates);
+
+                    await RealtimeManager.logActivity(
+                        profileState.currentAuthUser.uid,
+                        'profile_updated',
+                        { fields: Object.keys(updates) }
+                    );
+
+                    ProfileManager.closeEditModal();
+                    Utils.showNotification('Profile updated successfully!', 'success');
+
+                } catch (error) {
+                    console.error("Error updating profile:", error);
+                    Utils.showNotification('Failed to update profile. Please try again.', 'error');
+                } finally {
+                    elements.saveChangesBtn.innerHTML = originalText;
+                    elements.saveChangesBtn.disabled = false;
+                }
+            }
+
+            // Friendship functionality
+            static setupFriendshipfunctionality() {
+                // This will be populated after friend data is loaded
+            }
+
+            static async handleAddFriend() {
+                try {
+                    const batch = writeBatch(db);
+                    const viewedUserRef = doc(db, "users", profileState.viewedUserId);
+                    const currentUserRef = doc(db, "users", profileState.currentAuthUser.uid);
+
+                    batch.update(viewedUserRef, {
+                        friends: arrayUnion(profileState.currentAuthUser.uid),
+                        updatedAt: serverTimestamp()
+                    });
+                    batch.update(currentUserRef, {
+                        friends: arrayUnion(profileState.viewedUserId),
+                        updatedAt: serverTimestamp()
+                    });
+
+                    await batch.commit();
+
+                    await Promise.all([
+                        RealtimeManager.logActivity(
+                            profileState.currentAuthUser.uid,
+                            'friend_added',
+                            { friendId: profileState.viewedUserId, friendName: profileState.viewedUserData.name }
+                        ),
+                        RealtimeManager.logActivity(
+                            profileState.viewedUserId,
+                            'friend_received',
+                            { friendId: profileState.currentAuthUser.uid }
+                        )
+                    ]);
+
+                    Utils.showNotification(`You are now friends with ${profileState.viewedUserData.name}!`, 'success');
+                    ProfileManager.loadFriendData();
+
+                } catch (error) {
+                    console.error("Error adding friend:", error);
+                    Utils.showNotification('Failed to add friend. Please try again.', 'error');
+                }
+            }
+
+            static async handleRemoveFriend() {
+                if (!confirm(`Are you sure you want to remove ${profileState.viewedUserData.name} from your friends?`)) {
+                    return;
+                }
+
+                try {
+                    const batch = writeBatch(db);
+                    const viewedUserRef = doc(db, "users", profileState.viewedUserId);
+                    const currentUserRef = doc(db, "users", profileState.currentAuthUser.uid);
+
+                    batch.update(viewedUserRef, {
+                        friends: arrayRemove(profileState.currentAuthUser.uid),
+                        updatedAt: serverTimestamp()
+                    });
+                    batch.update(currentUserRef, {
+                        friends: arrayRemove(profileState.viewedUserId),
+                        updatedAt: serverTimestamp()
+                    });
+
+                    await batch.commit();
+
+                    await RealtimeManager.logActivity(
+                        profileState.currentAuthUser.uid,
+                        'friend_removed',
+                        { friendId: profileState.viewedUserId, friendName: profileState.viewedUserData.name }
+                    );
+
+                    Utils.showNotification(`Removed ${profileState.viewedUserData.name} from friends.`, 'info');
+                    ProfileManager.loadFriendData();
+
+                } catch (error) {
+                    console.error("Error removing friend:", error);
+                    Utils.showNotification('Failed to remove friend. Please try again.', 'error');
+                }
+            }
+
+            static setupMessagingfunctionality() {
+                elements.sendMessageBtn.addEventListener('click', () => {
+                    window.location.href = `messages.html?user=${profileState.viewedUserId}`;
+                });
+            }
+
+            // Friend Data Management
+            static async loadFriendData() {
+                try {
+                    const cacheKey = `friends_${profileState.viewedUserId}`;
+                    const cached = profileState.getCache(cacheKey);
+
+                    if (cached) {
+                        ProfileManager.updateFriendDisplay(cached);
+                    }
+
+                    const userRef = doc(db, "users", profileState.viewedUserId);
+                    const unsubscribe = onSnapshot(userRef, async (userSnap) => {
+                        if (!userSnap.exists()) return;
+
+                        const userData = userSnap.data();
+                        const friendsData = {
+                            friends: userData.friends || [],
+                            isCurrentUserFriend: false
+                        };
+
+                        if (profileState.currentAuthUser && profileState.viewedUserId !== profileState.currentAuthUser.uid) {
+                            const currentUserRef = doc(db, "users", profileState.currentAuthUser.uid);
+                            const currentUserSnap = await getDoc(currentUserRef);
+
+                            if (currentUserSnap.exists()) {
+                                const currentUserData = currentUserSnap.data();
+                                friendsData.isCurrentUserFriend =
+                                    userData.friends?.includes(profileState.currentAuthUser.uid) &&
+                                    currentUserData.friends?.includes(profileState.viewedUserId);
+                            }
+                        }
+
+                        profileState.setCache(cacheKey, friendsData);
+                        ProfileManager.updateFriendDisplay(friendsData);
+                    });
+
+                    profileState.realTimeListeners.push(unsubscribe);
+
+                } catch (error) {
+                    console.error("Error loading friend data:", error);
+                    elements.friendCount.innerHTML = '<i class="fas fa-users"></i> 0 friends';
+                }
+            }
+
+            static updateFriendDisplay(friendsData) {
+                const friendCountText = `${friendsData.friends.length} friend${friendsData.friends.length !== 1 ? 's' : ''}`;
+                elements.friendCount.innerHTML = `<i class="fas fa-users"></i> ${friendCountText}`;
+
+                if (profileState.viewedUserId !== profileState.currentAuthUser?.uid) {
+                    if (friendsData.isCurrentUserFriend) {
+                        elements.friendActions.innerHTML = `
+                            <button class="action-btn btn-secondary" id="removeFriendBtn">
+                                <i class="fas fa-user-minus"></i> Remove Friend
+                            </button>
+                        `;
+                        document.getElementById('removeFriendBtn').addEventListener('click', ProfileManager.handleRemoveFriend);
+                    } else {
+                        elements.friendActions.innerHTML = `
+                            <button class="action-btn btn-primary" id="addFriendBtn">
+                                <i class="fas fa-user-plus"></i> Add Friend
+                            </button>
+                        `;
+                        document.getElementById('addFriendBtn').addEventListener('click', ProfileManager.handleAddFriend);
+                    }
+                }
+            }
+
+            // Course Data Management
+            static async loadCourseData() {
+                try {
+                    const cacheKey = `courses_${profileState.viewedUserId}`;
+                    const cached = profileState.getCache(cacheKey);
+
+                    if (cached) {
+                        ProfileManager.displayCourses(cached);
+                        return;
+                    }
+
+                    elements.courseGrid.innerHTML = '<div class="loading-spinner" style="margin: 2rem auto; display: block;"></div>';
+
+                    const role = profileState.viewedUserData?.role || 'student';
+                    let courseData = [];
+
+                    if (role === 'instructor') {
+                        const coursesRef = collection(db, "courses");
+                        const q = query(coursesRef, where("instructorId", "==", profileState.viewedUserId));
+                        const querySnap = await getDocs(q);
+
+                        const coursePromises = [];
+                        querySnap.forEach(doc => {
+                            const course = { id: doc.id, ...doc.data() };
+                            coursePromises.push(ProfileManager.enrichCourseData(course));
+                        });
+
+                        courseData = await Promise.all(coursePromises);
+                    } else {
+                        const enrollmentsRef = collection(db, "enrollments");
+                        const q = query(enrollmentsRef, where("studentId", "==", profileState.viewedUserId));
+                        const enrollmentSnap = await getDocs(q);
+
+                        const coursePromises = [];
+                        enrollmentSnap.forEach(doc => {
+                            const enrollment = doc.data();
+                            coursePromises.push(ProfileManager.getCourseWithProgress(enrollment));
+                        });
+
+                        courseData = await Promise.all(coursePromises);
+                    }
+
+                    profileState.setCache(cacheKey, courseData);
+                    ProfileManager.displayCourses(courseData);
+
+                } catch (error) {
+                    console.error("Error loading courses:", error);
+                    elements.courseGrid.innerHTML = '<p>Error loading courses. Please try again.</p>';
+                }
+            }
+
+            static async enrichCourseData(course) {
+                try {
+                    const enrollmentsRef = collection(db, "enrollments");
+                    const q = query(enrollmentsRef, where("courseId", "==", course.id));
+                    const enrollmentSnap = await getDocs(q);
+
+                    return {
+                        ...course,
+                        studentCount: enrollmentSnap.size,
+                        completionPercentage: 100
+                    };
+                } catch (error) {
+                    console.error("Error enriching course data:", error);
+                    return { ...course, studentCount: 0, completionPercentage: 100 };
+                }
+            }
+
+            static async getCourseWithProgress(enrollment) {
+                try {
+                    const courseRef = doc(db, "courses", enrollment.courseId);
+                    const courseSnap = await getDoc(courseRef);
+
+                    if (!courseSnap.exists()) {
+                        return null;
+                    }
+
+                    const courseData = courseSnap.data();
+
+                    if (courseData.instructorId) {
+                        const instructorRef = doc(db, "users", courseData.instructorId);
+                        const instructorSnap = await getDoc(instructorRef);
+
+                        if (instructorSnap.exists()) {
+                            courseData.instructorName = instructorSnap.data().name;
+                        }
+                    }
+
+                    return {
+                        id: enrollment.courseId,
+                        ...courseData,
+                        completionPercentage: enrollment.progress || 0,
+                        enrolledAt: enrollment.enrolledAt
+                    };
+                } catch (error) {
+                    console.error("Error getting course with progress:", error);
+                    return null;
+                }
+            }
+
+            static displayCourses(courseData) {
+                const validCourses = courseData.filter(course => course !== null);
+                elements.courseGrid.innerHTML = '';
+
+                const courseCount = validCourses.length;
+                elements.courseCount.innerHTML = `<i class="fas fa-graduation-cap"></i> ${courseCount} course${courseCount !== 1 ? 's' : ''}`;
+
+                if (courseCount === 0) {
+                    elements.courseGrid.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; grid-column: 1 / -1;">
+                            <i class="fas fa-book-open" style="font-size: 3rem; color: var(--text-secondary); margin-bottom: 1rem;"></i>
+                            <p>No courses to display.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const avgProgress = validCourses.reduce((sum, course) => sum + (course.completionPercentage || 0), 0) / courseCount;
+                const completedCourses = validCourses.filter(course => (course.completionPercentage || 0) >= 100).length;
+
+                elements.courseStats.innerHTML = `
+                    <div style="display: flex; gap: 1rem; font-size: 0.9rem; color: var(--text-secondary);">
+                        <span><i class="fas fa-chart-line"></i> ${Math.round(avgProgress)}% avg progress</span>
+                        <span><i class="fas fa-trophy"></i> ${completedCourses} completed</span>
+                    </div>
+                `;
+
+                validCourses.forEach(course => {
+                    const courseCard = ProfileManager.createCourseCard(course);
+                    elements.courseGrid.appendChild(courseCard);
+                });
+            }
+
+          // In profile.html - Replace the createCourseCard method in the ProfileManager class
+
+static createCourseCard(course) {
+    const card = document.createElement('div');
+    card.className = 'course-card';
+
+    const progress = course.completionPercentage || 0;
+    const isCompleted = progress >= 100;
+    const role = profileState.viewedUserData?.role || 'student';
+
+    card.innerHTML = `
+        <div class="course-title">${course.title || 'Untitled Course'}</div>
+        <div class="course-description">${course.description || 'No description available'}</div>
+        <div class="course-progress">
+            <div class="progress-fill" style="width: ${progress}%"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+            <span style="font-size: 0.85rem; color: var(--text-secondary);">
+                ${progress}% complete
+            </span>
+            ${isCompleted ? '<i class="fas fa-check-circle" style="color: var(--success-color);"></i>' : ''}
+        </div>
+        ${role === 'instructor'
+            ? `<div class="course-meta">
+                <i class="fas fa-users"></i> ${course.studentCount || 0} students
+               </div>`
+            : course.instructorName
+                ? `<div class="course-meta">
+                    <i class="fas fa-chalkboard-teacher"></i> ${course.instructorName}
+                   </div>`
+                : ''
+        }
+    `;
+
+    // Add click handler to navigate to course details
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', () => {
+        // Navigate to course-details.html with the course ID
+        window.location.href = `course-details.html?id=${course.id}`;
+    });
+
+    // Add hover effect
+    card.addEventListener('mouseenter', () => {
+        card.style.transform = 'translateY(-2px)';
+        card.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.15)';
+    });
+
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = 'translateY(0)';
+        card.style.boxShadow = '';
+    });
+
+    return card;
+}
+
+            // Activity Data Management
+            static async loadActivityData() {
+                try {
+                    elements.activityFeed.innerHTML = '<div class="loading-spinner" style="margin: 2rem auto; display: block;"></div>';
+
+                    const unsubscribe = RealtimeManager.listenToUserActivity(
+                        profileState.viewedUserId,
+                        (querySnapshot) => {
+                            const activities = [];
+                            querySnapshot.forEach(doc => {
+                                activities.push({ id: doc.id, ...doc.data() });
+                            });
+
+                            ProfileManager.displayActivities(activities);
+                        }
+                    );
+
+                    profileState.realTimeListeners.push(unsubscribe);
+
+                } catch (error) {
+                    console.error("Error loading activities:", error);
+                    elements.activityFeed.innerHTML = '<p>Error loading activities. Please try again.</p>';
+                }
+            }
+
+            static displayActivities(activities) {
+                elements.activityFeed.innerHTML = '';
+
+                if (activities.length === 0) {
+                    elements.activityFeed.innerHTML = `
+                        <div style="text-align: center; padding: 2rem;">
+                            <i class="fas fa-chart-line" style="font-size: 3rem; color: var(--text-secondary); margin-bottom: 1rem;"></i>
+                            <p>No recent activity to display.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                activities.forEach(activity => {
+                    const activityItem = ProfileManager.createActivityItem(activity);
+                    elements.activityFeed.appendChild(activityItem);
+                });
+            }
+
+            static createActivityItem(activity) {
+                const item = document.createElement('div');
+                item.className = 'activity-item';
+
+                const activityText = ProfileManager.formatActivityText(activity);
+                const timestamp = Utils.formatRelativeTime(activity.timestamp);
+
+                item.innerHTML = `
+                    <div class="activity-text">${activityText}</div>
+                    <div class="activity-timestamp">${timestamp}</div>
+                `;
+
+                return item;
+            }
+
+            static formatActivityText(activity) {
+                const userName = profileState.viewedUserData?.name || 'User';
+
+                switch (activity.type) {
+                    case 'profile_updated':
+                        return `${userName} updated their profile`;
+                    case 'avatar_updated':
+                        return `${userName} changed their profile picture`;
+                    case 'friend_added':
+                        return `${userName} became friends with ${activity.data?.friendName || 'someone'}`;
+                    case 'course_enrolled':
+                        return `${userName} enrolled in ${activity.data?.courseName || 'a course'}`;
+                    case 'course_completed':
+                        return `${userName} completed ${activity.data?.courseName || 'a course'}`;
+                    case 'achievement_earned':
+                        return `${userName} earned the "${activity.data?.achievementName || 'Unknown'}" achievement`;
+                    default:
+                        return `${userName} was active on Andrew Cares Village`;
+                }
+            }
+
+            // Achievements Management
+            static async loadAchievements() {
+                try {
+                    elements.achievementsList.innerHTML = '<div class="loading-spinner" style="margin: 2rem auto; display: block;"></div>';
+
+                    const achievementsRef = collection(db, "users", profileState.viewedUserId, "achievements");
+                    const achievementsSnap = await getDocs(achievementsRef);
+
+                    const achievements = [];
+                    achievementsSnap.forEach(doc => {
+                        achievements.push({ id: doc.id, ...doc.data() });
+                    });
+
+                    ProfileManager.displayAchievements(achievements);
+
+                } catch (error) {
+                    console.error("Error loading achievements:", error);
+                    elements.achievementsList.innerHTML = '<p>Error loading achievements. Please try again.</p>';
+                }
+            }
+
+            static displayAchievements(achievements) {
+                elements.achievementsList.innerHTML = '';
+
+                if (achievements.length === 0) {
+                    elements.achievementsList.innerHTML = `
+                        <div style="text-align: center; padding: 2rem;">
+                            <i class="fas fa-trophy" style="font-size: 3rem; color: var(--text-secondary); margin-bottom: 1rem;"></i>
+                            <p>No achievements earned yet.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const achievementGrid = document.createElement('div');
+                achievementGrid.style.cssText = `
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                    gap: 1rem;
+                    margin-top: 1rem;
+                `;
+
+                achievements.forEach(achievement => {
+                    const achievementCard = ProfileManager.createAchievementCard(achievement);
+                    achievementGrid.appendChild(achievementCard);
+                });
+
+                elements.achievementsList.appendChild(achievementGrid);
+            }
+
+            static createAchievementCard(achievement) {
+                const card = document.createElement('div');
+                card.className = 'course-card';
+                card.style.background = 'linear-gradient(135deg, #ffd700 0%, #ffed4e 100%)';
+                card.style.color = '#333';
+
+                const earnedDate = Utils.formatDate(achievement.earnedAt);
+
+                card.innerHTML = `
+                    <div style="text-align: center;">
+                        <i class="fas fa-trophy" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                        <div class="course-title" style="color: #333;">${achievement.name || 'Achievement'}</div>
+                        <div class="course-description" style="color: #666;">${achievement.description || 'No description'}</div>
+                        <div style="margin-top: 0.5rem; font-size: 0.8rem; color: #888;">
+                            Earned on ${earnedDate}
+                        </div>
+                    </div>
+                `;
+
+                return card;
+            }
+
+         // In profile.html - Update the loadTestimonials method query
+static async loadTestimonials() {
+    try {
+        elements.testimonialsList.innerHTML = '<div class="loading-spinner" style="margin: 2rem auto; display: block;"></div>';
+
+        // Only load testimonials for instructors
+        if (profileState.viewedUserData?.role !== 'instructor') {
+            elements.testimonialsList.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <p>Testimonials are only available for instructors.</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Query testimonials where this user is the instructor
+        const testimonialsRef = collection(db, "testimonials");
+        const q = query(testimonialsRef, where("instructorId", "==", profileState.viewedUserId));
+        const testimonialsSnap = await getDocs(q);
+
+        const testimonials = [];
+        testimonialsSnap.forEach(doc => {
+            testimonials.push({ id: doc.id, ...doc.data() });
+        });
+
+        ProfileManager.displayTestimonials(testimonials);
+
+    } catch (error) {
+        console.error("Error loading testimonials:", error);
+        elements.testimonialsList.innerHTML = '<p>Error loading testimonials. Please try again.</p>';
+    }
+}
+
+            static displayTestimonials(testimonials) {
+                elements.testimonialsList.innerHTML = '';
+
+                if (testimonials.length === 0) {
+                    elements.testimonialsList.innerHTML = `
+                        <div style="text-align: center; padding: 2rem;">
+                            <i class="fas fa-star" style="font-size: 3rem; color: var(--text-secondary); margin-bottom: 1rem;"></i>
+                            <p>No testimonials yet.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                testimonials.forEach(testimonial => {
+                    const testimonialCard = ProfileManager.createTestimonialCard(testimonial);
+                    elements.testimonialsList.appendChild(testimonialCard);
+                });
+            }
+
+            static createTestimonialCard(testimonial) {
+                const card = document.createElement('div');
+                card.className = 'course-card';
+                card.style.marginBottom = '1rem';
+
+                const rating = testimonial.rating || 5;
+                const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+
+                card.innerHTML = `
+                    <div style="margin-bottom: 1rem;">
+                        <div style="color: #ffd700; font-size: 1.2rem; margin-bottom: 0.5rem;">${stars}</div>
+                        <p style="font-style: italic; margin-bottom: 1rem;">"${testimonial.text || 'No testimonial text'}"</p>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <strong>${testimonial.studentName || 'Anonymous'}</strong>
+                            <span style="color: var(--text-secondary); font-size: 0.9rem;">
+                                • ${Utils.formatDate(testimonial.createdAt)}
+                            </span>
+                        </div>
+                    </div>
+                `;
+
+                return card;
+            }
+        }
+
+        // Tab Management
+        class TabManager {
+            static init() {
+                elements.tabBtns.forEach(btn => {
+                    btn.addEventListener('click', TabManager.handleTabClick);
+                });
+            }
+
+            static handleTabClick(e) {
+                const tabName = e.currentTarget.dataset.tab;
+
+                elements.tabBtns.forEach(btn => btn.classList.remove('active'));
+                elements.tabPanels.forEach(panel => panel.classList.remove('active'));
+
+                e.currentTarget.classList.add('active');
+                document.getElementById(`${tabName}Panel`).classList.add('active');
+
+                TabManager.loadTabData(tabName);
+            }
+
+            static loadTabData(tabName) {
+                switch (tabName) {
+                    case 'activity':
+                        if (elements.activityFeed.innerHTML.includes('loading-spinner')) {
+                            ProfileManager.loadActivityData();
+                        }
+                        break;
+                    case 'courses':
+                        if (elements.courseGrid.innerHTML.includes('loading-spinner')) {
+                            ProfileManager.loadCourseData();
+                        }
+                        break;
+                    case 'achievements':
+                        if (elements.achievementsList.innerHTML.includes('loading-spinner')) {
+                            ProfileManager.loadAchievements();
+                        }
+                        break;
+                    case 'testimonials':
+                        ProfileManager.loadTestimonials();
+                        break;
+                }
+            }
+        }
+
+        // Authentication Management
+        class AuthManager {
+            static init() {
+                elements.logoutButton.addEventListener('click', AuthManager.handleLogout);
+                onAuthStateChanged(auth, AuthManager.handleAuthStateChange);
+            }
+
+            static async handleLogout() {
+                try {
+                    if (profileState.currentAuthUser) {
+                        const userRef = doc(db, "users", profileState.currentAuthUser.uid);
+                        await updateDoc(userRef, {
+                            isOnline: false,
+                            lastSeen: serverTimestamp()
+                        }).catch(console.error);
+                    }
+
+                    await signOut(auth);
+                    profileState.cleanup();
+                    window.location.href = 'index.html';
+                } catch (error) {
+                    console.error("Error signing out:", error);
+                    Utils.showNotification('Error signing out. Please try again.', 'error');
+                }
+            }
+
+            static async handleAuthStateChange(user) {
+                if (user) {
+                    profileState.currentAuthUser = user;
+
+                    const params = new URLSearchParams(window.location.search);
+                    profileState.viewedUserId = params.get('id') || user.uid;
+
+                    console.log("Authenticated user:", user.uid);
+                    console.log("Viewing profile:", profileState.viewedUserId);
+
+                    const cleanupPresence = RealtimeManager.setupUserPresence(user.uid);
+                    profileState.realTimeListeners.push(cleanupPresence);
+
+                    await AuthManager.updateNavigation();
+                    await ProfileManager.loadProfile(profileState.viewedUserId);
+
+                } else {
+                    console.log("No authenticated user, redirecting to login...");
+                    profileState.cleanup();
+                    window.location.href = 'index.html';
+                }
+            }
+
+            static async updateNavigation() {
+                try {
+                    const userRef = doc(db, "users", profileState.currentAuthUser.uid);
+                    const userSnap = await getDoc(userRef);
+
+                    if (userSnap.exists()) {
+                        const userData = userSnap.data();
+                        elements.userNameNav.textContent = userData.name || 'User';
+
+                        // Update navigation avatar
+                        AvatarManager.displayAvatar(userData, 'nav');
+
+                        elements.onlineIndicatorNav.style.display = 'block';
+                        elements.onlineIndicatorNav.className = 'online-indicator';
+                    }
+                } catch (error) {
+                    console.error("Error updating navigation:", error);
+                }
+            }
+        }
+
+        // Error Handling
+        class ErrorHandler {
+            static init() {
+                window.addEventListener('error', ErrorHandler.handleError);
+                window.addEventListener('unhandledrejection', ErrorHandler.handlePromiseRejection);
+            }
+
+            static handleError(event) {
+                console.error('Global error:', event.error);
+
+                if (event.error?.code === 'permission-denied') {
+                    Utils.showNotification('Access denied. Please check your permissions.', 'error');
+                } else if (event.error?.code === 'unavailable') {
+                    Utils.showNotification('Service temporarily unavailable. Please try again.', 'warning');
+                }
+            }
+
+            static handlePromiseRejection(event) {
+                console.error('Unhandled promise rejection:', event.reason);
+
+                if (event.reason?.code === 'auth/user-not-found') {
+                    Utils.showNotification('User not found. Please check the profile URL.', 'error');
+                    window.location.href = 'home.html';
+                }
+            }
+        }
+
+        // Initialize Application
+        class App {
+            static async init() {
+                try {
+                    console.log("Initializing Profile Page...");
+
+                    ErrorHandler.init();
+                    AuthManager.init();
+                    TabManager.init();
+                    App.setupModalListeners();
+                    App.setupPerformanceMonitoring();
+
+                    console.log("Profile Page initialized successfully");
+
+                } catch (error) {
+                    console.error("Error initializing app:", error);
+                    Utils.showNotification('Failed to initialize application. Please refresh the page.', 'error');
+                }
+            }
+
+            static setupModalListeners() {
+                elements.editModal.addEventListener('click', (e) => {
+                    if (e.target === elements.editModal) {
+                        ProfileManager.closeEditModal();
+                    }
+                });
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && elements.editModal.classList.contains('visible')) {
+                        ProfileManager.closeEditModal();
+                    }
+                });
+            }
+
+            static setupPerformanceMonitoring() {
+                window.addEventListener('load', () => {
+                    const perfData = performance.getEntriesByType('navigation')[0];
+                    const loadTime = perfData.loadEventEnd - perfData.loadEventStart;
+
+                    if (loadTime > 3000) {
+                        console.warn('Page load time is high:', loadTime, 'ms');
+                    }
+                });
+
+                window.addEventListener('beforeunload', () => {
+                    profileState.cleanup();
+                });
+            }
+        }
+
+        // Start the application
+        App.init();
+
+    </script>
+    </body>
+
+</html>

@@ -1,0 +1,307 @@
+<!-- moderation.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moderation Dashboard - Andrew Cares Village</title>
+    <!-- Common styles and fonts -->
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <style>
+        /* Moderation Page Styles */
+
+/* Moderation Queue */
+.moderation-queue {
+    margin-bottom: 2rem;
+}
+
+.case-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.case-card {
+    background: var(--card-bg);
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.action-panel {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+/* User Search Section */
+.user-search-section {
+    margin-top: 2rem;
+}
+
+.search-container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid var(--border-color);
+    border-radius: 25px;
+    font-size: 0.95rem;
+    transition: border-color 0.3s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .search-container {
+        max-width: 100%;
+    }
+    
+    .action-panel {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
+    </style>
+</head>
+
+<body>
+    <div class="page-container">
+        <!-- Moderation Queue -->
+        <div class="moderation-queue">
+            <h2>Moderation Queue</h2>
+            <div class="case-list" id="caseList">
+                <!-- Cases will be loaded here -->
+            </div>
+        </div>
+
+        <!-- User Search -->
+        <div class="user-search-section">
+            <h2>User Search & History</h2>
+            <div class="search-container">
+                <input type="text" id="userSearch" placeholder="Search users...">
+                <div class="search-results" id="searchResults"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // moderation.js
+            class ModerationDashboard {
+                constructor() {
+                    this.db = firebase.firestore();
+                    this.alertsRef = this.db.collection('moderation_alerts');
+                    this.usersRef = this.db.collection('users');
+                    this.setupRealtimeListeners();
+                    this.setupSearch();
+                    this.initializeActionButtons();
+                }
+
+                setupRealtimeListeners() {
+                    // Listen for new moderation alerts
+                    this.alertsRef
+                        .where('status', '==', 'pending')
+                        .orderBy('timestamp', 'desc')
+                        .onSnapshot((snapshot) => {
+                            this.updateModerationQueue(snapshot);
+                        });
+                }
+
+                setupSearch() {
+                    const searchInput = document.getElementById('userSearch');
+                    searchInput.addEventListener('input', (e) => {
+                        const searchTerm = e.target.value.toLowerCase();
+                        if (searchTerm.length >= 2) {
+                            this.searchUsers(searchTerm);
+                        } else {
+                            document.getElementById('searchResults').innerHTML = '';
+                        }
+                    });
+                }
+
+                initializeActionButtons() {
+                    // Initialize action buttons
+                    document.querySelectorAll('.action-panel .btn').forEach(button => {
+                        button.addEventListener('click', async (e) => {
+                            const caseId = button.closest('.case-card').dataset.caseId;
+                            const action = button.dataset.action;
+                            await this.handleModerationAction(caseId, action);
+                        });
+                    });
+                }
+
+                async searchUsers(searchTerm) {
+                    try {
+                        const query = this.usersRef
+                            .where('searchKeywords', 'array-contains', searchTerm)
+                            .limit(10);
+
+                        const snapshot = await query.get();
+                        this.displaySearchResults(snapshot);
+                    } catch (error) {
+                        console.error('Error searching users:', error);
+                        this.showErrorNotification('Error searching users. Please try again.');
+                    }
+                }
+
+                async handleModerationAction(caseId, action) {
+                    try {
+                        const caseRef = this.alertsRef.doc(caseId);
+                        const caseData = await caseRef.get();
+                        const userData = await this.usersRef.doc(caseData.data().userId).get();
+
+                        switch (action) {
+                            case 'dismiss':
+                                await this.dismissCase(caseRef);
+                                break;
+                            case 'warn':
+                                await this.issueWarning(caseRef, userData);
+                                break;
+                            case 'block':
+                                await this.blockUser(userData);
+                                break;
+                        }
+
+                        this.showSuccessNotification(`Case ${action}d successfully`);
+                    } catch (error) {
+                        console.error('Error handling moderation action:', error);
+                        this.showErrorNotification('Error processing moderation action. Please try again.');
+                    }
+                }
+
+                async dismissCase(caseRef) {
+                    await caseRef.update({
+                        status: 'dismissed',
+                        resolvedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+
+                async issueWarning(caseRef, userData) {
+                    const warnings = userData.data().warnings || 0;
+                    await this.usersRef.doc(userData.id).update({
+                        warnings: warnings + 1,
+                        lastWarningAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    await caseRef.update({
+                        status: 'resolved',
+                        action: 'warning',
+                        resolvedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+
+                async blockUser(userData) {
+                    await this.usersRef.doc(userData.id).update({
+                        isBlocked: true,
+                        blockedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    const caseRef = this.alertsRef.doc(userData.data().currentCaseId);
+                    await caseRef.update({
+                        status: 'resolved',
+                        action: 'block',
+                        resolvedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+
+                updateModerationQueue(snapshot) {
+                    const caseList = document.getElementById('caseList');
+                    caseList.innerHTML = '';
+
+                    snapshot.forEach(doc => {
+                        const caseData = doc.data();
+                        const caseCard = this.createCaseCard(doc.id, caseData);
+                        caseList.appendChild(caseCard);
+                    });
+                }
+
+                createCaseCard(caseId, caseData) {
+                    const card = document.createElement('div');
+                    card.className = 'case-card';
+                    card.dataset.caseId = caseId;
+
+                    card.innerHTML = `
+            <div class="case-content">
+                <h3>${caseData.content}</h3>
+                <p class="case-user">Reported by: ${caseData.reportedBy}</p>
+                <p class="case-reason">Reason: ${caseData.reason}</p>
+                <p class="case-timestamp">${new Date(caseData.timestamp).toLocaleString()}</p>
+            </div>
+            <div class="action-panel">
+                <button class="btn btn-secondary" data-action="dismiss">Dismiss</button>
+                <button class="btn btn-warning" data-action="warn">Issue Warning</button>
+                <button class="btn btn-danger" data-action="block">Block User</button>
+            </div>
+        `;
+
+                    return card;
+                }
+
+                displaySearchResults(snapshot) {
+                    const searchResults = document.getElementById('searchResults');
+                    searchResults.innerHTML = '';
+
+                    snapshot.forEach(doc => {
+                        const userData = doc.data();
+                        const resultCard = this.createSearchResultCard(doc.id, userData);
+                        searchResults.appendChild(resultCard);
+                    });
+                }
+
+                createSearchResultCard(userId, userData) {
+                    const card = document.createElement('div');
+                    card.className = 'search-result-card';
+                    card.innerHTML = `
+            <h4>${userData.name}</h4>
+            <p>Warnings: ${userData.warnings || 0}</p>
+            <p>Status: ${userData.isBlocked ? 'Blocked' : 'Active'}</p>
+            <button class="btn btn-primary" onclick="moderationDashboard.viewUserHistory('${userId}')">
+                View History
+            </button>
+        `;
+
+                    return card;
+                }
+
+                showErrorNotification(message) {
+                    this.showNotification(message, 'error');
+                }
+
+                showSuccessNotification(message) {
+                    this.showNotification(message, 'success');
+                }
+
+                showNotification(message, type = 'info') {
+                    const notification = document.createElement('div');
+                    notification.className = `notification ${type}`;
+                    const icon = type === 'success' ? 'fas fa-check' :
+                        type === 'error' ? 'fas fa-times' : 'fas fa-info';
+                    notification.innerHTML = `<i class="${icon}"></i> ${message}`;
+                    document.body.appendChild(notification);
+
+                    setTimeout(() => notification.classList.add('show'), 100);
+                    setTimeout(() => {
+                        notification.classList.remove('show');
+                        setTimeout(() => notification.remove(), 300);
+                    }, 4000);
+                }
+            }
+
+            // Initialize dashboard when DOM is loaded
+            document.addEventListener('DOMContentLoaded', () => {
+                const moderationDashboard = new ModerationDashboard();
+            });
+    </script>
+</body>
+
+</html>

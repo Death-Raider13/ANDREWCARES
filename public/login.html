@@ -1,0 +1,603 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Andrew Cares Village</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #001F3F; 
+            --primary-light: #003366; 
+            --secondary-color: #2ECC40;
+            --accent-color: #FF4136; 
+            --background-color: #F4F2ED; 
+            --text-primary: #333333;
+            --text-secondary: #666666; 
+            --card-bg: #FFFFFF; 
+            --success-color: #4CAF50;
+            --error-color: #f44336; 
+            --input-border: #E0E0E0; 
+            --input-focus: #B3D1FF;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light)); 
+            min-height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 16px;
+            line-height: 1.6;
+        }
+
+        .container { 
+            width: 100%; 
+            max-width: 420px;
+        }
+
+        .login-card { 
+            background-color: var(--card-bg); 
+            border-radius: 16px; 
+            padding: 2rem; 
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            width: 100%;
+        }
+
+        .logo { 
+            text-align: center; 
+            margin-bottom: 2rem; 
+        }
+
+        .logo a { 
+            font-family: 'Cinzel', serif; 
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            color: var(--primary-color); 
+            text-decoration: none; 
+            font-weight: 700; 
+            display: inline-block;
+        }
+
+        .welcome-text { 
+            text-align: center; 
+            margin-bottom: 1.5rem; 
+            color: var(--text-secondary); 
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+        }
+
+        .form-group { 
+            margin-bottom: 1.25rem; 
+            position: relative; 
+        }
+
+        label { 
+            display: block; 
+            margin-bottom: 0.5rem; 
+            color: var(--text-secondary); 
+            font-weight: 500; 
+            font-size: 0.9rem;
+        }
+
+        .input-wrapper { 
+            position: relative; 
+        }
+
+        .input-wrapper i { 
+            position: absolute; 
+            left: 12px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            color: var(--text-secondary); 
+            font-size: 1rem;
+        }
+
+        input { 
+            width: 100%; 
+            padding: 0.875rem 0.875rem 0.875rem 2.75rem; 
+            border: 2px solid var(--input-border); 
+            border-radius: 8px; 
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        input:focus { 
+            outline: none; 
+            border-color: var(--primary-color); 
+            box-shadow: 0 0 0 3px var(--input-focus); 
+        }
+
+        button { 
+            width: 100%; 
+            padding: 0.875rem 1rem; 
+            background-color: var(--primary-color); 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 1rem; 
+            font-weight: 600; 
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            min-height: 48px;
+        }
+
+        button:hover:not(:disabled) {
+            background-color: var(--primary-light);
+            transform: translateY(-1px);
+        }
+
+        button:disabled { 
+            background-color: var(--text-secondary); 
+            cursor: not-allowed; 
+        }
+
+        .loading-spinner { 
+            display: none; 
+            width: 20px; 
+            height: 20px; 
+            border: 3px solid rgba(255, 255, 255, 0.3); 
+            border-radius: 50%; 
+            border-top-color: #fff; 
+            animation: spin 0.8s linear infinite; 
+        }
+
+        button.loading .loading-spinner { 
+            display: inline-block; 
+        }
+
+        button.loading span { 
+            visibility: hidden; 
+        }
+
+        .message { 
+            margin-top: 1rem; 
+            padding: 0.75rem; 
+            border-radius: 8px; 
+            text-align: center; 
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        .message.show { 
+            display: block; 
+        }
+
+        .error { 
+            background-color: #ffebee; 
+            color: var(--error-color); 
+            border: 1px solid #ffcdd2;
+        }
+
+        .divider { 
+            display: flex; 
+            align-items: center; 
+            text-align: center; 
+            margin: 1.5rem 0; 
+        }
+
+        .divider::before, 
+        .divider::after { 
+            content: ''; 
+            flex: 1; 
+            border-bottom: 1px solid var(--input-border); 
+        }
+
+        .divider span { 
+            padding: 0 10px; 
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .social-button { 
+            width: 100%; 
+            padding: 0.875rem; 
+            background-color: #fff; 
+            color: var(--text-primary); 
+            border: 2px solid var(--input-border); 
+            border-radius: 8px; 
+            font-size: 1rem; 
+            font-weight: 500; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            min-height: 48px;
+        }
+
+        .social-button:hover:not(:disabled) {
+            border-color: var(--primary-color);
+            background-color: #f8f9fa;
+            transform: translateY(-1px);
+        }
+
+        .social-button i { 
+            font-size: 1.2rem; 
+        }
+
+        .links { 
+            margin-top: 1.5rem; 
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .links a { 
+            color: var(--primary-color); 
+            text-decoration: none; 
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .links a:hover {
+            color: var(--primary-light);
+            text-decoration: underline;
+        }
+
+        @keyframes spin { 
+            to { transform: rotate(360deg); } 
+        }
+
+        /* Mobile First - Extra Small devices (phones) */
+        @media (max-width: 575.98px) {
+            body {
+                padding: 12px;
+            }
+
+            .login-card {
+                padding: 1.5rem;
+                border-radius: 12px;
+            }
+
+            .logo a {
+                font-size: 1.5rem;
+            }
+
+            .welcome-text {
+                font-size: 1rem;
+                margin-bottom: 1.25rem;
+            }
+
+            input {
+                padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+
+            button, .social-button {
+                padding: 0.75rem;
+                font-size: 0.95rem;
+                min-height: 44px;
+            }
+
+            .form-group {
+                margin-bottom: 1rem;
+            }
+
+            .links {
+                gap: 0.5rem;
+            }
+
+            .links a {
+                font-size: 0.9rem;
+                padding: 0.25rem;
+            }
+        }
+
+        /* Small devices (landscape phones) */
+        @media (min-width: 576px) and (max-width: 767.98px) {
+            .container {
+                max-width: 400px;
+            }
+
+            .login-card {
+                padding: 2rem;
+            }
+        }
+
+        /* Medium devices (tablets) */
+        @media (min-width: 768px) and (max-width: 991.98px) {
+            body {
+                padding: 24px;
+            }
+
+            .container {
+                max-width: 450px;
+            }
+
+            .login-card {
+                padding: 2.5rem;
+            }
+
+            .logo a {
+                font-size: 2.2rem;
+            }
+
+            .welcome-text {
+                font-size: 1.15rem;
+            }
+
+            .links {
+                flex-direction: row;
+                justify-content: center;
+                gap: 2rem;
+            }
+        }
+
+        /* Large devices (desktops) */
+        @media (min-width: 992px) {
+            body {
+                padding: 32px;
+            }
+
+            .container {
+                max-width: 480px;
+            }
+
+            .login-card {
+                padding: 3rem;
+                border-radius: 20px;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            }
+
+            .logo a {
+                font-size: 2.5rem;
+            }
+
+            .welcome-text {
+                font-size: 1.2rem;
+                margin-bottom: 2rem;
+            }
+
+            input {
+                padding: 1rem 1rem 1rem 3rem;
+            }
+
+            button, .social-button {
+                padding: 1rem;
+                font-size: 1.05rem;
+                min-height: 52px;
+            }
+
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
+
+            .links {
+                flex-direction: row;
+                justify-content: center;
+                gap: 2.5rem;
+            }
+
+            .links a {
+                font-size: 1rem;
+            }
+        }
+
+        /* Touch device improvements */
+        @media (hover: none) and (pointer: coarse) {
+            button:hover, .social-button:hover {
+                transform: none;
+            }
+
+            button:active, .social-button:active {
+                transform: scale(0.98);
+            }
+        }
+
+        /* High DPI displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .login-card {
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+            }
+        }
+
+        /* Landscape orientation on small screens */
+        @media (max-height: 600px) and (orientation: landscape) {
+            body {
+                padding: 8px;
+                align-items: flex-start;
+                padding-top: 2vh;
+            }
+
+            .login-card {
+                margin: 0 auto;
+                padding: 1.5rem;
+            }
+
+            .logo {
+                margin-bottom: 1rem;
+            }
+
+            .welcome-text {
+                margin-bottom: 1rem;
+                font-size: 0.95rem;
+            }
+
+            .form-group {
+                margin-bottom: 0.875rem;
+            }
+        }
+
+        /* Accessibility improvements */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+      
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-card">
+            <div class="logo">
+                <a href="index.html">Andrew Cares Village</a>
+            </div>
+            <div class="welcome-text">Welcome back! Please login to your account.</div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" name="email" required autocomplete="email" inputmode="email">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" required autocomplete="current-password">
+                    </div>
+                </div>
+                
+                <button type="submit">
+                    <span>Sign In</span>
+                    <div class="loading-spinner"></div>
+                </button>
+                
+                <div id="message" class="message"></div>
+            </form>
+            
+            <div class="divider">
+                <span>or</span>
+            </div>
+            
+            <div class="social-login">
+                <button type="button" id="googleSignIn" class="social-button">
+                    <i class="fab fa-google"></i> 
+                    Continue with Google
+                </button>
+            </div>
+            
+            <div class="links">
+                <a href="signup.html">Create Account</a>
+                <a href="forgot-password.html">Forgot Password?</a>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
+            authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
+            projectId: "andrew-cares-village-f4cb6",
+            storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
+            messagingSenderId: "255087116955",
+            appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        const loginForm = document.getElementById('loginForm');
+        const messageDiv = document.getElementById('message');
+        const googleSignInButton = document.getElementById('googleSignIn');
+
+        function showMessage(message, type) {
+            messageDiv.textContent = message;
+            messageDiv.className = `message ${type} show`;
+        }
+
+        async function handleSuccessfulLogin(user) {
+            const userRef = doc(db, "users", user.uid);
+            const userDoc = await getDoc(userRef);
+
+            if (!userDoc.exists()) {
+                await setDoc(userRef, {
+                    uid: user.uid, 
+                    name: user.displayName, 
+                    email: user.email,
+                    avatarUrl: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=001F3F&color=fff`,
+                    createdAt: serverTimestamp(), 
+                    membershipTier: 'apprentice', 
+                    membershipStatus: 'active',
+                    role: 'member', 
+                    isBlocked: false, 
+                    signupMethod: 'google'
+                });
+            }
+            
+            const userData = (await getDoc(userRef)).data();
+
+            if (userData.isBlocked) {
+                await auth.signOut();
+                showMessage("Your account has been suspended.", 'error');
+                return;
+            }
+
+            if (!user.emailVerified) {
+                await auth.signOut();
+                window.location.href = `verify.html?email=${encodeURIComponent(user.email)}`;
+                return;
+            }
+
+            await setDoc(userRef, { lastLogin: serverTimestamp() }, { merge: true });
+
+            const destination = userData.role === 'admin' ? 'admin.html' : 'home.html';
+            window.location.href = destination;
+        }
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const submitButton = loginForm.querySelector('button[type="submit"]');
+            
+            submitButton.classList.add('loading');
+            submitButton.disabled = true;
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                await handleSuccessfulLogin(userCredential.user);
+            } catch (error) {
+                showMessage("Invalid email or password. Please try again.", 'error');
+            } finally {
+                submitButton.classList.remove('loading');
+                submitButton.disabled = false;
+            }
+        });
+
+        googleSignInButton.addEventListener('click', async () => {
+            googleSignInButton.disabled = true;
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                await handleSuccessfulLogin(result.user);
+            } catch (error) {
+                console.error("Google Sign-In Error:", error);
+                showMessage("Could not sign in with Google. Please try again.", 'error');
+            } finally {
+                googleSignInButton.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

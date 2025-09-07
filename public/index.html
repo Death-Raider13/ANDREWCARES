@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Andrew Cares Village</title>
+    <!-- Fonts and Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        :root {
+            --background-color: #F4F2ED;
+            --text-primary: #333333;
+            --text-secondary: #555555;
+            --color-primary: #B38B00;
+            --color-secondary: #001F3F;
+            --card-bg: #FFFFFF;
+            --border-color: #EAEAEA;
+            --hover-bg: #F9F9F9;
+            --success-color: #2e7d32;
+            --error-color: #d32f2f;
+            --warning-color: #f57c00;
+            --shadow-light: 0 4px 15px rgba(0, 0, 0, .05);
+            --shadow-medium: 0 8px 25px rgba(0, 0, 0, .1);
+            --shadow-dark: 0 8px 25px rgba(0, 0, 0, .15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Footer Styles */
+        .main-footer {
+            background-color: var(--card-bg);
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--border-color);
+            border-bottom: none;
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 3rem;
+        }
+        
+        .footer-links a {
+            margin: 0 1rem;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Header Styles */
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-light);
+        }
+
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--color-secondary);
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .header-actions button {
+            padding: .8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all .3s;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-actions button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .header-actions button:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-primary), #9c7a00);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(179, 139, 0, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(179, 139, 0, 0.4);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--color-primary);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 5rem 2rem;
+            background-image:
+                linear-gradient(135deg, rgba(0, 31, 63, 0.8), rgba(179, 139, 0, 0.6)),
+                url(https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, transparent 20%, rgba(0, 31, 63, 0.3) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff, #f0c674);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            max-width: 700px;
+            margin: 0 auto 2rem auto;
+            opacity: 0.95;
+        }
+
+        /* Disciplines Section */
+        .disciplines {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .discipline-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow-light);
+            transition: all .3s ease;
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .discipline-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--color-primary), transparent);
+            opacity: 0.05;
+            transition: left 0.5s ease;
+        }
+
+        .discipline-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-medium);
+            border-color: var(--color-primary);
+        }
+
+        .discipline-card:hover::before {
+            left: 0;
+        }
+
+        .discipline-card i {
+            font-size: 3rem;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .discipline-card:hover i {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .discipline-card h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--color-secondary);
+        }
+
+        .discipline-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Membership Section */
+        .membership-section {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #fff, #f8f8f8);
+        }
+
+        .membership-section h2 {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2rem, 4vw, 2.5rem);
+            margin-bottom: 3rem;
+            color: var(--color-secondary);
+        }
+
+        .membership-tiers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .tier-card {
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            transition: all .3s ease;
+            background: var(--card-bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tier-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--color-primary), #f0c674);
+            transition: all 0.5s ease;
+            transform: translateX(-50%);
+        }
+
+        .tier-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-medium);
+            border-color: var(--color-primary);
+        }
+
+        .tier-card:hover::after {
+            width: 80%;
+        }
+
+        .tier-card h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .tier-card .price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: .5rem 0;
+            color: var(--color-secondary);
+        }
+
+        .tier-card .price-term {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .tier-card ul {
+            list-style: none;
+            margin: 1.5rem 0;
+            text-align: left;
+            flex-grow: 1;
+        }
+
+        .tier-card li {
+            margin-bottom: .8rem;
+            display: flex;
+            align-items: center;
+            transition: transform 0.2s ease;
+        }
+
+        .tier-card li:hover {
+            transform: translateX(5px);
+        }
+
+        .tier-card li i {
+            margin-right: .7rem;
+            width: 20px;
+        }
+
+        .tier-card li .fa-check {
+            color: var(--success-color);
+        }
+
+        .tier-card li .fa-times {
+            color: var(--error-color);
+        }
+
+        .tier-card .choose-plan-btn {
+            margin-top: auto;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            border: none;
+            background: linear-gradient(135deg, var(--color-primary), #9c7a00);
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tier-card .choose-plan-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(179, 139, 0, 0.4);
+        }
+
+        /* Founder Tier Special Styling */
+        .tier-card.founder {
+            background: linear-gradient(135deg, var(--color-secondary), #002a5c);
+            color: #fff;
+            border: 2px solid var(--color-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tier-card.founder::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(179, 139, 0, 0.1) 0%, transparent 70%);
+            animation: rotate 10s linear infinite;
+        }
+
+        .tier-card.founder h3,
+        .tier-card.founder .price,
+        .tier-card.founder .fa-crown {
+            color: var(--color-primary);
+        }
+
+        .tier-card.founder .price-term {
+            color: #ccc;
+        }
+
+        .tier-card.founder .founder-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: linear-gradient(135deg, var(--color-primary), #f0c674);
+            color: var(--color-secondary);
+            padding: .5rem 1.5rem;
+            font-family: 'Cinzel', serif;
+            font-size: .9rem;
+            font-weight: 700;
+            border-bottom-left-radius: 15px;
+            z-index: 10;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, .7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.visible {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-container {
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: var(--shadow-dark);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.visible .modal-container {
+            transform: scale(1);
+        }
+
+        .close-modal-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal-btn:hover {
+            background-color: var(--hover-bg);
+            color: var(--error-color);
+        }
+
+        .modal-container h2 {
+            font-family: 'Cinzel', serif;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--color-secondary);
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: .9rem;
+            margin-bottom: .5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-group input {
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #fafafa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(179, 139, 0, 0.1);
+        }
+
+        .modal-submit-btn {
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--color-primary), #9c7a00);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(179, 139, 0, 0.4);
+        }
+
+        .modal-submit-btn:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .modal-message {
+            text-align: center;
+            margin-top: 1rem;
+            font-weight: 500;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+
+        .modal-message.error {
+            color: var(--error-color);
+            background-color: rgba(211, 47, 47, 0.1);
+        }
+
+        .modal-message.success {
+            color: var(--success-color);
+            background-color: rgba(46, 125, 50, 0.1);
+        }
+
+        .modal-message.warning {
+            color: var(--warning-color);
+            background-color: rgba(245, 124, 0, 0.1);
+        }
+
+        .switch-modal {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: .9rem;
+        }
+
+        .switch-modal span {
+            color: var(--color-primary);
+            cursor: pointer;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+
+        .switch-modal span:hover {
+            color: #9c7a00;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 1.5rem 0;
+            color: var(--text-secondary);
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .divider:not(:empty)::before {
+            margin-right: .75em;
+        }
+
+        .divider:not(:empty)::after {
+            margin-left: .75em;
+        }
+
+        .google-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 1rem;
+            background-color: #fff;
+            color: #444;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all .3s ease;
+        }
+
+        .google-btn:hover {
+            background-color: var(--hover-bg);
+            border-color: var(--color-primary);
+        }
+
+        .google-btn img {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Email Verification Notice */
+        .verification-notice {
+            background: linear-gradient(135deg, var(--warning-color), #ff9800);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .verification-notice.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        .verification-notice button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .verification-notice button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Toast Notification Styles */
+        #toastContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: #fff;
+            font-weight: 500;
+            box-shadow: var(--shadow-dark);
+            transform: translateX(120%);
+            opacity: 0;
+            transition: all .5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .toast::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: linear-gradient(135deg, var(--success-color), #2e7d32);
+        }
+
+        .toast.error {
+            background: linear-gradient(135deg, var(--error-color), #c62828);
+        }
+
+        .toast.warning {
+            background: linear-gradient(135deg, var(--warning-color), #ef6c00);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero {
+                padding: 3rem 1rem;
+                background-attachment: scroll;
+            }
+
+            .disciplines {
+                padding: 2rem 1rem;
+                grid-template-columns: 1fr;
+            }
+
+            .membership-section {
+                padding: 2rem 1rem;
+            }
+
+            .membership-tiers {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-container {
+                margin: 1rem;
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-actions {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .header-actions button {
+                flex: 1;
+                max-width: 150px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="logo">Andrew Cares Village</div>
+        <div class="header-actions">
+            <button onclick="window.location.href='login.html'" class="btn-secondary">Login</button>
+            <button onclick="window.location.href='signup.html'" class="btn-primary">Join Now</button>
+            <button onclick="window.location.href='contact.html'" class="btn-primary">Support</button>
+             <button onclick="window.location.href='About.html'" class="btn-primary">Who we are</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Master Yourself, Master Your Life</h1>
+                <p>Join a community dedicated to holistic growth through discipline, finance, and fitness. Become the
+                    strongest version of yourself, together.</p>
+                <button id="heroJoinBtn" class="btn-primary" onclick="window.location.href='login.html?action=signup'">Start Your Journey</button>
+            </div>
+        </section>
+
+        <section class="disciplines">
+            <div class="discipline-card">
+                <i class="fas fa-fist-raised"></i>
+                <h2>Karate</h2>
+                <p>Cultivate discipline, focus, and self-defense skills in our digital dojo. Master the art of mind and
+                    body unity.</p>
+            </div>
+            <div class="discipline-card">
+                <i class="fas fa-chart-line"></i>
+                <h2>Forex</h2>
+                <p>Learn the art of currency trading from seasoned experts. Transform financial knowledge into lasting
+                    wealth.</p>
+            </div>
+            <div class="discipline-card">
+                <i class="fas fa-dumbbell"></i>
+                <h2>Fitness</h2>
+                <p>Build a stronger, healthier body with our comprehensive workout programs. Forge your physical
+                    excellence.</p>
+            </div>
+        </section>
+    </main>
+
+
+   
+    <!-- Toast Notification Container -->
+    <div id="toastContainer"></div>
+
+    <script type="module">
+        // Firebase SDK Imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendEmailVerification, reload, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
+            authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
+            projectId: "andrew-cares-village-f4cb6",
+            storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
+            messagingSenderId: "255087116955",
+            appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        // DOM Elements
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const heroJoinBtn = document.getElementById('heroJoinBtn');
+        const loginModal = document.getElementById('loginModal');
+        const signupModal = document.getElementById('signupModal');
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        const googleLoginBtn = document.getElementById('googleLoginBtn');
+        const googleSignupBtn = document.getElementById('googleSignupBtn');
+        const choosePlanBtns = document.querySelectorAll('.choose-plan-btn');
+        const toastContainer = document.getElementById('toastContainer');
+        
+        // Verification elements
+        const verificationNotice = document.getElementById('verificationNotice');
+        const loginVerificationNotice = document.getElementById('loginVerificationNotice');
+        const resendVerificationBtn = document.getElementById('resendVerificationBtn');
+        const loginResendVerificationBtn = document.getElementById('loginResendVerificationBtn');
+
+        // Global variables
+        let pendingUser = null;
+
+        // Toast Notification function
+        const showToast = (message, type = 'error') => {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            toastContainer.appendChild(toast);
+
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 500);
+            }, 4000);
+        };
+
+        // Email verification functions
+        const showVerificationNotice = (modal, user) => {
+            const notice = modal === 'signup' ? verificationNotice : loginVerificationNotice;
+            notice.classList.add('show');
+            pendingUser = user;
+        };
+
+        const hideVerificationNotice = (modal) => {
+            const notice = modal === 'signup' ? verificationNotice : loginVerificationNotice;
+            notice.classList.remove('show');
+        };
+
+        const sendVerificationEmail = async (user) => {
+            try {
+                await sendEmailVerification(user);
+                showToast("Verification email sent! Please check your inbox.", "success");
+            } catch (error) {
+                console.error("Error sending verification email:", error);
+                showToast("Error sending verification email. Please try again.", "error");
+            }
+        };
+
+        // Role and membership-based redirect logic
+        const getRedirectUrl = (userData) => {
+            // First check if email is verified
+            if (!auth.currentUser?.emailVerified) {
+                return null; // Stay on landing page
+            }
+
+            // Admin and Instructor roles go to admin/instructor dashboards
+            if (userData.role === 'admin') {
+                return 'admin.html';
+            } else if (userData.role === 'instructor') {
+                return 'instructor.html';
+            }
+
+            // Regular users based on membership status
+            if (userData.membershipTier === 'none' || userData.membershipTier === 'pending') {
+                return 'charter.html';
+            } else {
+                return 'home.html';
+            }
+        };
+
+        // Auth State Observer with email verification and role-based routing
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const authAction = sessionStorage.getItem('authActionInProgress');
+                
+                // Reload user to get latest emailVerified status
+                await reload(user);
+
+                try {
+                    const userRef = doc(db, "users", user.uid);
+                    const userSnap = await getDoc(userRef);
+
+                    if (userSnap.exists()) {
+                        const userData = userSnap.data();
+
+                        // Check if account is blocked
+                        if (userData.isBlocked) {
+                            showToast("Your account has been suspended.", "error");
+                            await auth.signOut();
+                            return;
+                        }
+
+                        // Check email verification status
+                        if (!user.emailVerified) {
+                            if (authAction !== 'login') {
+                                showVerificationNotice('signup', user);
+                            }
+                            return; // Don't redirect if email not verified
+                        }
+
+                        // Email is verified, proceed with redirect
+                        const redirectUrl = getRedirectUrl(userData);
+                        if (redirectUrl && authAction !== 'login') {
+                            sessionStorage.setItem('authActionInProgress', 'true');
+                            setTimeout(() => {
+                                window.location.href = redirectUrl;
+                            }, 1000);
+                        } else if (authAction === 'login') {
+                            sessionStorage.removeItem('authActionInProgress');
+                            const redirectUrl = getRedirectUrl(userData);
+                            if (redirectUrl) {
+                                setTimeout(() => {
+                                    window.location.href = redirectUrl;
+                                }, 1000);
+                            }
+                        }
+                    } else {
+                        showToast("User data not found. Please contact support.", "error");
+                        await auth.signOut();
+                    }
+                } catch (error) {
+                    console.error("Error checking user data:", error);
+                    showToast("Error loading user data. Please try again.", "error");
+                }
+            } else {
+                hideVerificationNotice('signup');
+                hideVerificationNotice('login');
+                pendingUser = null;
+            }
+        });
+
+        // Modal Management
+        const openModal = (modal) => {
+            modal.classList.add('visible');
+            document.body.style.overflow = 'hidden';
+        };
+
+        const closeModal = (modal) => {
+            modal.classList.remove('visible');
+            document.body.style.overflow = '';
+            hideVerificationNotice('signup');
+            hideVerificationNotice('login');
+        };
+
+        // Event Listeners
+        loginBtn.addEventListener('click', () => openModal(loginModal));
+        signupBtn.addEventListener('click', () => openModal(signupModal));
+        heroJoinBtn.addEventListener('click', () => openModal(signupModal));
+        choosePlanBtns.forEach(btn => btn.addEventListener('click', () => openModal(signupModal)));
+
+        // Close modal handlers
+        document.querySelectorAll('.close-modal-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                closeModal(e.target.closest('.modal-overlay'));
+            });
+        });
+
+        // Modal switching
+        document.getElementById('switchToLogin').addEventListener('click', () => {
+            closeModal(signupModal);
+            openModal(loginModal);
+        });
+
+        document.getElementById('switchToSignup').addEventListener('click', () => {
+            closeModal(loginModal);
+            openModal(signupModal);
+        });
+
+        // Close modal on overlay click
+        [loginModal, signupModal].forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal(modal);
+                }
+            });
+        });
+
+        // Resend verification email handlers
+        resendVerificationBtn.addEventListener('click', async () => {
+            if (pendingUser) {
+                await sendVerificationEmail(pendingUser);
+            }
+        });
+
+        loginResendVerificationBtn.addEventListener('click', async () => {
+            if (pendingUser) {
+                await sendVerificationEmail(pendingUser);
+            }
+        });
+
+        // Helper for showing messages in modals
+        const showModalMessage = (element, message, isError = true) => {
+            element.textContent = message;
+            element.className = `modal-message ${isError ? 'error' : 'success'}`;
+        };
+
+        // Sign Up Logic with Email Verification
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const submitBtn = signupForm.querySelector('button[type="submit"]');
+            const messageEl = document.getElementById('signupMessage');
+
+            if (!name || !email || !password) {
+                showModalMessage(messageEl, "All fields are required.");
+                return;
+            }
+
+            if (password.length < 6) {
+                showModalMessage(messageEl, "Password must be at least 6 characters.");
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating Account...';
+            showModalMessage(messageEl, "", false);
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Send verification email
+                await sendEmailVerification(user);
+
+                // Create user document
+                await createUserDocument(user, name);
+
+                showToast("Account created! Please check your email for verification.", "success");
+                showVerificationNotice('signup', user);
+
+                // Reset form
+                signupForm.reset();
+
+            } catch (error) {
+                console.error("Signup error:", error);
+                let errorMessage = "Failed to create account. Please try again.";
+
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        errorMessage = "This email is already registered. try logging in instead.";
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = "Please enter a valid email address.";
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage = "Password is too weak. Please choose a stronger password.";
+                        break;
+                }
+
+                showModalMessage(messageEl, errorMessage);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create Account';
+            }
+        });
+
+        // Enhanced Login Logic with Rate Limiting and Better Error Handling
+        const loginAttempts = new Map();
+        const MAX_ATTEMPTS = 5;
+        const LOCKOUT_TIME = 15 * 60 * 1000; // 15 minutes
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const submitBtn = loginForm.querySelector('button[type="submit"]');
+            const messageEl = document.getElementById('loginMessage');
+
+            // Check rate limiting
+            const userAttempts = loginAttempts.get(email) || { count: 0, timestamp: 0 };
+            if (userAttempts.count >= MAX_ATTEMPTS) {
+                const timeLeft = LOCKOUT_TIME - (Date.now() - userAttempts.timestamp);
+                    if (timeLeft > 0) {
+                        showModalMessage(messageEl, `Too many login attempts. Please try again in ${Math.ceil(timeLeft / 60000)} minutes.`);
+                        return;
+                    } else {
+                        loginAttempts.delete(email);
+                    }
+                }
+
+            if (!email || !password) {
+                showModalMessage(messageEl, "Please enter both email and password.");
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Signing In...';
+            showModalMessage(messageEl, "", false);
+
+            sessionStorage.setItem('authActionInProgress', 'login');
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Reload user to get latest verification status
+                await reload(user);
+
+                if (!user.emailVerified) {
+                    showVerificationNotice('login', user);
+                    showModalMessage(messageEl, "Please verify your email address before logging in.", true);
+                    sessionStorage.removeItem('authActionInProgress');
+                    return;
+                }
+
+                // Get user data to determine redirect
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+
+                if (userSnap.exists()) {
+                    const userData = userSnap.data();
+
+                    if (userData.isBlocked) {
+                        showModalMessage(messageEl, "Your account has been suspended.");
+                        await auth.signOut();
+                        sessionStorage.removeItem('authActionInProgress');
+                        return;
+                    }
+
+                    showToast("Welcome back!", "success");
+                    closeModal(loginModal);
+
+                    // Redirect based on role and membership
+                    const redirectUrl = getRedirectUrl(userData);
+                    setTimeout(() => {
+                        window.location.href = redirectUrl;
+                    }, 1000);
+
+                } else {
+                    // User exists in Auth but not in Firestore - create a new user document
+                    try {
+                        showModalMessage(messageEl, "Setting up your account...", false);
+                        
+                        // Create user document with default values
+                        await createUserDocument(user, user.displayName || email.split('@')[0]);
+                        
+                        showToast("Account setup complete!", "success");
+                        closeModal(loginModal);
+                        
+                        // Redirect to charter page to select membership
+                        setTimeout(() => {
+                            window.location.href = 'charter.html';
+                        }, 1000);
+                    } catch (error) {
+                        console.error("Error creating user document:", error);
+                        showModalMessage(messageEl, "Error setting up your account. Please try again.");
+                        await auth.signOut();
+                        sessionStorage.removeItem('authActionInProgress');
+                    }
+                }
+
+            } catch (error) {
+                console.error("Login error:", error);
+                sessionStorage.removeItem('authActionInProgress');
+
+                let errorMessage = "Failed to sign in. Please try again.";
+
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                    case 'auth/wrong-password':
+                    case 'auth/invalid-credential':
+                        errorMessage = "Invalid email or password.";
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = "Please enter a valid email address.";
+                        break;
+                    case 'auth/too-many-requests':
+                        errorMessage = "Too many failed attempts. Please try again later.";
+                        break;
+                }
+
+                showModalMessage(messageEl, errorMessage);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Login';
+            }
+        });
+
+        // Google Sign-In Logic with Email Verification
+        const handleGoogleSignIn = async (isSignup = false) => {
+            const messageEl = isSignup ?
+                document.getElementById('signupMessage') :
+                document.getElementById('loginMessage');
+
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                const user = result.user;
+
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+
+                if (!userSnap.exists()) {
+                    // New user - Google accounts are automatically verified
+                    await createUserDocument(user, user.displayName, user.photoURL);
+                    showToast("Account created successfully! Welcome to the village.", "success");
+                    
+                    setTimeout(() => {
+                        window.location.href = 'charter.html';
+                    }, 1000);
+                } else {
+                    // Existing user
+                    const userData = userSnap.data();
+                    
+                    if (userData.isBlocked) {
+                        showModalMessage(messageEl, "Your account has been suspended.");
+                        await auth.signOut();
+                        return;
+                    }
+
+                    showToast("Welcome back!", "success");
+                    closeModal(isSignup ? signupModal : loginModal);
+                    
+                    const redirectUrl = getRedirectUrl(userData);
+                    setTimeout(() => {
+                        window.location.href = redirectUrl;
+                    }, 1000);
+                }
+
+            } catch (error) {
+                console.error("Google Sign-In Error:", error);
+                let errorMessage = "Could not sign in with Google. Please try again.";
+
+                if (error.code === 'auth/popup-closed-by-user') {
+                    errorMessage = "Sign-in cancelled.";
+                }
+
+                showModalMessage(messageEl, errorMessage);
+            }
+        };
+
+        googleSignupBtn.addEventListener('click', () => handleGoogleSignIn(true));
+        googleLoginBtn.addEventListener('click', () => handleGoogleSignIn(false));
+
+        // Create user document in Firestore with role-based defaults
+        async function createUserDocument(user, name, avatarUrl = null) {
+            const userRef = doc(db, "users", user.uid);
+            const now = new Date().toISOString();
+            
+            await setDoc(userRef, {
+                name: name || 'Anonymous User',
+                email: user.email,
+                uid: user.uid,
+                membershipTier: 'apprentice', // Default to apprentice (free tier)
+                role: 'member', // Default role, can be changed by admin
+                isBlocked: false,
+                membershipStatus: 'pending',
+                createdAt: now,
+                lastLogin: now,
+                lastActive: now,
+                avatarUrl: avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(name || 'User')}&background=B38B00&color=fff`,
+                emailVerified: user.emailVerified || false,
+                warnings: 0,
+                // Membership features access
+                hasBookingAccess: false,
+                hasLoungeAccess: false,
+                hasMentorshipAccess: false,
+                hasLiveQAAccess: false,
+                hasEarlyAccess: false,
+                canVote: false
+            });
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Keyboard accessibility
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (loginModal.classList.contains('visible')) {
+                    closeModal(loginModal);
+                }
+                if (signupModal.classList.contains('visible')) {
+                    closeModal(signupModal);
+                }
+            }
+        });
+
+        // Form validation improvements
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('blur', validateInput);
+            input.addEventListener('input', clearValidation);
+        });
+
+        function validateInput(e) {
+            const input = e.target;
+            const value = input.value.trim();
+
+            input.classList.remove('invalid');
+
+            if (!value && input.required) {
+                input.classList.add('invalid');
+                return;
+            }
+
+            if (input.type === 'email' && value && !isValidEmail(value)) {
+                input.classList.add('invalid');
+                return;
+            }
+
+            if (input.type === 'password' && value && value.length < 6) {
+                input.classList.add('invalid');
+                return;
+            }
+        }
+
+        function clearValidation(e) {
+            e.target.classList.remove('invalid');
+        }
+
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Add input validation styles
+        const style = document.createElement('style');
+        style.textContent = `
+            .form-group input.invalid {
+                border-color: var(--error-color);
+                background-color: rgba(211, 47, 47, 0.05);
+            }
+            .form-group input.invalid:focus {
+                box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Handle plan selection
+        function handlePlanSelection(selectedTier) {
+            // Store the selected plan in localStorage
+            localStorage.setItem('selectedPlan', selectedTier);
+            
+            // Check if user is logged in
+            const auth = getAuth();
+            const currentUser = auth.currentUser;
+
+            if (currentUser) {
+                // If logged in, redirect to charter page
+                window.location.href = 'charter.html';
+            } else {
+                // If not logged in, redirect to login page with return URL
+                window.location.href = `login.html?action=signup&redirect=charter&plan=${selectedTier}`;
+            }
+        }
+
+        // Initialize Firebase Auth State Observer
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Update header buttons for logged-in state
+                document.querySelector('.header-actions').innerHTML = `
+                    <button onclick="window.location.href='home.html'" class="btn-secondary">Dashboard</button>
+                    <button onclick="signOut(auth)" class="btn-primary">Sign Out</button>
+                `;
+            }
+        });
+
+        console.log('Andrew Cares Village - Optimized Landing Page Loaded Successfully');
+    </script>
+
+    <!-- 3. HTML: Footer -->
+    <footer class="main-footer">
+        <div class="footer-links">
+            <a href="about.html">About Us</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+        </div>
+        <p>&copy; 2025 Andrew Cares Village. All Rights Reserved.</p>
+    </footer>
+</body>
+
+</html>

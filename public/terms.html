@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - Andrew Cares Village</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:wght@400;700&family=Montserrat:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* --- CSS STYLES --- */
+
+        /* 1. Global Styles & Variables */
+        :root {
+            --background-color: #F4F2ED;
+            --text-primary: #333333;
+            --text-secondary: #555555;
+            --color-primary: #B38B00;
+            /* Rich Gold */
+            --color-secondary: #001F3F;
+            /* Deep Navy Blue */
+            --card-bg: #FFFFFF;
+            --border-color: #EAEAEA;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--color-primary);
+            font-weight: 500;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* 2. Header & Footer Styles */
+        .main-header,
+        .main-footer {
+            background-color: var(--card-bg);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .main-footer {
+            border-top: 1px solid var(--border-color);
+            border-bottom: none;
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 3rem;
+        }
+
+        .footer-links a {
+            margin: 0 1rem;
+        }
+
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--color-secondary);
+            text-align: center;
+        }
+
+        /* 3. Static Content Page Layout */
+        .content-container {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .content-container h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            color: var(--color-secondary);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .content-container h2 {
+            font-family: 'Lora', serif;
+            font-size: 1.8rem;
+            color: var(--color-primary);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .content-container p {
+            margin-bottom: 1rem;
+        }
+
+        .content-container ul {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-container li {
+            margin-bottom: 0.5rem;
+        }
+
+        .last-updated {
+            text-align: center;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-header,
+            .main-footer {
+                padding: 1rem;
+            }
+            
+            .content-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            
+            .content-container h1 {
+                font-size: 2rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .content-container h2 {
+                font-size: 1.5rem;
+                margin-top: 2rem;
+            }
+            
+            .content-container ul {
+                margin-left: 1.5rem;
+            }
+            
+            .footer-links a {
+                margin: 0 0.5rem;
+                display: inline-block;
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header,
+            .main-footer {
+                padding: 0.75rem;
+            }
+            
+            .content-container {
+                margin: 0.5rem;
+                padding: 1rem;
+            }
+            
+            .content-container h1 {
+                font-size: 1.75rem;
+            }
+            
+            .content-container h2 {
+                font-size: 1.3rem;
+            }
+            
+            .logo {
+                font-size: 1.25rem;
+            }
+            
+            .content-container ul {
+                margin-left: 1rem;
+            }
+            
+            .footer-links {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                margin-bottom: 1rem;
+            }
+            
+            .footer-links a {
+                margin: 0;
+            }
+        }
+
+        /* Accessibility improvements */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 1. HTML: Header -->
+    <header class="main-header">
+        <div class="logo">
+            <a href="index.html">Andrew Cares Village</a>
+        </div>
+    </header>
+
+    <!-- 2. HTML: Main Content -->
+    <main class="content-container">
+        <h1>Terms of Service</h1>
+        <p class="last-updated">Last Updated: August 21, 2025</p>
+
+        <p>Please read these Terms of Service ("Terms") carefully before using the Andrew Cares Village website (the "Service") operated by Andrew Cares Village ("us", "we", or "our"). Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms. These Terms apply to all visitors, users, and others who access or use the Service.</p>
+
+        <h2>1. Accounts and Membership</h2>
+        <p>When you create an account with us, you must provide information that is accurate, complete, and current at all times. Failure to do so constitutes a breach of the Terms, which may result in immediate termination of your account on our Service.</p>
+        <p>You are responsible for safeguarding the password that you use to access the Service and for any activities or actions under your password. You agree not to disclose your password to any third party.</p>
+        <p>Membership fees are billed on a subscription basis or as a one-time payment, as selected by you. Subscriptions are billed in advance on a recurring, periodic basis. By purchasing a membership, you agree to pay the specified fees.</p>
+
+        <h2>2. User Conduct and Community Guidelines</h2>
+        <p>Andrew Cares Village is a community built on respect, support, and personal growth. By using the Service, you agree not to:</p>
+        <ul>
+            <li>Post any content that is unlawful, harmful, threatening, abusive, harassing, defamatory, vulgar, obscene, or otherwise objectionable.</li>
+            <li>Engage in any form of cyberbullying or personal attacks.</li>
+            <li>Impersonate any person or entity, or falsely state or otherwise misrepresent your affiliation with a person or entity.</li>
+            <li>Share or distribute course content or other proprietary materials outside of the platform.</li>
+            <li>Use the Service for any illegal or unauthorized purpose.</li>
+        </ul>
+        <p>We reserve the right, but not the obligation, to monitor interactions and content. We have the right to remove any content or terminate accounts for conduct that we deem, in our sole discretion, to be a violation of these guidelines.</p>
+
+        <h2>3. Termination</h2>
+        <p>We may terminate or suspend your account immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.</p>
+        <p>If your account is terminated due to a breach of these Terms, particularly the community guidelines, you will not be eligible for a refund of any membership fees paid.</p>
+        <p>Upon termination, your right to use the Service will immediately cease.</p>
+
+        <h2>4. Intellectual Property</h2>
+        <p>The Service and its original content (excluding content provided by users), features, and functionality are and will remain the exclusive property of Andrew Cares Village and its licensors. The courses, videos, and text are protected by copyright and other laws. Our trademarks may not be used in connection with any product or service without our prior written consent.</p>
+        <p>Content created and uploaded by instructors remains the intellectual property of the respective instructor, who grants Andrew Cares Village a license to display and distribute that content on the platform.</p>
+
+        <h2>5. Disclaimer of Warranties; Limitation of Liability</h2>
+        <p>The Service is provided on an "AS IS" and "AS AVAILABLE" basis. We do not warrant that the results that may be obtained from the use of the Service will be accurate or reliable. You expressly agree that your use of the Service is at your sole risk.</p>
+        <p>In no case shall Andrew Cares Village, our directors, officers, employees, or instructors be liable for any injury, loss, claim, or any direct, indirect, incidental, punitive, special, or consequential damages of any kind.</p>
+
+        <h2>6. Governing Law</h2>
+        <p>These Terms shall be governed and construed in accordance with the laws of Nigeria, without regard to its conflict of law provisions.</p>
+
+        <h2>7. Changes to These Terms</h2>
+        <p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. We will provide notice of any significant changes. By continuing to access or use our Service after those revisions become effective, you agree to be bound by the revised terms.</p>
+
+    </main>
+
+    <!-- 3. HTML: Footer -->
+    <footer class="main-footer">
+        <div class="footer-links">
+            <a href="about.html">About Us</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+        </div>
+        <p>&copy; 2025 Andrew Cares Village. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
