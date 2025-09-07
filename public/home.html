@@ -3266,6 +3266,21 @@ function setupPostUpdateListener() {
                     markAllNotificationsAsRead();
                 });
 
+                // Function to check user role
+                async function checkUserRole(userId) {
+                    try {
+                        const userDoc = await getDoc(doc(db, 'users', userId));
+                        if (userDoc.exists()) {
+                            const userData = userDoc.data();
+                            return userData.role || 'member';
+                        }
+                        return 'member';
+                    } catch (error) {
+                        console.error('Error checking user role:', error);
+                        return 'member';
+                    }
+                }
+
                 // Show/hide mobile admin and instructor buttons based on user role
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
