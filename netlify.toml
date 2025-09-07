@@ -1,7 +1,7 @@
 [build]
   functions = "netlify/functions"
   publish = "public"
-  command = 'find public -name "*.html" -exec sed -i "s/%REACT_APP_FIREBASE_PROJECT_ID%/$REACT_APP_FIREBASE_PROJECT_ID/g" {} + && sed -i "s/%REACT_APP_FIREBASE_PROJECT_ID%/$REACT_APP_FIREBASE_PROJECT_ID/g" public/js/config.js && echo "All files processed with environment variables"'
+  command = 'find public -name "*.html" -exec sed -i "s/%REACT_APP_FIREBASE_PROJECT_ID%/$FIREBASE_PROJECT_ID/g" {} + && sed -i "s/%REACT_APP_FIREBASE_PROJECT_ID%/$FIREBASE_PROJECT_ID/g" public/js/config.js && echo "All files processed with environment variables"'
 
 [functions]
   directory = "netlify/functions"
