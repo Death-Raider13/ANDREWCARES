@@ -1106,14 +1106,14 @@
   donateBtn.classList.add('processing');
   updateProgressStep(3, 'active');
 
-  /*  NEW: build the config object ONCE  */
+  /*  Build the config object - removing callback_url to use popup mode  */
   const config = {
-    key: PAYSTACK_PUBLIC_KEY,               // your pk_test_…
+    key: PAYSTACK_PUBLIC_KEY,
     email: email,
     amount: selectedAmount * 100,           // kobo
     currency: 'NGN',
     ref: generateReference(),
-    callback_url: location.href,            // ➜ FORCE redirect mode
+    // callback_url: location.href,         // REMOVED - this prevents onSuccess from firing
     metadata: {
       custom_fields: [
         { display_name: 'Donor Name', variable_name: 'donor_name', value: name },
@@ -1123,11 +1123,13 @@
     },
     onSuccess: function (trx) {
       console.log('Paystack onSuccess fired', trx);
+      updateProgressStep(3, 'completed');
       handlePaymentSuccess(trx, name, email, phone, isAnonymous);
     },
     onCancel: function () {
       console.log('Paystack onCancel fired');
       resetProcessingState();
+      showMessage('Payment was cancelled. Your information has been saved if you want to try again.', 'warning');
     },
     onError: function (err) {
       console.error('Paystack onError fired', err);
