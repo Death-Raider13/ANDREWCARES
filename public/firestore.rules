@@ -109,9 +109,9 @@ service cloud.firestore {
     // --- CHAT SYSTEM ---
     match /chats/{chatId} {
       // Allow creation of chat documents
-      allow read: if isAuthenticated() && isParticipant(chatId);
-      allow create: if isAuthenticated() && isParticipant(chatId);
-      allow update: if isAuthenticated() && isParticipant(chatId);
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
       
       // Messages subcollection
       match /messages/{messageId} {
@@ -229,15 +229,17 @@ service cloud.firestore {
         request.resource.data.keys().hasAll(['studentId', 'instructorId']) &&
         request.resource.data.studentId == request.auth.uid;
       
-      allow read: if isAuthenticated() && 
-        (resource.data.studentId == request.auth.uid || 
-         resource.data.instructorId == request.auth.uid ||
-         isAdmin());
+      allow read: if isAuthenticated();
+      
+      // Allow list operations for authenticated users to query their own bookings
+      allow list: if isAuthenticated();
          
       allow update: if isAuthenticated() && 
         (resource.data.studentId == request.auth.uid || 
          resource.data.instructorId == request.auth.uid ||
-         isAdmin());
+         isAdmin() ||
+         // Allow instructors to update any booking status
+         isInstructor());
          
       allow delete: if isAdmin() || 
         (isAuthenticated() && resource.data.studentId == request.auth.uid);

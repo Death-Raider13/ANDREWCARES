@@ -66,11 +66,20 @@
         }
 
         .chat-sidebar {
-            width: 280px;
-            background: white;
-            border-left: 1px solid #e0e0e0;
+            width: 450px;
+            background: linear-gradient(145deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+            border-left: 1px solid rgba(255,255,255,0.1);
+            box-shadow: -8px 0 32px rgba(0,0,0,0.25);
+            position: fixed;
+            right: 0;
+            top: 0;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            border-radius: 20px 0 0 20px;
         }
 
         /* Dashboard Headers */
@@ -244,9 +253,12 @@
             
             .chat-sidebar {
                 width: 100%;
-                height: 30vh;
-                min-height: 250px;
-                order: 2;
+                height: 40vh;
+                min-height: 350px;
+                position: relative;
+                right: auto;
+                top: auto;
+                border-radius: 15px 15px 0 0;
             }
         }
 
@@ -392,9 +404,72 @@
                 </div>
             </div>
 
-            <!-- Access Denied View -->
-            <div id="accessDeniedView" class="hidden">
-                <div class="card" style="text-align: center; padding: 4rem 2rem;">
+            <!-- Goal-Based Mentor Matching Section -->
+            <div class="section" id="memberSection" style="display: none;">
+                <div class="container">
+                    <h2 style="text-align: center; margin-bottom: 1rem; color: var(--color-secondary);">
+                        <i class="fas fa-users"></i> Find Your Perfect Mentor
+                    </h2>
+                    
+                    <!-- Goal Selection Interface -->
+                    <div style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.05)); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; border: 1px solid rgba(102, 126, 234, 0.2);">
+                        <h3 style="text-align: center; margin-bottom: 1.5rem; color: #334155; font-weight: 600;">What are your mentorship goals?</h3>
+                        <div id="goalSelection" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                            <div class="goal-card" data-goal="career" onclick="selectGoal('career')" style="padding: 1.5rem; background: white; border: 2px solid #e2e8f0; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.3s;">
+                                <div style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-chart-line" style="color: white; font-size: 1.5rem;"></i>
+                                </div>
+                                <h4 style="margin: 0 0 0.5rem 0; color: #334155;">Career Growth</h4>
+                                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Advance your career and leadership skills</p>
+                            </div>
+                            
+                            <div class="goal-card" data-goal="tech" onclick="selectGoal('tech')" style="padding: 1.5rem; background: white; border: 2px solid #e2e8f0; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.3s;">
+                                <div style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(135deg, #10b981, #059669); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-code" style="color: white; font-size: 1.5rem;"></i>
+                                </div>
+                                <h4 style="margin: 0 0 0.5rem 0; color: #334155;">Tech & Engineering</h4>
+                                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Master technical skills and system design</p>
+                            </div>
+                            
+                            <div class="goal-card" data-goal="business" onclick="selectGoal('business')" style="padding: 1.5rem; background: white; border: 2px solid #e2e8f0; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.3s;">
+                                <div style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-rocket" style="color: white; font-size: 1.5rem;"></i>
+                                </div>
+                                <h4 style="margin: 0 0 0.5rem 0; color: #334155;">Entrepreneurship</h4>
+                                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Build and scale successful businesses</p>
+                            </div>
+                            
+                            <div class="goal-card" data-goal="academic" onclick="selectGoal('academic')" style="padding: 1.5rem; background: white; border: 2px solid #e2e8f0; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.3s;">
+                                <div style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(135deg, #8b5cf6, #7c3aed); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-graduation-cap" style="color: white; font-size: 1.5rem;"></i>
+                                </div>
+                                <h4 style="margin: 0 0 0.5rem 0; color: #334155;">Academic Research</h4>
+                                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Excel in research and publications</p>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center;">
+                            <button id="clearGoalsBtn" onclick="clearGoalSelection()" style="padding: 0.75rem 1.5rem; background: rgba(100, 116, 139, 0.1); color: #64748b; border: 1px solid rgba(100, 116, 139, 0.3); border-radius: 8px; cursor: pointer; font-weight: 500; display: none;">
+                                <i class="fas fa-times" style="margin-right: 0.5rem;"></i>
+                                Clear Selection
+                            </button>
+                        </div>
+                    </div>
+
+                <div id="memberInstructorList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem;">
+                    <!-- Mentors will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Access Denied View -->
+        <div id="accessDeniedView" class="hidden">
+            <div class="dashboard-header">
+                <h1><i class="fas fa-lock"></i> Access Restricted</h1>
+                <p>This mentorship platform is available to registered members, instructors, and admins only.</p>
+            </div>
+            <div class="container">
+                <div class="card" style="text-align: center; padding: 3rem;">
                     <i class="fas fa-lock" style="font-size: 4rem; color: var(--warning-color); margin-bottom: 1rem;"></i>
                     <h2>Access Restricted</h2>
                     <p>This mentorship platform is available to registered members, instructors, and admins only.</p>
@@ -405,17 +480,125 @@
             </div>
         </div>
 
-        <!-- Chat Sidebar -->
-        <div class="chat-sidebar">
-            <div class="sidebar-chat-header">
-                <h3><i class="fas fa-comments"></i> Active Chats</h3>
+        <!-- Professional Chat Sidebar -->
+        <div class="chat-sidebar" id="chatSidebar" style="display: none;">
+            <!-- Chat List Header -->
+            <div class="sidebar-chat-header" style="padding: 1.5rem; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.15);">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 0.8rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-comments" style="color: white; font-size: 1.2rem;"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; color: white; font-size: 1.1rem; font-weight: 700;">Messages</h3>
+                            <p style="margin: 0; color: rgba(255,255,255,0.7); font-size: 0.8rem;">Professional Support</p>
+                        </div>
+                    </div>
+                    <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);"></div>
+                </div>
             </div>
-            <div class="active-conversations" id="sidebarConversations">
-                <div class="conversation-item">
-                    <img src="https://ui-avatars.com/api/?name=No+Chat&background=ddd&color=999&size=40" alt="Avatar" class="conversation-avatar">
-                    <div>
-                        <p style="margin: 0; font-weight: 600;">No active chats</p>
-                        <p style="margin: 0; font-size: 0.8rem; color: var(--text-secondary);">Start a session to begin chatting</p>
+            
+            <!-- Active Conversations List -->
+            <div class="active-conversations" id="sidebarConversations" style="flex: 1; overflow-y: auto; padding: 0.5rem;">
+                <div class="conversation-item" style="padding: 1rem; margin: 0.5rem; background: rgba(255,255,255,0.08); border-radius: 12px; cursor: pointer; transition: all 0.3s; border: 1px solid rgba(255,255,255,0.1);" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="position: relative;">
+                            <img src="https://ui-avatars.com/api/?name=Support&background=667eea&color=fff&size=45&rounded=true" alt="Avatar" style="width: 45px; height: 45px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.2);">
+                            <div style="position: absolute; bottom: -2px; right: -2px; width: 14px; height: 14px; background: #10b981; border: 2px solid #1e3c72; border-radius: 50%;"></div>
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+                                <h4 style="margin: 0; color: white; font-size: 0.95rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Professional Support</h4>
+                                <span style="color: rgba(255,255,255,0.6); font-size: 0.75rem;">Online</span>
+                            </div>
+                            <p style="margin: 0; color: rgba(255,255,255,0.7); font-size: 0.85rem; line-height: 1.3;">Ready to assist with your mentorship session</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Professional Chat Header -->
+            <div class="chat-header" style="padding: 2rem 1.5rem; background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.15); position: relative;">
+                <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);"></div>
+                <div style="display: flex; align-items: center; gap: 1.2rem;">
+                    <div class="user-avatar" style="width: 52px; height: 52px; border-radius: 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1.3rem; box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3); border: 2px solid rgba(255,255,255,0.2);">U</div>
+                    <div style="flex: 1;">
+                        <h3 style="margin: 0; font-size: 1.2rem; color: white; font-weight: 700; letter-spacing: -0.02em;">Professional Chat</h3>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.3rem;">
+                            <div style="width: 8px; height: 8px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);"></div>
+                            <p style="margin: 0; font-size: 0.85rem; color: rgba(255,255,255,0.9); font-weight: 500;">Active Session</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button onclick="minimizeChat()" style="background: rgba(255,255,255,0.15); border: none; color: white; padding: 0.7rem; border-radius: 12px; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(10px);" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button onclick="closeChatSidebar()" style="background: rgba(239, 68, 68, 0.2); border: none; color: #fca5a5; padding: 0.7rem; border-radius: 12px; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(10px);" onmouseover="this.style.background='rgba(239, 68, 68, 0.3)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.2)'">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="chatMessages" style="flex: 1; padding: 2rem 1.5rem; overflow-y: auto; background: linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(248,250,252,0.95) 100%); margin: 1rem; border-radius: 20px; box-shadow: inset 0 4px 20px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.1); position: relative;">
+                <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);"></div>
+                <div style="text-align: center; padding: 3rem 2rem; color: #64748b;">
+                    <div style="width: 80px; height: 80px; margin: 0 auto 1.5rem; background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%); border-radius: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                        <i class="fas fa-comments" style="font-size: 2.5rem; color: #94a3b8;"></i>
+                    </div>
+                    <h4 style="margin: 0 0 0.5rem 0; font-size: 1.3rem; font-weight: 700; color: #334155; letter-spacing: -0.02em;">Professional Messaging</h4>
+                    <p style="margin: 0; font-size: 1rem; color: #64748b; font-weight: 500;">Secure, encrypted communication</p>
+                    <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #94a3b8;">Start your mentorship conversation</p>
+                </div>
+            </div>
+            
+            <!-- Payment & Agreement Section -->
+            <div id="paymentSection" style="padding: 1.5rem; background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%); border-top: 1px solid rgba(34, 197, 94, 0.2); display: none;">
+                <div style="text-align: center; margin-bottom: 1rem;">
+                    <div style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(135deg, #10b981, #059669); border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);">
+                        <i class="fas fa-handshake" style="color: white; font-size: 1.5rem;"></i>
+                    </div>
+                    <h4 style="margin: 0 0 0.5rem 0; color: white; font-weight: 700;">Agreement Reached</h4>
+                    <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 0.9rem;">Rate: <span id="agreedRate">₦5000/hour</span></p>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button onclick="initiatePayment()" style="flex: 1; padding: 1rem 1.5rem; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(16, 185, 129, 0.6)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 16px rgba(16, 185, 129, 0.4)'">
+                        <i class="fas fa-credit-card" style="margin-right: 0.5rem;"></i>
+                        Pay Now
+                    </button>
+                    <button onclick="openAgreementForm()" style="flex: 1; padding: 1rem 1.5rem; background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1)); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(10px);" onmouseover="this.style.background='linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.2))'" onmouseout="this.style.background='linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1))'">
+                        <i class="fas fa-file-contract" style="margin-right: 0.5rem;"></i>
+                        View Agreement
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Professional Input Area -->
+            <div class="chat-input" style="padding: 1.5rem; background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.08) 100%); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.15); position: relative;">
+                <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);"></div>
+                <div style="display: flex; gap: 1rem; align-items: flex-end;">
+                    <div style="flex: 1; position: relative;">
+                        <div style="position: relative; background: rgba(255,255,255,0.95); border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1), inset 0 1px 3px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.8);">
+                            <input type="text" id="chatInput" placeholder="Type your professional message..." style="width: 100%; padding: 1.2rem 1.8rem 1.2rem 1.5rem; border: none; border-radius: 20px; background: transparent; font-size: 0.95rem; outline: none; color: #334155; font-weight: 500; letter-spacing: -0.01em;" onkeypress="if(event.key==='Enter') sendChatMessage()">
+                            <div style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8;">
+                                <i class="fas fa-keyboard" style="font-size: 0.9rem;"></i>
+                            </div>
+                        </div>
+                        <div class="typing-indicator" style="position: absolute; bottom: -30px; left: 20px; font-size: 0.8rem; color: rgba(255,255,255,0.9); display: none; background: rgba(0,0,0,0.1); padding: 0.3rem 0.8rem; border-radius: 12px; backdrop-filter: blur(10px);">
+                            <i class="fas fa-circle" style="animation: pulse 1.5s infinite; font-size: 0.5rem;"></i>
+                            <i class="fas fa-circle" style="animation: pulse 1.5s infinite 0.3s; font-size: 0.5rem;"></i>
+                            <i class="fas fa-circle" style="animation: pulse 1.5s infinite 0.6s; font-size: 0.5rem;"></i>
+                            <span style="margin-left: 0.5rem;">Typing...</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 0.8rem;">
+                        <button onclick="attachFile()" style="padding: 1.2rem; background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%); color: white; border: none; border-radius: 16px; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(10px); box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
+                            <i class="fas fa-paperclip" style="font-size: 1.1rem;"></i>
+                        </button>
+                        <button onclick="sendChatMessage()" style="padding: 1.2rem 1.8rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 16px; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4); font-weight: 600;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 24px rgba(102, 126, 234, 0.6)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 16px rgba(102, 126, 234, 0.4)'">
+                            <i class="fas fa-paper-plane" style="margin-right: 0.5rem;"></i>
+                            Send
+                        </button>
                     </div>
                 </div>
             </div>
@@ -451,28 +634,54 @@
             auth = firebase.auth();
             db = firebase.firestore();
             
-            // Configure Firestore settings BEFORE any other operations
-            try {
-                db.settings({
-                    cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED,
-                    ignoreUndefinedProperties: true
-                });
-            } catch (settingsError) {
-                console.warn('⚠️ Firestore settings already configured:', settingsError.message);
-            }
-            
-            // Test Firebase connection immediately
-            db.collection('users').limit(1).get().then(() => {
+            // Enable offline persistence FIRST before any other operations
+            db.enablePersistence({ synchronizeTabs: true }).then(() => {
+                console.log('✅ Firebase persistence enabled');
+                
+                // Configure Firestore settings after persistence
+                try {
+                    db.settings({
+                        cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED,
+                        ignoreUndefinedProperties: true
+                    });
+                } catch (settingsError) {
+                    console.warn('⚠️ Firestore settings already configured:', settingsError.message);
+                }
+                
+                // Test Firebase connection
+                return db.collection('users').limit(1).get();
+            }).then(() => {
                 console.log('✅ Firebase connected successfully');
                 firebaseInitialized = true;
+                // Reload mentors now that Firebase is ready
+                if (currentUserData && currentUserData.role === 'member') {
+                    loadAvailableMentors();
+                }
             }).catch(error => {
-                console.warn('⚠️ Firebase connection test failed:', error);
-                firebaseInitialized = false;
-            });
-            
-            // Enable offline persistence with error handling (optional)
-            db.enablePersistence({ synchronizeTabs: true }).catch((err) => {
-                console.log('ℹ️ Persistence not enabled:', err.code);
+                console.warn('⚠️ Firebase initialization warning:', error.message);
+                
+                // Still try to configure settings and test connection
+                try {
+                    db.settings({
+                        cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED,
+                        ignoreUndefinedProperties: true
+                    });
+                } catch (settingsError) {
+                    // Ignore settings error
+                }
+                
+                // Test connection without persistence
+                db.collection('users').limit(1).get().then(() => {
+                    console.log('✅ Firebase connected (without persistence)');
+                    firebaseInitialized = true;
+                    // Reload mentors now that Firebase is ready
+                    if (currentUserData && currentUserData.role === 'member') {
+                        loadAvailableMentors();
+                    }
+                }).catch(connError => {
+                    console.warn('⚠️ Firebase connection failed:', connError);
+                    firebaseInitialized = false;
+                });
             });
 
             
@@ -673,29 +882,43 @@
         });
 
         function initializeView() {
-            const userRole = currentUserData.role;
+            const userRole = currentUserData?.role;
+
+            // Helper function to safely hide/show elements
+            function safeToggleElement(elementId, show = false) {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    if (show) {
+                        element.classList.remove('hidden');
+                    } else {
+                        element.classList.add('hidden');
+                    }
+                } else {
+                    console.warn(`Element with ID '${elementId}' not found`);
+                }
+            }
 
             // Hide all views first
-            document.getElementById('memberView').classList.add('hidden');
-            document.getElementById('instructorView').classList.add('hidden');
-            document.getElementById('adminView').classList.add('hidden');
-            document.getElementById('accessDeniedView').classList.add('hidden');
+            safeToggleElement('memberView', false);
+            safeToggleElement('instructorView', false);
+            safeToggleElement('adminView', false);
+            safeToggleElement('accessDeniedView', false);
 
             // Show appropriate view
             if (userRole === 'member') {
-                document.getElementById('memberView').classList.remove('hidden');
+                safeToggleElement('memberView', true);
                 updateSidebarConversations();
                 loadMemberSessions();
                 loadAvailableMentors(); // Load mentors when member view is shown
                 initializeMemberCalendar(); // Initialize calendar when member view is shown
             } else if (userRole === 'instructor') {
-                document.getElementById('instructorView').classList.remove('hidden');
+                safeToggleElement('instructorView', true);
                 initializeInstructor();
             } else if (userRole === 'admin') {
-                document.getElementById('adminView').classList.remove('hidden');
+                safeToggleElement('adminView', true);
                 initializeAdmin();
             } else {
-                document.getElementById('accessDeniedView').classList.remove('hidden');
+                safeToggleElement('accessDeniedView', true);
             }
 
             updateSidebarConversations();
@@ -1082,26 +1305,40 @@
         }
 
         function loadInstructorBookings() {
+            console.log('🔍 Loading instructor bookings for:', currentUser?.uid);
             const bookingsList = document.getElementById('instructorBookingsList');
             
-            if (!currentUser) return;
+            if (!currentUser) {
+                console.log('❌ No current user for instructor bookings');
+                return;
+            }
+            
+            if (!bookingsList) {
+                console.log('❌ instructorBookingsList element not found');
+                return;
+            }
             
             try {
+                // Query directly for this instructor's bookings (no need to get all first)
                 let q = db.collection("bookings").where("instructorId", "==", currentUser.uid);
                 
-                // Add additional filters if available
-                if (firebaseInitialized) {
-                    q = q.where("status", "in", ["negotiating", "confirmed"]);
-                    if (typeof q.orderBy === 'function') {
-                        q = q.orderBy("createdAt", "desc");
-                    }
-                }
+                console.log('🎯 Querying bookings for instructor:', currentUser.uid);
                 
                 q.onSnapshot((snapshot) => {
-                    bookingsList.innerHTML = snapshot.empty ? '<p>No bookings yet.</p>' : '';
+                    console.log(`📋 Found ${snapshot.size} bookings for instructor`);
+                    
+                    if (snapshot.empty) {
+                        bookingsList.innerHTML = '<p>No bookings yet.</p>';
+                        console.log('📝 No bookings found for this instructor');
+                        return;
+                    }
+                    
+                    bookingsList.innerHTML = '';
                     
                     snapshot.forEach(docSnap => {
                         const booking = { id: docSnap.id, ...docSnap.data() };
+                        console.log('✅ Processing booking:', booking);
+                        
                         const bookingEl = document.createElement('div');
                         bookingEl.className = 'session-card';
                         bookingEl.style.cssText = `
@@ -1115,20 +1352,23 @@
                             transition: all 0.3s;
                         `;
                         
-                        const sessionDate = booking.startTime?.toDate ? booking.startTime.toDate() : new Date();
-                        const statusClass = `status-${booking.status || 'pending'}`;
+                        const sessionDate = booking.sessionDate?.toDate ? booking.sessionDate.toDate() : 
+                                          booking.startTime?.toDate ? booking.startTime.toDate() : 
+                                          booking.createdAt?.toDate ? booking.createdAt.toDate() : new Date();
+                        const statusClass = `status-${booking.status || 'negotiating'}`;
                         
                         bookingEl.innerHTML = `
                             <div>
                                 <h4 style="margin: 0 0 0.5rem 0; color: var(--color-secondary);">${sessionDate.toLocaleString()}</h4>
                                 <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">with ${booking.studentName || 'Student'}</p>
                                 <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Rate: ₦${booking.hourlyRate || 5000}/hour</p>
+                                <p style="margin: 0; color: var(--text-secondary); font-size: 0.8rem;">Time: ${booking.timeSlot || 'TBD'}</p>
                             </div>
                             <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
                                 <span class="session-status ${statusClass}" style="padding: 0.25rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">
-                                    ${booking.status || 'pending'}
+                                    ${booking.status || 'negotiating'}
                                 </span>
-                                <button class="btn btn-info btn-sm" onclick="openChat('${booking.id}', '${booking.studentId}', '${booking.studentName}')">
+                                <button class="btn btn-info btn-sm" onclick="openChat('${booking.id}', '${booking.studentId}', '${booking.studentName || 'Student'}')" style="background: linear-gradient(45deg, #667eea, #764ba2); border: none; transition: all 0.3s; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 12px rgba(102, 126, 234, 0.5)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(102, 126, 234, 0.3)'">
                                     <i class="fas fa-comments"></i> Chat
                                 </button>
                                 ${(booking.status === 'negotiating' || !booking.status) ? `
@@ -1154,6 +1394,101 @@
                 bookingsList.innerHTML = '<p>Error loading bookings. Please refresh the page.</p>';
             }
         }
+
+        // Booking management functions for instructors
+        window.confirmBooking = async function(bookingId) {
+            try {
+                await db.collection("bookings").doc(bookingId).update({
+                    status: 'confirmed',
+                    confirmedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                showNotification('Booking confirmed successfully!', 'success');
+                
+                // Send system message to chat
+                const booking = await db.collection("bookings").doc(bookingId).get();
+                if (booking.exists) {
+                    const bookingData = booking.data();
+                    await db.collection("chats").add({
+                        sessionId: bookingId,
+                        senderId: 'system',
+                        senderName: 'System',
+                        text: `✅ Session confirmed by instructor. Looking forward to our mentorship session!`,
+                        messageType: 'system',
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+            } catch (error) {
+                console.error('Error confirming booking:', error);
+                showNotification('Failed to confirm booking. Please try again.', 'error');
+            }
+        };
+
+        window.rejectBooking = async function(bookingId) {
+            try {
+                console.log('🚫 Rejecting booking:', bookingId);
+                console.log('👤 Current user:', currentUser?.uid);
+                console.log('📋 Current user data:', currentUserData);
+                console.log('🎭 User role:', currentUserData?.role);
+                
+                // Get the booking first to check permissions
+                const bookingDoc = await db.collection("bookings").doc(bookingId).get();
+                if (!bookingDoc.exists) {
+                    throw new Error('Booking not found');
+                }
+                
+                const bookingData = bookingDoc.data();
+                console.log('📄 Booking data:', bookingData);
+                console.log('🎯 Instructor ID:', bookingData.instructorId);
+                console.log('🔍 Is current user the instructor?', bookingData.instructorId === currentUser?.uid);
+                
+                await db.collection("bookings").doc(bookingId).update({
+                    status: 'rejected',
+                    rejectedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                showNotification('Booking rejected.', 'info');
+                
+                // Send system message to chat
+                await db.collection("chats").add({
+                    sessionId: bookingId,
+                    senderId: 'system',
+                    senderName: 'System',
+                    text: `❌ Session request declined. Please feel free to book another available slot.`,
+                    messageType: 'system',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+            } catch (error) {
+                console.error('Error rejecting booking:', error);
+                console.error('Error details:', error.message);
+                showNotification('Failed to reject booking. Please try again.', 'error');
+            }
+        };
+
+        window.markSessionComplete = async function(bookingId) {
+            try {
+                await db.collection("bookings").doc(bookingId).update({
+                    status: 'completed',
+                    completedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                showNotification('Session marked as completed!', 'success');
+                
+                // Send system message to chat
+                await db.collection("chats").add({
+                    sessionId: bookingId,
+                    senderId: 'system',
+                    senderName: 'System',
+                    text: `🎉 Session completed successfully! Thank you for the mentorship.`,
+                    messageType: 'system',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            } catch (error) {
+                console.error('Error completing session:', error);
+                showNotification('Failed to mark session as complete. Please try again.', 'error');
+            }
+        };
 
         function loadCompletedSessions() {
             const completedList = document.getElementById('completedSessionsList');
@@ -1284,174 +1619,477 @@
                 
             } catch (error) {
                 console.error('Error loading admin statistics:', error);
-                document.getElementById('adminStats').innerHTML = '<p>Error loading statistics. Please refresh the page.</p>';
             }
         }
 
         function loadAvailableMentors() {
+            console.log('🔍 Loading mentors, Firebase initialized:', firebaseInitialized);
             const mentorsGrid = document.getElementById('memberInstructorList');
             if (!mentorsGrid) {
-                console.error('❌ Mentors container not found');
+                console.error('❌ memberInstructorList element not found');
                 return;
             }
 
-            console.log('🔍 Loading mentors, Firebase initialized:', firebaseInitialized);
-
-            // Demo data as fallback
+            // Enhanced demo data with professional mentors and expertise tags
             const demoMentors = [
                 {
-                    id: 'mentor-1',
+                    id: 'demo1',
                     name: 'Dr. Sarah Johnson',
                     expertise: 'Career Development & Leadership',
+                    bio: 'Former Fortune 500 executive with 15+ years experience in leadership development and C-suite transitions.',
                     rating: 4.9,
+                    sessions: 127,
                     hourlyRate: 75,
-                    profileImage: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-                    bio: 'Former tech executive with 15+ years experience helping professionals advance their careers.',
-                    totalSessions: 127
+                    avatar: 'https://ui-avatars.com/api/?name=Sarah+Johnson&background=667eea&color=fff&size=150',
+                    expertiseTags: ['Leadership', 'Career Growth', 'Executive Coaching', 'Team Management', 'Performance Review'],
+                    languages: ['English', 'Spanish'],
+                    availability: 'Mon-Fri 9AM-5PM EST',
+                    responseTime: '< 2 hours',
+                    totalReviews: 142,
+                    achievements: ['Top 1% Mentor', 'Leadership Expert', 'Career Catalyst'],
+                    publications: ['The Executive Mindset', 'Career Acceleration Strategies']
                 },
                 {
-                    id: 'mentor-2',
-                    name: 'Prof. Michael Chen',
-                    expertise: 'Academic Research & PhD Guidance',
+                    id: 'demo2',
+                    name: 'Michael Chen',
+                    expertise: 'Tech & Software Engineering',
+                    bio: 'Senior Software Architect at Google, specializing in system design and career growth in tech.',
                     rating: 4.8,
-                    hourlyRate: 60,
-                    profileImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
-                    bio: 'University professor and research supervisor with expertise in data science and machine learning.',
-                    totalSessions: 89
+                    sessions: 89,
+                    hourlyRate: 85,
+                    avatar: 'https://ui-avatars.com/api/?name=Michael+Chen&background=10b981&color=fff&size=150',
+                    expertiseTags: ['System Design', 'Software Architecture', 'Tech Career', 'Code Review', 'Team Leadership'],
+                    languages: ['English', 'Mandarin'],
+                    availability: 'Tue-Thu 2PM-8PM EST',
+                    responseTime: '< 4 hours',
+                    totalReviews: 76,
+                    achievements: ['Tech Excellence', 'System Design Expert', 'Code Mentor'],
+                    publications: ['Scalable System Design', 'The Tech Career Guide']
                 },
                 {
-                    id: 'mentor-3',
+                    id: 'demo3',
                     name: 'Emily Rodriguez',
-                    expertise: 'Entrepreneurship & Startup Strategy',
-                    rating: 4.7,
-                    hourlyRate: 85,
-                    profileImage: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
-                    bio: 'Serial entrepreneur who founded 3 successful startups. Expert in business strategy and fundraising.',
-                    totalSessions: 156
+                    expertise: 'Business Strategy & Entrepreneurship',
+                    bio: 'Serial entrepreneur and business consultant, helped launch 20+ successful startups with $50M+ exits.',
+                    rating: 4.9,
+                    sessions: 156,
+                    hourlyRate: 95,
+                    avatar: 'https://ui-avatars.com/api/?name=Emily+Rodriguez&background=f59e0b&color=fff&size=150',
+                    expertiseTags: ['Startup Strategy', 'Fundraising', 'Product-Market Fit', 'Scaling', 'Exit Strategy'],
+                    languages: ['English', 'Portuguese'],
+                    availability: 'Mon-Wed 10AM-6PM EST',
+                    responseTime: '< 1 hour',
+                    totalReviews: 187,
+                    achievements: ['Startup Unicorn', 'Funding Expert', 'Exit Specialist'],
+                    publications: ['Zero to Unicorn Playbook', 'Fundraising Secrets']
                 }
             ];
 
             function displayMentors(mentors, source = 'demo') {
                 mentorsGrid.innerHTML = mentors.map(mentor => `
-                    <div class="instructor-card" onclick="selectMentorForMember('${mentor.id}', '${mentor.name}', this)" style="margin-bottom: 15px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; cursor: pointer;">
-                        <div style="display: flex; align-items: center; gap: 15px;">
-                            <img src="${mentor.profileImage}" alt="${mentor.name}" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjZGRkIi8+CjxjaXJjbGUgY3g9IjMwIiBjeT0iMjUiIHI9IjEwIiBmaWxsPSIjOTk5Ii8+CjxwYXRoIGQ9Ik0xNSA0NWMwLTggNi43LTE1IDE1LTE1czE1IDcgMTUgMTV2NUgxNXYtNXoiIGZpbGw9IiM5OTkiLz4KPC9zdmc+Cg=='"
-                            <div style="flex: 1;">
-                                <h3 style="margin: 0 0 5px 0; color: var(--color-primary);">${mentor.name}</h3>
-                                <p style="margin: 0 0 5px 0; color: #666; font-size: 14px;">${mentor.expertise}</p>
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="color: #f39c12;">⭐ ${mentor.rating} (${mentor.totalSessions} sessions)</span>
-                                    <span style="font-weight: bold; color: var(--color-primary);">$${mentor.hourlyRate}/hour</span>
-                                </div>
+                    <div class="mentor-card" onclick="selectMentor('${mentor.id}')" style="
+                        background: white;
+                        border: 1px solid #e0e0e0;
+                        border-radius: 12px;
+                        padding: 20px;
+                        margin-bottom: 16px;
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                        <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                            <img src="${mentor.avatar}" alt="${mentor.name}" style="
+                                width: 50px;
+                                height: 50px;
+                                border-radius: 50%;
+                                margin-right: 15px;
+                                object-fit: cover;
+                            ">
+                            <div>
+                                <h3 style="margin: 0; color: #1a1a1a; font-size: 18px; font-weight: 600;">${mentor.name}</h3>
+                                <p style="margin: 4px 0 0 0; color: #6366f1; font-size: 14px; font-weight: 500;">${mentor.expertise}</p>
                             </div>
                         </div>
-                        <p style="margin: 10px 0 0 0; font-size: 13px; color: #777;">${mentor.bio}</p>
+                        <p style="margin: 0 0 12px 0; color: #666; font-size: 14px; line-height: 1.4;">${mentor.bio}</p>
+                        
+                        ${mentor.expertiseTags ? `
+                        <div style="margin-bottom: 12px;">
+                            ${mentor.expertiseTags.slice(0, 3).map(tag => `
+                                <span style="
+                                    display: inline-block;
+                                    background: linear-gradient(135deg, #667eea, #764ba2);
+                                    color: white;
+                                    padding: 4px 8px;
+                                    border-radius: 12px;
+                                    font-size: 11px;
+                                    font-weight: 500;
+                                    margin-right: 6px;
+                                    margin-bottom: 4px;
+                                ">${tag}</span>
+                            `).join('')}
+                            ${mentor.expertiseTags.length > 3 ? `<span style="color: #888; font-size: 11px;">+${mentor.expertiseTags.length - 3} more</span>` : ''}
+                        </div>
+                        ` : ''}
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <div style="display: flex; align-items: center; gap: 12px; font-size: 12px;">
+                                <span style="color: #f59e0b;">⭐ ${mentor.rating}</span>
+                                <span style="color: #888;">${mentor.totalReviews || mentor.sessions} reviews</span>
+                                ${mentor.responseTime ? `<span style="color: #10b981;">🕒 ${mentor.responseTime}</span>` : ''}
+                            </div>
+                            <span style="color: #10b981; font-weight: 600; font-size: 14px;">₦${mentor.hourlyRate * 100}/hr</span>
+                        </div>
+                        
+                        ${mentor.achievements ? `
+                        <div style="display: flex; gap: 4px; margin-bottom: 8px;">
+                            ${mentor.achievements.slice(0, 2).map(achievement => `
+                                <span style="
+                                    background: rgba(16, 185, 129, 0.1);
+                                    color: #059669;
+                                    padding: 2px 6px;
+                                    border-radius: 8px;
+                                    font-size: 10px;
+                                    font-weight: 600;
+                                ">🏆 ${achievement}</span>
+                            `).join('')}
+                        </div>
+                        ` : ''}
+                        
+                        ${mentor.languages ? `
+                        <div style="font-size: 11px; color: #666; margin-top: 8px;">
+                            <span>🌐 ${mentor.languages.join(', ')}</span>
+                            ${mentor.availability ? `<span style="margin-left: 12px;">📅 ${mentor.availability}</span>` : ''}
+                        </div>
+                        ` : ''}
                     </div>
                 `).join('');
                 console.log(`📋 Displaying ${mentors.length} mentors from ${source}`);
             }
 
-            // Try to load from Firestore first
+            // Always show demo data first for immediate UI feedback
+            displayMentors(demoMentors, 'demo (loading...)');
+
+            // Then try to load real data if Firebase is available
             if (firebaseInitialized && db) {
-                console.log('🔥 Attempting to load mentors from Firestore...');
+                console.log('🔥 Loading mentors from Firestore...');
                 
-                db.collection("users")
-                    .where("role", "==", "instructor")
-                    .where("isActive", "==", true)
-                    .get()
-                    .then((snapshot) => {
-                        console.log('📊 Firestore query result:', snapshot.size, 'mentors found');
+                // First try to get all users and filter for instructors
+                db.collection("users").get()
+                    .then(snapshot => {
+                        console.log(`📊 Found ${snapshot.size} total users in database`);
                         
                         if (!snapshot.empty) {
                             const mentors = [];
-                            snapshot.forEach((doc) => {
+                            snapshot.forEach(doc => {
                                 const data = doc.data();
-                                mentors.push({
-                                    id: doc.id,
-                                    name: data.name || 'Anonymous Mentor',
-                                    expertise: data.expertise || 'General Mentoring',
-                                    rating: data.rating || 4.5,
-                                    hourlyRate: data.hourlyRate || 40,
-                                    profileImage: data.profileImage || 'https://via.placeholder.com/150',
-                                    bio: data.bio || 'Experienced mentor ready to help you grow.',
-                                    totalSessions: data.totalSessions || 0
-                                });
+                                console.log(`👤 User ${doc.id}:`, data);
+                                
+                                // Check if user is an instructor (flexible field checking)
+                                const isInstructor = data.role === 'instructor' || 
+                                                   data.userType === 'instructor' || 
+                                                   data.type === 'instructor' ||
+                                                   data.accountType === 'instructor';
+                                
+                                if (isInstructor) {
+                                    console.log(`✅ Found instructor: ${data.name || data.displayName || doc.id}`);
+                                    mentors.push({
+                                        id: doc.id,
+                                        name: data.name || data.displayName || data.firstName || 'Unknown Mentor',
+                                        expertise: data.expertise || data.specialization || data.skills || 'General Mentoring',
+                                        bio: data.bio || data.description || data.about || 'Experienced mentor ready to help you grow.',
+                                        rating: data.rating || 4.5,
+                                        sessions: data.completedSessions || data.totalSessions || 0,
+                                        hourlyRate: data.hourlyRate || data.rate || 50,
+                                        avatar: data.avatar || data.photoURL || data.profileImage || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiM2MzY2RjEiLz4KPHN2ZyB4PSI4IiB5PSI4IiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSI+CjxwYXRoIGQ9Ik0yMCAyMXYtMmE0IDQgMCAwIDAtNC00SDhhNCA0IDAgMCAwLTQgNHYyIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo8L3N2Zz4K'
+                                    });
+                                }
                             });
-                            displayMentors(mentors, 'Firestore');
+                            
+                            if (mentors.length > 0) {
+                                console.log(`🎯 Found ${mentors.length} instructors to display`);
+                                displayMentors(mentors, 'Firestore');
+                            } else {
+                                console.log('📝 No instructors found in users collection, keeping demo data');
+                                displayMentors(demoMentors, 'demo (no instructors found)');
+                            }
                         } else {
-                            console.log('📝 No mentors in Firestore, using demo data');
-                            displayMentors(demoMentors, 'demo (no Firestore data)');
+                            console.log('📝 No users found in Firestore, keeping demo data');
+                            displayMentors(demoMentors, 'demo (no users data)');
                         }
                     })
-                    .catch((error) => {
-                        console.error('❌ Firestore error, falling back to demo data:', error);
+                    .catch(error => {
+                        console.error('❌ Error loading users from Firestore:', error);
                         displayMentors(demoMentors, 'demo (Firestore error)');
                     });
             } else {
-                console.log('📝 Firebase not initialized, using demo data');
-                displayMentors(demoMentors, 'demo (no Firebase)');
+                console.log('📝 Firebase not initialized, keeping demo data');
             }
         }
 
-        function loadAllTransactions() {
-            const transactionsList = document.getElementById('adminTransactionsList');
+        // Add selectMentor function
+        window.selectMentor = async function(mentorId) {
+            console.log('🎯 Selected mentor:', mentorId);
+            
+            // Store selected mentor ID globally for booking
+            window.selectedMentorId = mentorId;
             
             try {
-                let q = db.collection("bookings");
+                // Check if instructor has available mentorship slots
+                const slotsQuery = await db.collection("mentorshipSlots")
+                    .where("instructorId", "==", mentorId)
+                    .get();
                 
-                if (firebaseInitialized) {
-                    q = q.where("status", "==", "completed");
-                    if (typeof q.orderBy === 'function') {
-                        q = q.orderBy("completedAt", "desc");
-                    }
+                if (slotsQuery.empty) {
+                    showNotification('Instructor is not available for now. Try again later.', 'warning');
+                    return;
                 }
                 
-                q.onSnapshot((snapshot) => {
-                    transactionsList.innerHTML = snapshot.empty ? '<p>No transactions yet.</p>' : '';
-                    
-                    snapshot.forEach(docSnap => {
-                        const transaction = { id: docSnap.id, ...docSnap.data() };
-                        const transactionEl = document.createElement('div');
-                        transactionEl.className = 'session-card';
-                        transactionEl.style.cssText = `
-                            display: flex;
-                            justify-content: space-between;
-                            align-items: center;
-                            padding: 1.5rem;
-                            border: 1px solid var(--border-color);
-                            border-radius: 12px;
-                            margin-bottom: 1rem;
-                            transition: all 0.3s;
-                        `;
-                        
-                        const completedDate = transaction.completedAt?.toDate ? transaction.completedAt.toDate() : new Date();
-                        const finalAmount = transaction.finalAmount || transaction.hourlyRate || 5000;
-                        const commission = Math.round(finalAmount * 0.1);
-                        const instructorEarning = Math.round(finalAmount * 0.9);
-                        
-                        transactionEl.innerHTML = `
-                            <div>
-                                <h4 style="margin: 0 0 0.5rem 0; color: var(--color-secondary);">Transaction #${transaction.id.substr(-6).toUpperCase()}</h4>
-                                <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">${transaction.studentName || 'Student'} → ${transaction.instructorName || 'Instructor'}</p>
-                                <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Completed: ${completedDate.toLocaleString()}</p>
-                                <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem; font-weight: 600;">Total: ₦${finalAmount.toLocaleString()}</p>
-                            </div>
-                            <div style="text-align: right;">
-                                <p style="margin: 0; color: var(--success-color); font-size: 0.9rem; font-weight: 600;">Commission (10%): ₦${commission.toLocaleString()}</p>
-                                <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Instructor (90%): ₦${instructorEarning.toLocaleString()}</p>
-                                <span class="session-status status-completed" style="padding: 0.25rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">
-                                    Completed
-                                </span>
-                            </div>
-                        `;
-                        transactionsList.appendChild(transactionEl);
-                    });
+                // Load mentor's available time slots into calendar
+                const events = [];
+                slotsQuery.forEach(doc => {
+                    const slotData = doc.data();
+                    if (slotData.timeSlots && Array.isArray(slotData.timeSlots)) {
+                        slotData.timeSlots.forEach(slot => {
+                            const eventDate = new Date(slotData.date + 'T' + slot.time);
+                            events.push({
+                                title: `Available - $${slot.rate}/hr`,
+                                start: eventDate,
+                                end: new Date(eventDate.getTime() + 60 * 60 * 1000), // 1 hour
+                                backgroundColor: '#10b981',
+                                borderColor: '#059669',
+                                extendedProps: {
+                                    available: true,
+                                    mentorId: mentorId,
+                                    timeSlot: slot,
+                                    rate: slot.rate
+                                }
+                            });
+                        });
+                    }
                 });
+                
+                if (events.length === 0) {
+                    showNotification('Instructor has no available time slots. Try again later.', 'warning');
+                    return;
+                }
+                
+                // Update calendar with mentor's availability
+                if (calendar) {
+                    calendar.removeAllEvents();
+                    calendar.addEventSource(events);
+                    showNotification(`Showing ${events.length} available slots for this instructor`, 'success');
+                }
+                
             } catch (error) {
-                console.error('Error loading transactions:', error);
-                transactionsList.innerHTML = '<p>Error loading transactions. Please refresh the page.</p>';
+                console.error('Error loading mentor availability:', error);
+                showNotification('Error loading instructor availability. Try again later.', 'error');
+            }
+        };
+
+        // Add notification system
+        function showNotification(message, type = 'info') {
+            // Remove existing notification
+            const existing = document.querySelector('.slide-notification');
+            if (existing) existing.remove();
+            
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = 'slide-notification';
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <span class="notification-icon">${type === 'success' ? '✅' : type === 'warning' ? '⚠️' : type === 'error' ? '❌' : 'ℹ️'}</span>
+                    <span class="notification-message">${message}</span>
+                    <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
+                </div>
+            `;
+            
+            // Add styles
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: -400px;
+                width: 350px;
+                background: ${type === 'success' ? '#10b981' : type === 'warning' ? '#f59e0b' : type === 'error' ? '#ef4444' : '#6366f1'};
+                color: white;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                transition: right 0.3s ease;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            `;
+            
+            notification.querySelector('.notification-content').style.cssText = `
+                display: flex;
+                align-items: center;
+                padding: 16px;
+                gap: 12px;
+            `;
+            
+            notification.querySelector('.notification-message').style.cssText = `
+                flex: 1;
+                font-size: 14px;
+                font-weight: 500;
+            `;
+            
+            notification.querySelector('.notification-close').style.cssText = `
+                background: none;
+                border: none;
+                color: white;
+                font-size: 18px;
+                cursor: pointer;
+                padding: 0;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                transition: background-color 0.2s;
+            `;
+            
+            // Add to page
+            document.body.appendChild(notification);
+            
+            // Slide in
+            setTimeout(() => {
+                notification.style.right = '20px';
+            }, 100);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.style.right = '-400px';
+                    setTimeout(() => notification.remove(), 300);
+                }
+            }, 5000);
+        }
+
+        // Enhanced booking system that allows multiple concurrent bookings
+        window.bookSession = async function(timeSlot, eventStart) {
+            console.log('📅 Booking session:', timeSlot, eventStart);
+            
+            try {
+                // Get proper student name from user data
+                const studentName = currentUserData?.displayName || 
+                                  currentUserData?.name || 
+                                  currentUserData?.email?.split('@')[0] || 
+                                  'Student';
+                
+                // Generate unique booking ID for this specific request
+                const bookingId = `${timeSlot.mentorId || window.selectedMentorId}_${eventStart.getTime()}_${currentUser.uid}_${Date.now()}`;
+                
+                // Create booking request with unique identifier
+                const bookingData = {
+                    bookingId: bookingId,
+                    studentId: currentUser.uid,
+                    studentName: studentName,
+                    instructorId: timeSlot.mentorId || window.selectedMentorId || 'unknown',
+                    sessionDate: eventStart,
+                    timeSlot: timeSlot.time,
+                    hourlyRate: timeSlot.rate || 50,
+                    status: 'negotiating',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    message: 'I would like to book this mentorship session.',
+                    slotId: `${timeSlot.mentorId || window.selectedMentorId}_${eventStart.getTime()}` // For tracking multiple bookings on same slot
+                };
+                
+                // Add booking to Firestore (allows multiple bookings for same time slot)
+                const bookingRef = await db.collection("bookings").add(bookingData);
+                console.log('📋 Booking created with ID:', bookingRef.id, 'Data:', bookingData);
+                
+                showNotification('Session booking request sent! The instructor can accept multiple students for this time slot.', 'success');
+                
+                // Update calendar to show booking status without querying (to avoid permissions issues)
+                if (calendar) {
+                    const events = calendar.getEvents();
+                    events.forEach(event => {
+                        if (event.start.getTime() === eventStart.getTime()) {
+                            // Get current pending count from event properties
+                            const currentPending = event.extendedProps.pendingBookings || 0;
+                            const newPendingCount = currentPending + 1;
+                            
+                            // Update title to show booking count
+                            const baseTitle = event.title.replace(/ \(\d+ pending\)| \(\d+ booked\)/g, '');
+                            event.setProp('title', `${baseTitle} (${newPendingCount} pending)`);
+                            
+                            // Color coding based on booking count
+                            if (newPendingCount === 1) {
+                                event.setProp('backgroundColor', '#f59e0b'); // Orange for 1 booking
+                                event.setProp('borderColor', '#d97706');
+                            } else if (newPendingCount >= 2) {
+                                event.setProp('backgroundColor', '#ef4444'); // Red for multiple bookings
+                                event.setProp('borderColor', '#dc2626');
+                            }
+                            
+                            // Keep slot available for more bookings
+                            event.setExtendedProp('pendingBookings', newPendingCount);
+                            event.setExtendedProp('available', true); // Always keep available
+                        }
+                    });
+                }
+                
+            } catch (error) {
+                console.error('Error booking session:', error);
+                showNotification('Failed to book session. Please try again.', 'error');
+            }
+        };
+
+function loadCompletedSessions() {
+    const completedList = document.getElementById('completedSessionsList');
+
+    if (!currentUser) return;
+
+    try {
+        let q = db.collection("bookings").where("instructorId", "==", currentUser.uid);
+
+        if (firebaseInitialized) {
+            q = q.where("status", "==", "completed");
+            if (typeof q.orderBy === 'function') {
+                q = q.orderBy("completedAt", "desc");
             }
         }
+        
+        q.onSnapshot((snapshot) => {
+            completedList.innerHTML = snapshot.empty ? '<p>No completed sessions yet.</p>' : '';
+            
+            snapshot.forEach(docSnap => {
+                const session = { id: docSnap.id, ...docSnap.data() };
+                const sessionEl = document.createElement('div');
+                sessionEl.className = 'session-card';
+                sessionEl.style.cssText = `
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 1.5rem;
+                    border: 1px solid var(--border-color);
+                    border-radius: 12px;
+                    margin-bottom: 1rem;
+                    transition: all 0.3s;
+                `;
+                
+                const completedDate = session.completedAt?.toDate ? session.completedAt.toDate() : new Date();
+                const finalAmount = session.finalAmount || session.hourlyRate || 5000;
+                
+                sessionEl.innerHTML = `
+                    <div>
+                        <h4 style="margin: 0 0 0.5rem 0; color: var(--color-secondary);">Session with ${session.studentName || 'Student'}</h4>
+                        <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Completed: ${completedDate.toLocaleString()}</p>
+                        <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem; font-weight: 600;">Earned: ₦${Math.round(finalAmount * 0.9).toLocaleString()}</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <span class="session-status status-completed" style="padding: 0.25rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">
+                            Completed
+                        </span>
+                    </div>
+                `;
+                completedList.appendChild(sessionEl);
+            });
+        });
+    } catch (error) {
+        console.error('Error loading completed sessions:', error);
+        completedList.innerHTML = '<p>Error loading sessions. Please refresh the page.</p>';
+    }
+}
 
         async function loadAllMentors() {
             const mentorsList = document.getElementById('adminMentorsList');
@@ -1681,8 +2319,880 @@
 
         function openChat(sessionId, partnerId, partnerName) {
             console.log('Opening chat:', sessionId, partnerId, partnerName);
-            // Will implement chat functionality in next step
+            
+            // Show chat sidebar
+            const chatSidebar = document.getElementById('chatSidebar');
+            const chatMessages = document.getElementById('chatMessages');
+            
+            if (!chatSidebar) {
+                console.error('❌ Chat sidebar not found');
+                return;
+            }
+            
+            if (!chatMessages) {
+                console.error('❌ Chat messages container not found');
+                return;
+            }
+            
+            // Animate chat sidebar opening
+            chatSidebar.style.display = 'flex';
+            chatSidebar.style.animation = 'slideInRight 0.3s ease';
+            
+            // Update active conversation in sidebar
+            updateActiveConversation(partnerName);
+            
+            // Update chat header with user info
+            const chatHeader = document.querySelector('.chat-header h3');
+            const userAvatar = document.querySelector('.user-avatar');
+            const userStatus = document.querySelector('.chat-header p');
+            
+            if (chatHeader) {
+                chatHeader.textContent = `${partnerName || 'User'}`;
+            }
+            
+            if (userAvatar) {
+                const initials = (partnerName || 'U').split(' ').map(n => n[0]).join('').toUpperCase();
+                userAvatar.textContent = initials;
+                userAvatar.style.background = `linear-gradient(45deg, ${getRandomColor()}, ${getRandomColor()})`;
+            }
+            
+            if (userStatus) {
+                userStatus.textContent = 'Active Session';
+                userStatus.style.color = 'rgba(255,255,255,0.9)';
+            }
+            
+            // Load chat messages
+            loadChatMessages(sessionId);
+            
+            // Set current chat session
+            window.currentChatSession = sessionId;
+            window.currentChatPartner = { id: partnerId, name: partnerName || 'User' };
+            
+            // Check for agreement button
+            checkForAgreementButton(sessionId);
+            
+            // Focus on input
+            setTimeout(() => {
+                const chatInput = document.getElementById('chatInput');
+                if (chatInput) chatInput.focus();
+            }, 300);
         }
+        
+        // Update active conversation in sidebar
+        function updateActiveConversation(partnerName) {
+            const conversationItem = document.querySelector('.conversation-item');
+            if (conversationItem) {
+                const nameElement = conversationItem.querySelector('h4');
+                const messageElement = conversationItem.querySelector('p');
+                const avatar = conversationItem.querySelector('img');
+                
+                if (nameElement) nameElement.textContent = partnerName || 'Professional Support';
+                if (messageElement) messageElement.textContent = 'Active mentorship session';
+                if (avatar) {
+                    const initials = (partnerName || 'Support').split(' ').map(n => n[0]).join('');
+                    avatar.src = `https://ui-avatars.com/api/?name=${initials}&background=667eea&color=fff&size=45&rounded=true`;
+                }
+            }
+        }
+        
+        // Helper function for random colors
+        function getRandomColor() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        function loadChatMessages(sessionId) {
+            const chatMessages = document.getElementById('chatMessages');
+            if (!chatMessages) return;
+            
+            // Listen for real-time chat messages
+            db.collection("chats")
+                .where("sessionId", "==", sessionId)
+                .orderBy("timestamp", "asc")
+                .onSnapshot((snapshot) => {
+                    chatMessages.innerHTML = '';
+                    
+                    if (snapshot.empty) {
+                        chatMessages.innerHTML = `
+                            <div style="text-align: center; padding: 3rem; color: #666;">
+                                <i class="fas fa-comments" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+                                <p style="margin: 0; font-size: 1.1rem; font-weight: 500;">No messages yet</p>
+                                <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #999;">Start the conversation!</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    let lastDate = null;
+                    snapshot.forEach(doc => {
+                        const message = doc.data();
+                        const isCurrentUser = message.senderId === currentUser.uid;
+                        const timestamp = message.timestamp?.toDate ? message.timestamp.toDate() : new Date();
+                        const messageDate = timestamp.toDateString();
+                        
+                        // Add date separator if needed
+                        if (lastDate !== messageDate) {
+                            const dateSeparator = document.createElement('div');
+                            dateSeparator.style.cssText = `
+                                text-align: center;
+                                margin: 1.5rem 0;
+                                position: relative;
+                            `;
+                            dateSeparator.innerHTML = `
+                                <span style="
+                                    background: rgba(255,255,255,0.9);
+                                    padding: 0.3rem 1rem;
+                                    border-radius: 15px;
+                                    font-size: 0.8rem;
+                                    color: #666;
+                                    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                                ">${messageDate === new Date().toDateString() ? 'Today' : messageDate}</span>
+                            `;
+                            chatMessages.appendChild(dateSeparator);
+                            lastDate = messageDate;
+                        }
+                        
+                        const messageEl = document.createElement('div');
+                        messageEl.className = `message-bubble ${isCurrentUser ? 'message-sent' : 'message-received'}`;
+                        
+                        const timeString = timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                        const senderName = isCurrentUser ? 'You' : (message.senderName || 'User');
+                        
+                        messageEl.innerHTML = `
+                            <div style="font-size: 0.9rem; line-height: 1.4;">${message.text}</div>
+                            <div class="message-time" style="${isCurrentUser ? 'text-align: right;' : 'text-align: left;'}">
+                                ${senderName} • ${timeString}
+                            </div>
+                            ${isCurrentUser ? '<div class="message-status"><i class="fas fa-check" style="color: rgba(255,255,255,0.7);"></i></div>' : ''}
+                        `;
+                        
+                        chatMessages.appendChild(messageEl);
+                    });
+                    
+                    // Smooth scroll to bottom
+                    chatMessages.scrollTo({
+                        top: chatMessages.scrollHeight,
+                        behavior: 'smooth'
+                    });
+                });
+        }
+
+        function checkForAgreementButton(sessionId) {
+            // Get booking details to check status
+            db.collection("bookings").doc(sessionId).get().then(doc => {
+                if (doc.exists) {
+                    const booking = doc.data();
+                    const chatInput = document.querySelector('.chat-input');
+                    
+                    // Remove existing agreement button
+                    const existingBtn = document.querySelector('.agreement-button');
+                    if (existingBtn) existingBtn.remove();
+                    
+                    // Show agreement button if booking is confirmed and no agreement exists
+                    if (booking.status === 'confirmed' && !booking.agreementSigned) {
+                        const agreementBtn = document.createElement('div');
+                        agreementBtn.className = 'agreement-button';
+                        agreementBtn.innerHTML = `
+                            <button onclick="openAgreementForm('${sessionId}')" style="
+                                background: linear-gradient(135deg, #10b981, #059669);
+                                color: white;
+                                border: none;
+                                padding: 12px 24px;
+                                border-radius: 8px;
+                                font-weight: 600;
+                                cursor: pointer;
+                                width: 100%;
+                                margin-bottom: 10px;
+                                box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+                                transition: all 0.2s ease;
+                            " onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(16, 185, 129, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 4px rgba(16, 185, 129, 0.3)'">
+                                📝 Finalize Agreement & Sign Contract
+                            </button>
+                        `;
+                        
+                        chatInput.parentNode.insertBefore(agreementBtn, chatInput);
+                    }
+                }
+            });
+        }
+
+        window.openAgreementForm = function(sessionId) {
+            // Create agreement modal
+            const modal = document.createElement('div');
+            modal.className = 'agreement-modal';
+            modal.innerHTML = `
+                <div class="modal-overlay" onclick="closeAgreementModal()"></div>
+                <div class="modal-content" style="
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: white;
+                    border-radius: 16px;
+                    padding: 2rem;
+                    width: 90%;
+                    max-width: 600px;
+                    max-height: 80vh;
+                    overflow-y: auto;
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+                    z-index: 10001;
+                ">
+                    <h2 style="margin: 0 0 1.5rem 0; color: #1a1a1a;">Mentorship Agreement</h2>
+                    
+                    <form id="agreementForm">
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Session Duration (hours):</label>
+                            <input type="number" id="sessionDuration" min="1" max="8" value="1" required style="
+                                width: 100%;
+                                padding: 0.75rem;
+                                border: 1px solid #e0e0e0;
+                                border-radius: 8px;
+                                font-size: 1rem;
+                            ">
+                        </div>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Total Amount (₦):</label>
+                            <input type="number" id="totalAmount" required style="
+                                width: 100%;
+                                padding: 0.75rem;
+                                border: 1px solid #e0e0e0;
+                                border-radius: 8px;
+                                font-size: 1rem;
+                            ">
+                        </div>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Session Objectives:</label>
+                            <textarea id="sessionObjectives" rows="3" required style="
+                                width: 100%;
+                                padding: 0.75rem;
+                                border: 1px solid #e0e0e0;
+                                border-radius: 8px;
+                                font-size: 1rem;
+                                resize: vertical;
+                            " placeholder="What do you hope to achieve in this session?"></textarea>
+                        </div>
+                        
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="agreeTerms" required>
+                                <span>I agree to the terms and conditions of this mentorship session</span>
+                            </label>
+                        </div>
+                        
+                        <div style="display: flex; gap: 1rem;">
+                            <button type="button" onclick="closeAgreementModal()" style="
+                                flex: 1;
+                                padding: 0.75rem;
+                                border: 1px solid #e0e0e0;
+                                background: white;
+                                border-radius: 8px;
+                                cursor: pointer;
+                            ">Cancel</button>
+                            <button type="submit" style="
+                                flex: 1;
+                                padding: 0.75rem;
+                                background: #10b981;
+                                color: white;
+                                border: none;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                font-weight: 600;
+                            ">Sign Agreement</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 10000;
+            `;
+            
+            modal.querySelector('.modal-overlay').style.cssText = `
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Handle form submission
+            document.getElementById('agreementForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await signAgreement(sessionId);
+            });
+        };
+
+        window.closeAgreementModal = function() {
+            const modal = document.querySelector('.agreement-modal');
+            if (modal) modal.remove();
+        };
+
+        async function signAgreement(sessionId) {
+            try {
+                const duration = document.getElementById('sessionDuration').value;
+                const amount = document.getElementById('totalAmount').value;
+                const objectives = document.getElementById('sessionObjectives').value;
+                
+                // Update booking with agreement details
+                await db.collection("bookings").doc(sessionId).update({
+                    agreementSigned: true,
+                    sessionDuration: parseInt(duration),
+                    finalAmount: parseInt(amount),
+                    sessionObjectives: objectives,
+                    agreementDate: firebase.firestore.FieldValue.serverTimestamp(),
+                    status: 'agreed'
+                });
+                
+                // Add system message to chat
+                await db.collection("chats").add({
+                    sessionId: sessionId,
+                    senderId: 'system',
+                    senderName: 'System',
+                    text: `📋 Agreement signed! Session duration: ${duration}h, Amount: ₦${parseInt(amount).toLocaleString()}`,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    type: 'system'
+                });
+                
+                closeAgreementModal();
+                showNotification('Agreement signed successfully! Session is now finalized.', 'success');
+                
+            } catch (error) {
+                console.error('Error signing agreement:', error);
+                showNotification('Failed to sign agreement. Please try again.', 'error');
+            }
+        }
+
+        // Send chat message function with price detection
+        window.sendChatMessage = function() {
+            const messageInput = document.getElementById('chatInput');
+            const message = messageInput.value.trim();
+            
+            if (!message || !window.currentChatSession) return;
+            
+            // Add visual feedback
+            const sendButton = document.querySelector('[onclick="sendChatMessage()"]');
+            const originalContent = sendButton.innerHTML;
+            sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            sendButton.disabled = true;
+            
+            // Clear input immediately for better UX
+            messageInput.value = '';
+            
+            // Check for price agreement in message
+            const priceMatch = message.match(/(?:₦|\$|USD|NGN)\s*(\d+(?:,\d{3})*(?:\.\d{2})?)/i) || 
+                             message.match(/(\d+(?:,\d{3})*(?:\.\d{2})?)\s*(?:₦|naira|dollars?|USD|NGN)/i);
+            
+            let messageType = 'text';
+            let agreedPrice = null;
+            
+            if (priceMatch && (message.toLowerCase().includes('agree') || message.toLowerCase().includes('accept') || message.toLowerCase().includes('deal'))) {
+                messageType = 'price_agreement';
+                agreedPrice = priceMatch[1].replace(/,/g, '');
+            }
+            
+            db.collection("chats").add({
+                sessionId: window.currentChatSession,
+                senderId: currentUser.uid,
+                senderName: currentUserData?.displayName || currentUserData?.name || currentUserData?.email?.split('@')[0] || 'User',
+                text: message,
+                messageType: messageType,
+                agreedPrice: agreedPrice,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                status: 'sent'
+            }).then(() => {
+                // Reset button
+                sendButton.innerHTML = originalContent;
+                sendButton.disabled = false;
+                
+                // Show payment section if price agreed
+                if (messageType === 'price_agreement') {
+                    showPaymentSection(agreedPrice);
+                    showNotification('Price agreement detected! Payment option available.', 'success');
+                } else {
+                    showNotification('Message sent!', 'success');
+                }
+            }).catch(error => {
+                console.error('Error sending message:', error);
+                // Restore message if failed
+                messageInput.value = message;
+                sendButton.innerHTML = originalContent;
+                sendButton.disabled = false;
+                showNotification('Failed to send message. Please try again.', 'error');
+            });
+        };
+        
+        // Show payment section when price is agreed
+        function showPaymentSection(agreedPrice) {
+            const paymentSection = document.getElementById('paymentSection');
+            const agreedRateElement = document.getElementById('agreedRate');
+            
+            if (paymentSection && agreedRateElement) {
+                agreedRateElement.textContent = `₦${agreedPrice}/hour`;
+                paymentSection.style.display = 'block';
+                
+                // Store agreed price globally
+                window.agreedPrice = agreedPrice;
+            }
+        }
+        
+        // Initiate payment process
+        window.initiatePayment = function() {
+            if (!window.agreedPrice) {
+                showNotification('No agreed price found', 'error');
+                return;
+            }
+            
+            // Here you would integrate with Paystack or your payment provider
+            showNotification('Redirecting to payment gateway...', 'info');
+            
+            // Placeholder for Paystack integration
+            setTimeout(() => {
+                showNotification('Payment feature will be integrated with Paystack', 'info');
+            }, 1000);
+        };
+
+        // Goal-based mentor matching functionality
+        let selectedGoals = [];
+
+        window.selectGoal = function(goalType) {
+            const goalCard = document.querySelector(`[data-goal="${goalType}"]`);
+            const clearBtn = document.getElementById('clearGoalsBtn');
+            
+            if (selectedGoals.includes(goalType)) {
+                // Deselect goal
+                selectedGoals = selectedGoals.filter(g => g !== goalType);
+                goalCard.style.border = '2px solid #e2e8f0';
+                goalCard.style.background = 'white';
+                goalCard.style.transform = 'scale(1)';
+            } else {
+                // Select goal
+                selectedGoals.push(goalType);
+                goalCard.style.border = '2px solid #667eea';
+                goalCard.style.background = 'linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.05))';
+                goalCard.style.transform = 'scale(1.02)';
+            }
+            
+            // Show/hide clear button
+            clearBtn.style.display = selectedGoals.length > 0 ? 'inline-flex' : 'none';
+            
+            // Filter mentors based on selected goals
+            filterMentorsByGoals();
+        };
+
+        window.clearGoalSelection = function() {
+            selectedGoals = [];
+            document.querySelectorAll('.goal-card').forEach(card => {
+                card.style.border = '2px solid #e2e8f0';
+                card.style.background = 'white';
+                card.style.transform = 'scale(1)';
+            });
+            document.getElementById('clearGoalsBtn').style.display = 'none';
+            
+            // Show all mentors
+            filterMentorsByGoals();
+        };
+
+        function filterMentorsByGoals() {
+            const mentorsGrid = document.getElementById('memberInstructorList');
+            if (!mentorsGrid) return;
+            
+            // Get current mentors data
+            const demoMentors = [
+                {
+                    id: 'demo1',
+                    name: 'Dr. Sarah Johnson',
+                    expertise: 'Career Development & Leadership',
+                    bio: 'Former Fortune 500 executive with 15+ years experience in leadership development and C-suite transitions.',
+                    rating: 4.9,
+                    sessions: 127,
+                    hourlyRate: 75,
+                    avatar: 'https://ui-avatars.com/api/?name=Sarah+Johnson&background=667eea&color=fff&size=150',
+                    expertiseTags: ['Leadership', 'Career Growth', 'Executive Coaching', 'Team Management', 'Performance Review'],
+                    languages: ['English', 'Spanish'],
+                    availability: 'Mon-Fri 9AM-5PM EST',
+                    responseTime: '< 2 hours',
+                    totalReviews: 142,
+                    achievements: ['Top 1% Mentor', 'Leadership Expert', 'Career Catalyst'],
+                    publications: ['The Executive Mindset', 'Career Acceleration Strategies'],
+                    goalCategories: ['career']
+                },
+                {
+                    id: 'demo2',
+                    name: 'Michael Chen',
+                    expertise: 'Tech & Software Engineering',
+                    bio: 'Senior Software Architect at Google, specializing in system design and career growth in tech.',
+                    rating: 4.8,
+                    sessions: 89,
+                    hourlyRate: 85,
+                    avatar: 'https://ui-avatars.com/api/?name=Michael+Chen&background=10b981&color=fff&size=150',
+                    expertiseTags: ['System Design', 'Software Architecture', 'Tech Career', 'Code Review', 'Team Leadership'],
+                    languages: ['English', 'Mandarin'],
+                    availability: 'Tue-Thu 2PM-8PM EST',
+                    responseTime: '< 4 hours',
+                    totalReviews: 76,
+                    achievements: ['Tech Excellence', 'System Design Expert', 'Code Mentor'],
+                    publications: ['Scalable System Design', 'The Tech Career Guide'],
+                    goalCategories: ['tech', 'career']
+                },
+                {
+                    id: 'demo3',
+                    name: 'Emily Rodriguez',
+                    expertise: 'Business Strategy & Entrepreneurship',
+                    bio: 'Serial entrepreneur and business consultant, helped launch 20+ successful startups with $50M+ exits.',
+                    rating: 4.9,
+                    sessions: 156,
+                    hourlyRate: 95,
+                    avatar: 'https://ui-avatars.com/api/?name=Emily+Rodriguez&background=f59e0b&color=fff&size=150',
+                    expertiseTags: ['Startup Strategy', 'Fundraising', 'Product-Market Fit', 'Scaling', 'Exit Strategy'],
+                    languages: ['English', 'Portuguese'],
+                    availability: 'Mon-Wed 10AM-6PM EST',
+                    responseTime: '< 1 hour',
+                    totalReviews: 187,
+                    achievements: ['Startup Unicorn', 'Funding Expert', 'Exit Specialist'],
+                    publications: ['Zero to Unicorn Playbook', 'Fundraising Secrets'],
+                    goalCategories: ['business', 'career']
+                }
+            ];
+            
+            // Filter mentors based on selected goals
+            let filteredMentors = demoMentors;
+            if (selectedGoals.length > 0) {
+                filteredMentors = demoMentors.filter(mentor => 
+                    mentor.goalCategories && mentor.goalCategories.some(cat => selectedGoals.includes(cat))
+                );
+            }
+            
+            // Display filtered mentors
+            displayFilteredMentors(filteredMentors);
+            
+            // Show notification
+            if (selectedGoals.length > 0) {
+                const goalNames = selectedGoals.map(g => {
+                    const goalMap = {
+                        'career': 'Career Growth',
+                        'tech': 'Tech & Engineering', 
+                        'business': 'Entrepreneurship',
+                        'academic': 'Academic Research'
+                    };
+                    return goalMap[g];
+                }).join(', ');
+                showNotification(`Showing ${filteredMentors.length} mentors for: ${goalNames}`, 'info');
+            }
+        }
+
+        function displayFilteredMentors(mentors) {
+            const mentorsGrid = document.getElementById('memberInstructorList');
+            if (!mentorsGrid) return;
+            
+            mentorsGrid.innerHTML = mentors.map(mentor => `
+                <div class="mentor-card" onclick="selectMentor('${mentor.id}')" style="
+                    background: white;
+                    border: 1px solid #e0e0e0;
+                    border-radius: 12px;
+                    padding: 20px;
+                    margin-bottom: 16px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                        <img src="${mentor.avatar}" alt="${mentor.name}" style="
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 50%;
+                            margin-right: 15px;
+                            object-fit: cover;
+                        ">
+                        <div>
+                            <h3 style="margin: 0; color: #1a1a1a; font-size: 18px; font-weight: 600;">${mentor.name}</h3>
+                            <p style="margin: 4px 0 0 0; color: #6366f1; font-size: 14px; font-weight: 500;">${mentor.expertise}</p>
+                        </div>
+                    </div>
+                    <p style="margin: 0 0 12px 0; color: #666; font-size: 14px; line-height: 1.4;">${mentor.bio}</p>
+                    
+                    ${mentor.expertiseTags ? `
+                    <div style="margin-bottom: 12px;">
+                        ${mentor.expertiseTags.slice(0, 3).map(tag => `
+                            <span style="
+                                display: inline-block;
+                                background: linear-gradient(135deg, #667eea, #764ba2);
+                                color: white;
+                                padding: 4px 8px;
+                                border-radius: 12px;
+                                font-size: 11px;
+                                font-weight: 500;
+                                margin-right: 6px;
+                                margin-bottom: 4px;
+                            ">${tag}</span>
+                        `).join('')}
+                        ${mentor.expertiseTags.length > 3 ? `<span style="color: #888; font-size: 11px;">+${mentor.expertiseTags.length - 3} more</span>` : ''}
+                    </div>
+                    ` : ''}
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <div style="display: flex; align-items: center; gap: 12px; font-size: 12px;">
+                            <span style="color: #f59e0b;">⭐ ${mentor.rating}</span>
+                            <span style="color: #888;">${mentor.totalReviews || mentor.sessions} reviews</span>
+                            ${mentor.responseTime ? `<span style="color: #10b981;">🕒 ${mentor.responseTime}</span>` : ''}
+                        </div>
+                        <span style="color: #10b981; font-weight: 600; font-size: 14px;">₦${mentor.hourlyRate * 100}/hr</span>
+                    </div>
+                    
+                    ${mentor.achievements ? `
+                    <div style="display: flex; gap: 4px; margin-bottom: 8px;">
+                        ${mentor.achievements.slice(0, 2).map(achievement => `
+                            <span style="
+                                background: rgba(16, 185, 129, 0.1);
+                                color: #059669;
+                                padding: 2px 6px;
+                                border-radius: 8px;
+                                font-size: 10px;
+                                font-weight: 600;
+                            ">🏆 ${achievement}</span>
+                        `).join('')}
+                    </div>
+                    ` : ''}
+                    
+                    ${mentor.languages ? `
+                    <div style="font-size: 11px; color: #666; margin-top: 8px;">
+                        <span>🌐 ${mentor.languages.join(', ')}</span>
+                        ${mentor.availability ? `<span style="margin-left: 12px;">📅 ${mentor.availability}</span>` : ''}
+                    </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+        
+        // Close chat sidebar function
+        window.closeChatSidebar = function() {
+            const chatSidebar = document.getElementById('chatSidebar');
+            if (chatSidebar) {
+                chatSidebar.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    chatSidebar.style.display = 'none';
+                    chatSidebar.style.transform = 'translateX(0)';
+                }, 300);
+            }
+        };
+
+        // Minimize chat function
+        window.minimizeChat = function() {
+            const chatSidebar = document.getElementById('chatSidebar');
+            if (chatSidebar) {
+                chatSidebar.style.height = '60px';
+                chatSidebar.style.overflow = 'hidden';
+                setTimeout(() => {
+                    chatSidebar.style.height = '100vh';
+                    chatSidebar.style.overflow = 'hidden';
+                }, 2000);
+            }
+        };
+        
+        // Cloudinary configuration
+        const CLOUDINARY_CONFIG = {
+            cloudName: 'dkd6x857p',
+            uploadPreset: 'Andrew Cares Village Hub'
+        };
+
+        // Attach file function with Cloudinary upload
+        window.attachFile = function() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*,video/*,audio/*,.pdf,.doc,.docx,.txt';
+            input.multiple = false;
+            
+            input.onchange = async function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                // Check file size (max 10MB)
+                if (file.size > 10 * 1024 * 1024) {
+                    showNotification('File size must be less than 10MB', 'error');
+                    return;
+                }
+                
+                // Show upload progress
+                const uploadNotification = showUploadProgress('Uploading file...');
+                
+                try {
+                    const uploadResult = await uploadToCloudinary(file, (progress) => {
+                        updateUploadProgress(uploadNotification, progress);
+                    });
+                    
+                    // Remove upload notification
+                    uploadNotification.remove();
+                    
+                    // Send file message
+                    await sendFileMessage(uploadResult);
+                    
+                    showNotification('File uploaded successfully!', 'success');
+                    
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    uploadNotification.remove();
+                    showNotification('Failed to upload file. Please try again.', 'error');
+                }
+            };
+            
+            input.click();
+        };
+
+        // Upload to Cloudinary
+        async function uploadToCloudinary(file, onProgress) {
+            return new Promise((resolve, reject) => {
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', CLOUDINARY_CONFIG.uploadPreset);
+                
+                const fileExtension = file.name.split('.').pop().toLowerCase();
+                let resourceType = 'auto';
+                
+                // Determine resource type
+                if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(fileExtension)) {
+                    resourceType = 'image';
+                } else if (['mp4', 'avi', 'mov', 'wmv', 'flv', 'webm'].includes(fileExtension)) {
+                    resourceType = 'video';
+                } else if (['mp3', 'wav', 'ogg', 'aac'].includes(fileExtension)) {
+                    resourceType = 'video'; // Cloudinary uses 'video' for audio
+                }
+                
+                const xhr = new XMLHttpRequest();
+                
+                xhr.upload.addEventListener('progress', (e) => {
+                    if (e.lengthComputable && onProgress) {
+                        const progress = Math.round((e.loaded / e.total) * 100);
+                        onProgress(progress);
+                    }
+                });
+                
+                xhr.addEventListener('load', () => {
+                    if (xhr.status === 200) {
+                        const response = JSON.parse(xhr.responseText);
+                        resolve({
+                            url: response.secure_url,
+                            publicId: response.public_id,
+                            resourceType: response.resource_type,
+                            format: response.format,
+                            originalFilename: file.name,
+                            fileSize: file.size
+                        });
+                    } else {
+                        reject(new Error('Upload failed'));
+                    }
+                });
+                
+                xhr.addEventListener('error', () => reject(new Error('Upload failed')));
+                
+                xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/${resourceType}/upload`);
+                xhr.send(formData);
+            });
+        }
+
+        // Send file message
+        async function sendFileMessage(uploadResult) {
+            const fileType = uploadResult.resourceType;
+            let messageContent = '';
+            
+            if (fileType === 'image') {
+                messageContent = `<div class="file-message image-message">
+                    <img src="${uploadResult.url}" alt="${uploadResult.originalFilename}" style="max-width: 250px; max-height: 200px; border-radius: 8px; cursor: pointer;" onclick="window.open('${uploadResult.url}', '_blank')">
+                    <p style="margin: 0.5rem 0 0 0; font-size: 0.8rem; opacity: 0.8;">${uploadResult.originalFilename}</p>
+                </div>`;
+            } else if (fileType === 'video') {
+                messageContent = `<div class="file-message video-message">
+                    <video controls style="max-width: 250px; max-height: 200px; border-radius: 8px;">
+                        <source src="${uploadResult.url}" type="video/${uploadResult.format}">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p style="margin: 0.5rem 0 0 0; font-size: 0.8rem; opacity: 0.8;">${uploadResult.originalFilename}</p>
+                </div>`;
+            } else {
+                messageContent = `<div class="file-message document-message" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer;" onclick="window.open('${uploadResult.url}', '_blank')">
+                    <i class="fas fa-file-alt" style="font-size: 2rem; color: #667eea;"></i>
+                    <div>
+                        <p style="margin: 0; font-weight: 500;">${uploadResult.originalFilename}</p>
+                        <p style="margin: 0; font-size: 0.8rem; opacity: 0.8;">${(uploadResult.fileSize / 1024 / 1024).toFixed(2)} MB</p>
+                    </div>
+                    <i class="fas fa-download" style="margin-left: auto; opacity: 0.6;"></i>
+                </div>`;
+            }
+            
+            return db.collection("chats").add({
+                sessionId: window.currentChatSession,
+                senderId: currentUser.uid,
+                senderName: currentUserData?.displayName || currentUserData?.name || currentUserData?.email?.split('@')[0] || 'User',
+                text: messageContent,
+                fileUrl: uploadResult.url,
+                fileName: uploadResult.originalFilename,
+                fileType: fileType,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                status: 'sent',
+                isFile: true
+            });
+        }
+
+        // Show upload progress notification
+        function showUploadProgress(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 12px;
+                z-index: 1001;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+                backdrop-filter: blur(10px);
+                min-width: 250px;
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <div style="flex: 1;">
+                        <p style="margin: 0; font-weight: 500;">${message}</p>
+                        <div style="background: rgba(255,255,255,0.3); height: 4px; border-radius: 2px; margin-top: 0.5rem; overflow: hidden;">
+                            <div class="upload-progress-bar" style="background: white; height: 100%; width: 0%; transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            return notification;
+        }
+
+        // Update upload progress
+        function updateUploadProgress(notification, progress) {
+            const progressBar = notification.querySelector('.upload-progress-bar');
+            if (progressBar) {
+                progressBar.style.width = progress + '%';
+            }
+        }
+
+        // Handle Enter key in chat input
+        document.addEventListener('DOMContentLoaded', () => {
+            const messageInput = document.getElementById('messageInput');
+            if (messageInput) {
+                messageInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        sendChatMessage();
+                    }
+                });
+            }
+        });
 
         // Add status styles
         const statusStyles = document.createElement('style');
