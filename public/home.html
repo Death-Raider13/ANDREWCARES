@@ -1536,27 +1536,437 @@
 
         <script src="https://widget.cloudinary.com/v2.0/global/all.js"
             type="text/javascript"></script>
+        
         <script type="module">
-            // --- Firebase & Cloudinary Imports ---
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js ";
-            import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js ";
-            import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, updateDoc, arrayUnion, arrayRemove, increment, deleteDoc, limit, where, setDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js ";
+            // Firebase SDK Imports
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+            import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+            import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, where, orderBy, limit, getDocs, serverTimestamp, onSnapshot, arrayUnion, arrayRemove, increment, writeBatch, deleteDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 
             // --- Configs ---
             const firebaseConfig = {
                 apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
                 authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-                  projectId: "%REACT_APP_FIREBASE_PROJECT_ID%",   
+                projectId: "andrew-cares-village-f4cb6",
                 storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
                 messagingSenderId: "255087116955",
                 appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
             };
             const CLOUDINARY_CONFIG = { cloudName: 'dkd6x857p', uploadPreset: 'Andrew Cares Village Hub' };
 
-            // --- App Initialization ---
+            // Initialize Firebase
             const app = initializeApp(firebaseConfig);
             const auth = getAuth(app);
             const db = getFirestore(app);
+
+            // Make Firebase functions available globally for notification service
+            window.firebase = {
+                firestore: {
+                    arrayUnion,
+                    arrayRemove,
+                    increment,
+                    serverTimestamp,
+                    collection,
+                    doc,
+                    getDoc,
+                    getDocs,
+                    addDoc,
+                    updateDoc,
+                    query,
+                    where,
+                    orderBy,
+                    limit,
+                    onSnapshot,
+                    writeBatch
+                }
+            };
+
+            // Notification Service - Embedded to avoid loading issues
+            class NotificationService {
+                constructor() {
+                    this.db = null;
+                    this.auth = null;
+                    this.currentUser = null;
+                    this.unsubscribeListeners = [];
+                    this.notificationTypes = {
+                        // User interactions
+                        MENTION: 'mention',
+                        COMMENT: 'comment', 
+                        LIKE: 'like',
+                        REPLY: 'reply',
+                        SHARE: 'share',
+                        
+                        // Admin notifications
+                        ADMIN_NEW_RESOURCE: 'admin_new_resource',
+                        ADMIN_LIVESTREAM: 'admin_livestream',
+                        INSTRUCTOR_APPLICATION_APPROVED: 'instructor_approved',
+                        INSTRUCTOR_APPLICATION_REJECTED: 'instructor_rejected',
+                        ADMIN_ANNOUNCEMENT: 'admin_announcement',
+                        
+                        // Instructor notifications
+                        INSTRUCTOR_BOOKING_ACCEPTED: 'booking_accepted',
+                        INSTRUCTOR_BOOKING_REJECTED: 'booking_rejected',
+                        INSTRUCTOR_NEW_COURSE: 'instructor_new_course',
+                        INSTRUCTOR_QUIZ_CREATED: 'instructor_quiz_created',
+                        INSTRUCTOR_LIVESTREAM: 'instructor_livestream',
+                        INSTRUCTOR_AGREEMENT_SIGNED: 'instructor_agreement_signed',
+                        STUDENT_PAYMENT_RECEIVED: 'student_payment_received',
+                        STUDENT_AGREEMENT_PENDING: 'student_agreement_pending',
+                        
+                        // General system notifications
+                        SYSTEM_UPDATE: 'system_update',
+                        MEMBERSHIP_UPDATED: 'membership_updated',
+                        COURSE_ENROLLMENT: 'course_enrollment'
+                    };
+                }
+
+                // Initialize the notification service
+                async initialize(firebaseAuth, firebaseDb) {
+                    this.auth = firebaseAuth;
+                    this.db = firebaseDb;
+                    
+                    // Listen for auth state changes
+                    this.auth.onAuthStateChanged((user) => {
+                        if (user) {
+                            this.currentUser = user;
+                            this.setupNotificationListener();
+                        } else {
+                            this.cleanup();
+                        }
+                    });
+                }
+
+                // Setup real-time notification listener
+                setupNotificationListener() {
+                    if (!this.currentUser || !this.db) return;
+
+                    const { onSnapshot, collection, query, where, orderBy, limit } = window.firebase.firestore;
+                    
+                    // Listen for notifications for current user
+                    const notificationsRef = collection(this.db, 'notifications');
+                    const q = query(
+                        notificationsRef,
+                        where('recipientId', '==', this.currentUser.uid),
+                        orderBy('createdAt', 'desc'),
+                        limit(50)
+                    );
+
+                    const unsubscribe = onSnapshot(q, (snapshot) => {
+                        const notifications = [];
+                        snapshot.forEach((doc) => {
+                            notifications.push({
+                                id: doc.id,
+                                ...doc.data()
+                            });
+                        });
+                        
+                        this.updateNotificationUI(notifications);
+                    }, (error) => {
+                        console.error('Error listening to notifications:', error);
+                    });
+
+                    this.unsubscribeListeners.push(unsubscribe);
+                }
+
+                // Create a new notification
+                async createNotification(recipientId, type, data) {
+                    if (!this.db || !this.currentUser) return;
+
+                    const { addDoc, collection, serverTimestamp } = window.firebase.firestore;
+
+                    const notification = {
+                        recipientId: recipientId,
+                        senderId: this.currentUser.uid,
+                        type: type,
+                        title: this.getNotificationTitle(type, data),
+                        message: this.getNotificationMessage(type, data),
+                        data: data,
+                        relatedId: data.postId || null,
+                        read: false,
+                        createdAt: serverTimestamp(),
+                        updatedAt: serverTimestamp()
+                    };
+
+                    try {
+                        await addDoc(collection(this.db, 'notifications'), notification);
+                        console.log('Notification created successfully with postId:', data.postId);
+                    } catch (error) {
+                        console.error('Error creating notification:', error);
+                    }
+                }
+
+                // Get notification title based on type
+                getNotificationTitle(type, data) {
+                    switch (type) {
+                        case this.notificationTypes.MENTION:
+                            return 'You were mentioned';
+                        case this.notificationTypes.COMMENT:
+                            return 'New comment on your post';
+                        case this.notificationTypes.LIKE:
+                            return 'Someone liked your post';
+                        case this.notificationTypes.REPLY:
+                            return 'New reply to your comment';
+                        case this.notificationTypes.SHARE:
+                            return 'Your post was shared';
+                        default:
+                            return 'New Notification';
+                    }
+                }
+
+                // Get notification message based on type
+                getNotificationMessage(type, data) {
+                    switch (type) {
+                        case this.notificationTypes.MENTION:
+                            return `${data.senderName} mentioned you in a post`;
+                        case this.notificationTypes.COMMENT:
+                            return `${data.senderName} commented on your post`;
+                        case this.notificationTypes.LIKE:
+                            return `${data.senderName} liked your post`;
+                        case this.notificationTypes.REPLY:
+                            return `${data.senderName} replied to your comment`;
+                        case this.notificationTypes.SHARE:
+                            return `${data.senderName} shared your post`;
+                        default:
+                            return 'You have a new notification';
+                    }
+                }
+
+                // Update notification UI
+                updateNotificationUI(notifications) {
+                    const unreadNotifications = notifications.filter(n => !n.read);
+                    const unreadCount = unreadNotifications.length;
+
+                    // Update notification badge
+                    this.updateNotificationBadge(unreadCount);
+                    
+                    // Update notification list
+                    this.updateNotificationList(notifications);
+                }
+
+                // Update notification badge count
+                updateNotificationBadge(count) {
+                    const badges = [
+                        document.getElementById('notificationBadge'),
+                        document.getElementById('mobileNotificationBadge')
+                    ];
+
+                    badges.forEach(badge => {
+                        if (badge) {
+                            if (count > 0) {
+                                badge.textContent = count > 99 ? '99+' : count.toString();
+                                badge.style.display = 'flex';
+                            } else {
+                                badge.style.display = 'none';
+                            }
+                        }
+                    });
+                }
+
+                // Update notification list in UI
+                updateNotificationList(notifications) {
+                    const lists = [
+                        document.getElementById('notificationList'),
+                        document.getElementById('mobileNotificationList')
+                    ];
+
+                    lists.forEach(list => {
+                        if (list) {
+                            if (notifications.length === 0) {
+                                list.innerHTML = '<div style="padding: 2rem; text-align: center; color: var(--text-secondary);">No notifications yet</div>';
+                            } else {
+                                list.innerHTML = notifications.map(notification => 
+                                    this.createNotificationHTML(notification)
+                                ).join('');
+                            }
+                        }
+                    });
+                }
+
+                // Create HTML for a single notification
+                createNotificationHTML(notification) {
+                    const timeAgo = this.getTimeAgo(notification.createdAt);
+                    const typeIcon = this.getNotificationIcon(notification.type);
+                    const unreadClass = notification.read ? '' : 'unread';
+
+                    return `
+                        <div class="notification-item ${unreadClass}" data-notification-id="${notification.id}">
+                            <div class="notification-avatar">
+                                <i class="fas ${typeIcon}"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-text">
+                                    <strong>${notification.title}</strong><br>
+                                    ${notification.message}
+                                </div>
+                                <div class="notification-time">${timeAgo}</div>
+                            </div>
+                            <div class="notification-type-icon ${notification.type}">
+                                <i class="fas ${typeIcon}"></i>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Get icon for notification type
+                getNotificationIcon(type) {
+                    const iconMap = {
+                        [this.notificationTypes.MENTION]: 'fa-at',
+                        [this.notificationTypes.COMMENT]: 'fa-comment',
+                        [this.notificationTypes.LIKE]: 'fa-heart',
+                        [this.notificationTypes.REPLY]: 'fa-reply',
+                        [this.notificationTypes.SHARE]: 'fa-share'
+                    };
+
+                    return iconMap[type] || 'fa-bell';
+                }
+
+                // Mark all notifications as read and delete them
+                async markAllAsRead() {
+                    if (!this.db || !this.currentUser) return;
+
+                    try {
+                        const { query, where, getDocs, writeBatch, doc, collection, deleteDoc } = window.firebase.firestore;
+                        const notificationsRef = collection(this.db, 'notifications');
+                        const q = query(
+                            notificationsRef,
+                            where('recipientId', '==', this.currentUser.uid)
+                        );
+
+                        const snapshot = await getDocs(q);
+                        const batch = writeBatch(this.db);
+
+                        snapshot.forEach((docSnapshot) => {
+                            batch.delete(doc(this.db, 'notifications', docSnapshot.id));
+                        });
+
+                        await batch.commit();
+                        
+                        // Clear local notifications array
+                        window.notifications = [];
+                        window.unreadCount = 0;
+                        
+                        // Update UI immediately
+                        if (window.updateNotificationUI) {
+                            window.updateNotificationUI();
+                        }
+                        
+                        console.log('All notifications deleted');
+                    } catch (error) {
+                        console.error('Error deleting all notifications:', error);
+                    }
+                }
+
+                // Get time ago string
+                getTimeAgo(timestamp) {
+                    if (!timestamp) return 'Just now';
+                    
+                    const notificationTime = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+                    const now = new Date();
+                    const diffMs = now - notificationTime;
+                    const diffMins = Math.floor(diffMs / 60000);
+                    const diffHours = Math.floor(diffMs / 3600000);
+                    const diffDays = Math.floor(diffMs / 86400000);
+
+                    if (diffMins < 1) return 'Just now';
+                    if (diffMins < 60) return `${diffMins}m ago`;
+                    if (diffHours < 24) return `${diffHours}h ago`;
+                    if (diffDays < 7) return `${diffDays}d ago`;
+                    return notificationTime.toLocaleDateString();
+                }
+
+                // Cleanup listeners
+                cleanup() {
+                    this.unsubscribeListeners.forEach(unsubscribe => unsubscribe());
+                    this.unsubscribeListeners = [];
+                    this.currentUser = null;
+                }
+
+                // Notification creation methods
+                async notifyLike(postOwnerId, postId) {
+                    if (postOwnerId === this.currentUser.uid) return; // Don't notify self
+                    
+                    await this.createNotification(postOwnerId, this.notificationTypes.LIKE, {
+                        senderName: this.currentUser.displayName || 'Someone',
+                        postId: postId
+                    });
+                }
+
+                async notifyComment(postOwnerId, postId, commentContent) {
+                    if (postOwnerId === this.currentUser.uid) return; // Don't notify self
+                    
+                    await this.createNotification(postOwnerId, this.notificationTypes.COMMENT, {
+                        senderName: this.currentUser.displayName || 'Someone',
+                        postId: postId,
+                        commentContent: commentContent.substring(0, 100) + '...'
+                    });
+                }
+            }
+
+            // Make NotificationService available globally
+            window.NotificationService = NotificationService;
+
+            // Enhanced connection error handling
+            let connectionRetries = 0;
+            const maxRetries = 3;
+
+            function handleFirebaseError(error) {
+                console.error('Firebase Error:', error);
+                
+                if (error.code === 'unavailable' || error.code === 'deadline-exceeded') {
+                    if (connectionRetries < maxRetries) {
+                        connectionRetries++;
+                        showNotification(`Connection issue. Retrying... (${connectionRetries}/${maxRetries})`, 'warning');
+                        return true; // Indicate retry should happen
+                    } else {
+                        showNotification('Unable to connect to server. Please check your internet connection and try again.', 'error');
+                    }
+                } else if (error.code === 'permission-denied') {
+                    showNotification('Access denied. Please contact support if this persists.', 'error');
+                } else {
+                    showNotification('An unexpected error occurred. Please try again.', 'error');
+                }
+                return false;
+            }
+
+            function showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    color: white;
+                    font-weight: 500;
+                    z-index: 10000;
+                    max-width: 300px;
+                    word-wrap: break-word;
+                `;
+                
+                switch(type) {
+                    case 'error':
+                        notification.style.backgroundColor = '#f44336';
+                        break;
+                    case 'warning':
+                        notification.style.backgroundColor = '#ff9800';
+                        break;
+                    case 'success':
+                        notification.style.backgroundColor = '#4caf50';
+                        break;
+                    default:
+                        notification.style.backgroundColor = '#2196f3';
+                }
+                
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 5000);
+            }
 
             // --- Global State ---
             let currentUser = null;
@@ -1566,32 +1976,97 @@
             let userResponse = null;
             let notifications = [];
             let unreadCount = 0;
+            let notificationService = null;
 
-            // --- Authentication & Page Bootstrapping ---
+            // Initialize Firebase and setup authentication
             onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    currentUser = user;
-                    const userSnap = await getDoc(doc(db, "users", user.uid));
-                    if (userSnap.exists()) {
-                        currentUserData = userSnap.data();
-                        updateUserActivity();
-                        renderPage(currentUserData);
-                        loadDynamicContent();
-                        setupNotificationListener();
-                        document.getElementById('loader').style.display = 'none';
-                        document.getElementById('mainContent').classList.remove('hidden');
+                try {
+                    console.log('Auth state changed:', user ? 'User logged in' : 'User logged out');
+                    
+                    if (user) {
+                        currentUser = user;
+                        console.log('Getting user document for:', user.uid);
+                        
+                        // Get user data
+                        const userDoc = await getDoc(doc(db, "users", user.uid));
+                        if (userDoc.exists()) {
+                            currentUserData = userDoc.data();
+                            console.log('User data loaded:', currentUserData.name);
+                            
+                            // Initialize NotificationService
+                            console.log('Initializing NotificationService...');
+                            notificationService = new NotificationService();
+                            await notificationService.initialize(auth, db);
+                            console.log('NotificationService initialized');
+                            
+                            // Update UI with user info
+                            console.log('Rendering page...');
+                            renderPage(currentUserData);
+                            
+                            // Setup real-time listeners
+                            console.log('Setting up listeners...');
+                            setupPostUpdateListener();
+                            setupNotificationListener();
+                            setupNotificationSystem();
+                            
+                            // Load initial data
+                            console.log('Loading initial data...');
+                            loadPosts();
+                            loadTrendingHashtags();
+                            loadOnlineMembers();
+                            
+                            // Initialize mobile widgets
+                            console.log('Initializing mobile widgets...');
+                            initializeMobileWidgets();
+                            
+                            // Initialize mobile menus
+                            console.log('Initializing mobile menus...');
+                            initializeMobileMenus();
+                            
+                            // Listen for active question
+                            console.log('Setting up question listener...');
+                            listenForActiveQuestion();
+                            
+                            // Show main content
+                            console.log('Showing main content...');
+                            const loadingScreen = document.getElementById('loader');
+                            const mainContent = document.getElementById('mainContent');
+                            if (loadingScreen) {
+                                loadingScreen.style.display = 'none';
+                                console.log('Loading screen hidden');
+                            }
+                            if (mainContent) {
+                                mainContent.classList.remove('hidden');
+                                mainContent.style.display = 'block';
+                                console.log('Main content shown');
+                            }
+                            console.log('Page initialization complete!');
+                        } else {
+                            console.error('User document does not exist');
+                            // Create user document or redirect to setup
+                            window.location.href = 'index.html';
+                        }
                     } else {
+                        // User is signed out
+                        console.log('User not authenticated, redirecting to index.html');
                         window.location.href = 'index.html';
                     }
-                } else {
-                    window.location.href = 'index.html';
+                } catch (error) {
+                    console.error('Error in auth state change handler:', error);
+                    // Hide loading screen even on error
+                    const loadingScreen = document.getElementById('loader');
+                    if (loadingScreen) {
+                        loadingScreen.style.display = 'none';
+                    }
+                    // Show error message
+                    alert('Error loading page: ' + error.message);
                 }
             });
 
             // --- Core Page Rendering ---
             function renderPage(userData) {
                 document.getElementById('userName').textContent = userData.name;
-                document.getElementById('userAvatar').src = userData.avatarUrl || `https://ui-avatars.com/api/?name= ${encodeURIComponent(userData.name)}`;
+                document.getElementById('userAvatar').src = userData.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name)}`;
                 const userRoleBadge = document.getElementById('userRoleBadge');
                 if (userData.role && userData.role !== 'user') {
                     userRoleBadge.textContent = userData.role.charAt(0).toUpperCase() + userData.role.slice(1);
@@ -1604,7 +2079,6 @@
                 createPostWidget(userData);
                 setupHeaderEventListeners();
                 setDailyQuote();
-                setupNotificationSystem();
             }
 
             // --- Event Listeners & UI Setup ---
@@ -1792,7 +2266,7 @@
                 widget.className = 'widget create-post-widget';
                 widget.innerHTML = `
                     <div class="post-header">
-                        <img src="${userData.avatarUrl || `https://ui-avatars.com/api/?name= ${encodeURIComponent(userData.name)}`}" alt="Your Avatar" class="user-avatar">
+                        <img src="${userData.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name)}`}" alt="Your Avatar" class="user-avatar">
                         <textarea id="postContent" placeholder="What's on your mind, ${userData.name}?"></textarea>
                     </div>
                     <div class="media-preview" id="mediaPreview"></div>
@@ -1847,24 +2321,62 @@
                 setupMentionFunctionality(postContent);
             }
 
-            // --- NOTIFICATION SYSTEM ---
+            // --- ENHANCED NOTIFICATION SYSTEM ---
+            async function initializeNotificationService() {
+                // Initialize the notification service
+                notificationService = new NotificationService();
+                await notificationService.initialize(auth, db);
+                
+                // Setup UI event listeners
+                setupNotificationSystem();
+            }
+
             function setupNotificationSystem() {
                 const notificationBell = document.getElementById('notificationBell');
                 const notificationDropdown = document.getElementById('notificationDropdown');
                 const markAllReadBtn = document.getElementById('markAllReadBtn');
+                const mobileMarkAllReadBtn = document.getElementById('mobileMarkAllReadBtn');
 
-                notificationBell.addEventListener('click', (e) => {
+                if (!notificationBell || !notificationDropdown) {
+                    console.error('Notification elements not found');
+                    return;
+                }
+
+                // Clear any existing listeners
+                notificationBell.replaceWith(notificationBell.cloneNode(true));
+                const freshNotificationBell = document.getElementById('notificationBell');
+                const freshNotificationDropdown = document.getElementById('notificationDropdown');
+
+                freshNotificationBell.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    notificationDropdown.classList.toggle('show');
+                    console.log('Notification bell clicked');
+                    console.log('Current notifications:', notifications);
+                    freshNotificationDropdown.classList.toggle('show');
                 });
 
-                markAllReadBtn.addEventListener('click', markAllNotificationsAsRead);
+                if (markAllReadBtn) {
+                    markAllReadBtn.addEventListener('click', () => {
+                        if (notificationService) {
+                            notificationService.markAllAsRead();
+                        }
+                    });
+                }
+
+                if (mobileMarkAllReadBtn) {
+                    mobileMarkAllReadBtn.addEventListener('click', () => {
+                        if (notificationService) {
+                            notificationService.markAllAsRead();
+                        }
+                    });
+                }
 
                 document.addEventListener('click', (e) => {
-                    if (!notificationBell.contains(e.target)) {
-                        notificationDropdown.classList.remove('show');
+                    if (!freshNotificationBell.contains(e.target) && !freshNotificationDropdown.contains(e.target)) {
+                        freshNotificationDropdown.classList.remove('show');
                     }
                 });
+
+                console.log('Notification system setup completed');
             }
 
             function setupNotificationListener() {
@@ -1872,7 +2384,7 @@
                 const q = query(
                     notificationsRef, 
                     where('recipientId', '==', currentUser.uid),
-                    orderBy('timestamp', 'desc'),
+                    orderBy('createdAt', 'desc'),
                     limit(50)
                 );
 
@@ -1888,6 +2400,7 @@
                         }
                     });
 
+                    console.log('Notifications loaded:', notifications.length, notifications);
                     updateNotificationUI();
                 });
             }
@@ -1920,16 +2433,18 @@
                         No notifications yet
                     </div>` :
                     notifications.map(notification => {
-                        const timeAgo = getTimeAgo(notification.timestamp?.toDate());
+                        const timeAgo = getTimeAgo(notification.createdAt?.toDate() || notification.timestamp?.toDate());
                         const iconClass = getNotificationIcon(notification.type);
+                        const postId = notification.data?.postId || notification.relatedId || '';
                         
                         return `
                             <div class="notification-item ${!notification.read ? 'unread' : ''}" 
-                                 onclick="handleNotificationClick('${notification.id}', '${notification.type}', '${notification.relatedId || ''}')">
-                                <img src="${notification.senderAvatar || `https://ui-avatars.com/api/?name= ${encodeURIComponent(notification.senderName || 'User')}`}" 
-                                     class="notification-avatar" alt="${notification.senderName}">
+                                 onclick="handleNotificationClick('${notification.id}', '${notification.type}', '${postId}')" 
+                                 style="cursor: pointer;">
+                                <img src="${notification.data?.senderAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(notification.data?.senderName || 'User')}`}" 
+                                     class="notification-avatar" alt="${notification.data?.senderName || 'User'}">
                                 <div class="notification-content">
-                                    <div class="notification-text">${notification.message}</div>
+                                    <div class="notification-text">${notification.message || notification.title}</div>
                                     <div class="notification-time">${timeAgo}</div>
                                 </div>
                                 <div class="notification-type-icon ${notification.type}">
@@ -2003,51 +2518,54 @@
                 }
             }
 
-            function handleNotificationClick(notificationId, type, relatedId) {
-                // Mark as read
-                updateDoc(doc(db, 'notifications', notificationId), { read: true });
+            async function handleNotificationClick(notificationId, type, relatedId) {
+                console.log('Notification clicked:', { notificationId, type, relatedId });
                 
-                // Close mobile hamburger menu if open
-                const mobileWidgetsMenu = document.getElementById('mobileWidgetsMenu');
-                const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
-                if (mobileWidgetsMenu && mobileWidgetsMenu.classList.contains('show')) {
-                    mobileWidgetsMenu.classList.remove('show');
-                    mobileMenuOverlay.classList.remove('show');
-                    document.body.style.overflow = '';
-                }
-                
-                // Close desktop dropdown
-                const notificationDropdown = document.getElementById('notificationDropdown');
-                if (notificationDropdown) {
-                    notificationDropdown.classList.remove('show');
-                }
-                
-                // Navigate based on type
-                switch (type) {
-                    case 'like':
-                    case 'comment':
-                    case 'reply':
-                    case 'share':
-                    case 'mention':
-                        if (relatedId && relatedId !== 'null' && relatedId !== '') {
-                            // First try to scroll to the post if it's already loaded
-                            const postElement = document.getElementById(`post-${relatedId}`);
-                            if (postElement) {
-                                postElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                // Highlight the post briefly
-                                postElement.style.backgroundColor = 'rgba(179, 139, 0, 0.1)';
-                                setTimeout(() => {
-                                    postElement.style.backgroundColor = '';
-                                }, 2000);
+                try {
+                    // Mark as read and delete from Firestore
+                    await deleteDoc(doc(db, 'notifications', notificationId));
+                    
+                    // Remove from local notifications array
+                    notifications = notifications.filter(n => n.id !== notificationId);
+                    
+                    // Update UI immediately
+                    updateNotificationUI();
+                    
+                    // Close mobile hamburger menu if open
+                    const mobileWidgetsMenu = document.getElementById('mobileWidgetsMenu');
+                    const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+                    if (mobileWidgetsMenu && mobileWidgetsMenu.classList.contains('show')) {
+                        mobileWidgetsMenu.classList.remove('show');
+                        mobileMenuOverlay.classList.remove('show');
+                        document.body.style.overflow = '';
+                    }
+                    
+                    // Close desktop dropdown
+                    const notificationDropdown = document.getElementById('notificationDropdown');
+                    if (notificationDropdown) {
+                        notificationDropdown.classList.remove('show');
+                    }
+                    
+                    // Navigate based on type
+                    switch (type) {
+                        case 'like':
+                        case 'comment':
+                        case 'reply':
+                        case 'share':
+                        case 'mention':
+                            if (relatedId && relatedId !== 'null' && relatedId !== '') {
+                                console.log('Scrolling to post:', relatedId);
+                                scrollToPost(relatedId);
                             } else {
-                                // If post not found, reload the page to ensure it's loaded
-                                window.location.reload();
+                                console.log('No relatedId found for notification');
                             }
-                        }
-                        break;
-                    default:
-                        // For other notification types, just close menus
-                        break;
+                            break;
+                        default:
+                            console.log('Unknown notification type:', type);
+                            break;
+                    }
+                } catch (error) {
+                    console.error('Error handling notification click:', error);
                 }
             }
 
@@ -2170,7 +2688,7 @@
                     sharedContent = `
                         <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; margin-top: 1rem; background: var(--hover-bg);">
                             <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-                                <img src="${post.sharedPost.authorAvatar || `https://ui-avatars.com/api/?name= ${encodeURIComponent(post.sharedPost.authorName)}`}" 
+                                <img src="${post.sharedPost.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(post.sharedPost.authorName)}`}" 
                                      style="width: 24px; height: 24px; border-radius: 50%;">
                                 <strong style="font-size: 0.9rem;">${post.sharedPost.authorName}</strong>
                             </div>
@@ -2183,7 +2701,7 @@
                 postCard.innerHTML = `
                     <div class="post-header">
                         <div class="post-author-info">
-                            <img src="${post.authorAvatar || `https://ui-avatars.com/api/?name= ${encodeURIComponent(post.authorName)}`}" alt="${post.authorName}" class="user-avatar">
+                            <img src="${post.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(post.authorName)}`}" alt="${post.authorName}" class="user-avatar">
                             <div>
                                 <strong>${post.authorName}</strong>
                                 ${post.isShared ? '<span style="color: var(--text-secondary); font-size: 0.8rem;"> shared a post</span>' : ''}
@@ -2251,7 +2769,7 @@
                             let avatarHtml = '<div class="online-avatar-stack">';
                             membersToShow.forEach(doc => {
                                 const member = doc.data();
-                                avatarHtml += `<img src="${member.avatarUrl || `https://ui-avatars.com/api/?name= ${encodeURIComponent(member.name)}`}" alt="${member.name}" title="${member.name}" class="online-avatar">`;
+                                avatarHtml += `<img src="${member.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}`}" alt="${member.name}" title="${member.name}" class="online-avatar">`;
                             });
                             avatarHtml += '</div>';
                             let textHtml = totalOnline > maxAvatarsToShow ? `<span class="online-text-more">+${totalOnline - maxAvatarsToShow} more online</span>` : '';
@@ -2345,7 +2863,7 @@
                 
                 container.innerHTML = `
                     <div class="comment-input-container">
-                        <img src="${currentUserData.avatarUrl || `https://ui-avatars.com/api/?name= ${encodeURIComponent(currentUserData.name)}`}" class="user-avatar" style="width:32px;height:32px;">
+                        <img src="${currentUserData.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUserData.name)}`}" class="user-avatar" style="width:32px;height:32px;">
                         <input type="text" class="comment-input" id="comment-input-${postId}" placeholder="Write a comment...">
                         <button class="comment-submit-btn" onclick="window.submitComment('${postId}')"><i class="fas fa-paper-plane"></i></button>
                     </div>
@@ -2424,7 +2942,7 @@
                 return `
                     <div class="comment-thread">
                         <div class="comment-item">
-                            <img src="${comment.authorAvatar || `https://ui-avatars.com/api/?name= ${encodeURIComponent(comment.authorName)}`}" 
+                            <img src="${comment.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(comment.authorName)}`}" 
                                  class="user-avatar" style="width:32px;height:32px;">
                             <div class="comment-content">
                                 <div class="comment-bubble">
@@ -2440,7 +2958,7 @@
                             </div>
                         </div>
                         <div class="reply-input-container" id="reply-input-${comment.id}">
-                            <img src="${currentUserData.avatarUrl || `https://ui-avatars.com/api/?name= ${encodeURIComponent(currentUserData.name)}`}" 
+                            <img src="${currentUserData.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUserData.name)}`}" 
                                  class="user-avatar" style="width:28px;height:28px;">
                             <input type="text" class="reply-input" id="reply-input-field-${comment.id}" placeholder="Write a reply...">
                             <button class="reply-submit-btn" onclick="window.submitReply('${postId}', '${comment.id}')">
@@ -2511,7 +3029,7 @@
                         
                         usersSnapshot.forEach(doc => {
                             const user = doc.data();
-                            if (user.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+                            if (user.name && user.name.toLowerCase().includes(searchTerm.toLowerCase())) {
                                 users.push({ id: doc.id, ...user });
                             }
                         });
@@ -2529,7 +3047,7 @@
                         
                         mentionDropdown.innerHTML = users.slice(0, 5).map((user, index) => `
                             <div class="mention-item ${index === 0 ? 'selected' : ''}" data-user-id="${user.id}" data-user-name="${user.name}">
-                                <img src="${user.avatarUrl || `https://ui-avatars.com/api/?name= ${encodeURIComponent(user.name)}`}" class="mention-avatar">
+                                <img src="${user.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}`}" class="mention-avatar">
                                 <div class="mention-info">
                                     <div class="mention-name">${user.name}</div>
                                     <div class="mention-username">@${user.name.toLowerCase().replace(/\s+/g, '')}</div>
@@ -2644,7 +3162,7 @@
                     
                     usersSnapshot.forEach(doc => {
                         const user = doc.data();
-                        if (user.name.toLowerCase().includes(query.toLowerCase())) {
+                        if (user.name && user.name.toLowerCase().includes(query.toLowerCase())) {
                             userResults.push({ id: doc.id, ...user });
                         }
                     });
@@ -2675,7 +3193,7 @@
                 if (peopleResults) {
                     peopleResults.innerHTML = users.slice(0, 5).map(user => `
                         <div class="search-result-item" onclick="viewProfile('${user.id}')">
-                            <img src="${user.avatarUrl || `https://ui-avatars.com/api/?name= ${encodeURIComponent(user.name)}`}" 
+                            <img src="${user.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}`}" 
                                  style="width: 32px; height: 32px; border-radius: 50%;">
                             <span>${user.name}</span>
                         </div>
@@ -2829,13 +3347,16 @@
                         });
                         
                         // Create notification for original post author
-                        createNotification(
-                            postData.authorId,
-                            currentUser.uid,
-                            'share',
-                            `${currentUserData.name} shared your post`,
-                            currentSharePostId
-                        );
+                        if (notificationService) {
+                            await notificationService.createNotification(
+                                postData.authorId,
+                                notificationService.notificationTypes.SHARE,
+                                {
+                                    senderName: currentUserData.name,
+                                    postId: postId
+                                }
+                            );
+                        }
                         
                         closeShareModal();
                     }
@@ -2922,7 +3443,35 @@
             function scrollToPost(postId) {
                 const element = document.getElementById(`post-${postId}`);
                 if (element) {
-                    element.scrollIntoView({ behavior: 'smooth' });
+                    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    // Highlight the post briefly
+                    element.style.backgroundColor = 'rgba(179, 139, 0, 0.1)';
+                    element.style.transition = 'background-color 0.3s ease';
+                    setTimeout(() => {
+                        element.style.backgroundColor = '';
+                        setTimeout(() => {
+                            element.style.transition = '';
+                        }, 300);
+                    }, 2000);
+                } else {
+                    // If post not found, try to load it by refreshing the feed
+                    console.log(`Post ${postId} not found, refreshing feed...`);
+                    loadPosts();
+                    // Try again after a short delay
+                    setTimeout(() => {
+                        const retryElement = document.getElementById(`post-${postId}`);
+                        if (retryElement) {
+                            retryElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            retryElement.style.backgroundColor = 'rgba(179, 139, 0, 0.1)';
+                            retryElement.style.transition = 'background-color 0.3s ease';
+                            setTimeout(() => {
+                                retryElement.style.backgroundColor = '';
+                                setTimeout(() => {
+                                    retryElement.style.transition = '';
+                                }, 300);
+                            }, 2000);
+                        }
+                    }, 1000);
                 }
             }
 
@@ -2942,14 +3491,8 @@
         });
         
         // Create notification for like (only if not unliking)
-        if (!isLiked && postData.authorId !== currentUser.uid) {
-            createNotification(
-                postData.authorId,
-                currentUser.uid,
-                'like',
-                `${currentUserData.name} liked your post`,
-                postId
-            );
+        if (!isLiked && postData.authorId !== currentUser.uid && notificationService) {
+            await notificationService.notifyLike(postData.authorId, postId);
         }
         
         // Update UI immediately
@@ -3010,7 +3553,7 @@ window.submitComment = async (postId) => {
             mentions: processedContent.mentions,
             authorId: currentUser.uid, 
             authorName: currentUserData.name,
-            authorAvatar: currentUserData.avatarUrl, 
+            authorAvatar: currentUserData.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUserData.name)}`, 
             timestamp: serverTimestamp()
         });
         
@@ -3025,28 +3568,32 @@ window.submitComment = async (postId) => {
             const postData = postSnap.data();
             
             // Create notification for post author
-            if (postData.authorId !== currentUser.uid) {
-                createNotification(
-                    postData.authorId,
-                    currentUser.uid,
-                    'comment',
-                    `${currentUserData.name} commented on your post`,
-                    postId
-                );
+            if (postData.authorId !== currentUser.uid && notificationService) {
+                console.log('Creating comment notification for post author:', postData.authorId, 'postId:', postId);
+                await notificationService.notifyComment(postData.authorId, postId, processedContent.text);
+            } else {
+                console.log('Skipping notification - same user or no notificationService:', {
+                    isOwnPost: postData.authorId === currentUser.uid,
+                    hasNotificationService: !!notificationService
+                });
             }
             
             // Create notifications for mentions
-            processedContent.mentions.forEach(mention => {
-                if (mention.userId && mention.userId !== currentUser.uid) {
-                    createNotification(
-                        mention.userId,
-                        currentUser.uid,
-                        'mention',
-                        `${currentUserData.name} mentioned you in a comment`,
-                        postId
-                    );
-                }
-            });
+            if (notificationService) {
+                processedContent.mentions.forEach(async (mention) => {
+                    if (mention.userId && mention.userId !== currentUser.uid) {
+                        await notificationService.createNotification(
+                            mention.userId,
+                            notificationService.notificationTypes.MENTION,
+                            {
+                                senderName: currentUserData.name,
+                                postId: postId,
+                                commentContent: processedContent.text.substring(0, 100) + '...'
+                            }
+                        );
+                    }
+                });
+            }
         }
         
         input.value = '';
@@ -3113,7 +3660,7 @@ function setupPostUpdateListener() {
                         mentions: processedContent.mentions,
                         authorId: currentUser.uid, 
                         authorName: currentUserData.name,
-                        authorAvatar: currentUserData.avatarUrl, 
+                        authorAvatar: currentUserData.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUserData.name)}`, 
                         timestamp: serverTimestamp(),
                         parentId: parentCommentId
                     });
@@ -3126,28 +3673,34 @@ function setupPostUpdateListener() {
                         const parentCommentData = parentCommentSnap.data();
                         
                         // Create notification for parent comment author
-                        if (parentCommentData.authorId !== currentUser.uid) {
-                            createNotification(
+                        if (parentCommentData.authorId !== currentUser.uid && notificationService) {
+                            await notificationService.createNotification(
                                 parentCommentData.authorId,
-                                currentUser.uid,
-                                'reply',
-                                `${currentUserData.name} replied to your comment`,
-                                postId
+                                notificationService.notificationTypes.REPLY,
+                                {
+                                    senderName: currentUserData.name,
+                                    postId: postId,
+                                    commentContent: processedContent.text.substring(0, 100) + '...'
+                                }
                             );
                         }
                         
                         // Create notifications for mentions
-                        processedContent.mentions.forEach(mention => {
-                            if (mention.userId && mention.userId !== currentUser.uid) {
-                                createNotification(
-                                    mention.userId,
-                                    currentUser.uid,
-                                    'mention',
-                                    `${currentUserData.name} mentioned you in a reply`,
-                                    postId
-                                );
-                            }
-                        });
+                        if (notificationService) {
+                            processedContent.mentions.forEach(async (mention) => {
+                                if (mention.userId && mention.userId !== currentUser.uid) {
+                                    await notificationService.createNotification(
+                                        mention.userId,
+                                        notificationService.notificationTypes.MENTION,
+                                        {
+                                            senderName: currentUserData.name,
+                                            postId: postId,
+                                            commentContent: processedContent.text.substring(0, 100) + '...'
+                                        }
+                                    );
+                                }
+                            });
+                        }
                     }
                     
                     input.value = '';
@@ -3455,5 +4008,7 @@ function setupPostUpdateListener() {
             });
 
         </script>
+        <!-- Hybrid AI Chat Widget -->
+        <script src="js/advanced-hybrid-chat.js"></script>
     </body>
 </html>

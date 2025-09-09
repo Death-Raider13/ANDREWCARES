@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>1-on-1 Mentorship - Andrew Cares Village</title>
-    
+
     <!-- External Libraries -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script
+      src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <script src="https://js.paystack.co/v1/inline.js"></script>
     <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
-    
+
     <style>
         :root {
             --background-color: #F4F2ED;
@@ -65,23 +67,7 @@
             overflow-y: auto;
         }
 
-        .chat-sidebar {
-            width: 450px;
-            background: linear-gradient(145deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
-            border-left: 1px solid rgba(255,255,255,0.1);
-            box-shadow: -8px 0 32px rgba(0,0,0,0.25);
-            position: fixed;
-            right: 0;
-            top: 0;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            backdrop-filter: blur(15px);
-            z-index: 1000;
-            border-radius: 20px 0 0 20px;
-        }
-
+       
         /* Dashboard Headers */
         .dashboard-header {
             background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
@@ -201,43 +187,448 @@
             box-shadow: 0 0 0 2px rgba(179, 139, 0, 0.2);
         }
 
-        /* Chat Sidebar */
-        .sidebar-chat-header {
-            background-color: var(--color-primary);
-            color: white;
-            padding: 1rem;
-            text-align: center;
-            border-radius: 12px 12px 0 0;
-        }
+     /* ------ Professional Chat Sidebar ------ */
+.chat-sidebar{
+  width: 100%;
+  max-width: 420px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  right: -420px;
+  background: #ffffff;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-left: 1px solid #e5e7eb;
+  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter: blur(10px);
+}
 
-        .active-conversations {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1rem;
-        }
+.chat-sidebar.active {
+  right: 0;
+}
 
-        .conversation-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-bottom: 0.5rem;
-        }
+@media (min-width: 768px) {
+  .chat-sidebar {
+    width: 420px;
+    right: -420px;
+  }
+  
+  .chat-sidebar.active {
+    right: 0;
+  }
+}
 
-        .conversation-item:hover {
-            background-color: var(--hover-bg);
-        }
+@media (max-width: 767px) {
+  .chat-sidebar {
+    width: 90vw;
+    max-width: 350px;
+    right: -90vw;
+  }
+}
+.chat-sidebar-header{
+  padding: 1.5rem 1.25rem;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
 
-        .conversation-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
 
+.header-meta .avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+  font-size: 1.2rem;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.header-meta .avatar:hover {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.partner-name {
+  margin: 0 0 0.25rem 0;
+  font-weight: 600;
+  font-size: 1.1rem;
+  line-height: 1.2;
+}
+
+.status-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  background: #10b981;
+  border-radius: 50%;
+  display: inline-block;
+  animation: pulse 2s infinite;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+.status-text {
+  font-size: 0.8rem;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.header-actions button {
+  background: rgba(255, 255, 255, 0.15);
+  border: 0;
+  color: #ffffff;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.header-actions button:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.conversation-list {
+  flex-shrink: 0;
+  padding: 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+  max-height: 60px;
+  overflow: hidden;
+  background: #fafbfc;
+  transition: max-height 0.3s ease;
+}
+
+.conversation-list.expanded {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.conversation-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.conversation-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.conversation-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 2px;
+}
+
+.conversation-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 0.25rem;
+  border: 1px solid transparent;
+}
+
+.conversation-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  cursor: pointer;
+  background: #f8fafc;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.conversation-toggle:hover {
+  background: #e2e8f0;
+}
+
+.conversation-toggle i {
+  transition: transform 0.3s ease;
+}
+
+.conversation-list.expanded .conversation-toggle i {
+  transform: rotate(180deg);
+}
+
+.conversation-item:hover {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+.conversation-item:last-child {
+  margin-bottom: 0;
+}
+
+.conversation-item img {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #e2e8f0;
+  flex-shrink: 0;
+}
+
+.conversation-item .conversation-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.conversation-item .conversation-name {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #1e293b;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.conversation-item .conversation-preview {
+  font-size: 0.7rem;
+  color: #64748b;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  min-height: 0; /* Important for flex child to shrink */
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  scroll-behavior: smooth;
+  /* Remove max-height to allow proper flex behavior */
+}
+
+.chat-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+  background: #f8fafc;
+  border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+@media (max-width: 767px) {
+  .chat-messages {
+    padding: 1rem;
+    max-height: calc(100vh - 220px);
+  }
+}
+
+.empty-state {
+  text-align: center;
+  margin: auto;
+  color: #64748b;
+  padding: 2rem;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.6;
+  color: var(--color-primary);
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.empty-state small {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+/* ---- Enhanced Contract / Payment Strips ---- */
+.contract-strip {
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-top: 1px solid #e2e8f0;
+  flex-shrink: 0;
+  display: flex;
+  gap: 0.875rem;
+  align-items: center;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.payment-strip {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  padding: 1.25rem;
+  border-top: 1px solid #bae6fd;
+}
+
+.pay-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--color-primary) 0%, #d4af37 100%);
+  color: #ffffff;
+  border: 0;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(179, 139, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.pay-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(179, 139, 0, 0.4);
+}
+
+.pay-btn:active {
+  transform: translateY(0);
+}
+
+.chat-input-bar {
+  padding: 1.25rem;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  flex-shrink: 0;
+  display: flex;
+  gap: 0.875rem;
+  align-items: center;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+
+@media (max-width: 767px) {
+  .chat-input-bar {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+}
+
+.chat-input-bar input {
+  flex: 1;
+  border: 2px solid #e2e8f0;
+  border-radius: 24px;
+  padding: 0.875rem 1.25rem;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: #f8fafc;
+}
+
+.chat-input-bar input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(179, 139, 0, 0.1);
+}
+
+.chat-input-bar input::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.chat-input-bar button {
+  background: var(--color-primary);
+  color: #ffffff;
+  border: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(179, 139, 0, 0.3);
+}
+
+.chat-input-bar button:hover {
+  background: #9c7a00;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(179, 139, 0, 0.4);
+}
+
+.chat-input-bar button:active {
+  transform: translateY(0);
+}
         /* Responsive Design */
         @media (max-width: 1024px) {
             .mentorship-container {
@@ -251,15 +642,7 @@
                 min-height: 70vh;
             }
             
-            .chat-sidebar {
-                width: 100%;
-                height: 40vh;
-                min-height: 350px;
-                position: relative;
-                right: auto;
-                top: auto;
-                border-radius: 15px 15px 0 0;
-            }
+            
         }
 
         @media (max-width: 768px) {
@@ -272,340 +655,1132 @@
                 font-size: 0.85rem;
             }
         }
-    </style>
-</head>
+/* Enhanced Agreement Strip Styles */
+.agreement-strip {
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
 
-<body>
-    <!-- Firebase Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
+.agreement-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+}
+
+.agreement-content.success {
+    color: var(--success-color);
+}
+
+.agreement-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.agreement-summary {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 0.25rem;
+}
+
+.agreement-summary p {
+    margin: 0.1rem 0;
+}
+
+.agreement-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.download-strip {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    border-color: var(--success-color);
+}
+
+/* Loading dots animation */
+.loading-dots {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.loading-dots span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #d97706;
+    animation: loading-dot 1.4s infinite ease-in-out both;
+}
+
+.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes loading-dot {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+
+/* Notification styles */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem;
+    border-radius: 8px;
+    color: white;
+    z-index: 10000;
+    max-width: 400px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.notification.success { background-color: var(--success-color); }
+.notification.error { background-color: var(--error-color); }
+.notification.info { background-color: var(--info-color); }
+.notification.warning { background-color: var(--warning-color); }
+
+.notification-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Professional Agreement Modal Styles */
+.agreement-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.agreement-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    position: relative;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease-out;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #b45309 0%, #d97706 100%);
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+    border-radius: 16px 16px 0 0;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.modal-header p {
+    margin: 0.5rem 0 0 0;
+    opacity: 0.9;
+    font-size: 1rem;
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+.agreement-form h3 {
+    margin: 0 0 0.5rem 0;
+    color: #b45309;
+    font-size: 1.4rem;
+}
+
+.form-subtitle {
+    color: #6b7280;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    position: relative;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.9rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #d97706;
+    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+}
+
+.form-unit {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6b7280;
+    font-size: 0.9rem;
+    pointer-events: none;
+}
+
+.total-display {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #059669;
+    text-align: center;
+}
+
+.form-textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    min-height: 100px;
+    resize: vertical;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.form-textarea:focus {
+    outline: none;
+    border-color: #d97706;
+    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+}
+
+.agreement-summary-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.agreement-summary-card h3 {
+    margin: 0 0 1rem 0;
+    color: #b45309;
+    font-size: 1.3rem;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.75rem;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+}
+
+.summary-item label {
+    font-weight: 600;
+    color: #374151;
+    min-width: 120px;
+    flex-shrink: 0;
+}
+
+.summary-item span {
+    color: #1f2937;
+    text-align: right;
+    word-break: break-word;
+}
+
+.total-highlight {
+    font-weight: 700;
+    color: #059669;
+    font-size: 1.1rem;
+}
+
+.objectives-card, .terms-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.objectives-card h4, .terms-card h4 {
+    margin: 0 0 1rem 0;
+    color: #b45309;
+    font-size: 1.1rem;
+}
+
+.objectives-content {
+    color: #374151;
+    line-height: 1.5;
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #d97706;
+}
+
+.terms-list {
+    margin: 0;
+    padding-left: 1.5rem;
+    color: #374151;
+}
+
+.terms-list li {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.modal-footer {
+    padding: 1.5rem 2rem;
+    background: #f8fafc;
+    border-radius: 0 0 16px 16px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 1rem;
+    }
+    
+    .modal-header {
+        padding: 1.5rem;
+    }
+    
+    .modal-body {
+        padding: 1.5rem;
+    }
+    
+    .modal-footer {
+        padding: 1rem 1.5rem;
+        flex-direction: column;
+    }
+}
+/* download strip – shown only after both signed */
+.download-strip{
+  padding:1rem;
+  border-top:1px solid var(--border-color);
+  background:#f0f9ff;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.download-strip button{
+  background:var(--info-color);
+  color:#fff;
+  border:none;
+  padding:.5rem 1rem;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+    </style>
+  </head>
+
+  <body>
+    <!-- Error Handler (must load first) -->
+    <script src="js/error-handler.js"></script>
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
     <!-- Header -->
     <header class="main-header">
-        <a href="home.html" style="font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--color-secondary); text-decoration: none;">
-            Andrew Cares Village
-        </a>
+      <a href="home.html"
+        style="font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--color-secondary); text-decoration: none;">
+        Andrew Cares Village
+      </a>
     </header>
 
     <!-- Main Container -->
     <div class="mentorship-container">
-        <!-- Main Content Area -->
-        <div class="main-content">
-            <!-- Member View -->
-            <div id="memberView" class="hidden">
-                <div class="dashboard-header">
-                    <h1><i class="fas fa-graduation-cap"></i> Mentorship Portal</h1>
-                    <p>Connect with expert mentors for personalized guidance</p>
+      <!-- Main Content Area -->
+      <div class="main-content">
+        <!-- Member View -->
+        <div id="memberView" class="hidden">
+          <div class="dashboard-header">
+            <h1><i class="fas fa-graduation-cap"></i> Mentorship Portal</h1>
+            <p>Connect with expert mentors for personalized guidance</p>
+          </div>
+
+          <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('browse')">
+              <i class="fas fa-search"></i> Browse Mentors
+            </button>
+            <button class="tab-btn" onclick="switchTab('my-sessions')">
+              <i class="fas fa-calendar-alt"></i> My Sessions
+            </button>
+          </div>
+
+          <div id="browse-tab" class="tab-content active">
+            <div class="grid-2">
+              <div class="card">
+                <h2 class="section-title">Available Mentors</h2>
+                <div id="memberInstructorList">
+                  <p>Loading mentors...</p>
                 </div>
-                
-                <div class="tab-nav">
-                    <button class="tab-btn active" onclick="switchTab('browse')">
-                        <i class="fas fa-search"></i> Browse Mentors
-                    </button>
-                    <button class="tab-btn" onclick="switchTab('my-sessions')">
-                        <i class="fas fa-calendar-alt"></i> My Sessions
-                    </button>
+              </div>
+              <div class="card">
+                <h2 class="section-title" id="memberBookingTitle">Select a
+                  Mentor to Begin</h2>
+                <div id="memberCalendar"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="my-sessions-tab" class="tab-content">
+            <div class="card">
+              <h2 class="section-title">My Mentorship Sessions</h2>
+              <div id="memberSessionsList">
+                <p>You have no sessions yet.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Instructor View -->
+        <div id="instructorView" class="hidden">
+          <div class="dashboard-header">
+            <h1><i class="fas fa-chalkboard-teacher"></i> Mentor Dashboard</h1>
+            <p>Manage your mentorship sessions and availability</p>
+          </div>
+
+          <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('availability')">
+              <i class="fas fa-clock"></i> Set Availability
+            </button>
+            <button class="tab-btn" onclick="switchTab('bookings')">
+              <i class="fas fa-calendar-check"></i> Bookings
+            </button>
+            <button class="tab-btn" onclick="switchTab('completed')">
+              <i class="fas fa-trophy"></i> Completed
+            </button>
+          </div>
+
+          <div id="availability-tab" class="tab-content active">
+            <div class="card">
+              <h2 class="section-title">Set Your Availability</h2>
+              <div class="form-group">
+                <label for="availabilityDate">Select Date:</label>
+                <input type="date" id="availabilityDate" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="hourlyRate">Hourly Rate (₦):</label>
+                <input type="number" id="hourlyRate" class="form-control"
+                  placeholder="e.g., 5000" min="1000">
+                <small>Minimum rate: ₦1,000 per hour</small>
+              </div>
+              <button class="btn btn-primary" onclick="saveAvailability()">
+                <i class="fas fa-save"></i> Save Availability
+              </button>
+            </div>
+          </div>
+
+          <div id="bookings-tab" class="tab-content">
+            <div class="card">
+              <h2 class="section-title">Pending & Confirmed Bookings</h2>
+              <div id="instructorBookingsList">
+                <p>No bookings yet.</p>
+              </div>
+            </div>
+          </div>
+
+          <div id="completed-tab" class="tab-content">
+            <div class="card">
+              <h2 class="section-title">Completed Sessions</h2>
+              <div id="completedSessionsList">
+                <p>No completed sessions yet.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin View -->
+        <div id="adminView" class="hidden">
+          <div class="dashboard-header">
+            <h1><i class="fas fa-chart-line"></i> Admin Dashboard</h1>
+            <p>Monitor platform performance and commission earnings</p>
+          </div>
+
+          <div class="card">
+            <h2 class="section-title">Platform Statistics</h2>
+            <div id="adminStats">
+              <p>Loading statistics...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Goal-Based Mentor Matching Section -->
+        <div class="section" id="memberSection" style="display: none;">
+          <div class="container">
+            <h2
+              style="text-align: center; margin-bottom: 1rem; color: var(--color-secondary);">
+              <i class="fas fa-users"></i> Find Your Perfect Mentor
+            </h2>
+
+            <!-- Goal Selection Interface -->
+            <div
+              style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.05)); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; border: 1px solid rgba(102, 126, 234, 0.2);">
+              <h3
+                style="text-align: center; margin-bottom: 1.5rem; color: #334155; font-weight: 600;">What
+                are your mentorship goals?</h3>
+              <div id="goalSelection"
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                <div class="goal-card" data-goal="career"
+                  onclick="selectGoal('career')"
+                  style="padding: 1.5rem; background: white; border: 2px solid #e2e8f0; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.3s;">
+                  <div
+                    style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-chart-line"
+                      style="color: white; font-size: 1.5rem;"></i>
+                  </div>
+                  <h4 style="margin: 0 0 0.5rem 0; color: #334155;">Career
+                    Growth</h4>
+                  <p
+                    style="margin: 0; color: #64748b; font-size: 0.9rem;">Advance
+                    your career and leadership skills</p>
                 </div>
 
-                <div id="browse-tab" class="tab-content active">
-                    <div class="grid-2">
-                        <div class="card">
-                            <h2 class="section-title">Available Mentors</h2>
-                            <div id="memberInstructorList">
-                                <p>Loading mentors...</p>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <h2 class="section-title" id="memberBookingTitle">Select a Mentor to Begin</h2>
-                            <div id="memberCalendar"></div>
-                        </div>
-                    </div>
+                <div class="goal-card" data-goal="tech"
+                  onclick="selectGoal('tech')"
+                  style="padding: 1.5rem; background: white; border: 2px solid #e2e8f0; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.3s;">
+                  <div
+                    style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(135deg, #10b981, #059669); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-code"
+                      style="color: white; font-size: 1.5rem;"></i>
+                  </div>
+                  <h4 style="margin: 0 0 0.5rem 0; color: #334155;">Tech &
+                    Engineering</h4>
+                  <p
+                    style="margin: 0; color: #64748b; font-size: 0.9rem;">Master
+                    technical skills and system design</p>
                 </div>
 
-                <div id="my-sessions-tab" class="tab-content">
-                    <div class="card">
-                        <h2 class="section-title">My Mentorship Sessions</h2>
-                        <div id="memberSessionsList">
-                            <p>You have no sessions yet.</p>
-                        </div>
-                    </div>
+                <div class="goal-card" data-goal="business"
+                  onclick="selectGoal('business')"
+                  style="padding: 1.5rem; background: white; border: 2px solid #e2e8f0; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.3s;">
+                  <div
+                    style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-rocket"
+                      style="color: white; font-size: 1.5rem;"></i>
+                  </div>
+                  <h4
+                    style="margin: 0 0 0.5rem 0; color: #334155;">Entrepreneurship</h4>
+                  <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Build
+                    and scale successful businesses</p>
                 </div>
+
+                <div class="goal-card" data-goal="academic"
+                  onclick="selectGoal('academic')"
+                  style="padding: 1.5rem; background: white; border: 2px solid #e2e8f0; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.3s;">
+                  <div
+                    style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(135deg, #8b5cf6, #7c3aed); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-graduation-cap"
+                      style="color: white; font-size: 1.5rem;"></i>
+                  </div>
+                  <h4 style="margin: 0 0 0.5rem 0; color: #334155;">Academic
+                    Research</h4>
+                  <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Excel
+                    in research and publications</p>
+                </div>
+              </div>
+
+              <div style="text-align: center;">
+                <button id="clearGoalsBtn" onclick="clearGoalSelection()"
+                  style="padding: 0.75rem 1.5rem; background: rgba(100, 116, 139, 0.1); color: #64748b; border: 1px solid rgba(100, 116, 139, 0.3); border-radius: 8px; cursor: pointer; font-weight: 500; display: none;">
+                  <i class="fas fa-times" style="margin-right: 0.5rem;"></i>
+                  Clear Selection
+                </button>
+              </div>
             </div>
 
-            <!-- Instructor View -->
-            <div id="instructorView" class="hidden">
-                <div class="dashboard-header">
-                    <h1><i class="fas fa-chalkboard-teacher"></i> Mentor Dashboard</h1>
-                    <p>Manage your mentorship sessions and availability</p>
-                </div>
-                
-                <div class="tab-nav">
-                    <button class="tab-btn active" onclick="switchTab('availability')">
-                        <i class="fas fa-clock"></i> Set Availability
-                    </button>
-                    <button class="tab-btn" onclick="switchTab('bookings')">
-                        <i class="fas fa-calendar-check"></i> Bookings
-                    </button>
-                    <button class="tab-btn" onclick="switchTab('completed')">
-                        <i class="fas fa-trophy"></i> Completed
-                    </button>
-                </div>
-
-                <div id="availability-tab" class="tab-content active">
-                    <div class="card">
-                        <h2 class="section-title">Set Your Availability</h2>
-                        <div class="form-group">
-                            <label for="availabilityDate">Select Date:</label>
-                            <input type="date" id="availabilityDate" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="hourlyRate">Hourly Rate (₦):</label>
-                            <input type="number" id="hourlyRate" class="form-control" placeholder="e.g., 5000" min="1000">
-                            <small>Minimum rate: ₦1,000 per hour</small>
-                        </div>
-                        <button class="btn btn-primary" onclick="saveAvailability()">
-                            <i class="fas fa-save"></i> Save Availability
-                        </button>
-                    </div>
-                </div>
-
-                <div id="bookings-tab" class="tab-content">
-                    <div class="card">
-                        <h2 class="section-title">Pending & Confirmed Bookings</h2>
-                        <div id="instructorBookingsList">
-                            <p>No bookings yet.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="completed-tab" class="tab-content">
-                    <div class="card">
-                        <h2 class="section-title">Completed Sessions</h2>
-                        <div id="completedSessionsList">
-                            <p>No completed sessions yet.</p>
-                        </div>
-                    </div>
-                </div>
+            <div id="memberInstructorList"
+              style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem;">
+              <!-- Mentors will be loaded here -->
             </div>
-
-            <!-- Admin View -->
-            <div id="adminView" class="hidden">
-                <div class="dashboard-header">
-                    <h1><i class="fas fa-chart-line"></i> Admin Dashboard</h1>
-                    <p>Monitor platform performance and commission earnings</p>
-                </div>
-                
-                <div class="card">
-                    <h2 class="section-title">Platform Statistics</h2>
-                    <div id="adminStats">
-                        <p>Loading statistics...</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Goal-Based Mentor Matching Section -->
-            <div class="section" id="memberSection" style="display: none;">
-                <div class="container">
-                    <h2 style="text-align: center; margin-bottom: 1rem; color: var(--color-secondary);">
-                        <i class="fas fa-users"></i> Find Your Perfect Mentor
-                    </h2>
-                    
-                    <!-- Goal Selection Interface -->
-                    <div style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.05)); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; border: 1px solid rgba(102, 126, 234, 0.2);">
-                        <h3 style="text-align: center; margin-bottom: 1.5rem; color: #334155; font-weight: 600;">What are your mentorship goals?</h3>
-                        <div id="goalSelection" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-                            <div class="goal-card" data-goal="career" onclick="selectGoal('career')" style="padding: 1.5rem; background: white; border: 2px solid #e2e8f0; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.3s;">
-                                <div style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
-                                    <i class="fas fa-chart-line" style="color: white; font-size: 1.5rem;"></i>
-                                </div>
-                                <h4 style="margin: 0 0 0.5rem 0; color: #334155;">Career Growth</h4>
-                                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Advance your career and leadership skills</p>
-                            </div>
-                            
-                            <div class="goal-card" data-goal="tech" onclick="selectGoal('tech')" style="padding: 1.5rem; background: white; border: 2px solid #e2e8f0; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.3s;">
-                                <div style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(135deg, #10b981, #059669); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
-                                    <i class="fas fa-code" style="color: white; font-size: 1.5rem;"></i>
-                                </div>
-                                <h4 style="margin: 0 0 0.5rem 0; color: #334155;">Tech & Engineering</h4>
-                                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Master technical skills and system design</p>
-                            </div>
-                            
-                            <div class="goal-card" data-goal="business" onclick="selectGoal('business')" style="padding: 1.5rem; background: white; border: 2px solid #e2e8f0; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.3s;">
-                                <div style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
-                                    <i class="fas fa-rocket" style="color: white; font-size: 1.5rem;"></i>
-                                </div>
-                                <h4 style="margin: 0 0 0.5rem 0; color: #334155;">Entrepreneurship</h4>
-                                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Build and scale successful businesses</p>
-                            </div>
-                            
-                            <div class="goal-card" data-goal="academic" onclick="selectGoal('academic')" style="padding: 1.5rem; background: white; border: 2px solid #e2e8f0; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.3s;">
-                                <div style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(135deg, #8b5cf6, #7c3aed); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
-                                    <i class="fas fa-graduation-cap" style="color: white; font-size: 1.5rem;"></i>
-                                </div>
-                                <h4 style="margin: 0 0 0.5rem 0; color: #334155;">Academic Research</h4>
-                                <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Excel in research and publications</p>
-                            </div>
-                        </div>
-                        
-                        <div style="text-align: center;">
-                            <button id="clearGoalsBtn" onclick="clearGoalSelection()" style="padding: 0.75rem 1.5rem; background: rgba(100, 116, 139, 0.1); color: #64748b; border: 1px solid rgba(100, 116, 139, 0.3); border-radius: 8px; cursor: pointer; font-weight: 500; display: none;">
-                                <i class="fas fa-times" style="margin-right: 0.5rem;"></i>
-                                Clear Selection
-                            </button>
-                        </div>
-                    </div>
-
-                <div id="memberInstructorList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem;">
-                    <!-- Mentors will be loaded here -->
-                </div>
-            </div>
+          </div>
         </div>
 
         <!-- Access Denied View -->
         <div id="accessDeniedView" class="hidden">
-            <div class="dashboard-header">
-                <h1><i class="fas fa-lock"></i> Access Restricted</h1>
-                <p>This mentorship platform is available to registered members, instructors, and admins only.</p>
+          <div class="dashboard-header">
+            <h1><i class="fas fa-lock"></i> Access Restricted</h1>
+            <p>This mentorship platform is available to registered members,
+              instructors, and admins only.</p>
+          </div>
+          <div class="container">
+            <div class="card" style="text-align: center; padding: 3rem;">
+              <i class="fas fa-lock"
+                style="font-size: 4rem; color: var(--warning-color); margin-bottom: 1rem;"></i>
+              <h2>Access Restricted</h2>
+              <p>This mentorship platform is available to registered members,
+                instructors, and admins only.</p>
+              <a href="contact.html" class="btn btn-primary">
+                <i class="fas fa-envelope"></i> Contact Support
+              </a>
             </div>
-            <div class="container">
-                <div class="card" style="text-align: center; padding: 3rem;">
-                    <i class="fas fa-lock" style="font-size: 4rem; color: var(--warning-color); margin-bottom: 1rem;"></i>
-                    <h2>Access Restricted</h2>
-                    <p>This mentorship platform is available to registered members, instructors, and admins only.</p>
-                    <a href="contact.html" class="btn btn-primary">
-                        <i class="fas fa-envelope"></i> Contact Support
-                    </a>
-                </div>
-            </div>
+          </div>
         </div>
 
         <!-- Professional Chat Sidebar -->
-        <div class="chat-sidebar" id="chatSidebar" style="display: none;">
-            <!-- Chat List Header -->
-            <div class="sidebar-chat-header" style="padding: 1.5rem; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.15);">
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <div style="display: flex; align-items: center; gap: 0.8rem;">
-                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                            <i class="fas fa-comments" style="color: white; font-size: 1.2rem;"></i>
-                        </div>
-                        <div>
-                            <h3 style="margin: 0; color: white; font-size: 1.1rem; font-weight: 700;">Messages</h3>
-                            <p style="margin: 0; color: rgba(255,255,255,0.7); font-size: 0.8rem;">Professional Support</p>
-                        </div>
-                    </div>
-                    <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);"></div>
+        <!--  Professional Chat Sidebar  -->
+        <div class="chat-sidebar" id="chatSidebar" style="display:none;">
+          <!--  Header  -->
+          <div class="chat-sidebar-header">
+            <div class="header-meta">
+              <div class="avatar"
+                style="background:var(--color-primary)">U</div>
+              <div>
+                <p class="partner-name">Professional Chat</p>
+                <div class="status-container">
+                  <span class="status-dot"></span>
+                  <small class="status-text">Active session</small>
                 </div>
+              </div>
+            </div>
+            <div class="header-actions">
+              <button onclick="minimizeChat()" aria-label="Minimise"><i
+                  class="fas fa-minus"></i></button>
+              <button onclick="closeChatSidebar()" aria-label="Close"><i
+                  class="fas fa-times"></i></button>
+            </div>
+          </div>
+
+          <!--  Conversation List  -->
+          <div class="conversation-list" id="sidebarConversations">
+            <div class="conversation-toggle" onclick="toggleConversationList()">
+              <span>Conversations</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+          </div>
+
+          <!--  Message Area  -->
+          <div class="chat-body">
+            <div class="chat-messages" id="chatMessages">
+              <div class="empty-state">
+                <i class="fas fa-comments"></i>
+                <p>Start the conversation</p>
+                <small>Send a message to begin your mentorship session</small>
+              </div>
             </div>
             
-            <!-- Active Conversations List -->
-            <div class="active-conversations" id="sidebarConversations" style="flex: 1; overflow-y: auto; padding: 0.5rem;">
-                <div class="conversation-item" style="padding: 1rem; margin: 0.5rem; background: rgba(255,255,255,0.08); border-radius: 12px; cursor: pointer; transition: all 0.3s; border: 1px solid rgba(255,255,255,0.1);" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">
-                    <div style="display: flex; align-items: center; gap: 1rem;">
-                        <div style="position: relative;">
-                            <img src="https://ui-avatars.com/api/?name=Support&background=667eea&color=fff&size=45&rounded=true" alt="Avatar" style="width: 45px; height: 45px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.2);">
-                            <div style="position: absolute; bottom: -2px; right: -2px; width: 14px; height: 14px; background: #10b981; border: 2px solid #1e3c72; border-radius: 50%;"></div>
-                        </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
-                                <h4 style="margin: 0; color: white; font-size: 0.95rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Professional Support</h4>
-                                <span style="color: rgba(255,255,255,0.6); font-size: 0.75rem;">Online</span>
+            <!--  Contract / Payment Strip  -->
+            <div id="contractStrip" class="contract-strip" style="display:none;">
+              <div class="strip-content">
+                <i class="fas fa-file-contract"></i>
+                <span id="stripText">Contract pending signature</span>
+              </div>
+            </div>
+
+            <!--  Payment Button (student only)  -->
+            <div id="paymentStrip" class="payment-strip" style="display:none;">
+              <button id="payBtn" class="pay-btn">
+                <i class="fas fa-lock"></i> Pay ₦<span id="payAmount">0</span>
+              </button>
+            </div>
+
+            <!--  Input Area  -->
+            <div class="chat-input-bar">
+              <input id="chatInput" type="text" placeholder="Type a message…"
+                onkeypress="if(event.key==='Enter') sendChatMessage()">
+              <button onclick="attachFile()" aria-label="Attach file"><i
+                  class="fas fa-paperclip"></i></button>
+              <button onclick="sendChatMessage()" aria-label="Send"><i
+                  class="fas fa-paper-plane"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!--  Contract Modal  -->
+        <div id="contractModal" class="modal-overlay" style="display:none;">
+          <div class="modal-box">
+            <h3>Mentorship Agreement</h3>
+            <form id="contractForm">
+              <label>Session length (hours)</label>
+              <input type="number" id="hours" min="1" max="8" value="1"
+                required>
+
+              <label>Hourly rate (₦)</label>
+              <input type="number" id="rate" readonly>
+
+              <label>Total amount (₦)</label>
+              <input type="number" id="total" readonly>
+
+              <label>Main objectives</label>
+              <textarea id="objectives" rows="3" required
+                placeholder="What do you want to achieve?"></textarea>
+
+              <label class="chk-label">
+                <input type="checkbox" id="agreeChk" required>
+                I accept the terms & conditions
+              </label>
+
+              <div class="modal-actions">
+                <button type="button" onclick="closeContract()">Cancel</button>
+                <button type="submit">Sign & Continue</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Professional Agreement Modals -->
+        <!-- Instructor Signing Modal -->
+        <div id="instructorSignModal" class="agreement-modal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>MENTORSHIP AGREEMENT</h2>
+                    <p>Andrew Cares Village Hub</p>
+                    <button class="modal-close" onclick="closeInstructorSignModal()">&times;</button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="agreement-form">
+                        <h3>Create Agreement Terms</h3>
+                        <p class="form-subtitle">Please specify the session details for this mentorship agreement</p>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="sessionDuration">Duration</label>
+                                <input type="number" id="sessionDuration" min="1" max="8" value="1" class="form-input">
+                                <span class="form-unit">hour(s)</span>
                             </div>
-                            <p style="margin: 0; color: rgba(255,255,255,0.7); font-size: 0.85rem; line-height: 1.3;">Ready to assist with your mentorship session</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Professional Chat Header -->
-            <div class="chat-header" style="padding: 2rem 1.5rem; background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.15); position: relative;">
-                <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);"></div>
-                <div style="display: flex; align-items: center; gap: 1.2rem;">
-                    <div class="user-avatar" style="width: 52px; height: 52px; border-radius: 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1.3rem; box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3); border: 2px solid rgba(255,255,255,0.2);">U</div>
-                    <div style="flex: 1;">
-                        <h3 style="margin: 0; font-size: 1.2rem; color: white; font-weight: 700; letter-spacing: -0.02em;">Professional Chat</h3>
-                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.3rem;">
-                            <div style="width: 8px; height: 8px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);"></div>
-                            <p style="margin: 0; font-size: 0.85rem; color: rgba(255,255,255,0.9); font-weight: 500;">Active Session</p>
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <button onclick="minimizeChat()" style="background: rgba(255,255,255,0.15); border: none; color: white; padding: 0.7rem; border-radius: 12px; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(10px);" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <button onclick="closeChatSidebar()" style="background: rgba(239, 68, 68, 0.2); border: none; color: #fca5a5; padding: 0.7rem; border-radius: 12px; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(10px);" onmouseover="this.style.background='rgba(239, 68, 68, 0.3)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.2)'">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="chatMessages" style="flex: 1; padding: 2rem 1.5rem; overflow-y: auto; background: linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(248,250,252,0.95) 100%); margin: 1rem; border-radius: 20px; box-shadow: inset 0 4px 20px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.1); position: relative;">
-                <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);"></div>
-                <div style="text-align: center; padding: 3rem 2rem; color: #64748b;">
-                    <div style="width: 80px; height: 80px; margin: 0 auto 1.5rem; background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%); border-radius: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
-                        <i class="fas fa-comments" style="font-size: 2.5rem; color: #94a3b8;"></i>
-                    </div>
-                    <h4 style="margin: 0 0 0.5rem 0; font-size: 1.3rem; font-weight: 700; color: #334155; letter-spacing: -0.02em;">Professional Messaging</h4>
-                    <p style="margin: 0; font-size: 1rem; color: #64748b; font-weight: 500;">Secure, encrypted communication</p>
-                    <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #94a3b8;">Start your mentorship conversation</p>
-                </div>
-            </div>
-            
-            <!-- Payment & Agreement Section -->
-            <div id="paymentSection" style="padding: 1.5rem; background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%); border-top: 1px solid rgba(34, 197, 94, 0.2); display: none;">
-                <div style="text-align: center; margin-bottom: 1rem;">
-                    <div style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(135deg, #10b981, #059669); border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);">
-                        <i class="fas fa-handshake" style="color: white; font-size: 1.5rem;"></i>
-                    </div>
-                    <h4 style="margin: 0 0 0.5rem 0; color: white; font-weight: 700;">Agreement Reached</h4>
-                    <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 0.9rem;">Rate: <span id="agreedRate">₦5000/hour</span></p>
-                </div>
-                <div style="display: flex; gap: 1rem;">
-                    <button onclick="initiatePayment()" style="flex: 1; padding: 1rem 1.5rem; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(16, 185, 129, 0.6)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 16px rgba(16, 185, 129, 0.4)'">
-                        <i class="fas fa-credit-card" style="margin-right: 0.5rem;"></i>
-                        Pay Now
-                    </button>
-                    <button onclick="openAgreementForm()" style="flex: 1; padding: 1rem 1.5rem; background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1)); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(10px);" onmouseover="this.style.background='linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.2))'" onmouseout="this.style.background='linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1))'">
-                        <i class="fas fa-file-contract" style="margin-right: 0.5rem;"></i>
-                        View Agreement
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Professional Input Area -->
-            <div class="chat-input" style="padding: 1.5rem; background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.08) 100%); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.15); position: relative;">
-                <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);"></div>
-                <div style="display: flex; gap: 1rem; align-items: flex-end;">
-                    <div style="flex: 1; position: relative;">
-                        <div style="position: relative; background: rgba(255,255,255,0.95); border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1), inset 0 1px 3px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.8);">
-                            <input type="text" id="chatInput" placeholder="Type your professional message..." style="width: 100%; padding: 1.2rem 1.8rem 1.2rem 1.5rem; border: none; border-radius: 20px; background: transparent; font-size: 0.95rem; outline: none; color: #334155; font-weight: 500; letter-spacing: -0.01em;" onkeypress="if(event.key==='Enter') sendChatMessage()">
-                            <div style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8;">
-                                <i class="fas fa-keyboard" style="font-size: 0.9rem;"></i>
+                            
+                            <div class="form-group">
+                                <label for="sessionRate">Rate</label>
+                                <input type="number" id="sessionRate" min="1000" value="5000" class="form-input">
+                                <span class="form-unit">₦/hour</span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Total Amount</label>
+                                <div class="total-display" id="totalAmount">₦5,000</div>
                             </div>
                         </div>
-                        <div class="typing-indicator" style="position: absolute; bottom: -30px; left: 20px; font-size: 0.8rem; color: rgba(255,255,255,0.9); display: none; background: rgba(0,0,0,0.1); padding: 0.3rem 0.8rem; border-radius: 12px; backdrop-filter: blur(10px);">
-                            <i class="fas fa-circle" style="animation: pulse 1.5s infinite; font-size: 0.5rem;"></i>
-                            <i class="fas fa-circle" style="animation: pulse 1.5s infinite 0.3s; font-size: 0.5rem;"></i>
-                            <i class="fas fa-circle" style="animation: pulse 1.5s infinite 0.6s; font-size: 0.5rem;"></i>
-                            <span style="margin-left: 0.5rem;">Typing...</span>
+                        
+                        <div class="form-group full-width">
+                            <label for="sessionObjectives">Session Objectives</label>
+                            <textarea id="sessionObjectives" class="form-textarea" placeholder="Describe the learning objectives and goals for this mentorship session..."></textarea>
                         </div>
                     </div>
-                    <div style="display: flex; gap: 0.8rem;">
-                        <button onclick="attachFile()" style="padding: 1.2rem; background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%); color: white; border: none; border-radius: 16px; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(10px); box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
-                            <i class="fas fa-paperclip" style="font-size: 1.1rem;"></i>
-                        </button>
-                        <button onclick="sendChatMessage()" style="padding: 1.2rem 1.8rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 16px; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4); font-weight: 600;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 24px rgba(102, 126, 234, 0.6)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 16px rgba(102, 126, 234, 0.4)'">
-                            <i class="fas fa-paper-plane" style="margin-right: 0.5rem;"></i>
-                            Send
-                        </button>
-                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeInstructorSignModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="confirmInstructorSign()">
+                        <i class="fas fa-pen"></i> Sign Agreement
+                    </button>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script>
+        <!-- Student Review Modal -->
+        <div id="studentReviewModal" class="agreement-modal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>MENTORSHIP AGREEMENT</h2>
+                    <p>Andrew Cares Village Hub</p>
+                    <button class="modal-close" onclick="closeStudentReviewModal()">&times;</button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="agreement-summary-card">
+                        <h3>Agreement Summary</h3>
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <label>Instructor:</label>
+                                <span id="reviewInstructorName">Loading...</span>
+                            </div>
+                            <div class="summary-item">
+                                <label>Student:</label>
+                                <span id="reviewStudentName">Loading...</span>
+                            </div>
+                            <div class="summary-item">
+                                <label>Duration:</label>
+                                <span id="reviewDuration">Loading...</span>
+                            </div>
+                            <div class="summary-item">
+                                <label>Rate:</label>
+                                <span id="reviewRate">Loading...</span>
+                            </div>
+                            <div class="summary-item">
+                                <label>Total Amount:</label>
+                                <span id="reviewTotal" class="total-highlight">Loading...</span>
+                            </div>
+                            <div class="summary-item">
+                                <label>Session Date:</label>
+                                <span id="reviewDate">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="objectives-card">
+                        <h4>Session Objectives</h4>
+                        <div id="reviewObjectives" class="objectives-content">Loading...</div>
+                    </div>
+                    
+                    <div class="terms-card">
+                        <h4>Terms and Conditions</h4>
+                        <ul class="terms-list">
+                            <li>Both parties agree to the terms specified above</li>
+                            <li> Payment must be made before the start of the mentorship session</li>
+                            <li>Either party may reschedule with 24 hours notice</li>
+                            <li>This agreement is legally binding upon digital signature by both parties</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button class="btn btn-warning" onclick="requestRenegotiation()">
+                        <i class="fas fa-redo"></i> Renegotiate
+                    </button>
+                    <button class="btn btn-success" onclick="confirmStudentSign()">
+                        <i class="fas fa-check"></i> Sign & Accept
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Production Paystack Integration with Development Fallback -->
+        <script>
+        // Check if we're in production (not localhost)
+        const isProduction = !window.location.hostname.includes('localhost') && 
+                            !window.location.hostname.includes('127.0.0.1') &&
+                            !window.location.hostname.includes('file://');
+        
+        if (isProduction) {
+            // Load real Paystack in production
+            const script = document.createElement('script');
+            script.src = 'https://js.paystack.co/v1/inline.js';
+            script.onload = function() {
+                console.log('Production Paystack loaded successfully');
+            };
+            script.onerror = function() {
+                console.error('Failed to load Paystack in production');
+                // Fallback to custom implementation
+                loadCustomPaystack();
+            };
+            document.head.appendChild(script);
+        } else {
+            // Use custom implementation in development
+            console.log('Development mode detected - using custom Paystack implementation');
+            loadCustomPaystack();
+        }
+        
+        function loadCustomPaystack() {
+            // Custom Paystack implementation for development/fallback
+            window.PaystackPop = {
+                setup: function(config) {
+                    return {
+                        openIframe: function() {
+                            // Create custom payment modal
+                            const modal = document.createElement('div');
+                            modal.id = 'paystack-modal';
+                            modal.style.cssText = `
+                                position: fixed;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                background: rgba(0,0,0,0.8);
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                z-index: 10000;
+                                font-family: 'Montserrat', sans-serif;
+                            `;
+                            
+                            modal.innerHTML = `
+                                <div style="
+                                    background: white;
+                                    padding: 2rem;
+                                    border-radius: 12px;
+                                    max-width: 400px;
+                                    width: 90%;
+                                    text-align: center;
+                                    position: relative;
+                                ">
+                                    <button onclick="closePaystackModal()" 
+                                            style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+                                    
+                                    <h3 style="color: #333; margin-bottom: 1rem;">Development Payment</h3>
+                                    <p style="color: #666; margin-bottom: 1.5rem;" id="payment-amount">Amount: ₦${(config.amount / 100).toLocaleString()}</p>
+                                    
+                                    <button onclick="simulatePaymentSuccess()" style="
+                                        background: #00C851;
+                                        color: white;
+                                        border: none;
+                                        padding: 12px 24px;
+                                        border-radius: 6px;
+                                        cursor: pointer;
+                                        margin: 5px;
+                                        font-size: 16px;
+                                    ">Simulate Success</button>
+                                    
+                                    <button onclick="closePaystackModal()" style="
+                                        background: #ff4444;
+                                        color: white;
+                                        border: none;
+                                        padding: 12px 24px;
+                                        border-radius: 6px;
+                                        cursor: pointer;
+                                        margin: 5px;
+                                        font-size: 16px;
+                                    ">Cancel</button>
+                                </div>
+                            `;
+                            
+                            document.body.appendChild(modal);
+                            
+                            // Store config globally for button handlers
+                            window.currentPaystackConfig = config;
+                        }
+                    };
+                }
+            };
+        }
+        
+        // Global functions for Paystack modal buttons
+        function closePaystackModal() {
+            const modal = document.getElementById('paystack-modal');
+            if (modal) {
+                modal.remove();
+                if (window.currentPaystackConfig && typeof window.currentPaystackConfig.onClose === 'function') {
+                    window.currentPaystackConfig.onClose();
+                }
+            }
+        }
+        
+        function simulatePaymentSuccess() {
+            const modal = document.getElementById('paystack-modal');
+            if (modal) {
+                modal.remove();
+                if (window.currentPaystackConfig && typeof window.currentPaystackConfig.callback === 'function') {
+                    window.currentPaystackConfig.callback({
+                        status: 'success',
+                        reference: 'dev_' + Date.now(),
+                        transaction: Date.now()
+                    });
+                }
+            }
+        }
+        
+        console.log('Custom Paystack implementation loaded - no external dependencies');
+        </script>
+        
+        <script>
+        // Toggle conversation list functionality
+        function toggleConversationList() {
+            const conversationList = document.getElementById('sidebarConversations');
+            if (conversationList) {
+                conversationList.classList.toggle('expanded');
+            }
+        }
+
+        // Auto-collapse conversation list when chat is opened
+        function autoCollapseConversations() {
+            const conversationList = document.getElementById('sidebarConversations');
+            if (conversationList && conversationList.classList.contains('expanded')) {
+                conversationList.classList.remove('expanded');
+            }
+        }
+
+        // Open learning dashboard
+        function openLearningDashboard(sessionId) {
+            localStorage.setItem('currentSession', sessionId);
+            window.open(`learning-dashboard.html?session=${sessionId}`, '_blank');
+        }
+
+        // Open instructor content management
+        function openInstructorContent(sessionId) {
+            window.open(`instructor-content.html?session=${sessionId}`, '_blank');
+        }
+
+        // Handle session renewal from URL parameters
+        function handleRenewalFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const renewSessionId = urlParams.get('renew');
+            const reuseTerms = urlParams.get('reuse') === 'true';
+            
+            if (renewSessionId) {
+                if (reuseTerms) {
+                    // Create new booking with same terms
+                    db.collection('bookings').doc(renewSessionId).get().then(snap => {
+                        if (!snap.exists) return;
+                        
+                        const oldBooking = snap.data();
+                        const newBooking = {
+                            ...oldBooking,
+                            status: 'negotiating',
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            renewedFrom: renewSessionId,
+                            reuseTerms: true
+                        };
+                        
+                        // Remove old booking ID fields
+                        delete newBooking.id;
+                        
+                        db.collection('bookings').add(newBooking).then(docRef => {
+                            showNotification('Session renewal request sent with same terms!', 'success');
+                            // Clear URL parameters
+                            window.history.replaceState({}, document.title, window.location.pathname);
+                            // Open chat for new session
+                            setTimeout(() => {
+                                openChat(docRef.id, newBooking.instructorId, newBooking.instructorName);
+                            }, 1000);
+                        });
+                    });
+                } else {
+                    // Show instructor selection for new terms
+                    showNotification('Select an instructor to negotiate new terms', 'info');
+                    // Clear URL parameters
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
+            }
+        }
+
+        // Call handleRenewalFromURL after Firebase is initialized - will be handled in main auth listener
+        </script>
+
+        <script>
+        // Paystack Configuration
+        const PAYSTACK_PUBLIC_KEY = 'pk_test_4f982216f23d912048d00f1a9c9f77a7b54647bc';
+        
         // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
@@ -634,56 +1809,62 @@
             auth = firebase.auth();
             db = firebase.firestore();
             
-            // Enable offline persistence FIRST before any other operations
-            db.enablePersistence({ synchronizeTabs: true }).then(() => {
+            // Configure Firestore settings first to reduce connection timeouts
+            try {
+                db.settings({
+                    cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED,
+                    ignoreUndefinedProperties: true,
+                    experimentalForceLongPolling: false, // Use WebSocket for better performance
+                    merge: true
+                });
+                console.log('✅ Firestore settings configured');
+            } catch (settingsError) {
+                console.warn('⚠️ Firestore settings already configured:', settingsError.message);
+            }
+
+            // Enable offline persistence with simpler configuration
+            db.enablePersistence({ synchronizeTabs: false }).then(() => {
                 console.log('✅ Firebase persistence enabled');
                 
-                // Configure Firestore settings after persistence
-                try {
-                    db.settings({
-                        cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED,
-                        ignoreUndefinedProperties: true
-                    });
-                } catch (settingsError) {
-                    console.warn('⚠️ Firestore settings already configured:', settingsError.message);
-                }
+                // Settings already configured above
                 
                 // Test Firebase connection
                 return db.collection('users').limit(1).get();
             }).then(() => {
                 console.log('✅ Firebase connected successfully');
-                firebaseInitialized = true;
-                // Reload mentors now that Firebase is ready
-                if (currentUserData && currentUserData.role === 'member') {
-                    loadAvailableMentors();
-                }
-            }).catch(error => {
-                console.warn('⚠️ Firebase initialization warning:', error.message);
-                
-                // Still try to configure settings and test connection
-                try {
-                    db.settings({
-                        cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED,
-                        ignoreUndefinedProperties: true
-                    });
-                } catch (settingsError) {
-                    // Ignore settings error
+            }).catch((err) => {
+                console.warn('⚠️ Persistence error:', err.message);
+                if (err.code == 'failed-precondition') {
+                    console.log('Multiple tabs open, persistence can only be enabled in one tab at a time.');
+                } else if (err.code == 'unimplemented') {
+                    console.log('The current browser does not support all of the features required to enable persistence');
                 }
                 
                 // Test connection without persistence
-                db.collection('users').limit(1).get().then(() => {
-                    console.log('✅ Firebase connected (without persistence)');
-                    firebaseInitialized = true;
-                    // Reload mentors now that Firebase is ready
-                    if (currentUserData && currentUserData.role === 'member') {
-                        loadAvailableMentors();
+                return db.collection('users').limit(1).get();
+            }).then(() => {
+                console.log('✅ Firebase connected successfully');
+                firebaseInitialized = true;
+                if (currentUserData && currentUserData.role === 'member') {
+                    loadAvailableMentors();
+                }
+            }).catch((connError) => {
+                console.warn('⚠️ Firebase connection failed, entering offline mode:', connError);
+                firebaseInitialized = false;
+                showNotification('Working offline - limited functionality available', 'info');
+                
+                // Load cached data for offline mode
+                const cachedMentors = localStorage.getItem('cachedMentors');
+                if (cachedMentors && currentUserData && currentUserData.role === 'member') {
+                    try {
+                        const mentors = JSON.parse(cachedMentors);
+                        displayMentors(mentors);
+                        console.log('📋 Loaded cached mentors for offline viewing');
+                    } catch (e) {
+                        console.warn('Failed to parse cached mentors');
                     }
-                }).catch(connError => {
-                    console.warn('⚠️ Firebase connection failed:', connError);
-                    firebaseInitialized = false;
-                });
+                }
             });
-
             
         } catch (error) {
             console.error('❌ Firebase initialization failed:', error);
@@ -747,8 +1928,9 @@
         let currentUserData = null;
         let calendar = null;
         let selectedInstructorId = null;
-        let currentChatSession = null;
-        const PAYSTACK_PUBLIC_KEY = 'pk_test_4f982216f23d912048d00f1a9c9f77a7b54647bc';
+        
+        let currentChatPartner = {};
+       
 
         // Add sample data to Firestore for testing
         async function addSampleData() {
@@ -827,6 +2009,46 @@
             }
         }
 
+        // Load available mentors with error handling
+        async function loadAvailableMentors() {
+            try {
+                const result = await window.errorHandler.executeFirebaseOperation(
+                    () => db.collection('users').where('role', '==', 'instructor').get(),
+                    'Load mentors'
+                );
+                
+                if (result.empty) {
+                    // Add sample data if no mentors exist
+                    await addSampleData();
+                    const newResult = await window.errorHandler.executeFirebaseOperation(
+                        () => db.collection('users').where('role', '==', 'instructor').get(),
+                        'Load mentors after sample data'
+                    );
+                    const mentors = newResult.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    displayMentors(mentors);
+                    window.errorHandler.cacheData('mentors', mentors);
+                } else {
+                    const mentors = result.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    displayMentors(mentors);
+                    window.errorHandler.cacheData('mentors', mentors);
+                }
+            } catch (error) {
+                if (error.message === 'OFFLINE_MODE') {
+                    // Load cached mentors
+                    const cachedMentors = window.errorHandler.getCachedData('mentors');
+                    if (cachedMentors) {
+                        displayMentors(cachedMentors);
+                        window.errorHandler.showNotification('Showing cached mentors (offline)', 'info');
+                    } else {
+                        window.errorHandler.showNotification('No mentors available offline', 'warning');
+                    }
+                } else {
+                    console.error('Error loading mentors:', error);
+                    window.errorHandler.showNotification('Error loading mentors. Please try again.', 'error');
+                }
+            }
+        }
+
         // Authentication State Management - prioritize Firestore connection
         auth.onAuthStateChanged(async (user) => {
             if (user) {
@@ -834,51 +2056,50 @@
                 console.log('👤 Real user authenticated:', user.email);
                 currentUser = user;
                 
+                // Fetch user data from Firestore to get correct role
                 try {
-                    const userDoc = await db.collection('users').doc(user.uid).get();
+                    const userDoc = await db.collection("users").doc(user.uid).get();
                     if (userDoc.exists) {
                         currentUserData = userDoc.data();
-                        console.log('📋 User data loaded from Firestore');
                     } else {
-                        // Create new user document
+                        // Create new user document with default role
                         currentUserData = {
-                            name: user.displayName || 'New User',
+                            name: user.displayName || user.email?.split('@')[0] || 'User',
                             email: user.email,
-                            role: 'member',
-                            createdAt: new Date()
+                            role: 'member' // Default role for new users
                         };
-                        await db.collection('users').doc(user.uid).set(currentUserData);
-                        console.log('📝 New user document created');
+                        await db.collection("users").doc(user.uid).set(currentUserData);
                     }
                 } catch (error) {
-                    console.error('Error loading user data:', error);
+                    console.error('Error fetching user data:', error);
+                    // Fallback to default user data
                     currentUserData = {
-                        name: user.displayName || 'User',
+                        name: user.displayName || user.email?.split('@')[0] || 'User',
                         email: user.email,
                         role: 'member'
                     };
                 }
-            } else {
-                // No authenticated user - create test user for development
-                console.log('🔧 Development mode - creating test user');
-                currentUser = { uid: 'test-user-123', email: 'test@example.com' };
-                currentUserData = { 
-                    name: 'Test User', 
-                    email: 'test@example.com', 
-                    role: 'member' // Change to 'instructor' or 'admin' to test different views
-                };
-            }
-            
-            // Try to add sample data if Firebase is working
-            try {
-                if (firebaseInitialized) {
-                    await addSampleData();
+                
+                // Handle session renewal from URL parameters first
+                handleRenewalFromURL();
+                
+                // Initialize the appropriate view based on user role
+                initializeView();
+                
+                // Load appropriate data based on role
+                if (currentUserData.role === 'member') {
+                    loadMemberSessions();
+                    loadMentorsForMember();
+                } else if (currentUserData.role === 'instructor') {
+                    loadInstructorBookings();
                 }
-            } catch (error) {
-                console.log('ℹ️ Could not add sample data, continuing with demo data');
+                
+                // Load conversations for chat sidebar - handled by existing functions
+            } else {
+                console.log('❌ No authenticated user');
+                // Redirect to login if no user
+                window.location.href = 'login.html';
             }
-            
-            initializeView();
         });
 
         function initializeView() {
@@ -1220,6 +2441,16 @@
                                 <button class="btn btn-info btn-sm" onclick="openChat('${session.id}', '${session.instructorId}', '${session.instructorName}')">
                                     <i class="fas fa-comments"></i> Chat
                                 </button>
+                                ${(session.studentSignedAt && session.instructorSignedAt && session.paymentCompleted) ? `
+                                <button class="btn btn-success btn-sm" onclick="openLearningDashboard('${session.id}')">
+                                    <i class="fas fa-graduation-cap"></i> Learning
+                                </button>
+                                ` : ''}
+                                ${session.instructorId === currentUser?.uid ? `
+                                <button class="btn btn-warning btn-sm" onclick="openInstructorContent('${session.id}')">
+                                    <i class="fas fa-cog"></i> Manage
+                                </button>
+                                ` : ''}
                             </div>
                         `;
                         sessionsList.appendChild(sessionEl);
@@ -1426,42 +2657,27 @@
 
         window.rejectBooking = async function(bookingId) {
             try {
-                console.log('🚫 Rejecting booking:', bookingId);
-                console.log('👤 Current user:', currentUser?.uid);
-                console.log('📋 Current user data:', currentUserData);
-                console.log('🎭 User role:', currentUserData?.role);
-                
-                // Get the booking first to check permissions
-                const bookingDoc = await db.collection("bookings").doc(bookingId).get();
-                if (!bookingDoc.exists) {
-                    throw new Error('Booking not found');
-                }
-                
-                const bookingData = bookingDoc.data();
-                console.log('📄 Booking data:', bookingData);
-                console.log('🎯 Instructor ID:', bookingData.instructorId);
-                console.log('🔍 Is current user the instructor?', bookingData.instructorId === currentUser?.uid);
-                
                 await db.collection("bookings").doc(bookingId).update({
                     status: 'rejected',
-                    rejectedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    rejectedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    chatEnabled: true // Keep chat open after rejection
                 });
                 
-                showNotification('Booking rejected.', 'info');
+                showNotification('Booking rejected. Chat remains open for discussion.', 'info');
                 
-                // Send system message to chat
-                await db.collection("chats").add({
-                    sessionId: bookingId,
-                    senderId: 'system',
-                    senderName: 'System',
-                    text: `❌ Session request declined. Please feel free to book another available slot.`,
-                    messageType: 'system',
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                
+                // Send system message to chat explaining rejection but keeping communication open
+                const booking = await db.collection("bookings").doc(bookingId).get();
+                if (booking.exists) {
+                    await db.collection("messages").add({
+                        sessionId: bookingId,
+                        senderId: 'system',
+                        message: 'This booking request has been declined by the instructor. However, you can continue chatting to discuss alternative arrangements, different time slots, or modified terms.',
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                        type: 'system'
+                    });
+                }
             } catch (error) {
                 console.error('Error rejecting booking:', error);
-                console.error('Error details:', error.message);
                 showNotification('Failed to reject booking. Please try again.', 'error');
             }
         };
@@ -2188,18 +3404,24 @@ function loadCompletedSessions() {
                 .where("status", "in", ["confirmed", "negotiating", "completed"]);
             
             q.onSnapshot((snapshot) => {
+                // Preserve toggle element
+                const toggleElement = sidebarConversations.querySelector('.conversation-toggle');
                 sidebarConversations.innerHTML = '';
+                if (toggleElement) {
+                    sidebarConversations.appendChild(toggleElement);
+                }
                 
                 if (snapshot.empty) {
-                    sidebarConversations.innerHTML = `
-                        <div class="conversation-item">
-                            <img src="https://ui-avatars.com/api/?name=No+Chat&background=ddd&color=999&size=40" alt="Avatar" class="conversation-avatar">
-                            <div>
-                                <p style="margin: 0; font-weight: 600;">No active chats</p>
-                                <p style="margin: 0; font-size: 0.8rem; color: var(--text-secondary);">Start a session to begin chatting</p>
-                            </div>
+                    const noChatsEl = document.createElement('div');
+                    noChatsEl.className = 'conversation-item';
+                    noChatsEl.innerHTML = `
+                        <img src="https://ui-avatars.com/api/?name=No+Chat&background=ddd&color=999&size=32" alt="Avatar" class="conversation-avatar">
+                        <div class="conversation-info">
+                            <p class="conversation-name">No active chats</p>
+                            <p class="conversation-preview">Start a session to begin chatting</p>
                         </div>
                     `;
+                    sidebarConversations.appendChild(noChatsEl);
                     return;
                 }
                 
@@ -2213,10 +3435,10 @@ function loadCompletedSessions() {
                     conversationEl.onclick = () => openChat(session.id, isInstructor ? session.studentId : session.instructorId, partnerName);
                     
                     conversationEl.innerHTML = `
-                        <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(partnerName)}&size=40" alt="${partnerName}" class="conversation-avatar">
-                        <div>
-                            <p style="margin: 0; font-weight: 600; font-size: 0.9rem;">${partnerName}</p>
-                            <p style="margin: 0; font-size: 0.8rem; color: var(--text-secondary);">Mentorship Session</p>
+                        <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(partnerName)}&size=32" alt="${partnerName}" class="conversation-avatar">
+                        <div class="conversation-info">
+                            <p class="conversation-name">${partnerName}</p>
+                            <p class="conversation-preview">Mentorship Session</p>
                         </div>
                     `;
                     
@@ -2288,8 +3510,10 @@ function loadCompletedSessions() {
         window.rejectBooking = async function(bookingId) {
             if (confirm('Reject this booking? This action cannot be undone.')) {
                 try {
-                    await db.collection("bookings").doc(bookingId).delete();
-                    alert('Booking rejected and removed.');
+                    await db.collection("bookings").doc(bookingId).update({
+  status: 'rejected',
+  rejectedAt: firebase.firestore.FieldValue.serverTimestamp()
+});                    alert('Booking rejected and removed.');
                 } catch (error) {
                     console.error('Error rejecting booking:', error);
                     alert('Failed to reject booking.');
@@ -2334,31 +3558,24 @@ function loadCompletedSessions() {
                 return;
             }
             
-            // Animate chat sidebar opening
+            // Show chat sidebar using CSS classes
             chatSidebar.style.display = 'flex';
-            chatSidebar.style.animation = 'slideInRight 0.3s ease';
+            chatSidebar.classList.add('active');
             
             // Update active conversation in sidebar
             updateActiveConversation(partnerName);
             
-            // Update chat header with user info
-            const chatHeader = document.querySelector('.chat-header h3');
-            const userAvatar = document.querySelector('.user-avatar');
-            const userStatus = document.querySelector('.chat-header p');
+            // Update chat header with partner info
+            const partnerNameElement = document.querySelector('.partner-name');
+            const headerAvatar = document.querySelector('.header-meta .avatar');
             
-            if (chatHeader) {
-                chatHeader.textContent = `${partnerName || 'User'}`;
+            if (partnerNameElement) {
+                partnerNameElement.textContent = partnerName || 'User';
             }
             
-            if (userAvatar) {
+            if (headerAvatar) {
                 const initials = (partnerName || 'U').split(' ').map(n => n[0]).join('').toUpperCase();
-                userAvatar.textContent = initials;
-                userAvatar.style.background = `linear-gradient(45deg, ${getRandomColor()}, ${getRandomColor()})`;
-            }
-            
-            if (userStatus) {
-                userStatus.textContent = 'Active Session';
-                userStatus.style.color = 'rgba(255,255,255,0.9)';
+                headerAvatar.textContent = initials;
             }
             
             // Load chat messages
@@ -2368,6 +3585,9 @@ function loadCompletedSessions() {
             window.currentChatSession = sessionId;
             window.currentChatPartner = { id: partnerId, name: partnerName || 'User' };
             
+            // Auto-collapse conversation list
+            autoCollapseConversations();
+            
             // Check for agreement button
             checkForAgreementButton(sessionId);
             
@@ -2376,6 +3596,7 @@ function loadCompletedSessions() {
                 const chatInput = document.getElementById('chatInput');
                 if (chatInput) chatInput.focus();
             }, 300);
+             setupAgreementListener(window.currentChatSession);
         }
         
         // Update active conversation in sidebar
@@ -2478,43 +3699,29 @@ function loadCompletedSessions() {
         }
 
         function checkForAgreementButton(sessionId) {
-            // Get booking details to check status
-            db.collection("bookings").doc(sessionId).get().then(doc => {
-                if (doc.exists) {
-                    const booking = doc.data();
-                    const chatInput = document.querySelector('.chat-input');
-                    
-                    // Remove existing agreement button
-                    const existingBtn = document.querySelector('.agreement-button');
-                    if (existingBtn) existingBtn.remove();
-                    
-                    // Show agreement button if booking is confirmed and no agreement exists
-                    if (booking.status === 'confirmed' && !booking.agreementSigned) {
-                        const agreementBtn = document.createElement('div');
-                        agreementBtn.className = 'agreement-button';
-                        agreementBtn.innerHTML = `
-                            <button onclick="openAgreementForm('${sessionId}')" style="
-                                background: linear-gradient(135deg, #10b981, #059669);
-                                color: white;
-                                border: none;
-                                padding: 12px 24px;
-                                border-radius: 8px;
-                                font-weight: 600;
-                                cursor: pointer;
-                                width: 100%;
-                                margin-bottom: 10px;
-                                box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
-                                transition: all 0.2s ease;
-                            " onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(16, 185, 129, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 4px rgba(16, 185, 129, 0.3)'">
-                                📝 Finalize Agreement & Sign Contract
-                            </button>
-                        `;
-                        
-                        chatInput.parentNode.insertBefore(agreementBtn, chatInput);
-                    }
-                }
-            });
+            // This function is now disabled - using new bilateral agreement system
+            return;
         }
+
+   /*  Create / insert the agreement strip  */
+function insertAgreementStrip() {
+  const chatInput = document.getElementById('chatInput');
+  if (!chatInput) return;                  //  guard: element not ready
+
+  //  Don’t add twice
+  if (document.querySelector('.agreement-button')) return;
+
+  const agreementBtn = document.createElement('div');
+  agreementBtn.className = 'agreement-button';
+  agreementBtn.innerHTML = `
+    <button onclick="openContract()" style="
+      width:100%; padding:.6rem; border:0; border-radius:8px;
+      background:linear-gradient(135deg,var(--color-primary),#d4af37);
+      color:#fff; font-weight:600; cursor:pointer;">
+      <i class="fas fa-file-contract"></i>  Sign Contract
+    </button>`;
+  chatInput.parentNode.insertBefore(agreementBtn, chatInput);
+}
 
         window.openAgreementForm = function(sessionId) {
             // Create agreement modal
@@ -2977,10 +4184,9 @@ function loadCompletedSessions() {
         window.closeChatSidebar = function() {
             const chatSidebar = document.getElementById('chatSidebar');
             if (chatSidebar) {
-                chatSidebar.style.transform = 'translateX(100%)';
+                chatSidebar.classList.remove('active');
                 setTimeout(() => {
                     chatSidebar.style.display = 'none';
-                    chatSidebar.style.transform = 'translateX(0)';
                 }, 300);
             }
         };
@@ -3097,6 +4303,86 @@ function loadCompletedSessions() {
                 xhr.send(formData);
             });
         }
+        /*  open / close contract  */
+window.openContract = () => {
+  const m = document.getElementById('contractModal');
+  m.style.display = 'grid';
+  const rate = Number(document.getElementById('agreedRate')?.textContent.replace(/[₦,]/g,'') || 5000);
+  document.getElementById('rate').value = rate;
+  document.getElementById('hours').value = 1;
+  document.getElementById('total').value = rate;
+};
+document.getElementById('hours').oninput = e => {
+  const total = Number(document.getElementById('rate').value) * Number(e.target.value);
+  document.getElementById('total').value = total;
+};
+window.closeContract = () => document.getElementById('contractModal').style.display = 'none';
+
+/*  handle contract signature  */
+document.getElementById('contractForm').onsubmit = async e => {
+  e.preventDefault();
+  const data = {
+    hours: Number(document.getElementById('hours').value),
+    rate:  Number(document.getElementById('rate').value),
+    total: Number(document.getElementById('total').value),
+    objectives: document.getElementById('objectives').value,
+    signedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    status: 'signed'
+  };
+  await db.collection('bookings').doc(window.currentChatSession).update(data);
+  await db.collection('chats').add({
+    sessionId: window.currentChatSession,
+    senderId: 'system',
+    text: `📄 Contract signed – ${data.hours} h × ₦${data.rate} = ₦${data.total}`,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  closeContract();
+};
+
+/*  BOTH must sign before we call it final  */
+db.collection('bookings').doc(window.currentChatSession)
+  .onSnapshot(snap => {
+    if (!snap.exists) { hideBoth(); return; }
+
+    const d = snap.data();
+    const strip   = document.getElementById('contractStrip');
+    const payStrip= document.getElementById('paymentStrip');
+    const stripText=document.getElementById('stripText');
+
+    /*  who is looking?  */
+    const meStudent = currentUserData.role === 'member';
+    const meInstructor = currentUserData.role === 'instructor';
+
+    /*  signature flags  */
+    const studentSigned = d.studentSignedAt;
+    const instructorSigned = d.instructorSignedAt;
+
+    /*  contract still open ?  */
+    if (!studentSigned || !instructorSigned) {
+      strip.style.display   = 'block';
+      payStrip.style.display= 'none';
+      stripText.innerHTML =
+        !studentSigned && meStudent ? '<i class="fas fa-edit"></i> Sign Contract' :
+        !studentSigned && meInstructor ? '<i class="fas fa-clock"></i> Waiting for student' :
+        !instructorSigned && meInstructor ? '<i class="fas fa-edit"></i> Sign Contract' :
+        '<i class="fas fa-clock"></i> Waiting for instructor';
+      return;
+    }
+
+    /*  both signed  */
+    strip.style.display = 'none';
+    if (meStudent && d.status === 'agreed') {
+      payStrip.style.display = 'block';
+      document.getElementById('payAmount').textContent = (d.total || 0).toLocaleString();
+    } else {
+      payStrip.style.display = 'none';
+    }
+  });
+
+function hideBoth() {
+  document.getElementById('contractStrip').style.display = 'none';
+  document.getElementById('paymentStrip').style.display = 'none';
+}
 
         // Send file message
         async function sendFileMessage(uploadResult) {
@@ -3203,6 +4489,920 @@ function loadCompletedSessions() {
             .status-negotiating { background-color: var(--color-primary); color: white; }
         `;
         document.head.appendChild(statusStyles);
+
+/*  NEW – injects the correct action strip depending on state  */
+function insertAgreementStrip(){
+  const chatInputBar = document.querySelector('.chat-input-bar');
+  if(!chatInputBar) return;
+
+  /*  remove any previous strip  */
+  document.querySelectorAll('.agreement-strip, .download-strip').forEach(el=>el.remove());
+
+  const strip = document.createElement('div');
+  strip.className = 'agreement-strip';
+  strip.id        = 'agreementStrip';
+  chatInputBar.parentNode.insertBefore(strip, chatInputBar);
+}
+
+/*  Enhanced bilateral agreement listener  */
+function setupAgreementListener(sessionId) {
+    db.collection('bookings').doc(sessionId).onSnapshot(async (snap) => {
+        if (!snap.exists) {
+            hideAgreementStrips();
+            return;
+        }
+
+        const booking = snap.data();
+        const isStudent = currentUserData.role === 'member';
+        const isInstructor = currentUserData.role === 'instructor';
+
+        const instructorSigned = booking.instructorSignedAt;
+        const studentSigned = booking.studentSignedAt;
+
+        // Remove existing strips
+        hideAgreementStrips();
+
+        // Both parties signed - show download and payment options
+        if (instructorSigned && studentSigned) {
+            if (isStudent && !booking.paymentCompleted) {
+                showPaymentStrip(booking);
+            } else if (booking.paymentCompleted) {
+                showDownloadStrip(booking);
+                // Enable instructor features after payment
+                if (isInstructor) {
+                    showInstructorDashboard(booking);
+                }
+                // Show instructor dashboard buttons in chat
+                if (isInstructor && booking.paymentCompleted) {
+                    showInstructorButtons();
+                }
+                // Check if session is over for student review
+                checkSessionCompletion(booking);
+            }
+            return;
+        }
+
+        // Instructor needs to sign first
+        if (!instructorSigned && isInstructor) {
+            showInstructorSignStrip();
+            return;
+        }
+
+        // Student waiting for instructor
+        if (!instructorSigned && isStudent) {
+            showWaitingForInstructorStrip();
+            return;
+        }
+
+        // Instructor signed, student needs to review and sign
+        if (instructorSigned && !studentSigned && isStudent) {
+            showStudentReviewStrip(booking);
+            return;
+        }
+
+        // Instructor waiting for student
+        if (instructorSigned && !studentSigned && isInstructor) {
+            showWaitingForStudentStrip();
+            return;
+        }
+    });
+}
+
+// Show instructor sign modal
+function showInstructorSignStrip() {
+    const strip = createAgreementStrip();
+    if (!strip) return;
+    strip.innerHTML = `
+        <div class="agreement-content">
+            <i class="fas fa-file-signature"></i>
+            <span>Ready to create the mentorship agreement</span>
+        </div>
+        <button class="btn btn-primary" onclick="openInstructorSignModal()">
+            <i class="fas fa-pen"></i> Create Agreement
+        </button>
+    `;
+}
+
+// Open instructor signing modal
+function openInstructorSignModal() {
+    const modal = document.getElementById('instructorSignModal');
+    modal.classList.add('active');
+    
+    // Set up real-time total calculation
+    const durationInput = document.getElementById('sessionDuration');
+    const rateInput = document.getElementById('sessionRate');
+    const totalDisplay = document.getElementById('totalAmount');
+    
+    function updateTotal() {
+        const duration = parseInt(durationInput.value) || 1;
+        const rate = parseInt(rateInput.value) || 5000;
+        const total = duration * rate;
+        totalDisplay.textContent = `₦${total.toLocaleString()}`;
+    }
+    
+    durationInput.addEventListener('input', updateTotal);
+    rateInput.addEventListener('input', updateTotal);
+    updateTotal();
+}
+
+// Close instructor signing modal
+function closeInstructorSignModal() {
+    const modal = document.getElementById('instructorSignModal');
+    modal.classList.remove('active');
+}
+
+// Show waiting for instructor strip
+function showWaitingForInstructorStrip() {
+    const strip = createAgreementStrip();
+    if (!strip) return;
+    strip.innerHTML = `
+        <div class="agreement-content">
+            <i class="fas fa-clock"></i>
+            <span>Waiting for instructor to sign the agreement...</span>
+        </div>
+        <div class="loading-dots">
+            <span></span><span></span><span></span>
+        </div>
+    `;
+}
+
+// Show student review strip
+function showStudentReviewStrip(booking) {
+    const strip = createAgreementStrip();
+    if (!strip) return;
+    strip.innerHTML = `
+        <div class="agreement-content">
+            <i class="fas fa-file-contract"></i>
+            <span>Instructor has signed the agreement - Review required</span>
+        </div>
+        <button class="btn btn-primary" onclick="openStudentReviewModal()">
+            <i class="fas fa-eye"></i> Review Agreement
+        </button>
+    `;
+}
+
+// Open student review modal
+function openStudentReviewModal() {
+    const modal = document.getElementById('studentReviewModal');
+    modal.classList.add('active');
+    
+    // Load booking data into modal
+    if (window.currentChatSession) {
+        db.collection('bookings').doc(window.currentChatSession).get().then(snap => {
+            if (snap.exists) {
+                const booking = snap.data();
+                
+                // Get instructor name from users collection if not in booking
+                let instructorName = booking.instructorName || 'Loading...';
+                if (!booking.instructorName && booking.instructorId) {
+                    db.collection('users').doc(booking.instructorId).get().then(userSnap => {
+                        if (userSnap.exists) {
+                            const userData = userSnap.data();
+                            instructorName = userData.displayName || userData.name || userData.email?.split('@')[0] || 'Unknown';
+                            document.getElementById('reviewInstructorName').textContent = instructorName;
+                        }
+                    });
+                }
+                
+                // Populate agreement summary
+                document.getElementById('reviewInstructorName').textContent = instructorName;
+                document.getElementById('reviewStudentName').textContent = booking.studentName || 'Unknown';
+                document.getElementById('reviewDuration').textContent = `${booking.hours} hour(s)`;
+                document.getElementById('reviewRate').textContent = `₦${booking.rate?.toLocaleString()}/hour`;
+                document.getElementById('reviewTotal').textContent = `₦${booking.total?.toLocaleString()}`;
+                document.getElementById('reviewDate').textContent = booking.sessionDate?.toDate?.().toDateString() || 'To be determined';
+                document.getElementById('reviewObjectives').textContent = booking.objectives || 'As discussed in chat';
+            }
+        }).catch(error => {
+            console.error('Error loading booking data:', error);
+        });
+    }
+}
+
+// Close student review modal
+function closeStudentReviewModal() {
+    const modal = document.getElementById('studentReviewModal');
+    modal.classList.remove('active');
+}
+
+// Show waiting for student strip
+function showWaitingForStudentStrip() {
+    const strip = createAgreementStrip();
+    if (!strip) return;
+    strip.innerHTML = `
+        <div class="agreement-content">
+            <i class="fas fa-hourglass-half"></i>
+            <span>Waiting for student to review and sign the agreement...</span>
+        </div>
+        <div class="loading-dots">
+            <span></span><span></span><span></span>
+        </div>
+    `;
+}
+
+/*  ----------  Enhanced bilateral agreement actions  ----------  */
+// Confirm instructor signing from modal
+async function confirmInstructorSign(){
+  try {
+    const hours = parseInt(document.getElementById('sessionDuration').value);
+    const rate = parseInt(document.getElementById('sessionRate').value);
+    const objectives = document.getElementById('sessionObjectives').value.trim();
+    
+    if (!hours || hours < 1) {
+      showNotification('Please enter a valid duration', 'error');
+      return;
+    }
+    
+    if (!rate || rate < 1000) {
+      showNotification('Please enter a valid rate', 'error');
+      return;
+    }
+
+    const total = rate * hours;
+
+    await db.collection('bookings').doc(window.currentChatSession).update({
+      instructorSignedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      hours: hours,
+      rate: rate,
+      total: total,
+      objectives: objectives || 'As discussed in chat',
+      status: 'pending_student_signature'
+    });
+
+    closeInstructorSignModal();
+    showNotification('Agreement signed successfully! Waiting for student to review and sign.', 'success');
+  } catch (error) {
+    console.error('Error signing agreement:', error);
+    showNotification('Error signing agreement', 'error');
+  }
+}
+
+// Confirm student signing from modal
+async function confirmStudentSign(){
+  try {
+    await db.collection('bookings').doc(window.currentChatSession).update({
+      studentSignedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      status: 'confirmed'
+    });
+
+    closeStudentReviewModal();
+    showNotification('Agreement signed successfully! Both parties have now signed the agreement.', 'success');
+  } catch (error) {
+    console.error('Error signing agreement:', error);
+    showNotification('Error signing agreement', 'error');
+  }
+}
+
+// Request renegotiation from modal
+async function requestRenegotiation(){
+  try {
+    await db.collection('bookings').doc(window.currentChatSession).update({
+      status: 'negotiating',
+      instructorSignedAt: null,
+      studentSignedAt: null,
+      renegotiationRequested: firebase.firestore.FieldValue.serverTimestamp(),
+      renegotiationRequestedBy: currentUserData.id
+    });
+
+    closeStudentReviewModal();
+    showNotification('Agreement sent back for renegotiation', 'info');
+  } catch (error) {
+    console.error('Error requesting renegotiation:', error);
+    showNotification('Error requesting renegotiation', 'error');
+  }
+}
+
+/*  ----------  payment and download  ----------  */
+function showPaymentStrip(booking) {
+    // Add payment button directly to chat messages area
+    const chatMessages = document.getElementById('chatMessages');
+    if (!chatMessages) return;
+    
+    // Check if payment message already exists
+    if (document.querySelector('.payment-message')) return;
+    
+    const paymentMessage = document.createElement('div');
+    paymentMessage.className = 'message system-message payment-message';
+    paymentMessage.innerHTML = `
+        <div class="message-content">
+            <div class="payment-card">
+                <div class="payment-header">
+                    <i class="fas fa-credit-card"></i>
+                    <h4>Complete Payment</h4>
+                </div>
+                <div class="payment-details">
+                    <p>Agreement signed by both parties. Complete payment to start your session.</p>
+                    <div class="payment-amount">₦${booking.total?.toLocaleString()}</div>
+                </div>
+                <button class="btn btn-primary payment-btn" onclick="processPayment()">
+                    <i class="fas fa-credit-card"></i> Pay Now
+                </button>
+            </div>
+        </div>
+    `;
+    
+    chatMessages.appendChild(paymentMessage);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function showDownloadStrip(B){
+  const existing = document.querySelector('.download-strip');
+  if(existing) return;
+
+  const strip = document.createElement('div');
+  strip.className = 'download-strip agreement-strip';
+  strip.innerHTML=`
+    <div class="agreement-content">
+        <i class="fas fa-check-circle text-success"></i>
+        <span>Agreement completed! Download your copy</span>
+    </div>
+    <button class="btn btn-success" onclick="downloadAgreement()">
+      <i class="fas fa-download"></i> Download Agreement
+    </button>`;
+  
+  // Insert at the top of chat messages instead of bottom
+  const chatMessages = document.getElementById('chatMessages');
+  if (chatMessages) {
+      chatMessages.insertBefore(strip, chatMessages.firstChild);
+  }
+}
+
+function processPayment() {
+    if (!window.currentChatSession) return;
+    
+    db.collection('bookings').doc(window.currentChatSession).get().then(snap => {
+        if (!snap.exists) return;
+        
+        const booking = snap.data();
+        const amount = booking.total * 100; // Convert to kobo for Paystack
+        
+        // Validate required fields before payment
+        if (!currentUserData.email || !booking.total || booking.total <= 0) {
+            showNotification('Payment error: Missing required information', 'error');
+            return;
+        }
+
+        const handler = PaystackPop.setup({
+            key: PAYSTACK_PUBLIC_KEY,
+            email: currentUserData.email,
+            amount: amount,
+            currency: 'NGN',
+            ref: `session_${window.currentChatSession}_${Date.now()}`,
+            channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer'],
+            metadata: {
+                sessionId: window.currentChatSession,
+                instructorId: booking.instructorId,
+                studentId: booking.studentId,
+                custom_fields: [
+                    {
+                        display_name: "Session Type",
+                        variable_name: "session_type",
+                        value: "Mentorship Session"
+                    }
+                ]
+            },
+            callback: function(response) {
+                // Payment successful
+                showNotification('Payment successful! Verifying...', 'success');
+                
+                // Update booking with payment info
+                db.collection('bookings').doc(window.currentChatSession).update({
+                    paymentCompleted: true,
+                    paymentCompletedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    paymentReference: response.reference,
+                    status: 'confirmed'
+                }).then(() => {
+                    showNotification('Payment verified! Session confirmed.', 'success');
+                    // Remove payment message and enable features
+                    document.querySelector('.payment-message')?.remove();
+                    // Enable instructor dashboard
+                    enableInstructorFeatures();
+                }).catch(error => {
+                    console.error('Error updating payment status:', error);
+                    showNotification('Payment verification failed', 'error');
+                });
+            },
+            onClose: function() {
+                showNotification('Payment cancelled', 'info');
+            }
+        });
+        
+        try {
+            handler.openIframe();
+        } catch (error) {
+            console.error('Paystack error:', error);
+            showNotification('Payment system error. Please try again.', 'error');
+        }
+    });
+}
+
+async function downloadAgreement(){
+  if (!window.currentChatSession) return;
+  
+  try {
+    const bookingSnap = await db.collection('bookings').doc(window.currentChatSession).get();
+    if (!bookingSnap.exists) return;
+
+    const booking = bookingSnap.data();
+    
+    // Get instructor name if not already in booking
+    if (!booking.instructorName && booking.instructorId) {
+      const instructorSnap = await db.collection('users').doc(booking.instructorId).get();
+      if (instructorSnap.exists) {
+        const instructorData = instructorSnap.data();
+        booking.instructorName = instructorData.displayName || instructorData.name || instructorData.email?.split('@')[0] || 'Unknown Instructor';
+      }
+    }
+    
+    // Get student name if not already in booking
+    if (!booking.studentName && booking.studentId) {
+      const studentSnap = await db.collection('users').doc(booking.studentId).get();
+      if (studentSnap.exists) {
+        const studentData = studentSnap.data();
+        booking.studentName = studentData.displayName || studentData.name || studentData.email?.split('@')[0] || 'Unknown Student';
+      }
+    }
+    
+    generateAgreementImage(booking);
+  } catch (error) {
+    console.error('Error downloading agreement:', error);
+    showNotification('Error downloading agreement', 'error');
+  }
+}
+
+// Generate tamper-proof agreement image with watermarks
+// Enable instructor features after payment
+function enableInstructorFeatures() {
+    if (currentUserData.role !== 'instructor') return;
+    
+    const chatMessages = document.getElementById('chatMessages');
+    if (!chatMessages) return;
+    
+    // Check if instructor dashboard already exists
+    if (document.querySelector('.instructor-dashboard-message')) return;
+    
+    const dashboardMessage = document.createElement('div');
+    dashboardMessage.className = 'message system-message instructor-dashboard-message';
+    dashboardMessage.innerHTML = `
+        <div class="message-content">
+            <div class="instructor-dashboard">
+                <div class="dashboard-header">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <h4>Instructor Dashboard</h4>
+                    <p>Payment confirmed! You now have access to exclusive teaching tools.</p>
+                </div>
+                <div class="feature-grid">
+                    <div class="feature-card" onclick="createExclusiveCourse()">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h5>Create Course</h5>
+                        <p>Build exclusive course for this student</p>
+                    </div>
+                    <div class="feature-card" onclick="createLivestream()">
+                        <i class="fas fa-video"></i>
+                        <h5>Start Livestream</h5>
+                        <p>Begin live session at scheduled time</p>
+                    </div>
+                    <div class="feature-card" onclick="createQuiz()">
+                        <i class="fas fa-clipboard-question"></i>
+                        <h5>Create Quiz</h5>
+                        <p>Build assessment for student</p>
+                    </div>
+                    <div class="feature-card" onclick="uploadResources()">
+                        <i class="fas fa-upload"></i>
+                        <h5>Upload Resources</h5>
+                        <p>Share materials and documents</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    chatMessages.appendChild(dashboardMessage);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Show instructor dashboard after payment
+function showInstructorDashboard(booking) {
+    enableInstructorFeatures();
+}
+
+// Check if session is complete for student review
+function checkSessionCompletion(booking) {
+    if (currentUserData.role !== 'member') return;
+    
+    const sessionDate = booking.sessionDate?.toDate();
+    const sessionDuration = booking.hours || 1;
+    
+    if (!sessionDate) return;
+    
+    const sessionEndTime = new Date(sessionDate.getTime() + (sessionDuration * 60 * 60 * 1000));
+    const now = new Date();
+    
+    // If session has ended and no review submitted yet
+    if (now > sessionEndTime && !booking.reviewSubmitted) {
+        setTimeout(() => {
+            showStudentReviewModal();
+        }, 5000); // Show review modal 5 seconds after session ends
+    }
+}
+
+// Create exclusive course for student
+function createExclusiveCourse() {
+    if (!window.currentChatSession) return;
+    
+    // Open new all-in-one instructor dashboard
+    const dashboardUrl = `mentorship-instructor.html?sessionId=${window.currentChatSession}`;
+    window.open(dashboardUrl, '_blank');
+    
+    showNotification('Opening instructor dashboard...', 'info');
+}
+
+// Create livestream for session
+function createLivestream() {
+    if (!window.currentChatSession) return;
+    
+    // Open instructor dashboard on livestream tab
+    const dashboardUrl = `mentorship-instructor.html?sessionId=${window.currentChatSession}#livestream`;
+    window.open(dashboardUrl, '_blank');
+    
+    showNotification('Opening livestream dashboard...', 'info');
+}
+
+// Create quiz for student
+function createQuiz() {
+    if (!window.currentChatSession) return;
+    
+    // Open instructor dashboard on quiz tab
+    const dashboardUrl = `mentorship-instructor.html?sessionId=${window.currentChatSession}#quiz`;
+    window.open(dashboardUrl, '_blank');
+    
+    showNotification('Opening quiz creator...', 'info');
+}
+
+// Upload resources for student
+function uploadResources() {
+    if (!window.currentChatSession) return;
+    
+    // Open instructor dashboard on resources tab
+    const dashboardUrl = `mentorship-instructor.html?sessionId=${window.currentChatSession}#resources`;
+    window.open(dashboardUrl, '_blank');
+    
+    showNotification('Opening resource manager...', 'info');
+}
+
+// Show student review modal after session
+function showStudentReviewModal() {
+    const modal = document.createElement('div');
+    modal.className = 'modal active';
+    modal.id = 'studentReviewModal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Session Complete - Share Your Experience</h3>
+                <button class="modal-close" onclick="closeReviewModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="reviewForm">
+                    <div class="form-group">
+                        <label>Rate your instructor (1-5 stars)</label>
+                        <div class="star-rating">
+                            <span class="star" data-rating="1">☆</span>
+                            <span class="star" data-rating="2">☆</span>
+                            <span class="star" data-rating="3">☆</span>
+                            <span class="star" data-rating="4">☆</span>
+                            <span class="star" data-rating="5">☆</span>
+                        </div>
+                        <input type="hidden" id="rating" name="rating" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="testimonial">Write a testimonial</label>
+                        <textarea id="testimonial" name="testimonial" rows="4" 
+                                placeholder="Share your experience with this instructor..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="publicTestimonial" name="public"> 
+                            Make this testimonial public on instructor's profile
+                        </label>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" onclick="closeReviewModal()" class="btn btn-secondary">Skip</button>
+                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Add star rating functionality
+    const stars = modal.querySelectorAll('.star');
+    const ratingInput = modal.querySelector('#rating');
+    
+    stars.forEach(star => {
+        star.addEventListener('click', () => {
+            const rating = star.dataset.rating;
+            ratingInput.value = rating;
+            
+            stars.forEach((s, index) => {
+                s.textContent = index < rating ? '★' : '☆';
+                s.style.color = index < rating ? '#ffd700' : '#ccc';
+            });
+        });
+    });
+    
+    // Handle form submission
+    modal.querySelector('#reviewForm').addEventListener('submit', submitReview);
+}
+
+// Submit student review
+async function submitReview(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const rating = parseInt(formData.get('rating'));
+    const testimonial = formData.get('testimonial');
+    const isPublic = formData.get('public') === 'on';
+    
+    if (!rating || !testimonial) {
+        showNotification('Please provide both rating and testimonial', 'error');
+        return;
+    }
+    
+    try {
+        const booking = await db.collection('bookings').doc(window.currentChatSession).get();
+        const bookingData = booking.data();
+        
+        // Submit testimonial to admin for review
+        await db.collection('testimonials').add({
+            sessionId: window.currentChatSession,
+            instructorId: bookingData.instructorId,
+            instructorName: bookingData.instructorName,
+            studentId: currentUserData.uid,
+            studentName: currentUserData.displayName || currentUserData.email,
+            rating: rating,
+            content: testimonial,
+            isPublic: isPublic,
+            status: 'pending', // Admin will review
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        // Mark review as submitted in booking
+        await db.collection('bookings').doc(window.currentChatSession).update({
+            reviewSubmitted: true,
+            reviewSubmittedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        showNotification('Thank you! Your review has been submitted for approval.', 'success');
+        closeReviewModal();
+        
+    } catch (error) {
+        console.error('Error submitting review:', error);
+        showNotification('Error submitting review. Please try again.', 'error');
+    }
+}
+
+// Show instructor dashboard buttons in chat
+function showInstructorButtons() {
+    const chatMessages = document.getElementById('chatMessages');
+    if (!chatMessages) return;
+    
+    // Check if buttons already exist
+    if (document.querySelector('.instructor-buttons-message')) return;
+    
+    const buttonsMessage = document.createElement('div');
+    buttonsMessage.className = 'message system-message instructor-buttons-message';
+    buttonsMessage.innerHTML = `
+        <div class="message-content">
+            <div style="text-align: center; padding: 1rem;">
+                <h4 style="margin-bottom: 1rem; color: var(--color-primary);">
+                    <i class="fas fa-chalkboard-teacher"></i> Instructor Tools
+                </h4>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem;">
+                    <button onclick="createExclusiveCourse()" class="btn" style="background: var(--color-primary); color: white; padding: 0.5rem; font-size: 0.9rem;">
+                        <i class="fas fa-graduation-cap"></i><br>Course
+                    </button>
+                    <button onclick="createLivestream()" class="btn" style="background: var(--success-color); color: white; padding: 0.5rem; font-size: 0.9rem;">
+                        <i class="fas fa-video"></i><br>Live
+                    </button>
+                    <button onclick="createQuiz()" class="btn" style="background: var(--info-color); color: white; padding: 0.5rem; font-size: 0.9rem;">
+                        <i class="fas fa-clipboard-question"></i><br>Quiz
+                    </button>
+                    <button onclick="uploadResources()" class="btn" style="background: var(--warning-color); color: white; padding: 0.5rem; font-size: 0.9rem;">
+                        <i class="fas fa-upload"></i><br>Files
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    chatMessages.appendChild(buttonsMessage);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Close review modal
+function closeReviewModal() {
+    const modal = document.getElementById('studentReviewModal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+function generateAgreementImage(booking) {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  
+  // Set canvas size for A4-like proportions
+  canvas.width = 800;
+  canvas.height = 1200;
+  
+  // Background with subtle pattern
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // Add watermark background pattern
+  ctx.save();
+  ctx.globalAlpha = 0.05;
+  ctx.fillStyle = '#d97706';
+  ctx.font = 'bold 60px Arial';
+  ctx.textAlign = 'center';
+  
+  // Diagonal watermarks across the document
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 6; j++) {
+      ctx.save();
+      ctx.translate(i * 150, j * 200);
+      ctx.rotate(-Math.PI / 6);
+      ctx.fillText('ANDREW CARES', 0, 0);
+      ctx.fillText('VILLAGE HUB', 0, 70);
+      ctx.restore();
+    }
+  }
+  ctx.restore();
+  
+  // Header with logo area
+  ctx.fillStyle = 'linear-gradient(135deg, #b45309 0%, #d97706 100%)';
+  const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+  gradient.addColorStop(0, '#b45309');
+  gradient.addColorStop(1, '#d97706');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, canvas.width, 120);
+  
+  // Header text
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 36px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('MENTORSHIP AGREEMENT', canvas.width / 2, 50);
+  ctx.font = '18px Arial';
+  ctx.fillText('Andrew Cares Village Hub - Official Document', canvas.width / 2, 85);
+  
+  // Document content
+  let y = 170;
+  const leftMargin = 60;
+  const rightMargin = canvas.width - 60;
+  
+  // Helper function to add text
+  function addText(text, fontSize = 16, color = '#333333', bold = false, center = false) {
+    ctx.fillStyle = color;
+    ctx.font = `${bold ? 'bold ' : ''}${fontSize}px Arial`;
+    ctx.textAlign = center ? 'center' : 'left';
+    
+    if (center) {
+      ctx.fillText(text, canvas.width / 2, y);
+    } else {
+      // Handle text wrapping
+      const words = text.split(' ');
+      let line = '';
+      const maxWidth = rightMargin - leftMargin - 20;
+      
+      for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = ctx.measureText(testLine);
+        const testWidth = metrics.width;
+        
+        if (testWidth > maxWidth && n > 0) {
+          ctx.fillText(line, leftMargin, y);
+          line = words[n] + ' ';
+          y += fontSize + 8;
+        } else {
+          line = testLine;
+        }
+      }
+      ctx.fillText(line, leftMargin, y);
+    }
+    y += fontSize + 12;
+  }
+  
+  // Document ID and timestamp
+  addText(`Document ID: ${window.currentChatSession}`, 12, '#666666');
+  addText(`Generated: ${new Date().toLocaleString()}`, 12, '#666666');
+  y += 20;
+  
+  // Agreement details
+  addText('PARTIES TO THE AGREEMENT', 20, '#b45309', true);
+  y += 10;
+  addText(`Student: ${booking.studentName}`, 16, '#333333', true);
+  addText(`Student ID: ${booking.studentId}`, 14, '#666666');
+  y += 10;
+  addText(`Instructor: ${booking.instructorName}`, 16, '#333333', true);
+  addText(`Instructor ID: ${booking.instructorId}`, 14, '#666666');
+  y += 30;
+  
+  addText('SESSION DETAILS', 20, '#b45309', true);
+  y += 10;
+  addText(`Session Date: ${booking.sessionDate?.toDate?.().toDateString() || 'To be determined'}`, 16);
+  addText(`Duration: ${booking.hours} hour(s)`, 16);
+  addText(`Hourly Rate: ₦${booking.rate?.toLocaleString()}`, 16);
+  addText(`Total Amount: ₦${booking.total?.toLocaleString()}`, 18, '#059669', true);
+  addText(`Subject: ${booking.subject || 'As discussed'}`, 16);
+  y += 20;
+  
+  addText('SESSION OBJECTIVES', 20, '#b45309', true);
+  y += 10;
+  addText(booking.objectives || 'As discussed in chat', 16);
+  y += 30;
+  
+  addText('DIGITAL SIGNATURES', 20, '#b45309', true);
+  y += 10;
+  addText(`Instructor Signed: ${booking.instructorSignedAt?.toDate?.().toLocaleString() || 'Not signed'}`, 16, '#059669', true);
+  addText(`Student Signed: ${booking.studentSignedAt?.toDate?.().toLocaleString() || 'Not signed'}`, 16, '#059669', true);
+  y += 30;
+  
+  addText('TERMS AND CONDITIONS', 20, '#b45309', true);
+  y += 10;
+  addText('1. Both parties agree to the terms specified above', 14);
+  addText('2. Payment must be made before the start of the mentorship session', 14);
+  addText('3. Either party may reschedule with 24 hours notice', 14);
+  addText('4. This agreement is legally binding upon digital signature by both parties', 14);
+  y += 30;
+  
+  // Security features
+  addText('DOCUMENT SECURITY FEATURES', 16, '#b45309', true);
+  y += 10;
+  addText('• This document contains embedded watermarks for authenticity verification', 12, '#666666');
+  addText('• Any modification to this document will be detectable', 12, '#666666');
+  addText('• Original document hash: ' + generateDocumentHash(booking), 12, '#666666');
+  y += 20;
+  
+  // Footer with timestamp and verification
+  ctx.fillStyle = '#f8f9fa';
+  ctx.fillRect(0, canvas.height - 80, canvas.width, 80);
+  
+  ctx.fillStyle = '#666666';
+  ctx.font = '12px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('This is an official document from Andrew Cares Village Hub', canvas.width / 2, canvas.height - 50);
+  ctx.fillText('Verify authenticity at: andrewcaresvillage.com/verify', canvas.width / 2, canvas.height - 30);
+  ctx.fillText(`Document generated on ${new Date().toLocaleString()}`, canvas.width / 2, canvas.height - 10);
+  
+  // Convert to image and download
+  canvas.toBlob(function(blob) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Mentorship_Agreement_${window.currentChatSession}_${new Date().getTime()}.png`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    showNotification('Secure agreement image downloaded successfully', 'success');
+  }, 'image/png', 0.95);
+}
+
+// Generate a simple hash for document verification
+function generateDocumentHash(booking) {
+  const dataString = `${booking.studentId}${booking.instructorId}${booking.hours}${booking.rate}${booking.total}${booking.instructorSignedAt}${booking.studentSignedAt}`;
+  let hash = 0;
+  for (let i = 0; i < dataString.length; i++) {
+    const char = dataString.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  return Math.abs(hash).toString(16).toUpperCase().substring(0, 8);
+}
+
+function hideAgreementStrips(){
+  document.querySelectorAll('.agreement-strip, .download-strip, .payment-strip').forEach(el=>el.remove());
+}
+
+// Create agreement strip helper function
+function createAgreementStrip(additionalClass = '') {
+  const chatInputBar = document.querySelector('.chat-input-bar');
+  if (!chatInputBar) return null;
+
+  const strip = document.createElement('div');
+  strip.className = `agreement-strip ${additionalClass}`.trim();
+  strip.id = 'agreementStrip';
+  
+  chatInputBar.parentNode.insertBefore(strip, chatInputBar);
+  return strip;
+}
     </script>
-</body>
+          <!-- AI Chat Widget Integration -->
+    <script src="js/chat-integration.js"></script>
+        <!-- Hybrid AI Chat Widget -->
+        <script src="js/advanced-hybrid-chat.js"></script>
+    </body>
 </html>

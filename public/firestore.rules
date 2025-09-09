@@ -96,8 +96,7 @@ service cloud.firestore {
         (resource.data.recipientId == request.auth.uid || 
          resource.data.senderId == request.auth.uid);
       allow create: if isAuthenticated() && 
-        request.resource.data.senderId == request.auth.uid &&
-        request.resource.data.keys().hasAll(['recipientId', 'senderId', 'timestamp']);
+        request.resource.data.keys().hasAll(['recipientId', 'type', 'createdAt']);
       allow update: if isAuthenticated() && 
         (resource.data.recipientId == request.auth.uid || isAdmin());
       allow delete: if isAuthenticated() && 
@@ -541,3 +540,4 @@ service cloud.firestore {
     }
   }
 }
+    

@@ -3211,7 +3211,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
             authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-             projectId: "%REACT_APP_FIREBASE_PROJECT_ID%",    
+             projectId: "andrew-cares-village-f4cb6",    
             storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
             messagingSenderId: "255087116955",
             appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
@@ -3220,6 +3220,69 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+
+        // Enhanced connection error handling
+        let connectionRetries = 0;
+        const maxRetries = 3;
+
+        function handleFirebaseError(error) {
+            console.error('Firebase Error:', error);
+            
+            if (error.code === 'unavailable' || error.code === 'deadline-exceeded') {
+                if (connectionRetries < maxRetries) {
+                    connectionRetries++;
+                    showNotification(`Connection issue. Retrying... (${connectionRetries}/${maxRetries})`, 'warning');
+                    return true;
+                } else {
+                    showNotification('Unable to connect to server. Please check your internet connection and try again.', 'error');
+                }
+            } else if (error.code === 'permission-denied') {
+                showNotification('Access denied. Please contact support if this persists.', 'error');
+            } else {
+                showNotification('An unexpected error occurred. Please try again.', 'error');
+            }
+            return false;
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 12px 20px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                max-width: 300px;
+                word-wrap: break-word;
+            `;
+            
+            switch(type) {
+                case 'error':
+                    notification.style.backgroundColor = '#f44336';
+                    break;
+                case 'warning':
+                    notification.style.backgroundColor = '#ff9800';
+                    break;
+                case 'success':
+                    notification.style.backgroundColor = '#4caf50';
+                    break;
+                default:
+                    notification.style.backgroundColor = '#2196f3';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 5000);
+        }
 
         // Enhanced Global State
         let currentAuthUser = null;
@@ -6880,5 +6943,7 @@ function stopVoiceRecording() {
         }, 2000);
     
     </script>
+            <!-- Hybrid AI Chat Widget -->
+        <script src="js/advanced-hybrid-chat.js"></script>
     </body>
 </html>

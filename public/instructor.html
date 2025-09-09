@@ -1021,7 +1021,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
             authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-                projectId: "%REACT_APP_FIREBASE_PROJECT_ID%", 
+                projectId: "andrew-cares-village-f4cb6", 
             storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
             messagingSenderId: "255087116955",
             appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
@@ -1030,6 +1030,89 @@
         const app = initializeApp(firebaseConfig );
         const auth = getAuth(app);
         const db = getFirestore(app);
+
+        // Import NotificationService
+        let notificationService;
+        async function initializeInstructorNotificationService() {
+            try {
+                // Load NotificationService dynamically
+                const script = document.createElement('script');
+                script.src = '/js/notification-service.js';
+                script.onload = async () => {
+                    if (typeof NotificationService !== 'undefined') {
+                        notificationService = new NotificationService();
+                        await notificationService.initialize(auth, db);
+                        console.log('Instructor notification service initialized');
+                    }
+                };
+                document.head.appendChild(script);
+            } catch (error) {
+                console.error('Error initializing instructor notification service:', error);
+            }
+        }
+
+        // Enhanced connection error handling
+        let connectionRetries = 0;
+        const maxRetries = 3;
+
+        function handleFirebaseError(error) {
+            console.error('Firebase Error:', error);
+            
+            if (error.code === 'unavailable' || error.code === 'deadline-exceeded') {
+                if (connectionRetries < maxRetries) {
+                    connectionRetries++;
+                    showNotification(`Connection issue. Retrying... (${connectionRetries}/${maxRetries})`, 'warning');
+                    return true; // Indicate retry should happen
+                } else {
+                    showNotification('Unable to connect to server. Please check your internet connection and try again.', 'error');
+                }
+            } else if (error.code === 'permission-denied') {
+                showNotification('Access denied. Please contact support if this persists.', 'error');
+            } else {
+                showNotification('An unexpected error occurred. Please try again.', 'error');
+            }
+            return false;
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 12px 20px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                max-width: 300px;
+                word-wrap: break-word;
+            `;
+            
+            switch(type) {
+                case 'error':
+                    notification.style.backgroundColor = '#f44336';
+                    break;
+                case 'warning':
+                    notification.style.backgroundColor = '#ff9800';
+                    break;
+                case 'success':
+                    notification.style.backgroundColor = '#4caf50';
+                    break;
+                default:
+                    notification.style.backgroundColor = '#2196f3';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 5000);
+        }
 
         let currentUser = null;
         let userData = null;
@@ -1048,8 +1131,13 @@ onAuthStateChanged(auth, async (user) => {
     currentUser = user;
     console.log("User authenticated:", user.uid);
 
+    // Initialize notification service for instructor
+    await initializeInstructorNotificationService();
+
     try {
         const userDocSnap = await getDoc(doc(db, "users", user.uid));
+        
+        connectionRetries = 0; // Reset retry counter on success
         
         if (!userDocSnap.exists()) {
             console.error("User document not found");
@@ -1089,10 +1177,13 @@ onAuthStateChanged(auth, async (user) => {
         }
         
         console.log("Starting application with user:", userData);
+        initializeDashboard();
+        setupInstructorNotificationListeners();
         startApplication();
         
     } catch (error) {
-        console.error("Authentication Error:", error);
+        console.error("Error loading user data:", error);
+        handleFirebaseError(error);
         
         // More user-friendly error handling
         const errorMessage = error.message || "Authentication failed";
@@ -1726,7 +1817,6 @@ function calculateCourseCompletion(course) {
         const isComplete = req.check ? req.check(value) : Boolean(value && value.toString().trim());
         if (isComplete) completionScore += req.weight;
     });
-
     return Math.min(100, completionScore);
 }
 
@@ -1740,12 +1830,30 @@ async function submitForReview(courseId) {
     try {
         showToast('Submitting course for review...', 'info');
         
+        // Get course data for notification
+        const courseDoc = await getDoc(doc(db, "courses", courseId));
+        const courseData = courseDoc.data();
+        
         await updateDoc(doc(db, "courses", courseId), {
             status: 'pending',
             submittedAt: serverTimestamp()
         });
 
+        // Send notification to admins about new course submission
+        if (notificationService && courseData) {
+            await notificationService.createAdminNotification(
+                'admin',
+                'course_submitted',
+                `New course "${courseData.title}" has been submitted for review by ${courseData.instructorName}`,
+                courseId
+            );
+        }
+
         showToast('Course submitted for review successfully!', 'success');
+        
+        // Refresh the courses display
+        loadCourses();
+        
     } catch (error) {
         console.error('Error submitting course:', error);
         showToast('Failed to submit course for review', 'error');
@@ -1853,6 +1961,10 @@ async function deleteCourse(courseId, courseTitle) {
     try {
         showToast('Deleting course...', 'info');
         
+        // Get course data for notification before deletion
+        const courseDoc = await getDoc(doc(db, "courses", courseId));
+        const courseData = courseDoc.data();
+        
         // Delete all subcollections first (lessons)
         const lessonsQuery = query(collection(db, "courses", courseId, "lessons"));
         const lessonsSnapshot = await getDocs(lessonsQuery);
@@ -1867,7 +1979,20 @@ async function deleteCourse(courseId, courseTitle) {
         
         await batch.commit();
         
+        // Send notification to admins about course deletion
+        if (notificationService && courseData) {
+            await notificationService.createAdminNotification(
+                'admin',
+                'course_deleted',
+                `Course "${courseData.title}" has been deleted by instructor ${courseData.instructorName}`,
+                courseId
+            );
+        }
+        
         showToast('Course deleted successfully', 'success');
+        
+        // Refresh the courses display
+        loadCourses();
         
     } catch (error) {
         console.error('Error deleting course:', error);
@@ -1898,10 +2023,120 @@ function applyFilters() {
 }
 
 
+// Notification management functions
+async function markNotificationAsRead(notificationId) {
+    if (!notificationService) return;
+    
+    try {
+        await notificationService.markAsRead(notificationId);
+        // Update UI to reflect read status
+        const notificationElement = document.querySelector(`[data-notification-id="${notificationId}"]`);
+        if (notificationElement) {
+            notificationElement.classList.add('read');
+        }
+    } catch (error) {
+        console.error('Error marking notification as read:', error);
+    }
+}
+
+async function deleteNotification(notificationId) {
+    if (!notificationService) return;
+    
+    try {
+        await notificationService.deleteNotification(notificationId);
+        // Remove from UI
+        const notificationElement = document.querySelector(`[data-notification-id="${notificationId}"]`);
+        if (notificationElement) {
+            notificationElement.remove();
+        }
+        showToast('Notification deleted', 'success');
+    } catch (error) {
+        console.error('Error deleting notification:', error);
+        showToast('Failed to delete notification', 'error');
+    }
+}
+
+async function markAllNotificationsAsRead() {
+    if (!notificationService || !currentUser) return;
+    
+    try {
+        await notificationService.markAllAsRead(currentUser.uid);
+        // Update UI to reflect all notifications as read
+        document.querySelectorAll('.notification-item:not(.read)').forEach(item => {
+            item.classList.add('read');
+        });
+        showToast('All notifications marked as read', 'success');
+    } catch (error) {
+        console.error('Error marking all notifications as read:', error);
+        showToast('Failed to mark notifications as read', 'error');
+    }
+}
+
+// Enhanced course creation with notification
+async function handleCourseCreation(e) {
+    e.preventDefault();
+    
+    const courseData = {
+        title: document.getElementById('courseTitle').value,
+        discipline: document.getElementById('courseDiscipline').value,
+        level: document.getElementById('courseLevel').value,
+        duration: document.getElementById('courseDuration').value,
+        description: document.getElementById('courseDescription').value,
+        totalModules: parseInt(document.getElementById('totalModules').value) || 0,
+        estimatedStudents: parseInt(document.getElementById('estimatedStudents').value) || 0,
+        price: 0,
+        isFree: true,
+        skills: selectedSkills,
+        prerequisites: document.getElementById('coursePrerequisites').value,
+        instructorId: currentUser.uid,
+        instructorName: userData.name || currentUser.displayName || 'Instructor',
+        status: 'draft',
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+        enrolledStudents: 0,
+        rating: 0,
+        reviews: []
+    };
+
+    try {
+        showToast('Creating course...', 'info');
+        
+        const docRef = await addDoc(collection(db, "courses"), courseData);
+        
+        // Send notification to instructor about successful course creation
+        if (notificationService) {
+            await notificationService.createNotification(
+                currentUser.uid,
+                'instructor',
+                'course_created',
+                `Your course "${courseData.title}" has been created successfully. You can now add content and submit for review.`,
+                docRef.id
+            );
+        }
+        
+        showToast('Course created successfully!', 'success');
+        closeModal();
+        loadCourses();
+        
+        // Reset form
+        document.getElementById('createCourseForm').reset();
+        selectedSkills = [];
+        updateSkillTags();
+        
+    } catch (error) {
+        console.error('Error creating course:', error);
+        showToast('Failed to create course. Please try again.', 'error');
+    }
+}
+
 // Make functions globally accessible
 window.submitForReview = submitForReview;
 window.viewFeedback = viewFeedback;
 window.showToast = showToast;
+window.markNotificationAsRead = markNotificationAsRead;
+window.deleteNotification = deleteNotification;
+window.markAllNotificationsAsRead = markAllNotificationsAsRead;
+window.handleCourseCreation = handleCourseCreation;
 
 // --- UTILITY FUNCTIONS ---
 function showLoading(element, isTable, text = 'Loading...') {
@@ -1919,5 +2154,7 @@ function showLoading(element, isTable, text = 'Loading...') {
     return date.toLocaleDateString();
 }
     </script>
+            <!-- Hybrid AI Chat Widget -->
+        <script src="js/advanced-hybrid-chat.js"></script>
     </body>
 </html>

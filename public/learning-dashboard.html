@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Dashboard - Andrew Cares Village</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #b38b00;
+            --color-secondary: #d4af37;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666;
+            --card-bg: #ffffff;
+            --border-color: #e5e7eb;
+            --hover-bg: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem 1.5rem;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: var(--color-primary);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .session-info {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .session-status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .session-status.active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .session-status.expired {
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .content-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .courses-icon { background: #3b82f6; }
+        .quiz-icon { background: #10b981; }
+        .resources-icon { background: #f59e0b; }
+        .livestream-icon { background: #ef4444; }
+
+        .content-list {
+            list-style: none;
+        }
+
+        .content-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: background 0.3s ease;
+            cursor: pointer;
+        }
+
+        .content-item:hover {
+            background: var(--hover-bg);
+        }
+
+        .renewal-section {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9c7a00;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                padding: 1rem;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                Learning Hub
+            </div>
+            
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#courses" class="nav-link active" onclick="showSection('courses')">
+                            <i class="fas fa-book"></i>
+                            Courses
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#quizzes" class="nav-link" onclick="showSection('quizzes')">
+                            <i class="fas fa-question-circle"></i>
+                            Quizzes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#resources" class="nav-link" onclick="showSection('resources')">
+                            <i class="fas fa-folder"></i>
+                            Resources
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#livestream" class="nav-link" onclick="showSection('livestream')">
+                            <i class="fas fa-video"></i>
+                            Live Stream
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="mentorship.html" class="nav-link">
+                            <i class="fas fa-comments"></i>
+                            Back to Chat
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div>
+                    <h1 id="pageTitle">Learning Dashboard</h1>
+                    <p id="pageSubtitle">Access your courses, quizzes, and resources</p>
+                </div>
+                <div>
+                    <button class="btn btn-secondary" onclick="renewSession()">
+                        <i class="fas fa-refresh"></i> Renew Session
+                    </button>
+                </div>
+            </header>
+
+            <div class="session-info">
+                <div class="session-status active" id="sessionStatus">Active Session</div>
+                <h3 id="instructorName">Loading...</h3>
+                <p id="sessionDetails">Session details loading...</p>
+            </div>
+
+            <!-- Courses Section -->
+            <div id="courses-section" class="content-section">
+                <div class="content-grid">
+                    <div class="content-card">
+                        <div class="card-header">
+                            <div class="card-icon courses-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div>
+                                <h3>Courses</h3>
+                                <p>Interactive learning materials</p>
+                            </div>
+                        </div>
+                        <ul class="content-list" id="coursesList">
+                            <li class="empty-state">
+                                <i class="fas fa-book"></i>
+                                <p>No courses available yet</p>
+                                <small>Your instructor will add courses during the session</small>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quizzes Section -->
+            <div id="quizzes-section" class="content-section" style="display: none;">
+                <div class="content-grid">
+                    <div class="content-card">
+                        <div class="card-header">
+                            <div class="card-icon quiz-icon">
+                                <i class="fas fa-question-circle"></i>
+                            </div>
+                            <div>
+                                <h3>Quizzes</h3>
+                                <p>Test your knowledge</p>
+                            </div>
+                        </div>
+                        <ul class="content-list" id="quizzesList">
+                            <li class="empty-state">
+                                <i class="fas fa-question-circle"></i>
+                                <p>No quizzes available yet</p>
+                                <small>Your instructor will create quizzes for you</small>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources Section -->
+            <div id="resources-section" class="content-section" style="display: none;">
+                <div class="content-grid">
+                    <div class="content-card">
+                        <div class="card-header">
+                            <div class="card-icon resources-icon">
+                                <i class="fas fa-folder"></i>
+                            </div>
+                            <div>
+                                <h3>Resources</h3>
+                                <p>Documents and materials</p>
+                            </div>
+                        </div>
+                        <ul class="content-list" id="resourcesList">
+                            <li class="empty-state">
+                                <i class="fas fa-folder"></i>
+                                <p>No resources available yet</p>
+                                <small>Your instructor will share resources with you</small>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Livestream Section -->
+            <div id="livestream-section" class="content-section" style="display: none;">
+                <div class="content-grid">
+                    <div class="content-card">
+                        <div class="card-header">
+                            <div class="card-icon livestream-icon">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <div>
+                                <h3>Live Stream</h3>
+                                <p>Real-time video sessions</p>
+                            </div>
+                        </div>
+                        <div id="livestreamContent">
+                            <div class="empty-state">
+                                <i class="fas fa-video"></i>
+                                <p>No active live stream</p>
+                                <small>Your instructor will start live sessions when needed</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Session Renewal Section -->
+            <div class="renewal-section" id="renewalSection" style="display: none;">
+                <h3>Session Expired</h3>
+                <p>Your mentorship session has ended. You can still access all content, but your instructor cannot add new materials.</p>
+                <div style="margin-top: 1.5rem; gap: 1rem; display: flex; justify-content: center;">
+                    <button class="btn btn-primary" onclick="renewSession()">
+                        <i class="fas fa-refresh"></i> Renew Session
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
+            authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
+            projectId: "andrew-cares-village-f4cb6",
+            storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
+            messagingSenderId: "255087116955",
+            appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        let currentUser = null;
+        let currentUserData = null;
+        let currentSession = null;
+
+        // Initialize
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                currentUserData = userDoc.data();
+                
+                // Get session from URL params or localStorage
+                const urlParams = new URLSearchParams(window.location.search);
+                const sessionId = urlParams.get('session') || localStorage.getItem('currentSession');
+                
+                if (sessionId) {
+                    loadSession(sessionId);
+                } else {
+                    // Redirect to mentorship page if no session
+                    window.location.href = 'mentorship.html';
+                }
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        async function loadSession(sessionId) {
+            try {
+                const sessionDoc = await db.collection('bookings').doc(sessionId).get();
+                if (sessionDoc.exists) {
+                    currentSession = { id: sessionId, ...sessionDoc.data() };
+                    updateSessionInfo();
+                    loadContent();
+                }
+            } catch (error) {
+                console.error('Error loading session:', error);
+            }
+        }
+
+        function updateSessionInfo() {
+            const isInstructor = currentUserData.role === 'instructor';
+            const partnerName = isInstructor ? currentSession.studentName : currentSession.instructorName;
+            const sessionStatus = currentSession.status || 'active';
+            
+            document.getElementById('instructorName').textContent = 
+                isInstructor ? `Student: ${currentSession.studentName}` : `Instructor: ${currentSession.instructorName}`;
+            
+            document.getElementById('sessionDetails').textContent = 
+                `Session Duration: ${currentSession.hours || 1} hour(s) • Rate: ₦${currentSession.rate?.toLocaleString() || '0'}/hour`;
+            
+            const statusElement = document.getElementById('sessionStatus');
+            statusElement.textContent = sessionStatus === 'completed' ? 'Session Expired' : 'Active Session';
+            statusElement.className = `session-status ${sessionStatus === 'completed' ? 'expired' : 'active'}`;
+            
+            if (sessionStatus === 'completed') {
+                document.getElementById('renewalSection').style.display = 'block';
+            }
+        }
+
+        function loadContent() {
+            loadCourses();
+            loadQuizzes();
+            loadResources();
+            loadLivestream();
+        }
+
+        async function loadCourses() {
+            try {
+                const coursesQuery = db.collection('courses')
+                    .where('sessionId', '==', currentSession.id)
+                    .orderBy('createdAt', 'desc');
+                
+                coursesQuery.onSnapshot((snapshot) => {
+                    const coursesList = document.getElementById('coursesList');
+                    coursesList.innerHTML = '';
+                    
+                    if (snapshot.empty) {
+                        coursesList.innerHTML = `
+                            <li class="empty-state">
+                                <i class="fas fa-book"></i>
+                                <p>No courses available yet</p>
+                                <small>Your instructor will add courses during the session</small>
+                            </li>
+                        `;
+                        return;
+                    }
+                    
+                    snapshot.forEach(doc => {
+                        const course = doc.data();
+                        const courseItem = document.createElement('li');
+                        courseItem.className = 'content-item';
+                        courseItem.innerHTML = `
+                            <i class="fas fa-play-circle"></i>
+                            <div>
+                                <strong>${course.title}</strong>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary);">${course.description}</p>
+                            </div>
+                        `;
+                        courseItem.onclick = () => openCourse(doc.id, course);
+                        coursesList.appendChild(courseItem);
+                    });
+                });
+            } catch (error) {
+                console.error('Error loading courses:', error);
+            }
+        }
+
+        async function loadQuizzes() {
+            try {
+                const quizzesQuery = db.collection('quizzes')
+                    .where('sessionId', '==', currentSession.id)
+                    .orderBy('createdAt', 'desc');
+                
+                quizzesQuery.onSnapshot((snapshot) => {
+                    const quizzesList = document.getElementById('quizzesList');
+                    quizzesList.innerHTML = '';
+                    
+                    if (snapshot.empty) {
+                        quizzesList.innerHTML = `
+                            <li class="empty-state">
+                                <i class="fas fa-question-circle"></i>
+                                <p>No quizzes available yet</p>
+                                <small>Your instructor will create quizzes for you</small>
+                            </li>
+                        `;
+                        return;
+                    }
+                    
+                    snapshot.forEach(doc => {
+                        const quiz = doc.data();
+                        const quizItem = document.createElement('li');
+                        quizItem.className = 'content-item';
+                        quizItem.innerHTML = `
+                            <i class="fas fa-clipboard-question"></i>
+                            <div>
+                                <strong>${quiz.title}</strong>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary);">${quiz.questions?.length || 0} questions</p>
+                            </div>
+                        `;
+                        quizItem.onclick = () => openQuiz(doc.id, quiz);
+                        quizzesList.appendChild(quizItem);
+                    });
+                });
+            } catch (error) {
+                console.error('Error loading quizzes:', error);
+            }
+        }
+
+        async function loadResources() {
+            try {
+                const resourcesQuery = db.collection('resources')
+                    .where('sessionId', '==', currentSession.id)
+                    .orderBy('createdAt', 'desc');
+                
+                resourcesQuery.onSnapshot((snapshot) => {
+                    const resourcesList = document.getElementById('resourcesList');
+                    resourcesList.innerHTML = '';
+                    
+                    if (snapshot.empty) {
+                        resourcesList.innerHTML = `
+                            <li class="empty-state">
+                                <i class="fas fa-folder"></i>
+                                <p>No resources available yet</p>
+                                <small>Your instructor will share resources with you</small>
+                            </li>
+                        `;
+                        return;
+                    }
+                    
+                    snapshot.forEach(doc => {
+                        const resource = doc.data();
+                        const resourceItem = document.createElement('li');
+                        resourceItem.className = 'content-item';
+                        resourceItem.innerHTML = `
+                            <i class="fas fa-file-alt"></i>
+                            <div>
+                                <strong>${resource.title}</strong>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary);">${resource.type || 'Document'}</p>
+                            </div>
+                        `;
+                        resourceItem.onclick = () => openResource(doc.id, resource);
+                        resourcesList.appendChild(resourceItem);
+                    });
+                });
+            } catch (error) {
+                console.error('Error loading resources:', error);
+            }
+        }
+
+        async function loadLivestream() {
+            try {
+                const livestreamQuery = db.collection('livestreams')
+                    .where('sessionId', '==', currentSession.id)
+                    .where('status', '==', 'active');
+                
+                livestreamQuery.onSnapshot((snapshot) => {
+                    const livestreamContent = document.getElementById('livestreamContent');
+                    
+                    if (snapshot.empty) {
+                        livestreamContent.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-video"></i>
+                                <p>No active live stream</p>
+                                <small>Your instructor will start live sessions when needed</small>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    const livestream = snapshot.docs[0].data();
+                    livestreamContent.innerHTML = `
+                        <div style="text-align: center; padding: 2rem;">
+                            <div style="background: #ef4444; color: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                                <i class="fas fa-circle" style="color: #ff6b6b; animation: pulse 2s infinite;"></i>
+                                LIVE NOW
+                            </div>
+                            <h3>${livestream.title}</h3>
+                            <p>${livestream.description}</p>
+                            <button class="btn btn-primary" onclick="joinLivestream('${snapshot.docs[0].id}')">
+                                <i class="fas fa-video"></i> Join Live Stream
+                            </button>
+                        </div>
+                    `;
+                });
+            } catch (error) {
+                console.error('Error loading livestream:', error);
+            }
+        }
+
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
+            
+            // Show selected section
+            document.getElementById(section + '-section').style.display = 'block';
+            
+            // Update nav links
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update page title
+            const titles = {
+                courses: 'Courses',
+                quizzes: 'Quizzes', 
+                resources: 'Resources',
+                livestream: 'Live Stream'
+            };
+            document.getElementById('pageTitle').textContent = titles[section] || 'Learning Dashboard';
+        }
+
+        function renewSession() {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.5); display: flex; align-items: center;
+                justify-content: center; z-index: 10000;
+            `;
+            
+            modal.innerHTML = `
+                <div style="background: white; padding: 2rem; border-radius: 12px; max-width: 500px; text-align: center;">
+                    <h3 style="margin-bottom: 1rem; color: var(--color-primary);">Renew Session</h3>
+                    <p style="margin-bottom: 2rem; color: var(--text-secondary);">
+                        Would you like to renew with the same terms or negotiate new terms?
+                    </p>
+                    <div style="display: flex; gap: 1rem; justify-content: center;">
+                        <button onclick="renewWithSameTerms()" class="btn btn-primary">
+                            <i class="fas fa-check"></i> Same Terms
+                        </button>
+                        <button onclick="renewWithNewTerms()" class="btn btn-secondary">
+                            <i class="fas fa-edit"></i> New Terms
+                        </button>
+                        <button onclick="closeRenewalModal()" class="btn" style="background: #6b7280; color: white;">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            window.renewalModal = modal;
+        }
+
+        function renewWithSameTerms() {
+            window.location.href = `mentorship.html?renew=${currentSession.id}&reuse=true`;
+        }
+
+        function renewWithNewTerms() {
+            window.location.href = `mentorship.html?renew=${currentSession.id}&reuse=false`;
+        }
+
+        function closeRenewalModal() {
+            if (window.renewalModal) {
+                document.body.removeChild(window.renewalModal);
+                window.renewalModal = null;
+            }
+        }
+
+        function openCourse(courseId, course) {
+            // Implement course viewer
+            alert(`Opening course: ${course.title}`);
+        }
+
+        function openQuiz(quizId, quiz) {
+            // Implement quiz viewer
+            alert(`Opening quiz: ${quiz.title}`);
+        }
+
+        function openResource(resourceId, resource) {
+            // Implement resource viewer
+            if (resource.url) {
+                window.open(resource.url, '_blank');
+            } else {
+                alert(`Opening resource: ${resource.title}`);
+            }
+        }
+
+        function joinLivestream(livestreamId) {
+            // Implement livestream viewer
+            alert('Joining live stream...');
+        }
+    </script>
+        <!-- Hybrid AI Chat Widget -->
+        <script src="js/advanced-hybrid-chat.js"></script>
+    </body>
+</html>
+

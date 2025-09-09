@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - Andrew Cares Village</title>
+    <style>
+        :root {
+            --color-primary: #d4a574;
+            --color-secondary: #8b4513;
+            --background-color: #1a1a1a;
+            --text-color: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .offline-container {
+            text-align: center;
+            max-width: 500px;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .offline-icon {
+            font-size: 4rem;
+            color: var(--color-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .retry-btn {
+            background: linear-gradient(45deg, var(--color-primary), var(--color-secondary));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin: 0.5rem;
+        }
+
+        .retry-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .status {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .online {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4caf50;
+        }
+
+        .offline {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid #f44336;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .checking {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">📡</div>
+        <h1>You're Offline</h1>
+        <p>It looks like you've lost your internet connection. Don't worry - some features are still available offline!</p>
+        
+        <button class="retry-btn" onclick="checkConnection()">
+            🔄 Check Connection
+        </button>
+        
+        <button class="retry-btn" onclick="goHome()">
+            🏠 Go Home
+        </button>
+        
+        <div id="status" class="status offline">
+            <strong>Status:</strong> <span id="statusText">Offline</span>
+        </div>
+    </div>
+
+    <script>
+        let isChecking = false;
+
+        function checkConnection() {
+            if (isChecking) return;
+            
+            isChecking = true;
+            const statusEl = document.getElementById('status');
+            const statusText = document.getElementById('statusText');
+            
+            statusEl.className = 'status checking';
+            statusText.textContent = 'Checking connection...';
+            
+            // Try to fetch a small resource to test connection
+            fetch('/favicon.ico?' + Date.now(), { 
+                method: 'HEAD',
+                cache: 'no-cache'
+            })
+            .then(response => {
+                if (response.ok) {
+                    statusEl.className = 'status online';
+                    statusText.textContent = 'Back online! Redirecting...';
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 1500);
+                } else {
+                    throw new Error('Connection failed');
+                }
+            })
+            .catch(() => {
+                statusEl.className = 'status offline';
+                statusText.textContent = 'Still offline';
+                setTimeout(() => {
+                    isChecking = false;
+                }, 2000);
+            });
+        }
+
+        function goHome() {
+            window.location.href = '/';
+        }
+
+        // Auto-check connection every 30 seconds
+        setInterval(() => {
+            if (!isChecking) {
+                checkConnection();
+            }
+        }, 30000);
+
+        // Check connection when page becomes visible
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && !isChecking) {
+                setTimeout(checkConnection, 1000);
+            }
+        });
+
+        // Initial connection check
+        setTimeout(checkConnection, 2000);
+    </script>
+        <!-- Hybrid AI Chat Widget -->
+        <script src="js/advanced-hybrid-chat.js"></script>
+    </body>
+</html>
+

@@ -19,7 +19,7 @@
             --error-color: #f44336; --input-border: #E0E0E0; --input-focus: #B3D1FF;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Montserrat', sans-serif; background: linear-gradient(135deg, var(--primary-color ), var(--primary-light)); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        body { font-family: 'Montserrat', sans-serif; background-color: var(--background-color); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
         .container { width: 100%; max-width: 480px; }
         .signup-card { background-color: var(--card-bg); border-radius: 12px; padding: 2.5rem; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); }
         .logo { text-align: center; margin-bottom: 2rem; }
@@ -209,7 +209,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
             authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-                projectId: "%REACT_APP_FIREBASE_PROJECT_ID%", 
+                projectId: "andrew-cares-village-f4cb6", 
             storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
             messagingSenderId: "255087116955",
             appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
@@ -219,6 +219,29 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
+
+        // Enhanced connection error handling
+        let connectionRetries = 0;
+        const maxRetries = 3;
+
+        function handleFirebaseError(error) {
+            console.error('Firebase Error:', error);
+            
+            if (error.code === 'unavailable' || error.code === 'deadline-exceeded') {
+                if (connectionRetries < maxRetries) {
+                    connectionRetries++;
+                    showMessage(`Connection issue. Retrying... (${connectionRetries}/${maxRetries})`, 'error');
+                    return true; // Indicate retry should happen
+                } else {
+                    showMessage('Unable to connect to server. Please check your internet connection and try again.', 'error');
+                }
+            } else if (error.code === 'permission-denied') {
+                showMessage('Access denied. Please contact support if this persists.', 'error');
+            } else {
+                showMessage('An unexpected error occurred. Please try again.', 'error');
+            }
+            return false;
+        }
 
         const signupForm = document.getElementById('signupForm');
         const messageDiv = document.getElementById('message');
@@ -266,6 +289,7 @@
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
                 
+                connectionRetries = 0; // Reset retry counter on success
                 await createFirestoreUser(user, name, 'email');
                 await sendEmailVerification(user);
 
@@ -273,8 +297,17 @@
                 setTimeout(() => { window.location.href = `verify.html?email=${encodeURIComponent(email)}`; }, 3000);
 
             } catch (error) {
-                const errorMessage = error.code === 'auth/email-already-in-use' ? 'This email is already registered.' : 'Failed to create account.';
-                showMessage(errorMessage, 'error');
+                if (error.code === 'auth/email-already-in-use') {
+                    showMessage('This email is already registered.', 'error');
+                } else if (handleFirebaseError(error)) {
+                    // Retry signup after delay
+                    setTimeout(() => {
+                        signupForm.dispatchEvent(new Event('submit'));
+                    }, 2000);
+                    return; // Don't reset loading state yet
+                } else {
+                    showMessage('Failed to create account. Please try again.', 'error');
+                }
             } finally {
                 submitButton.classList.remove('loading');
                 submitButton.disabled = false;
@@ -287,6 +320,7 @@
                 const result = await signInWithPopup(auth, googleProvider);
                 const user = result.user;
                 
+                connectionRetries = 0; // Reset retry counter on success
                 const userDoc = await getDoc(doc(db, "users", user.uid));
                 if (!userDoc.exists()) {
                     await createFirestoreUser(user, user.displayName, 'google');
@@ -295,7 +329,17 @@
                 window.location.href = 'home.html';
             } catch (error) {
                 console.error("Google Sign-In Error:", error);
-                showMessage("Could not sign in with Google. Please try again.", 'error');
+                if (error.code === 'auth/popup-closed-by-user') {
+                    showMessage("Sign-in was cancelled.", 'error');
+                } else if (handleFirebaseError(error)) {
+                    // Retry Google sign-in after delay
+                    setTimeout(() => {
+                        googleSignInButton.click();
+                    }, 2000);
+                    return; // Don't reset disabled state yet
+                } else {
+                    showMessage("Could not sign in with Google. Please try again.", 'error');
+                }
             } finally {
                 googleSignInButton.disabled = false;
             }
@@ -317,5 +361,8 @@
             });
         }
     </script>
+            <!-- Hybrid AI Chat Widget -->
+        <script src="js/advanced-hybrid-chat.js"></script>
     </body>
 </html>
+

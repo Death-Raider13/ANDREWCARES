@@ -36,7 +36,7 @@
 
         body { 
             font-family: 'Montserrat', sans-serif; 
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-light)); 
+            background-color: var(--background-color); 
             min-height: 100vh; 
             display: flex; 
             align-items: center; 
@@ -514,7 +514,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
             authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-              projectId: "%REACT_APP_FIREBASE_PROJECT_ID%",   
+            projectId: "andrew-cares-village-f4cb6",   
             storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
             messagingSenderId: "255087116955",
             appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
@@ -524,6 +524,29 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
+
+        // Enhanced connection error handling
+        let connectionRetries = 0;
+        const maxRetries = 3;
+
+        function handleFirebaseError(error) {
+            console.error('Firebase Error:', error);
+            
+            if (error.code === 'unavailable' || error.code === 'deadline-exceeded') {
+                if (connectionRetries < maxRetries) {
+                    connectionRetries++;
+                    showMessage(`Connection issue. Retrying... (${connectionRetries}/${maxRetries})`, 'error');
+                    return true; // Indicate retry should happen
+                } else {
+                    showMessage('Unable to connect to server. Please check your internet connection and try again.', 'error');
+                }
+            } else if (error.code === 'permission-denied') {
+                showMessage('Access denied. Please contact support if this persists.', 'error');
+            } else {
+                showMessage('An unexpected error occurred. Please try again.', 'error');
+            }
+            return false;
+        }
 
         const loginForm = document.getElementById('loginForm');
         const messageDiv = document.getElementById('message');
@@ -535,42 +558,49 @@
         }
 
         async function handleSuccessfulLogin(user) {
-            const userRef = doc(db, "users", user.uid);
-            const userDoc = await getDoc(userRef);
+            try {
+                const userRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userRef);
 
-            if (!userDoc.exists()) {
-                await setDoc(userRef, {
-                    uid: user.uid, 
-                    name: user.displayName, 
-                    email: user.email,
-                    avatarUrl: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=001F3F&color=fff`,
-                    createdAt: serverTimestamp(), 
-                    membershipTier: 'apprentice', 
-                    membershipStatus: 'active',
-                    role: 'member', 
-                    isBlocked: false, 
-                    signupMethod: 'google'
-                });
+                if (!userDoc.exists()) {
+                    await setDoc(userRef, {
+                        uid: user.uid, 
+                        name: user.displayName, 
+                        email: user.email,
+                        avatarUrl: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=001F3F&color=fff`,
+                        createdAt: serverTimestamp(), 
+                        membershipTier: 'apprentice', 
+                        membershipStatus: 'active',
+                        role: 'member', 
+                        isBlocked: false, 
+                        signupMethod: 'google'
+                    });
+                }
+                
+                const userData = (await getDoc(userRef)).data();
+
+                if (userData.isBlocked) {
+                    await auth.signOut();
+                    showMessage("Your account has been suspended.", 'error');
+                    return;
+                }
+
+                if (!user.emailVerified) {
+                    await auth.signOut();
+                    window.location.href = `verify.html?email=${encodeURIComponent(user.email)}`;
+                    return;
+                }
+
+                await setDoc(userRef, { lastLogin: serverTimestamp() }, { merge: true });
+
+                const destination = userData.role === 'admin' ? 'admin.html' : 'home.html';
+                window.location.href = destination;
+            } catch (error) {
+                if (handleFirebaseError(error)) {
+                    // Retry the login process
+                    setTimeout(() => handleSuccessfulLogin(user), 2000);
+                }
             }
-            
-            const userData = (await getDoc(userRef)).data();
-
-            if (userData.isBlocked) {
-                await auth.signOut();
-                showMessage("Your account has been suspended.", 'error');
-                return;
-            }
-
-            if (!user.emailVerified) {
-                await auth.signOut();
-                window.location.href = `verify.html?email=${encodeURIComponent(user.email)}`;
-                return;
-            }
-
-            await setDoc(userRef, { lastLogin: serverTimestamp() }, { merge: true });
-
-            const destination = userData.role === 'admin' ? 'admin.html' : 'home.html';
-            window.location.href = destination;
         }
 
         loginForm.addEventListener('submit', async (e) => {
@@ -584,9 +614,18 @@
 
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                connectionRetries = 0; // Reset retry counter on success
                 await handleSuccessfulLogin(userCredential.user);
             } catch (error) {
-                showMessage("Invalid email or password. Please try again.", 'error');
+                if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                    showMessage("Invalid email or password. Please try again.", 'error');
+                } else if (handleFirebaseError(error)) {
+                    // Retry login after delay
+                    setTimeout(() => {
+                        loginForm.dispatchEvent(new Event('submit'));
+                    }, 2000);
+                    return; // Don't reset loading state yet
+                }
             } finally {
                 submitButton.classList.remove('loading');
                 submitButton.disabled = false;
@@ -597,14 +636,27 @@
             googleSignInButton.disabled = true;
             try {
                 const result = await signInWithPopup(auth, googleProvider);
+                connectionRetries = 0; // Reset retry counter on success
                 await handleSuccessfulLogin(result.user);
             } catch (error) {
                 console.error("Google Sign-In Error:", error);
-                showMessage("Could not sign in with Google. Please try again.", 'error');
+                if (error.code === 'auth/popup-closed-by-user') {
+                    showMessage("Sign-in was cancelled.", 'error');
+                } else if (handleFirebaseError(error)) {
+                    // Retry Google sign-in after delay
+                    setTimeout(() => {
+                        googleSignInButton.click();
+                    }, 2000);
+                    return; // Don't reset disabled state yet
+                } else {
+                    showMessage("Could not sign in with Google. Please try again.", 'error');
+                }
             } finally {
                 googleSignInButton.disabled = false;
             }
         });
     </script>
+            <!-- Hybrid AI Chat Widget -->
+        <script src="js/advanced-hybrid-chat.js"></script>
     </body>
 </html>

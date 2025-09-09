@@ -18,7 +18,7 @@
             --success-color: #4CAF50; --error-color: #f44336;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Montserrat', sans-serif; background: linear-gradient(135deg, var(--primary-color ), var(--primary-light)); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        body { font-family: 'Montserrat', sans-serif; background-color: var(--background-color); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
         .container { width: 100%; max-width: 500px; }
         .verify-card { background-color: var(--card-bg); border-radius: 12px; padding: 3rem; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); text-align: center; }
         .logo { font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--primary-color); text-decoration: none; font-weight: 700; margin-bottom: 1.5rem; display: block; }
@@ -96,7 +96,7 @@
     const firebaseConfig = {
         apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
         authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-           projectId: "%REACT_APP_FIREBASE_PROJECT_ID%",  
+           projectId: "andrew-cares-village-f4cb6",  
         storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
         messagingSenderId: "255087116955",
         appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
@@ -165,5 +165,8 @@
         }
     });
 </script>
+            <!-- Hybrid AI Chat Widget -->
+        <script src="js/advanced-hybrid-chat.js"></script>
     </body>
 </html>
+

@@ -33,6 +33,9 @@
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/cloudinary-core/2.13.0/cloudinary-core-shrinkwrap.min.js"></script>
 
+        <!-- Notification Service -->
+        <script src="/js/notification-service.js"></script>
+
         <!-- Custom CSS -->
         <style>
         /* --- Global Styles & Variables --- */
@@ -1892,7 +1895,7 @@
         firebase: {
             apiKey: "AIzaSyAM8S_LtlBaqfp7WoU6xLdaEMIyW_cZHRc",
             authDomain: "andrew-cares-village-f4cb6.firebaseapp.com",
-               projectId: "%REACT_APP_FIREBASE_PROJECT_ID%", 
+               projectId: "andrew-cares-village-f4cb6", 
             storageBucket: "andrew-cares-village-f4cb6.firebasestorage.app",
             messagingSenderId: "255087116955",
             appId: "1:255087116955:web:84360ee1f13888f9b83c3e"
@@ -1920,23 +1923,101 @@
     let streamStartTime = null;
     let currentStreamEventId = null;
 
+    // Enhanced connection error handling
+    let connectionRetries = 0;
+    const maxRetries = 3;
+
+    function handleFirebaseError(error) {
+        console.error('Firebase Error:', error);
+        
+        if (error.code === 'unavailable' || error.code === 'deadline-exceeded') {
+            if (connectionRetries < maxRetries) {
+                connectionRetries++;
+                showNotification(`Connection issue. Retrying... (${connectionRetries}/${maxRetries})`, 'warning');
+                return true;
+            } else {
+                showNotification('Unable to connect to server. Please check your internet connection and try again.', 'error');
+            }
+        } else if (error.code === 'permission-denied') {
+            showNotification('Access denied. Please contact support if this persists.', 'error');
+        } else {
+            showNotification('An unexpected error occurred. Please try again.', 'error');
+        }
+        return false;
+    }
+
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 10000;
+            max-width: 300px;
+            word-wrap: break-word;
+        `;
+        
+        switch(type) {
+            case 'error':
+                notification.style.backgroundColor = '#f44336';
+                break;
+            case 'warning':
+                notification.style.backgroundColor = '#ff9800';
+                break;
+            case 'success':
+                notification.style.backgroundColor = '#4caf50';
+                break;
+            default:
+                notification.style.backgroundColor = '#2196f3';
+        }
+        
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 5000);
+    }
+
     // Initialize Firebase v9
     async function initializeFirebase() {
         try {
             console.log('Initializing Firebase v9...');
             const app = initializeApp(CONFIG.firebase);
-            
-            db = getFirestore(app);
             auth = getAuth(app);
+            db = getFirestore(app);
             storage = getStorage(app);
-
-            updateConnectionStatus('connected');
             console.log('Firebase v9 initialized successfully');
+            
+            // Initialize notification service for admin
+            await initializeAdminNotificationService();
+            
             return true;
         } catch (error) {
             console.error('Firebase initialization error:', error);
             updateConnectionStatus('disconnected');
             return false;
+        }
+    }
+
+    // Initialize Admin Notification Service
+    let notificationService;
+    async function initializeAdminNotificationService() {
+        try {
+            if (typeof NotificationService !== 'undefined') {
+                notificationService = new NotificationService();
+                await notificationService.initialize(auth, db);
+                console.log('Admin notification service initialized');
+            }
+        } catch (error) {
+            console.error('Error initializing admin notification service:', error);
         }
     }
 
@@ -2353,12 +2434,26 @@ function updateConnectionStatus(status) {
     async function approveTestimonial(testimonialId) {
         try {
             const testimonialRef = doc(db, 'testimonials', testimonialId);
+            const testimonialDoc = await getDoc(testimonialRef);
+            const testimonialData = testimonialDoc.data();
+            
             await updateDoc(testimonialRef, {
                 status: 'approved',
                 approvedAt: serverTimestamp(),
                 approvedBy: 'admin',
                 isPublic: true
             });
+
+            // Send notification to testimonial author
+            if (notificationService && testimonialData.userId) {
+                await notificationService.createAdminNotification(
+                    testimonialData.userId,
+                    'testimonial_approved',
+                    `Your testimonial has been approved and is now live on our website!`,
+                    testimonialId
+                );
+            }
+
             showAlert('Success', 'Testimonial approved and published!', 'success');
         } catch (error) {
             console.error('Error approving testimonial:', error);
@@ -2553,6 +2648,16 @@ function updateConnectionStatus(status) {
                     });
 
                     console.log('Live event created with ID:', docRef.id);
+
+                    // Notify all users about the new livestream
+                    if (notificationService) {
+                        await notificationService.createLivestreamNotification(
+                            docRef.id,
+                            "Live Admin Stream",
+                            "Live streaming session from admin panel",
+                            joinUrl
+                        );
+                    }
 
                 } catch (error) {
                     console.warn('Could not save to database:', error);
@@ -4516,9 +4621,31 @@ function updateInstructorStatus(userId, status) {
                     transaction.update(userRef, { role: "instructor" });
                     transaction.update(appRef, { status: "approved" });
                 });
+
+                // Send approval notification to the applicant
+                if (notificationService && appData.userId) {
+                    await notificationService.createAdminNotification(
+                        appData.userId,
+                        'instructor_approved',
+                        `Congratulations! Your instructor application has been approved. You now have instructor privileges and can create courses.`,
+                        appId
+                    );
+                }
+
                 alert("Application Approved! The user has been promoted to an instructor.");
             } else {
                 await updateDoc(appRef, { status: "rejected" });
+
+                // Send rejection notification to the applicant
+                if (notificationService && appData.userId) {
+                    await notificationService.createAdminNotification(
+                        appData.userId,
+                        'instructor_rejected',
+                        `Your instructor application has been reviewed. Please check your email for more details about next steps.`,
+                        appId
+                    );
+                }
+
                 alert("Application Rejected.");
             }
             closeModal();
@@ -4687,6 +4814,3 @@ window.rejectApplication = rejectApplication;
 window.viewApplicationDetails = viewApplicationDetails;
 
 </script>
-    </body>
-
-</html>
