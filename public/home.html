@@ -40,6 +40,49 @@
         
         a { text-decoration: none; color: inherit; }
 
+        /* Andrew Cares Logo Styles */
+        .andrew-cares-logo {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.3s ease;
+        }
+
+        .andrew-cares-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .andrew-cares-logo img {
+            height: 80px;
+            width: auto;
+            max-width: 400px;
+        }
+
+        .header-logo img {
+            height: 70px;
+        }
+
+        @media (max-width: 768px) {
+            .andrew-cares-logo img {
+                height: 60px;
+            }
+            
+            .header-logo img {
+                height: 55px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .andrew-cares-logo img {
+                height: 50px;
+            }
+            
+            .header-logo img {
+                height: 45px;
+            }
+        }
+
         /* --- Header & Layout --- */
         .main-header { 
             display: flex; 
@@ -1143,7 +1186,9 @@
                 <button class="mobile-nav-toggle" id="mobileNavToggle">
                     <i class="fas fa-bars"></i>
                 </button>
-                <div class="logo">Andrew Cares Village</div>
+                <a href="index.html" class="andrew-cares-logo header-logo">
+                    <img src="images/andrew_cares_logo.png" alt="Andrew Cares Village Logo">
+                </a>
                 <div class="header-actions">
                     <div class="search-container">
                         <i class="fas fa-search search-icon"></i>

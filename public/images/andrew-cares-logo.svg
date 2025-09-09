@@ -1,0 +1,10 @@
+<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Red circular border -->
+  <circle cx="30" cy="30" r="26" fill="none" stroke="#E53E3E" stroke-width="4"/>
+  
+  <!-- Left hand reaching inward -->
+  <path d="M10 25 C8 22, 10 18, 14 18 C18 18, 22 20, 24 24 C26 28, 24 32, 20 34 C16 36, 12 34, 10 30 C8 28, 8 26, 10 25 Z" fill="#E53E3E"/>
+  
+  <!-- Right hand reaching inward -->
+  <path d="M50 25 C52 22, 50 18, 46 18 C42 18, 38 20, 36 24 C34 28, 36 32, 40 34 C44 36, 48 34, 50 30 C52 28, 52 26, 50 25 Z" fill="#E53E3E"/>
+</svg>

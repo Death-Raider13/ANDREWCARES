@@ -34,6 +34,39 @@
             padding: 2rem;
         }
 
+        /* Andrew Cares Logo Styles */
+        .andrew-cares-logo {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.3s ease;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .andrew-cares-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .andrew-cares-logo img {
+            height: 80px;
+            width: auto;
+            max-width: 400px;
+        }
+
+        @media (max-width: 768px) {
+            .andrew-cares-logo img {
+                height: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .andrew-cares-logo img {
+                height: 50px;
+            }
+        }
+
         .donation-container {
             max-width: 600px;
             margin: 0 auto;
@@ -534,6 +567,10 @@
         <div class="donation-container">
             <!-- Main Donation Form -->
             <div id="donationForm" class="donation-form">
+                <a href="index.html" class="andrew-cares-logo">
+                    <img src="images/andrew_cares_logo.png" alt="Andrew Cares Village Logo">
+                </a>
+                
                 <a href="home.html" class="back-link">
                     <i class="fas fa-arrow-left"></i> Back to Village
                 </a>
@@ -547,11 +584,6 @@
                     <div class="progress-step" id="step3">3</div>
                 </div>
 
-                <div class="donation-header">
-                    <h1>Support the Village</h1>
-                    <p>Your generous donation helps keep Andrew Cares Village
-                        free for everyone and supports our mission of building a
-                        supportive community.</p>
                 </div>
 
                 <div class="donation-impact">

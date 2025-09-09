@@ -28,6 +28,37 @@
         body { font-family: 'Montserrat', sans-serif; background-color: var(--background-color); color: var(--text-primary); }
         .main-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; border-bottom: 1px solid var(--border-color); background-color: var(--card-bg); box-shadow: var(--shadow-light); position: sticky; top: 0; z-index: 100; }
         .logo { font-family: 'Cinzel', serif; font-weight: 700; font-size: 1.5rem; color: var(--color-secondary); text-decoration: none; }
+        
+        /* Andrew Cares Logo Styles */
+        .andrew-cares-logo {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.3s ease;
+        }
+
+        .andrew-cares-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .andrew-cares-logo img {
+            height: 70px;
+            width: auto;
+            max-width: 300px;
+        }
+
+        @media (max-width: 768px) {
+            .andrew-cares-logo img {
+                height: 55px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .andrew-cares-logo img {
+                height: 45px;
+            }
+        }
         .user-profile-nav { display: flex; align-items: center; gap: 0.7rem; }
         .user-avatar-nav { width: 40px; height: 40px; border-radius: 50%; }
         .dashboard-container { max-width: 1400px; margin: 2rem auto; padding: 0 2rem; }
@@ -706,7 +737,9 @@
     </head>
     <body>
         <header class="main-header">
-            <a href="home.html" class="logo">Andrew Cares Village</a>
+            <a href="index.html" class="andrew-cares-logo">
+                <img src="images/andrew_cares_logo.png" alt="Andrew Cares Village Logo">
+            </a>
             <div class="header-actions">
                 <div id="userProfileNav" class="user-profile-nav">
                     <img id="userAvatarNav" src alt="User Avatar"

@@ -48,6 +48,38 @@
             /* Enhanced Shadows */
             --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Andrew Cares Logo Styles */
+        .andrew-cares-logo {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.3s ease;
+        }
+
+        .andrew-cares-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .andrew-cares-logo img {
+            height: 70px;
+            width: auto;
+            max-width: 300px;
+        }
+
+        @media (max-width: 768px) {
+            .andrew-cares-logo img {
+                height: 55px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .andrew-cares-logo img {
+                height: 45px;
+            }
+        }
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
             --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
@@ -2795,7 +2827,9 @@
     <body>
         <!-- Enhanced Header -->
         <header class="main-header">
-            <a href="home.html" class="logo">Andrew Cares Village</a>
+            <a href="index.html" class="andrew-cares-logo">
+                <img src="images/andrew_cares_logo.png" alt="Andrew Cares Village Logo">
+            </a>
 
             <button class="mobile-menu-toggle" id="mobileMenuToggle"
                 aria-label="Toggle menu">
